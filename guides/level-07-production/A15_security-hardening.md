@@ -132,6 +132,11 @@ function SafeLink({ url, children }: { url: string; children: React.ReactNode })
 }
 ```
 
+```bash
+# Minimum version 3.3.2 required — CVE-2026-0540 (XSS bypass) affects earlier versions
+npm install dompurify@^3.3.3
+```
+
 ```tsx
 // Safe HTML rendering (when absolutely necessary)
 import DOMPurify from 'dompurify';

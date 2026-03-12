@@ -61,20 +61,27 @@ npm --version
 ### Node Version Manager (Recommended)
 
 If your team works on multiple projects with different Node versions, use a version
-manager:
+manager. Note that **Windows and macOS/Linux use different tools** with the same name:
 
-**Windows — nvm-windows:**
+- **Windows:** Install [nvm-windows](https://github.com/coreybutler/nvm-windows) (a separate project from Unix nvm)
+- **macOS/Linux:** Install [nvm](https://github.com/nvm-sh/nvm)
+
+**Windows (nvm-windows):**
 ```bash
 nvm install 24
 nvm use 24
 ```
 
-**macOS/Linux — nvm:**
+**macOS/Linux (nvm):**
 ```bash
 nvm install 24
 nvm use 24
 nvm alias default 24
 ```
+
+> The `nvm alias default` command only exists in Unix nvm. On Windows, `nvm use`
+> sets the active version. To persist across terminal sessions on Windows, run
+> `nvm use 24` from an elevated (Administrator) terminal.
 
 ### Checkpoint 1
 
@@ -346,7 +353,11 @@ body {
 Delete `src/App.css` — we use Tailwind utility classes instead:
 
 ```bash
+# macOS/Linux/Git Bash
 rm src/App.css
+
+# Windows (PowerShell)
+Remove-Item src/App.css
 ```
 
 ### Update App.tsx
@@ -506,12 +517,11 @@ with its own components, hooks, types, and tests.
 Create the following directory structure inside `src/`:
 
 ```bash
-mkdir -p src/components/ui
-mkdir -p src/features
-mkdir -p src/hooks
-mkdir -p src/lib
-mkdir -p src/types
-mkdir -p src/styles
+# macOS/Linux/Git Bash
+mkdir -p src/components/ui src/features src/hooks src/lib src/types src/styles
+
+# Windows (PowerShell)
+mkdir src/components/ui, src/features, src/hooks, src/lib, src/types, src/styles
 ```
 
 The full structure:
@@ -946,7 +956,11 @@ VITE_APP_ENV=development
 Create `.env.local`:
 
 ```bash
+# macOS/Linux/Git Bash
 cp .env.example .env.local
+
+# Windows (PowerShell)
+Copy-Item .env.example .env.local
 ```
 
 ### Validate environment variables at startup

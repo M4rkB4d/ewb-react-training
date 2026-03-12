@@ -1,14 +1,12 @@
 # A02 — TypeScript for React
 
-> **Part:** A (Core)
-> **Level:** 1 — Welcome
-> **Estimated time:** 3 hours
-> **Prerequisites:** [A01 — What Is React](./A01_what-is-react.md)
-> **Companion repo tag:** `level-01-welcome`
+> **EastWest Bank — Digital Platforms & Innovations**
+>
+> Part A (Core) · Level 1 — Welcome · Est. 3 hours
 
 ---
 
-## Learning Objectives
+## What You Will Learn
 
 By the end of this guide, you will be able to:
 
@@ -18,6 +16,14 @@ By the end of this guide, you will be able to:
 4. Create Zod schemas for runtime validation
 5. Model complex state with discriminated unions
 6. Apply utility types (Pick, Omit, Partial, Record) to real banking interfaces
+
+---
+
+## Prerequisites
+
+| Requirement | Where |
+|------------|-------|
+| Completed A01 — What Is React | Level 1 |
 
 ---
 

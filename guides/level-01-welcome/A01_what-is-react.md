@@ -1,14 +1,12 @@
 # A01 — What Is React
 
-> **Part:** A (Core)
-> **Level:** 1 — Welcome
-> **Estimated time:** 2 hours
-> **Prerequisites:** None
-> **Companion repo tag:** `level-01-welcome`
+> **EastWest Bank — Digital Platforms & Innovations**
+>
+> Part A (Core) · Level 1 — Welcome · Est. 2 hours
 
 ---
 
-## Learning Objectives
+## What You Will Learn
 
 By the end of this guide, you will be able to:
 
@@ -18,6 +16,12 @@ By the end of this guide, you will be able to:
 4. Use `useEffect` for side effects and cleanup
 5. Use `useRef` for DOM access without re-renders
 6. Describe the mental model: UI = f(state)
+
+---
+
+## Prerequisites
+
+None — this is the starting guide. No prior React or TypeScript knowledge is assumed.
 
 ---
 
