@@ -31,6 +31,7 @@ is mapped to specific frontend implementation requirements.
 | Test coverage | Unit + integration + E2E tests before release | A14 |
 | Risk assessment | Security review for new features | A15 |
 | Documentation | Architecture Decision Records (ADRs) | A18 |
+| Runtime patching | Node.js and Docker security updates for Next.js | B10 |
 
 ---
 
@@ -54,6 +55,8 @@ is mapped to specific frontend implementation requirements.
 | RBAC | Role-based route protection | A11, B04 |
 | HTTPS | All API calls over TLS | B03 |
 | Token storage | Access token in-memory, refresh in HttpOnly cookie | A11, B04 |
+| Server-side secrets | API keys in Azure Key Vault, never in client bundle | A22, B10 |
+| Server-side auth | Session verification before rendering (no flash of content) | A22 |
 
 ---
 
@@ -76,6 +79,7 @@ is mapped to specific frontend implementation requirements.
 | Incident detection | Anomaly detection via error patterns | B06 |
 | Security events | CSP violation reporting | A15 |
 | Audit trail | All actions logged with timestamp and user | A16 |
+| Server-side logging | OpenTelemetry instrumentation for Next.js server | B10 |
 
 ---
 
@@ -241,6 +245,7 @@ personal information.
 | Audit trail | All deployments logged | B07 |
 | Access control | Role-based access to admin features | A11 |
 | Documentation | Release notes, change logs | B07 |
+| Next.js deployment | Slot swap, smoke tests, SOX checklist | B10 |
 
 ---
 
@@ -253,7 +258,7 @@ personal information.
 | Data collection forms | DPA (RA 10173), AMLA |
 | API integrations | BSP 1122, 982 |
 | Error handling/monitoring | BSP 1019 |
-| Deployment pipeline | BSP 808, SOX |
+| Deployment pipeline | BSP 808, SOX (B07 for SPA, B10 for Next.js) |
 | Any customer-facing UI | BSP 1033 (accessibility) |
 | Session management | BSP 982, 1105 |
 | Data display | DPA (masking), PCI-DSS (card numbers) |

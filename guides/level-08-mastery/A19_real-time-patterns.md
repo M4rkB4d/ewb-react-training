@@ -606,6 +606,15 @@ display, and message history persistence.
 Level 8 is complete. You now have architecture, internationalization,
 a full capstone feature, and real-time patterns.
 
+**Level 9 — Public-Facing Applications** introduces Next.js for EWB's
+customer-facing website (`ewbanking.com`), covering server-side rendering,
+static generation, and Azure App Service deployment:
+
+- [A20 — SPA vs SSR Decision Framework](../level-09-public-facing/A20_spa-vs-ssr-decision-framework.md)
+- [A21 — Next.js Project Setup](../level-09-public-facing/A21_nextjs-project-setup.md)
+- [A22 — Server Components and Data Fetching](../level-09-public-facing/A22_server-components-data-fetching.md)
+- [B10 — Deploying Next.js on Azure](../level-09-public-facing/B10_deploying-nextjs-on-azure.md)
+
 The **Appendix** provides reference materials:
 - [X01 — EWB Design System Reference](../appendix/X01_ewb-design-system-reference.md)
 - [X02 — BSP Circular Quick Reference](../appendix/X02_bsp-circular-quick-reference.md)
