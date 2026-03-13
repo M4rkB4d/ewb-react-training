@@ -12,7 +12,7 @@ By the end of this guide, you will:
 
 - Understand the deployment architecture differences between a Vite SPA and a Next.js application
 - Build a production Docker image using Next.js standalone output
-- Set up a GitHub Actions CI/CD pipeline for Azure App Service
+- Set up an Azure Pipelines CI/CD pipeline for Azure App Service
 - Configure Azure Front Door with CDN caching rules for Next.js
 - Instrument server-side monitoring with Azure Application Insights
 - Implement Redis-backed session management with TTL enforcement
@@ -229,164 +229,226 @@ when you change a source file but not `package.json`?
 
 ## Phase 3 — CI/CD Pipeline
 
-### GitHub Actions workflow
+### Azure Pipelines configuration
 
-This workflow extends the B07 pattern with Docker build and Azure App Service
-deployment.
+This pipeline extends the B07 pattern with Docker build, Azure Container
+Registry push, and App Service deployment slot swaps.
 
 ```yaml
-# .github/workflows/deploy-nextjs.yml
-name: Next.js CI/CD
+# azure-pipelines.yml
+trigger:
+  branches:
+    include:
+      - main
+      - develop
 
-on:
-  push:
-    branches: [main, develop]
-  pull_request:
-    branches: [main]
+pr:
+  branches:
+    include:
+      - main
 
-env:
-  NODE_VERSION: '24'
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}-public
+variables:
+  nodeVersion: '24'
+  azureSubscription: 'ewb-azure-service-connection'
+  imageName: 'ewb-public-site'
+  # Variable group 'ewb-nextjs-vars' contains:
+  # AZURE_ACR_NAME, AZURE_APP_NAME, AZURE_RG
 
-jobs:
-  quality-gates:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-      - run: npm ci
-      - run: npm run lint
-      - run: npm run type-check
-      - run: npm run test:coverage
-      - uses: actions/upload-artifact@v4
-        with:
-          name: coverage-report
-          path: coverage/
+stages:
+  - stage: QualityGates
+    displayName: 'Quality Gates'
+    jobs:
+      - job: LintTypeCheckTest
+        displayName: 'Lint, Type Check & Unit Tests'
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: $(nodeVersion)
+            displayName: 'Install Node.js'
+          - script: npm ci
+            displayName: 'Install dependencies'
+          - script: npm run lint
+            displayName: 'Lint'
+          - script: npm run type-check
+            displayName: 'Type check'
+          - script: npm run test:coverage
+            displayName: 'Unit tests with coverage'
+          - task: PublishBuildArtifacts@1
+            inputs:
+              pathToPublish: coverage
+              artifactName: coverage-report
+            displayName: 'Publish coverage report'
 
-  e2e-tests:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-      - run: npm ci
-      - run: npx playwright install --with-deps chromium
-      - run: npm run test:e2e
-      - uses: actions/upload-artifact@v4
-        if: failure()
-        with:
-          name: playwright-report
-          path: playwright-report/
+      - job: E2ETests
+        displayName: 'E2E Tests'
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: $(nodeVersion)
+            displayName: 'Install Node.js'
+          - script: npm ci
+            displayName: 'Install dependencies'
+          - script: npx playwright install --with-deps chromium
+            displayName: 'Install Playwright'
+          - script: npm run test:e2e
+            displayName: 'Run E2E tests'
+          - task: PublishBuildArtifacts@1
+            condition: failed()
+            inputs:
+              pathToPublish: playwright-report
+              artifactName: playwright-report
+            displayName: 'Publish Playwright report (on failure)'
 
-  build-and-push:
-    if: github.event_name == 'push'
-    needs: [quality-gates, e2e-tests]
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-    steps:
-      - uses: actions/checkout@v4
+  - stage: BuildAndPush
+    displayName: 'Build & Push Docker Image'
+    dependsOn: QualityGates
+    condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+    variables:
+      - group: ewb-nextjs-vars
+    jobs:
+      - job: DockerBuild
+        displayName: 'Build and Push to ACR'
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - task: AzureCLI@2
+            displayName: 'Build and push to Azure Container Registry'
+            inputs:
+              azureSubscription: $(azureSubscription)
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+                az acr build \
+                  --registry $(AZURE_ACR_NAME) \
+                  --image $(imageName):$(Build.SourceVersion) \
+                  --image $(imageName):latest \
+                  .
 
-      - name: Log in to Azure Container Registry
-        uses: azure/login@v2
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+  - stage: DeployStaging
+    displayName: 'Deploy to Staging'
+    dependsOn: BuildAndPush
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
+    variables:
+      - group: ewb-nextjs-vars
+    jobs:
+      - deployment: DeployToStaging
+        displayName: 'Deploy to Staging Slot'
+        pool:
+          vmImage: 'ubuntu-latest'
+        environment: 'ewb-public-staging'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: AzureCLI@2
+                  displayName: 'Deploy to staging slot'
+                  inputs:
+                    azureSubscription: $(azureSubscription)
+                    scriptType: bash
+                    scriptLocation: inlineScript
+                    inlineScript: |
+                      az webapp config container set \
+                        --name $(AZURE_APP_NAME) \
+                        --resource-group $(AZURE_RG) \
+                        --slot staging \
+                        --container-image-name $(AZURE_ACR_NAME).azurecr.io/$(imageName):$(Build.SourceVersion)
+                - task: AzureCLI@2
+                  displayName: 'Wait for container to start'
+                  inputs:
+                    azureSubscription: $(azureSubscription)
+                    scriptType: bash
+                    scriptLocation: inlineScript
+                    inlineScript: |
+                      az webapp deployment slot wait \
+                        --name $(AZURE_APP_NAME) \
+                        --resource-group $(AZURE_RG) \
+                        --slot staging \
+                        --created
+                - script: |
+                    STAGING_URL="https://$(AZURE_APP_NAME)-staging.azurewebsites.net"
+                    STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$STAGING_URL/api/health")
+                    if [ "$STATUS" != "200" ]; then
+                      echo "Health check failed with status $STATUS"
+                      exit 1
+                    fi
+                  displayName: 'Smoke test staging'
 
-      - name: Build and push to ACR
-        run: |
-          az acr build \
-            --registry ${{ vars.AZURE_ACR_NAME }} \
-            --image ${{ env.IMAGE_NAME }}:${{ github.sha }} \
-            --image ${{ env.IMAGE_NAME }}:latest \
-            .
-
-  deploy-staging:
-    if: github.ref == 'refs/heads/develop'
-    needs: build-and-push
-    runs-on: ubuntu-latest
-    environment: staging
-    steps:
-      - name: Azure Login
-        uses: azure/login@v2
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - name: Deploy to staging slot
-        run: |
-          az webapp config container set \
-            --name ${{ vars.AZURE_APP_NAME }} \
-            --resource-group ${{ vars.AZURE_RG }} \
-            --slot staging \
-            --container-image-name ${{ vars.AZURE_ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ github.sha }}
-
-      - name: Wait for deployment
-        run: |
-          az webapp deployment slot wait \
-            --name ${{ vars.AZURE_APP_NAME }} \
-            --resource-group ${{ vars.AZURE_RG }} \
-            --slot staging \
-            --created
-
-      - name: Smoke test staging
-        run: |
-          STAGING_URL="https://${{ vars.AZURE_APP_NAME }}-staging.azurewebsites.net"
-          STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$STAGING_URL/api/health")
-          if [ "$STATUS" != "200" ]; then
-            echo "Health check failed with status $STATUS"
-            exit 1
-          fi
-
-  deploy-production:
-    if: github.ref == 'refs/heads/main'
-    needs: build-and-push
-    runs-on: ubuntu-latest
-    environment: production
-    steps:
-      - name: Azure Login
-        uses: azure/login@v2
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - name: Deploy to staging slot
-        run: |
-          az webapp config container set \
-            --name ${{ vars.AZURE_APP_NAME }} \
-            --resource-group ${{ vars.AZURE_RG }} \
-            --slot staging \
-            --container-image-name ${{ vars.AZURE_ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ github.sha }}
-
-      - name: Wait for deployment
-        run: |
-          az webapp deployment slot wait \
-            --name ${{ vars.AZURE_APP_NAME }} \
-            --resource-group ${{ vars.AZURE_RG }} \
-            --slot staging \
-            --created
-
-      - name: Smoke test staging slot
-        run: |
-          STAGING_URL="https://${{ vars.AZURE_APP_NAME }}-staging.azurewebsites.net"
-          STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$STAGING_URL/api/health")
-          if [ "$STATUS" != "200" ]; then
-            echo "Health check failed with status $STATUS"
-            exit 1
-          fi
-
-      - name: Swap staging to production
-        run: |
-          az webapp deployment slot swap \
-            --name ${{ vars.AZURE_APP_NAME }} \
-            --resource-group ${{ vars.AZURE_RG }} \
-            --slot staging \
-            --target-slot production
+  - stage: DeployProduction
+    displayName: 'Deploy to Production'
+    dependsOn: BuildAndPush
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    variables:
+      - group: ewb-nextjs-vars
+    jobs:
+      - deployment: DeployToProduction
+        displayName: 'Deploy to Production (slot swap)'
+        pool:
+          vmImage: 'ubuntu-latest'
+        environment: 'ewb-public-production'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: AzureCLI@2
+                  displayName: 'Deploy to staging slot'
+                  inputs:
+                    azureSubscription: $(azureSubscription)
+                    scriptType: bash
+                    scriptLocation: inlineScript
+                    inlineScript: |
+                      az webapp config container set \
+                        --name $(AZURE_APP_NAME) \
+                        --resource-group $(AZURE_RG) \
+                        --slot staging \
+                        --container-image-name $(AZURE_ACR_NAME).azurecr.io/$(imageName):$(Build.SourceVersion)
+                - task: AzureCLI@2
+                  displayName: 'Wait for container to start'
+                  inputs:
+                    azureSubscription: $(azureSubscription)
+                    scriptType: bash
+                    scriptLocation: inlineScript
+                    inlineScript: |
+                      az webapp deployment slot wait \
+                        --name $(AZURE_APP_NAME) \
+                        --resource-group $(AZURE_RG) \
+                        --slot staging \
+                        --created
+                - script: |
+                    STAGING_URL="https://$(AZURE_APP_NAME)-staging.azurewebsites.net"
+                    STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$STAGING_URL/api/health")
+                    if [ "$STATUS" != "200" ]; then
+                      echo "Health check failed with status $STATUS"
+                      exit 1
+                    fi
+                  displayName: 'Smoke test staging slot'
+                - task: AzureCLI@2
+                  displayName: 'Swap staging to production'
+                  inputs:
+                    azureSubscription: $(azureSubscription)
+                    scriptType: bash
+                    scriptLocation: inlineScript
+                    inlineScript: |
+                      az webapp deployment slot swap \
+                        --name $(AZURE_APP_NAME) \
+                        --resource-group $(AZURE_RG) \
+                        --slot staging \
+                        --target-slot production
 ```
+
+> **Azure DevOps Environments:** The `environment` field in each deployment job
+> connects to an Azure DevOps Environment. Configure approval gates in
+> **Project Settings → Environments → ewb-public-production → Approvals and
+> checks**. Production deployments require manual approval before the slot
+> swap executes — a SOX requirement.
+
+> **Variable Groups:** Secrets and configuration values are stored in Azure
+> DevOps variable groups (Pipelines → Library). The `ewb-nextjs-vars` group
+> contains the ACR name, App Service name, and resource group. Mark secrets
+> as "secret" in the variable group — they will be masked in pipeline logs.
 
 ### Key differences from B07 pipeline
 
@@ -407,10 +469,10 @@ develop branch → quality gates → Docker build → staging slot (auto)
 main branch    → quality gates → Docker build → staging slot → smoke test → swap to production
 ```
 
-Production deploys use GitHub Environments with required reviewers. The
-`environment: production` setting in the workflow triggers a manual approval
-gate. No code reaches production without explicit approval — a SOX
-requirement (BSP 808).
+Production deploys use Azure DevOps Environments with approval gates. The
+`environment: 'ewb-public-production'` setting in the deployment job triggers
+a manual approval check. No code reaches production without explicit
+approval — a SOX requirement (BSP 808).
 
 ### Checkpoint 3
 
@@ -983,7 +1045,7 @@ Extend the CI/CD workflow to implement a full blue-green deployment:
 
 1. Deploy the new version to the staging slot
 2. Run automated smoke tests (health check, critical page loads, login flow)
-3. Add a manual approval gate using GitHub Environments
+3. Add a manual approval gate using Azure DevOps Environments
 4. Swap the staging slot to production
 5. If smoke tests fail on production after swap, automatically swap back
 

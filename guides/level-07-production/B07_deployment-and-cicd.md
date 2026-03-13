@@ -12,7 +12,7 @@ By the end of this guide, you will:
 
 - Build production-optimized Docker images for Vite SPAs
 - Configure Nginx for SPA routing and security headers
-- Set up a GitHub Actions CI/CD pipeline
+- Set up an Azure Pipelines CI/CD pipeline
 - Implement environment-specific configuration
 - Deploy to Azure Blob Storage with Azure CDN and Front Door
 - Deploy with blue-green strategy for zero-downtime releases
@@ -27,7 +27,7 @@ By the end of this guide, you will:
 |------------|-------|
 | Completed B06 — Monitoring and Observability | Level 6 |
 | Docker installed | Local setup |
-| GitHub repository created | Git setup |
+| Azure DevOps project created | DevOps setup |
 
 ---
 
@@ -180,142 +180,210 @@ one prevent?
 
 ## Phase 3 — CI/CD Pipeline
 
-### GitHub Actions workflow
+### Azure Pipelines configuration
+
+EastWest Bank uses Azure DevOps for source control and CI/CD. Azure Pipelines
+integrates natively with Azure services — no third-party marketplace actions
+needed for Azure login, storage, or CDN operations.
 
 ```yaml
-# .github/workflows/ci.yml
-name: CI/CD Pipeline
+# azure-pipelines.yml
+trigger:
+  branches:
+    include:
+      - main
+      - develop
 
-on:
-  push:
-    branches: [main, develop]
-  pull_request:
-    branches: [main]
+pr:
+  branches:
+    include:
+      - main
 
-env:
-  NODE_VERSION: '24'
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+variables:
+  nodeVersion: '24'
+  azureSubscription: 'ewb-azure-service-connection'
+  # Variable group 'ewb-portal-vars' contains:
+  # AZURE_STORAGE_ACCOUNT_STAGING, AZURE_STORAGE_ACCOUNT_PROD,
+  # AZURE_RG, AZURE_CDN_PROFILE, AZURE_CDN_ENDPOINT_STAGING,
+  # AZURE_CDN_ENDPOINT_PROD
 
-jobs:
-  lint-and-type-check:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-      - run: npm ci
-      - run: npm run lint
-      - run: npm run type-check
+stages:
+  - stage: QualityGates
+    displayName: 'Quality Gates'
+    jobs:
+      - job: LintAndTypeCheck
+        displayName: 'Lint & Type Check'
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: $(nodeVersion)
+            displayName: 'Install Node.js'
+          - script: npm ci
+            displayName: 'Install dependencies'
+          - script: npm run lint
+            displayName: 'Lint'
+          - script: npm run type-check
+            displayName: 'Type check'
 
-  unit-tests:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-      - run: npm ci
-      - run: npm run test:coverage
-      - uses: actions/upload-artifact@v4
-        with:
-          name: coverage-report
-          path: coverage/
+      - job: UnitTests
+        displayName: 'Unit Tests'
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: $(nodeVersion)
+            displayName: 'Install Node.js'
+          - script: npm ci
+            displayName: 'Install dependencies'
+          - script: npm run test:coverage
+            displayName: 'Run unit tests with coverage'
+          - task: PublishBuildArtifacts@1
+            inputs:
+              pathToPublish: coverage
+              artifactName: coverage-report
+            displayName: 'Publish coverage report'
 
-  e2e-tests:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-      - run: npm ci
-      - run: npx playwright install --with-deps chromium
-      - run: npm run test:e2e
-      - uses: actions/upload-artifact@v4
-        if: failure()
-        with:
-          name: playwright-report
-          path: playwright-report/
+      - job: E2ETests
+        displayName: 'E2E Tests'
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: $(nodeVersion)
+            displayName: 'Install Node.js'
+          - script: npm ci
+            displayName: 'Install dependencies'
+          - script: npx playwright install --with-deps chromium
+            displayName: 'Install Playwright'
+          - script: npm run test:e2e
+            displayName: 'Run E2E tests'
+          - task: PublishBuildArtifacts@1
+            condition: failed()
+            inputs:
+              pathToPublish: playwright-report
+              artifactName: playwright-report
+            displayName: 'Publish Playwright report (on failure)'
 
-  build:
-    needs: [lint-and-type-check, unit-tests, e2e-tests]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-      - run: npm ci
-      - run: npm run build
-      - uses: actions/upload-artifact@v4
-        with:
-          name: dist
-          path: dist/
+  - stage: Build
+    displayName: 'Build'
+    dependsOn: QualityGates
+    jobs:
+      - job: BuildApp
+        displayName: 'Build Application'
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: $(nodeVersion)
+            displayName: 'Install Node.js'
+          - script: npm ci
+            displayName: 'Install dependencies'
+          - script: npm run build
+            displayName: 'Build production bundle'
+          - task: PublishBuildArtifacts@1
+            inputs:
+              pathToPublish: dist
+              artifactName: dist
+            displayName: 'Publish build artifacts'
 
-  deploy-staging:
-    if: github.ref == 'refs/heads/develop'
-    needs: build
-    runs-on: ubuntu-latest
-    environment: staging
-    steps:
-      - uses: actions/download-artifact@v4
-        with:
-          name: dist
-          path: dist/
-      - name: Azure Login
-        uses: azure/login@v2
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS_STAGING }}
-      - name: Upload to Azure Blob Storage
-        run: |
-          az storage blob upload-batch \
-            --account-name ${{ vars.AZURE_STORAGE_ACCOUNT_STAGING }} \
-            --destination '$web' \
-            --source dist/ \
-            --overwrite
-      - name: Purge Azure CDN cache
-        run: |
-          az cdn endpoint purge \
-            --resource-group ${{ vars.AZURE_RG }} \
-            --profile-name ${{ vars.AZURE_CDN_PROFILE }} \
-            --name ${{ vars.AZURE_CDN_ENDPOINT_STAGING }} \
-            --content-paths '/*'
+  - stage: DeployStaging
+    displayName: 'Deploy to Staging'
+    dependsOn: Build
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
+    variables:
+      - group: ewb-portal-vars
+    jobs:
+      - deployment: DeployToStaging
+        displayName: 'Deploy to Staging'
+        pool:
+          vmImage: 'ubuntu-latest'
+        environment: 'ewb-portal-staging'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: AzureCLI@2
+                  displayName: 'Upload to Azure Blob Storage'
+                  inputs:
+                    azureSubscription: $(azureSubscription)
+                    scriptType: bash
+                    scriptLocation: inlineScript
+                    inlineScript: |
+                      az storage blob upload-batch \
+                        --account-name $(AZURE_STORAGE_ACCOUNT_STAGING) \
+                        --destination '$web' \
+                        --source $(Pipeline.Workspace)/dist \
+                        --overwrite
+                - task: AzureCLI@2
+                  displayName: 'Purge Azure CDN cache'
+                  inputs:
+                    azureSubscription: $(azureSubscription)
+                    scriptType: bash
+                    scriptLocation: inlineScript
+                    inlineScript: |
+                      az cdn endpoint purge \
+                        --resource-group $(AZURE_RG) \
+                        --profile-name $(AZURE_CDN_PROFILE) \
+                        --name $(AZURE_CDN_ENDPOINT_STAGING) \
+                        --content-paths '/*'
 
-  deploy-production:
-    if: github.ref == 'refs/heads/main'
-    needs: build
-    runs-on: ubuntu-latest
-    environment: production
-    steps:
-      - uses: actions/download-artifact@v4
-        with:
-          name: dist
-          path: dist/
-      - name: Azure Login
-        uses: azure/login@v2
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS_PRODUCTION }}
-      - name: Upload to Azure Blob Storage
-        run: |
-          az storage blob upload-batch \
-            --account-name ${{ vars.AZURE_STORAGE_ACCOUNT_PROD }} \
-            --destination '$web' \
-            --source dist/ \
-            --overwrite
-      - name: Purge Azure CDN cache
-        run: |
-          az cdn endpoint purge \
-            --resource-group ${{ vars.AZURE_RG }} \
-            --profile-name ${{ vars.AZURE_CDN_PROFILE }} \
-            --name ${{ vars.AZURE_CDN_ENDPOINT_PROD }} \
-            --content-paths '/*'
+  - stage: DeployProduction
+    displayName: 'Deploy to Production'
+    dependsOn: Build
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    variables:
+      - group: ewb-portal-vars
+    jobs:
+      - deployment: DeployToProduction
+        displayName: 'Deploy to Production'
+        pool:
+          vmImage: 'ubuntu-latest'
+        environment: 'ewb-portal-production'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: AzureCLI@2
+                  displayName: 'Upload to Azure Blob Storage'
+                  inputs:
+                    azureSubscription: $(azureSubscription)
+                    scriptType: bash
+                    scriptLocation: inlineScript
+                    inlineScript: |
+                      az storage blob upload-batch \
+                        --account-name $(AZURE_STORAGE_ACCOUNT_PROD) \
+                        --destination '$web' \
+                        --source $(Pipeline.Workspace)/dist \
+                        --overwrite
+                - task: AzureCLI@2
+                  displayName: 'Purge Azure CDN cache'
+                  inputs:
+                    azureSubscription: $(azureSubscription)
+                    scriptType: bash
+                    scriptLocation: inlineScript
+                    inlineScript: |
+                      az cdn endpoint purge \
+                        --resource-group $(AZURE_RG) \
+                        --profile-name $(AZURE_CDN_PROFILE) \
+                        --name $(AZURE_CDN_ENDPOINT_PROD) \
+                        --content-paths '/*'
 ```
+
+> **Azure DevOps Environments:** The `environment` field in each deployment job
+> connects to an Azure DevOps Environment. Configure approval gates in
+> **Project Settings → Environments → ewb-portal-production → Approvals and
+> checks**. This provides the manual approval gate required by SOX — no code
+> reaches production without explicit approval.
+
+> **Variable Groups:** Secrets and configuration values are stored in Azure
+> DevOps variable groups (Pipelines → Library). The `ewb-portal-vars` group
+> contains storage account names, resource group names, and CDN profile details.
+> Mark secrets as "secret" in the variable group — they will be masked in logs.
 
 ### Branch strategy
 
@@ -403,7 +471,7 @@ CSS, and assets. Azure offers two deployment models:
 ### Option A — Azure Blob Storage + CDN (recommended for SPAs)
 
 ```
-GitHub Actions → Build → Upload to Azure Blob Storage ($web container)
+Azure Pipelines → Build → Upload to Azure Blob Storage ($web container)
                             ↓
                      Azure CDN (caching, HTTPS)
                             ↓
@@ -508,9 +576,9 @@ Review the Content-Security-Policy header. Add directives for WebSocket
 connections to the real-time balance endpoint and for loading Google Fonts.
 
 ### Exercise 2 — Rollback Automation
-Write a GitHub Actions workflow that can be manually triggered to rollback
-to the previous production version. It should re-deploy the previous Docker
-image tag.
+Write an Azure Pipelines configuration that can be manually triggered to
+rollback to the previous production version. It should re-deploy the previous
+build artifacts to Azure Blob Storage.
 
 ### Exercise 3 — Deployment Notifications
 Add a step to the CI/CD pipeline that posts a message to a Slack channel

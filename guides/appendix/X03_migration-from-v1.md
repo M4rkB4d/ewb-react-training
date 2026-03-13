@@ -32,7 +32,7 @@ to know where to pick up in v2.
 | Doc 12 | Performance | B05 | React Compiler, TanStack Virtual |
 | Doc 13 | Auth | A11, B04, A12 | Major restructure + passkeys |
 | Doc 14 | i18n | B08 | fil-PH + zh-Hans replacing es-MX + ar-SA |
-| Doc 15 | Deployment | B07 | Docker + GitHub Actions |
+| Doc 15 | Deployment | B07 | Docker + Azure Pipelines |
 | Doc 16 | Security | A15 | CSP, SRI, Trusted Types, PCI-DSS |
 | Doc 17 | Architecture | A18 | Feature-slice + DDD |
 | Doc 18 | Real-time | A19 | WebSocket + SSE + polling |

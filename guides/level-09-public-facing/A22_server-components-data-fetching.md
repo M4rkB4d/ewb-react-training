@@ -1276,7 +1276,7 @@ external APIs through Route Handlers. The application works locally.
 
 **Next guide:** [B10 — Deploying Next.js on Azure](B10_deploying-nextjs-on-azure.md) —
 where you containerize the Next.js application with a standalone Docker build,
-set up CI/CD with GitHub Actions, configure Azure Front Door with CDN caching,
+set up CI/CD with Azure Pipelines, configure Azure Front Door with CDN caching,
 add server-side monitoring with Application Insights, and implement Redis-backed
 session management.
 
