@@ -16,6 +16,7 @@ By the end of this guide, you will:
 - Track user sessions and feature usage
 - Build an audit trail for financial operations
 - Configure alerting for critical errors
+- Forward telemetry to Azure Application Insights
 - Understand BSP 1019 monitoring requirements
 
 ---
@@ -312,10 +313,101 @@ export function trackNavigation(from: string, to: string, durationMs: number): v
 
 ---
 
+## Phase 5 — Azure Application Insights
+
+EastWest Bank's infrastructure runs on Azure. While Sentry handles developer-facing
+error tracking (grouping, stack traces, session replay), **Azure Application
+Insights** is the operations team's monitoring platform — dashboards, alerts,
+availability tests, and cross-service correlation across the entire Azure estate.
+
+Both tools serve different audiences and complement each other.
+
+### Browser SDK setup
+
+```tsx
+// src/lib/azure-insights.ts
+import { ApplicationInsights } from '@microsoft/applicationinsights-web';
+import { env } from './env';
+
+let appInsights: ApplicationInsights | null = null;
+
+export function initAzureInsights(): void {
+  if (!import.meta.env.PROD) return;
+
+  appInsights = new ApplicationInsights({
+    config: {
+      connectionString: env.VITE_APPINSIGHTS_CONNECTION_STRING,
+      enableAutoRouteTracking: true,
+      disableCookiesUsage: true, // BSP 982 — minimize tracking cookies
+      autoTrackPageVisitTime: true,
+    },
+  });
+
+  appInsights.loadAppInsights();
+
+  // BSP 982 — Strip PII from all telemetry
+  appInsights.addTelemetryInitializer((item) => {
+    if (item.baseData) {
+      delete item.baseData.name; // Remove page titles (may contain PII)
+    }
+    return true;
+  });
+}
+
+export function trackAzureEvent(
+  name: string,
+  properties?: Record<string, string>,
+): void {
+  appInsights?.trackEvent({ name }, properties);
+}
+```
+
+### Connecting to your monitoring stack
+
+```tsx
+// src/main.tsx
+import { initMonitoring } from './lib/monitoring';
+import { initAzureInsights } from './lib/azure-insights';
+import { initWebVitals } from './lib/web-vitals';
+
+// Sentry — developer error tracking
+initMonitoring();
+
+// Azure Application Insights — operations monitoring
+initAzureInsights();
+
+// Web Vitals — performance metrics (sent to both)
+initWebVitals();
+```
+
+### When to use which
+
+| Concern | Tool | Why |
+|---------|------|-----|
+| Error grouping and stack traces | Sentry | Superior developer UX |
+| Session replay on errors | Sentry | Built-in, privacy-compliant |
+| Azure infrastructure dashboards | Application Insights | Native Azure integration |
+| Cross-service correlation | Application Insights | Traces span frontend → API → database |
+| Availability monitoring | Application Insights | Synthetic tests from Azure regions |
+| Custom business metrics | Application Insights | Connects to Azure Monitor workbooks |
+| BSP 1019 audit reports | Both → backend | Frontend logs are supplementary |
+
+> **Note:** The `VITE_APPINSIGHTS_CONNECTION_STRING` is safe to expose in the
+> browser — it is a write-only ingestion key, not a secret. Azure Application
+> Insights connection strings are designed for client-side use.
+
+### Checkpoint 5
+
+Why does the configuration set `disableCookiesUsage: true`? What BSP regulation
+makes this the right default for a banking application?
+
+---
+
 ## Key Takeaways
 
-1. **Sentry for errors, structured logs for audit.** Sentry catches and groups
-   errors automatically. Structured logs create the BSP-required audit trail.
+1. **Sentry for errors, Application Insights for operations.** Sentry gives
+   developers stack traces and session replay. Application Insights gives the
+   ops team Azure-native dashboards and cross-service correlation.
 
 2. **Never send PII to external monitoring.** Strip emails, names, account
    numbers from Sentry events. Use internal IDs only.
@@ -328,6 +420,10 @@ export function trackNavigation(from: string, to: string, durationMs: number): v
 
 5. **Alert on what matters** — error rate spikes, auth failures, performance
    degradation. Not every warning needs a page.
+
+6. **Azure Application Insights** complements Sentry — use it for
+   infrastructure-level monitoring, availability tests, and cross-service
+   correlation across the Azure estate.
 
 ---
 

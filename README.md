@@ -89,6 +89,14 @@ Production-ready React documentation for enterprise banking applications. Built 
 | B09 | Integration Capstone | B (Vite SPA) | 4 hours |
 | A19 | Real-Time Patterns | A (Core) | 2.5 hours |
 
+### Level 9 — Public-Facing Applications (Next.js)
+| ID | Title | Part | Est. Time |
+|----|-------|------|-----------|
+| A20 | SPA vs SSR Decision Framework | A (Core) | 2 hours |
+| A21 | Next.js Project Setup | C (Next.js) | 3 hours |
+| A22 | Server Components and Data Fetching | C (Next.js) | 3.5 hours |
+| B10 | Deploying Next.js on Azure | C (Next.js) | 3 hours |
+
 ### Appendix
 | ID | Title |
 |----|-------|
@@ -98,9 +106,40 @@ Production-ready React documentation for enterprise banking applications. Built 
 
 ---
 
+## Architecture
+
+This curriculum is structured in three parts:
+
+| Part | Scope | Deployment |
+|------|-------|------------|
+| **Part A** — Core | React fundamentals, TypeScript, testing, security, compliance (~70% of content) | Framework-agnostic |
+| **Part B** — Vite SPA | Internal banking applications (post-login portal) | Azure Blob Storage + CDN |
+| **Part C** — Next.js | Public-facing applications (marketing, pre-login) | Azure App Service |
+
+Levels 1–8 cover Parts A and B. Level 9 covers Part C.
+
+---
+
 ## Companion Repository
 
-[eastwest-react-companion](https://github.com/eastwest/eastwest-react-companion) — Full working codebase that implements every pattern taught in these guides. Git tags map to each level.
+The companion repo lives at `companion-repo/` within this project. It implements every pattern taught in these guides. Git tags map to each level.
+
+---
+
+## Target Infrastructure
+
+EastWest Bank runs on **Microsoft Azure**. Deployment guides target:
+
+| Service | Purpose |
+|---------|---------|
+| Azure Blob Storage | Static website hosting (Vite SPA) |
+| Azure CDN | Content delivery and caching |
+| Azure Front Door | WAF, global routing, blue-green deployment |
+| Azure Application Insights | Monitoring and APM |
+| Azure Key Vault | Secrets management |
+| Azure Container Registry | Docker image storage |
+| Azure App Service | Next.js deployment (Level 9) |
+| GitHub Actions | CI/CD pipelines |
 
 ---
 

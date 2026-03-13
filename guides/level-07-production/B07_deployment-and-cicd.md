@@ -14,6 +14,7 @@ By the end of this guide, you will:
 - Configure Nginx for SPA routing and security headers
 - Set up a GitHub Actions CI/CD pipeline
 - Implement environment-specific configuration
+- Deploy to Azure Blob Storage with Azure CDN and Front Door
 - Deploy with blue-green strategy for zero-downtime releases
 - Build SOX-compliant change management checklists
 - Understand the release approval process
@@ -53,6 +54,7 @@ import { z } from 'zod';
 const envSchema = z.object({
   VITE_API_BASE_URL: z.string().url(),
   VITE_SENTRY_DSN: z.string().optional(),
+  VITE_APPINSIGHTS_CONNECTION_STRING: z.string().optional(),
   VITE_APP_VERSION: z.string().default('0.0.0'),
   MODE: z.enum(['development', 'staging', 'production']),
   DEV: z.boolean(),
@@ -62,6 +64,7 @@ const envSchema = z.object({
 export const env = envSchema.parse({
   VITE_API_BASE_URL: import.meta.env.VITE_API_BASE_URL,
   VITE_SENTRY_DSN: import.meta.env.VITE_SENTRY_DSN,
+  VITE_APPINSIGHTS_CONNECTION_STRING: import.meta.env.VITE_APPINSIGHTS_CONNECTION_STRING,
   VITE_APP_VERSION: import.meta.env.VITE_APP_VERSION,
   MODE: import.meta.env.MODE,
   DEV: import.meta.env.DEV,
@@ -261,13 +264,28 @@ jobs:
     runs-on: ubuntu-latest
     environment: staging
     steps:
-      - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
         with:
           name: dist
           path: dist/
-      - name: Deploy to staging
-        run: echo "Deploy to staging environment"
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS_STAGING }}
+      - name: Upload to Azure Blob Storage
+        run: |
+          az storage blob upload-batch \
+            --account-name ${{ vars.AZURE_STORAGE_ACCOUNT_STAGING }} \
+            --destination '$web' \
+            --source dist/ \
+            --overwrite
+      - name: Purge Azure CDN cache
+        run: |
+          az cdn endpoint purge \
+            --resource-group ${{ vars.AZURE_RG }} \
+            --profile-name ${{ vars.AZURE_CDN_PROFILE }} \
+            --name ${{ vars.AZURE_CDN_ENDPOINT_STAGING }} \
+            --content-paths '/*'
 
   deploy-production:
     if: github.ref == 'refs/heads/main'
@@ -275,13 +293,28 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     steps:
-      - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
         with:
           name: dist
           path: dist/
-      - name: Deploy to production
-        run: echo "Deploy to production environment"
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS_PRODUCTION }}
+      - name: Upload to Azure Blob Storage
+        run: |
+          az storage blob upload-batch \
+            --account-name ${{ vars.AZURE_STORAGE_ACCOUNT_PROD }} \
+            --destination '$web' \
+            --source dist/ \
+            --overwrite
+      - name: Purge Azure CDN cache
+        run: |
+          az cdn endpoint purge \
+            --resource-group ${{ vars.AZURE_RG }} \
+            --profile-name ${{ vars.AZURE_CDN_PROFILE }} \
+            --name ${{ vars.AZURE_CDN_ENDPOINT_PROD }} \
+            --content-paths '/*'
 ```
 
 ### Branch strategy
@@ -332,10 +365,10 @@ completed:
 - [ ] Notify stakeholders
 ```
 
-### Blue-green deployment concept
+### Blue-green deployment with Azure Front Door
 
 ```
-                    Load Balancer
+                  Azure Front Door (WAF)
                     ┌──────────┐
                     │  Router   │
                     └────┬─────┘
@@ -344,25 +377,112 @@ completed:
               │                     │
         ┌─────┴─────┐        ┌─────┴─────┐
         │  Blue     │        │  Green    │
+        │  Storage  │        │  Storage  │
         │  (v1.2.0) │        │  (v1.3.0) │
         │  ACTIVE   │        │  STANDBY  │
         └───────────┘        └───────────┘
 ```
 
-1. **Blue** is the current production environment
-2. **Green** is deployed with the new version
-3. Smoke tests run against Green
-4. Load balancer switches traffic to Green
+1. **Blue** is the current Azure Blob Storage account serving production
+2. **Green** is a second storage account deployed with the new version
+3. Smoke tests run against Green via its direct URL
+4. Azure Front Door switches the backend origin to Green
 5. Blue becomes the rollback target
 
-If issues are detected, traffic is switched back to Blue instantly.
+If issues are detected, Front Door switches the origin back to Blue instantly.
+Azure Front Door also provides WAF (Web Application Firewall) protection —
+a BSP 808 requirement for all internet-facing banking applications.
+
+---
+
+## Phase 5 — Azure Infrastructure for Vite SPAs
+
+EastWest Bank runs on Azure. A Vite SPA is a set of static files — HTML, JS,
+CSS, and assets. Azure offers two deployment models:
+
+### Option A — Azure Blob Storage + CDN (recommended for SPAs)
+
+```
+GitHub Actions → Build → Upload to Azure Blob Storage ($web container)
+                            ↓
+                     Azure CDN (caching, HTTPS)
+                            ↓
+                     Azure Front Door (WAF, global routing)
+                            ↓
+                         Users
+```
+
+This is the recommended approach for Vite SPAs. No servers to manage, no
+containers to patch, no Nginx to configure. Azure handles HTTPS, caching, and
+global distribution.
+
+#### Setting up static hosting
+
+```bash
+# Enable static website hosting on storage account
+az storage blob service-properties update \
+  --account-name ewbportalstaging \
+  --static-website \
+  --index-document index.html \
+  --404-document index.html
+
+# Upload built assets
+az storage blob upload-batch \
+  --account-name ewbportalstaging \
+  --destination '$web' \
+  --source dist/ \
+  --overwrite
+```
+
+> **SPA routing:** Setting `--404-document index.html` ensures all routes
+> serve the SPA entry point, just like the `try_files` directive in Nginx.
+
+### Option B — Azure Container Apps (when you need more control)
+
+The Docker/Nginx setup from Phase 2 deploys to Azure Container Apps when you
+need custom server-side logic, complex routing rules, or server-side security
+headers that Azure CDN rules cannot express.
+
+```bash
+# Build and push to Azure Container Registry
+az acr build \
+  --registry ewbregistry \
+  --image ewb-portal:${{ github.sha }} .
+
+# Deploy to Azure Container Apps
+az containerapp update \
+  --name ewb-portal-staging \
+  --resource-group ewb-digital \
+  --image ewbregistry.azurecr.io/ewb-portal:${{ github.sha }}
+```
+
+### Which option to choose
+
+| Concern | Blob Storage + CDN | Container Apps |
+|---------|-------------------|----------------|
+| Complexity | Low — static files only | Medium — containers |
+| Cost | Very low | Higher (compute) |
+| Security patching | None (no runtime) | Must patch Node/Nginx |
+| Custom headers | Azure CDN rules | Full Nginx control |
+| WAF | Azure Front Door | Azure Front Door |
+| SPA routing | 404 → index.html | Nginx try_files |
+
+For the EWB internal banking portal (a Vite SPA), **Option A is recommended**.
+No runtime means no runtime vulnerabilities to patch.
+
+### Checkpoint 5
+
+Why is "no runtime" a security advantage for deploying a Vite SPA? What
+class of vulnerabilities does static hosting eliminate compared to running
+a Node.js or Nginx server?
 
 ---
 
 ## Key Takeaways
 
 1. **Multi-stage Docker builds** — build stage compiles, serve stage only
-   contains static files and Nginx. Minimal attack surface.
+   contains static files and Nginx. Useful for containerized deployments to
+   Azure Container Apps.
 
 2. **Security headers** are mandatory. CSP, X-Frame-Options, and others prevent
    XSS, clickjacking, and MIME-type attacks.
@@ -373,8 +493,11 @@ If issues are detected, traffic is switched back to Blue instantly.
 4. **SOX compliance** requires documented change management. Every production
    release needs approval, testing evidence, and a rollback plan.
 
-5. **Blue-green deployment** enables zero-downtime releases with instant
-   rollback capability.
+5. **Blue-green deployment** via Azure Front Door enables zero-downtime
+   releases with instant rollback capability.
+
+6. **Azure Blob Storage + CDN** is the recommended deployment for Vite SPAs —
+   no servers to manage, no runtime vulnerabilities to patch.
 
 ---
 
