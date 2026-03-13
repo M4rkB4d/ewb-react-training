@@ -456,12 +456,11 @@ BSP Circular 1213 (AFASA — Anti-Financial Account Scam Act) mandates:
 ```
 January 2026          March 2026          June 2026
      │                    │                    │
-     │  ← You are here    │                    │
+     │                    │  ← You are here    │
      │                    │                    │
      ├── Phase 1 ────────→│                    │
-     │   Internal testing  │                    │
-     │   Staff enrollment  ├── Phase 2 ────────→│
-     │                    │   Customer rollout  │
+     │   Internal testing  ├── Phase 2 ────────→│
+     │   Staff enrollment  │   Customer rollout  │
      │                    │   Migration support │── Deadline
      │                    │                    │   Full compliance
 ```

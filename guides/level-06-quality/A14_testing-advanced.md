@@ -2,7 +2,7 @@
 
 > **EastWest Bank — Digital Platforms & Innovations**
 >
-> Part A (Core) · Level 6 — Quality · Est. 3 hours
+> Part A (Core) · Level 6 — Quality · Est. 3.5 hours
 
 ---
 
@@ -304,10 +304,10 @@ test.describe('Fund Transfer', () => {
 
 ```tsx
 // e2e/fixtures/auth.ts
-import { test as base } from '@playwright/test';
+import { test as base, type Page } from '@playwright/test';
 
 type AuthFixtures = {
-  authenticatedPage: ReturnType<typeof base['page']>;
+  authenticatedPage: Page;
 };
 
 export const test = base.extend<AuthFixtures>({

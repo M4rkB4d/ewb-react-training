@@ -14,7 +14,7 @@ By the end of this guide, you will:
 - Implement route-level code splitting with lazy loading
 - Virtualize long lists for transaction history
 - Optimize bundle size with tree shaking
-- Measure and monitor Web Vitals (LCP, FID, CLS)
+- Measure and monitor Web Vitals (LCP, INP, CLS)
 - Profile components to find re-render bottlenecks
 - Implement image and asset optimization
 

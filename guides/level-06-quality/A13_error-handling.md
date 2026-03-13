@@ -268,7 +268,7 @@ How do you handle errors in a `onClick` handler?
 
 ```tsx
 // src/lib/error-logger.ts
-import type { AppError } from './errors';
+import { AppError } from './errors';
 
 interface ErrorLogEntry {
   timestamp: string;
@@ -310,6 +310,7 @@ send the data even if the page is unloading (user closing the tab after an error
 
 ```tsx
 // src/lib/global-error-handlers.ts
+import { logError } from './error-logger';
 
 export function setupGlobalErrorHandlers(): void {
   // Catch unhandled promise rejections

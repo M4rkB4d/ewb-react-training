@@ -2,7 +2,7 @@
 
 > **EastWest Bank — Digital Platforms & Innovations**
 >
-> Part B (Vite SPA) · Level 5 — Data and Auth · Est. 3 hours
+> Part B (Vite SPA) · Level 5 — Data and Auth · Est. 3.5 hours
 
 ---
 
@@ -181,7 +181,7 @@ The user never sees a login screen for expired tokens.
 // BSP 1019 — Structured request/response logging
 apiClient.interceptors.response.use(
   (response) => {
-    if (env.DEV) {
+    if (import.meta.env.DEV) {
       console.info('[API]', response.config.method?.toUpperCase(), response.config.url, response.status);
     }
     return response;

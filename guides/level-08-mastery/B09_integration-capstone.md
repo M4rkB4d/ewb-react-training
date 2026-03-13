@@ -152,33 +152,72 @@ export const paymentKeys = {
 
 ```tsx
 // src/features/payments/api/payment-api.ts
+import { z } from 'zod';
 import { apiClient } from '@/lib/api-client';
-import type { Biller, PaymentRequest, PaymentReceipt } from '../types';
+import type { PaymentRequest } from '../types';
+
+// BSP 1122 — Zod schemas for runtime validation of all API responses
+
+const billerFieldSchema = z.object({
+  name: z.string(),
+  label: z.string(),
+  type: z.enum(['text', 'number']),
+  required: z.boolean(),
+  placeholder: z.string(),
+  validation: z.object({
+    pattern: z.string(),
+    message: z.string(),
+  }).optional(),
+});
+
+const billerSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  category: z.enum([
+    'utilities', 'telecommunications', 'government',
+    'insurance', 'credit-card', 'loans',
+  ]),
+  logoUrl: z.string(),
+  fields: z.array(billerFieldSchema),
+});
+
+const paymentReceiptSchema = z.object({
+  id: z.string(),
+  reference: z.string(),
+  billerId: z.string(),
+  billerName: z.string(),
+  accountId: z.string(),
+  amount: z.number(),
+  fee: z.number(),
+  total: z.number(),
+  status: z.enum(['completed', 'pending', 'failed']),
+  paidAt: z.string(),
+});
 
 export const paymentApi = {
-  searchBillers: async (query: string): Promise<Biller[]> => {
+  searchBillers: async (query: string) => {
     const response = await apiClient.get('/billers', { params: { q: query } });
-    return response.data;
+    return z.array(billerSchema).parse(response.data);
   },
 
-  getBiller: async (id: string): Promise<Biller> => {
+  getBiller: async (id: string) => {
     const response = await apiClient.get(`/billers/${id}`);
-    return response.data;
+    return billerSchema.parse(response.data);
   },
 
-  submitPayment: async (request: PaymentRequest): Promise<PaymentReceipt> => {
+  submitPayment: async (request: PaymentRequest) => {
     const response = await apiClient.post('/payments', request);
-    return response.data;
+    return paymentReceiptSchema.parse(response.data);
   },
 
-  getHistory: async (accountId: string): Promise<PaymentReceipt[]> => {
+  getHistory: async (accountId: string) => {
     const response = await apiClient.get(`/payments/history/${accountId}`);
-    return response.data;
+    return z.array(paymentReceiptSchema).parse(response.data);
   },
 
-  getReceipt: async (paymentId: string): Promise<PaymentReceipt> => {
+  getReceipt: async (paymentId: string) => {
     const response = await apiClient.get(`/payments/${paymentId}`);
-    return response.data;
+    return paymentReceiptSchema.parse(response.data);
   },
 };
 ```
@@ -672,6 +711,7 @@ describe('PaymentDraftStore', () => {
 ```tsx
 // src/features/payments/components/payment-form.test.tsx
 import { render, screen } from '@/test/test-utils';
+import userEvent from '@testing-library/user-event';
 import { PaymentForm } from './payment-form';
 import { usePaymentDraftStore } from '../stores/payment-draft-store';
 import { createAccount } from '@/test/factories/account-factory';

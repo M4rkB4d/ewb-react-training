@@ -2,7 +2,7 @@
 
 > **EastWest Bank — Digital Platforms & Innovations**
 >
-> Part B (Vite SPA) · Level 8 — Mastery · Est. 3 hours
+> Part B (Vite SPA) · Level 8 — Mastery · Est. 3.5 hours
 
 ---
 

@@ -2,7 +2,7 @@
 
 > **EastWest Bank — Digital Platforms & Innovations**
 >
-> Part A (Core) · Level 7 — Production · Est. 3 hours
+> Part A (Core) · Level 7 — Production · Est. 3.5 hours
 
 ---
 

@@ -745,7 +745,7 @@ The `.refine()` method adds custom validation logic — in this case, ensuring y
 Never trust environment variables. Validate them at application startup:
 
 ```typescript
-// src/config/env.ts
+// src/lib/env.ts
 import { z } from 'zod';
 
 const envSchema = z.object({
@@ -838,6 +838,8 @@ function processData(data: unknown) {
 
 ## Exercises
 
+> **Note:** These exercises require a project to be set up. If you have not completed **B01 — Project Setup** yet, return to these exercises after that guide. You will need a working Vite + React + TypeScript project before writing code.
+
 ### Exercise 1: Type a Banking Transaction
 
 **Objective:** Define TypeScript interfaces for a complete banking transaction system.
@@ -853,7 +855,7 @@ function processData(data: unknown) {
 
 **Verification:**
 ```bash
-npm run type-check
+npx tsc --noEmit
 ```
 
 ### Exercise 2: Create a Zod Schema for Account Data
@@ -872,7 +874,7 @@ npm run type-check
 
 **Verification:**
 ```bash
-npm run type-check
+npx tsc --noEmit
 ```
 
 ### Exercise 3: Type a Custom Hook
@@ -888,7 +890,7 @@ npm run type-check
 
 **Verification:**
 ```bash
-npm run type-check
+npx tsc --noEmit
 ```
 
 ---

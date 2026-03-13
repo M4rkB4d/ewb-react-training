@@ -553,6 +553,8 @@ export function AccountPage() {
 ### Form events
 
 ```tsx
+import { useState } from 'react';
+
 interface SearchBarProps {
   onSearch: (query: string) => void;
 }
@@ -562,7 +564,10 @@ export function SearchBar({ onSearch }: SearchBarProps) {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    onSearch(query.trim());
+    const trimmed = query.trim();
+    if (trimmed) {
+      onSearch(trimmed);
+    }
   };
 
   return (

@@ -645,6 +645,8 @@ React's ecosystem has many tools you will NOT need:
 
 ## Exercises
 
+> **Note:** These exercises require a project to be set up. If you have not completed **B01 — Project Setup** yet, return to these exercises after that guide. You will need a working Vite + React + TypeScript project before writing code.
+
 ### Exercise 1: Build a Counter Component
 
 **Objective:** Build a counter that starts at 0, has increment and decrement buttons, and displays the current count.
@@ -659,7 +661,7 @@ React's ecosystem has many tools you will NOT need:
 
 **Verification:**
 ```bash
-npm run type-check
+npx tsc --noEmit
 ```
 
 ### Exercise 2: Build a Toggle Component
@@ -675,7 +677,7 @@ npm run type-check
 
 **Verification:**
 ```bash
-npm run type-check
+npx tsc --noEmit
 ```
 
 ### Exercise 3: Build a Session Timer with Cleanup
@@ -691,7 +693,7 @@ npm run type-check
 
 **Verification:**
 ```bash
-npm run type-check
+npx tsc --noEmit
 ```
 
 ---

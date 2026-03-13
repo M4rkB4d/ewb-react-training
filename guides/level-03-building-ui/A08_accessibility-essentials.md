@@ -30,7 +30,7 @@ By the end of this guide, you will:
 
 ---
 
-## Why Accessibility Is Mandatory
+## Phase 1 — Why Accessibility Is Mandatory
 
 ### The regulatory requirement
 

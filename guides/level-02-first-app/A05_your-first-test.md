@@ -390,7 +390,7 @@ npm run test:run
 Expected output:
 
 ```
- ✓ src/features/accounts/components/account-card.test.tsx (12 tests)
+ ✓ src/features/accounts/components/account-card.test.tsx (14 tests)
    ✓ AccountCard > displays the account name
    ✓ AccountCard > masks the account number showing only last 4 digits
    ✓ AccountCard > displays the account type
@@ -403,9 +403,11 @@ Expected output:
    ✓ AccountCard > does not show transfer button when onTransfer is not provided
    ✓ AccountCard > calls onTransfer with account number when Transfer is clicked
    ✓ AccountCard > calls onViewDetails with account number when View Details is clicked
+   ✓ AccountCard > handles zero balance
+   ✓ AccountCard > defaults currency to PHP
 
  Test Files  1 passed (1)
-      Tests  12 passed (12)
+      Tests  14 passed (14)
 ```
 
 ### What these tests verify
@@ -420,7 +422,7 @@ Expected output:
 
 ### Checkpoint 3
 
-Run the test suite and verify all 12 tests pass. If any fail, read the error message
+Run the test suite and verify all 14 tests pass. If any fail, read the error message
 carefully — it will tell you exactly what was expected vs. what was found.
 
 ---
@@ -598,14 +600,14 @@ as the user-visible behavior is the same.
 Every test follows three steps:
 
 ```tsx
-it('shows low balance warning when balance is under 5000', () => {
+it('formats zero balance correctly', () => {
   // Arrange — set up the test
-  render(<AccountCard {...defaultProps} balance={3000} />);
+  render(<AccountCard {...defaultProps} balance={0} />);
 
   // Act — (sometimes no action needed for render tests)
 
   // Assert — verify the result
-  expect(screen.getByText('Low balance warning')).toBeInTheDocument();
+  expect(screen.getByText('₱0.00')).toBeInTheDocument();
 });
 ```
 

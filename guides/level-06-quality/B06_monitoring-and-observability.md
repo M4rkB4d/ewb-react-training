@@ -2,7 +2,7 @@
 
 > **EastWest Bank — Digital Platforms & Innovations**
 >
-> Part B (Vite SPA) · Level 6 — Quality · Est. 2 hours
+> Part B (Vite SPA) · Level 6 — Quality · Est. 2.5 hours
 
 ---
 
@@ -39,10 +39,10 @@ import * as Sentry from '@sentry/react';
 import { env } from './env';
 
 export function initMonitoring(): void {
-  if (env.PROD) {
+  if (import.meta.env.PROD) {
     Sentry.init({
       dsn: env.VITE_SENTRY_DSN,
-      environment: env.MODE,
+      environment: import.meta.env.MODE,
       release: env.VITE_APP_VERSION,
 
       // Performance monitoring

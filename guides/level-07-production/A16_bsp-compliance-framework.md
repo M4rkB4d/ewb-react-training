@@ -2,7 +2,7 @@
 
 > **EastWest Bank — Digital Platforms & Innovations**
 >
-> Part A (Core) · Level 7 — Production · Est. 3 hours
+> Part A (Core) · Level 7 — Production · Est. 3.5 hours
 
 ---
 
@@ -137,6 +137,8 @@ export type AuditEventType =
   | 'TRANSFER_FAILURE'
   | 'PAYMENT_INITIATE'
   | 'PAYMENT_CONFIRM'
+  | 'PAYMENT_SUBMITTED'
+  | 'PAYMENT_FAILED'
   | 'SETTINGS_CHANGE'
   | 'DATA_EXPORT'
   | 'CONSENT_GRANTED'
