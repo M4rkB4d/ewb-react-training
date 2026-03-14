@@ -507,6 +507,18 @@ react-intl uses ICU MessageFormat for complex messages:
 }
 ```
 
+### Plural rules by locale
+
+Not all locales use plural forms the same way. ICU MessageFormat adapts automatically, but translators must know the rules:
+
+| Locale | Plural Categories | Notes |
+|--------|------------------|-------|
+| `en-US` | one, other | "1 account" vs "2 accounts" |
+| `fil-PH` | one, other | Similar to English |
+| `zh-Hans` | other (only) | Chinese has no plural forms — use a single form: `"{count} 个账户"` |
+
+When translating, verify plural categories for each target locale at [unicode.org/cldr/charts/latest/supplemental/language_plural_rules.html](https://unicode.org/cldr/charts/latest/supplemental/language_plural_rules.html).
+
 ### Select for varying terms
 
 ```json

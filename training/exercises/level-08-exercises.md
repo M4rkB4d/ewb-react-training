@@ -137,7 +137,7 @@ The component must:
 'use client';
 
 import { useIntl } from 'react-intl';
-import { forwardRef, useState } from 'react';
+import { useState, type Ref } from 'react';
 
 interface CurrencyInputProps {
   name: string;
@@ -147,10 +147,10 @@ interface CurrencyInputProps {
   error?: string;
   currency?: string;
   max?: number;
+  ref?: Ref<HTMLInputElement>;
 }
 
-export const CurrencyInput = forwardRef<HTMLInputElement, CurrencyInputProps>(
-  function CurrencyInput({ name, label, value, onChange, error, currency = 'PHP', max = 500_000 }, ref) {
+export function CurrencyInput({ name, label, value, onChange, error, currency = 'PHP', max = 500_000, ref }: CurrencyInputProps) {
     const intl = useIntl();
     const [displayValue, setDisplayValue] = useState(
       value != null ? intl.formatNumber(value, { style: 'currency', currency }) : ''
@@ -171,8 +171,7 @@ export const CurrencyInput = forwardRef<HTMLInputElement, CurrencyInputProps>(
         )}
       </div>
     );
-  }
-);
+}
 ```
 
 ### Acceptance Criteria

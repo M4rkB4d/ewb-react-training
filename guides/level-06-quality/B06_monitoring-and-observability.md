@@ -401,7 +401,7 @@ initWebVitals();
 > browser — it is a write-only ingestion key, not a secret. Azure Application
 > Insights connection strings are designed for client-side use.
 
-### Checkpoint 5
+### Checkpoint 3
 
 Why does the configuration set `disableCookiesUsage: true`? What BSP regulation
 makes this the right default for a banking application?

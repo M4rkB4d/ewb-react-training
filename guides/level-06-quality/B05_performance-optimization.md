@@ -94,7 +94,7 @@ The compiler relies on React's rules:
 3. **Side effects in useEffect** — not during render
 
 If your code follows these rules (and it should), the compiler works
-automatically with zero configuration.
+automatically once installed — no per-component configuration needed.
 
 ### Checkpoint 1
 

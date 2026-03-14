@@ -2,7 +2,7 @@
 
 > **EastWest Bank — Digital Platforms & Innovations**
 >
-> Covers: A04 (Components and JSX), A05 (Your First Test), B01 (Project Setup)
+> Covers: A04 (Components and JSX), A05 (Your First Test), B01 (Project Setup), B01b (Project Tooling)
 
 ---
 

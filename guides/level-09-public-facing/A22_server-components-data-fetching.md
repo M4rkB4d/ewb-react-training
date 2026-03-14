@@ -264,6 +264,10 @@ await fetch(url, { cache: 'no-store' });
 
 > **Since Next.js 15:** `fetch` calls are NOT cached by default (unlike Next.js 14 where `force-cache` was the default). This behavior continues in Next.js 16. Always specify your caching intent explicitly with `cache` or `next.revalidate`.
 
+With ISR (`revalidate: 60`), cached content is served to all users during the revalidation window. At T+60s, the first request triggers a **background revalidation** — users continue seeing the cached version until the fresh data is ready. If the revalidation fetch fails, Next.js keeps serving the stale cache (stale-while-revalidate behavior).
+
+> **Banking safety:** Never use ISR for user-specific data. If you accidentally cache an application status page with ISR, one user's approval status could be served to another user. User-specific data must always use `cache: 'no-store'`.
+
 Applied to EWB pages:
 
 | Page | Strategy | Revalidation | Why |

@@ -300,7 +300,7 @@ export function TransferStatusTracker({ transferId }: { transferId: string }) {
 'use client';
 
 import { useIntl } from 'react-intl';
-import { forwardRef, useState, useCallback } from 'react';
+import { useState, useCallback, type Ref } from 'react';
 
 interface CurrencyInputProps {
   name: string;
@@ -310,6 +310,7 @@ interface CurrencyInputProps {
   error?: string;
   currency?: string;
   max?: number;
+  ref?: Ref<HTMLInputElement>;
 }
 
 function parseLocaleNumber(value: string, locale: string): number {
@@ -331,8 +332,7 @@ function parseLocaleNumber(value: string, locale: string): number {
   return isNaN(parsed) ? 0 : Math.round(parsed * 100) / 100;
 }
 
-export const CurrencyInput = forwardRef<HTMLInputElement, CurrencyInputProps>(
-  function CurrencyInput({ name, label, value, onChange, error, currency = 'PHP', max = 500_000 }, ref) {
+export function CurrencyInput({ name, label, value, onChange, error, currency = 'PHP', max = 500_000, ref }: CurrencyInputProps) {
     const intl = useIntl();
     const [displayValue, setDisplayValue] = useState(
       value != null && value > 0
@@ -396,8 +396,7 @@ export const CurrencyInput = forwardRef<HTMLInputElement, CurrencyInputProps>(
         )}
       </div>
     );
-  },
-);
+}
 ```
 
 ---

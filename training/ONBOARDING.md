@@ -64,11 +64,11 @@ Set up the project from scratch, build your first components, and write your fir
 | Session | Content | Est. Time |
 |---------|---------|-----------|
 | **Morning** | [B01 — Project Setup](../guides/level-02-first-app/B01_project-setup.md) | 2 hours |
-| | [B01b — Project Tooling and Quality Gates](../guides/level-02-first-app/B01b_project-tooling.md) | 1.5 hours |
+| | [B01b — Project Tooling and Quality Gates](../guides/level-02-first-app/B01b_project-tooling.md) | 1 hour |
 | | [A04 — Components and JSX](../guides/level-02-first-app/A04_components-and-jsx.md) | 2 hours |
-| **Afternoon** | [A05 — Your First Test](../guides/level-02-first-app/A05_your-first-test.md) | 2 hours |
+| **Afternoon** | [A05 — Your First Test](../guides/level-02-first-app/A05_your-first-test.md) | 1.5 hours |
 | | [Level 2 Quiz](quizzes/level-02-quiz.md) | 30 min |
-| | [Level 2 Exercises](exercises/level-02-exercises.md) | 30 min |
+| | [Level 2 Exercises](exercises/level-02-exercises.md) | 1 hour |
 
 **End-of-day checkpoint**: You have a running Vite + React + TypeScript project with the EWB Tailwind theme configured and at least one passing test.
 

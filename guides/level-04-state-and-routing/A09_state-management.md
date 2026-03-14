@@ -512,7 +512,8 @@ interface AccountFilterState {
   setAccountType: (type: AccountFilterState['accountType']) => void;
   setSearchQuery: (query: string) => void;
   reset: () => void;
-  // Computed: are any filters active?
+  // Derived helper — recalculated on each call, not a cached selector.
+  // For memoized derived state, use a selector: useStore((s) => s.x !== 'default')
   hasActiveFilters: () => boolean;
 }
 
