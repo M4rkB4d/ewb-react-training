@@ -159,7 +159,7 @@ server {
     add_header X-Content-Type-Options "nosniff" always;
     add_header Referrer-Policy "strict-origin-when-cross-origin" always;
     add_header Permissions-Policy "camera=(), microphone=(), geolocation=()" always;
-    add_header Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://api.ewbanking.com https://*.sentry.io; font-src 'self';" always;
+    add_header Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self' https://api.ewbanking.com https://*.sentry.io; font-src 'self'; frame-src 'none'; frame-ancestors 'none'; form-action 'self'; base-uri 'self';" always;
 
     # Disable server version disclosure
     server_tokens off;
@@ -588,9 +588,9 @@ when a deployment starts and when it completes (with success/failure status).
 
 ## What Comes Next
 
-**Next guide:** [A15 — Security Hardening](A15_security-hardening.md) —
-where you implement CSP, SRI, Trusted Types, and other browser-level security
-mechanisms.
+**Next guide:** [A16 — BSP Compliance Framework](A16_bsp-compliance-framework.md) —
+where you map BSP circulars to frontend controls, build audit trail systems,
+and prepare for BSP on-site examinations.
 
 ---
 

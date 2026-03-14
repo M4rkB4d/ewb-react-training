@@ -417,6 +417,8 @@ For a better user experience, update the UI immediately before the server respon
 
 ```tsx
 // src/features/transfers/hooks/use-create-transfer.ts
+import type { Account } from '@/features/accounts/types';
+
 export function useCreateTransfer() {
   const queryClient = useQueryClient();
 

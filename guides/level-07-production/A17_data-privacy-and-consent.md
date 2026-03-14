@@ -50,24 +50,16 @@ information of Philippine citizens. For a banking frontend:
 
 ```tsx
 // src/features/consent/types.ts
-export interface ConsentRecord {
-  id: string;
-  userId: string;
-  purpose: ConsentPurpose;
-  granted: boolean;
-  grantedAt: string | null;
-  revokedAt: string | null;
-  version: string;
-  ipAddress: string; // Set by backend
-}
+export const consentPurposes = [
+  'essential',          // Required for banking services
+  'analytics',          // Usage analytics
+  'marketing',          // Marketing communications
+  'data-sharing',       // BSP 1122 Open Finance
+  'biometric',          // Passkey/biometric auth
+  'location',           // Branch finder
+] as const;
 
-export type ConsentPurpose =
-  | 'essential'          // Required for banking services
-  | 'analytics'          // Usage analytics
-  | 'marketing'          // Marketing communications
-  | 'data-sharing'       // BSP 1122 Open Finance
-  | 'biometric'          // Passkey/biometric auth
-  | 'location';          // Branch finder
+export type ConsentPurpose = (typeof consentPurposes)[number];
 ```
 
 ### Consent management component
@@ -85,7 +77,7 @@ import type { ConsentPurpose } from '../types';
 const consentRecordSchema = z.object({
   id: z.string(),
   userId: z.string(),
-  purpose: z.string(),
+  purpose: z.enum(['essential', 'analytics', 'marketing', 'data-sharing', 'biometric', 'location']),
   granted: z.boolean(),
   grantedAt: z.string().nullable(),
   revokedAt: z.string().nullable(),
@@ -93,6 +85,7 @@ const consentRecordSchema = z.object({
   ipAddress: z.string(),
 });
 
+// Single source of truth — derived from the Zod schema
 type ConsentRecord = z.infer<typeof consentRecordSchema>;
 
 const purposes: { key: ConsentPurpose; label: string; description: string; required: boolean }[] = [

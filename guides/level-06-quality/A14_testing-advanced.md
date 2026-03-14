@@ -120,7 +120,7 @@ export function createAccount(overrides: Partial<Account> = {}): Account {
     name: 'Personal Savings',
     number: `${1000000000 + accountCounter}`,
     type: 'savings',
-    balance: 150000,
+    balance: 150_000_00, // ₱150,000.00 in centavos
     currency: 'PHP',
     isActive: true,
     ...overrides,
@@ -144,9 +144,9 @@ export function createTransaction(overrides: Partial<Transaction> = {}): Transac
     id: `txn-${txnCounter}`,
     date: new Date().toISOString(),
     description: 'POS Purchase — SM Megamall',
-    amount: -2500,
+    amount: -2_500_00, // ₱2,500.00 in centavos
     type: 'debit',
-    balance: 147500,
+    balance: 147_500_00, // ₱147,500.00 in centavos
     reference: `REF-${txnCounter.toString().padStart(4, '0')}`,
     channel: 'POS',
     ...overrides,
@@ -156,7 +156,7 @@ export function createTransaction(overrides: Partial<Transaction> = {}): Transac
 export function createTransactions(count: number): Transaction[] {
   return Array.from({ length: count }, (_, i) =>
     createTransaction({
-      amount: -(Math.floor(Math.random() * 10000) + 100),
+      amount: -((i + 1) * 500_00), // Deterministic: ₱500, ₱1000, ₱1500...
       description: `Transaction ${i + 1}`,
     }),
   );
@@ -176,9 +176,9 @@ it('shows the correct greeting', () => {
 });
 
 it('displays account balance', () => {
-  const account = createAccount({ balance: 50000 });
+  const account = createAccount({ balance: 50_000_00 }); // ₱50,000.00 in centavos
   render(<AccountCard {...account} />);
-  expect(screen.getByText('₱50,000.00')).toBeInTheDocument();
+  expect(screen.getByText('₱50,000.00')).toBeInTheDocument(); // formatPeso(5000000) → ₱50,000.00
 });
 ```
 

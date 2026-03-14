@@ -418,6 +418,7 @@ for each login attempt and rejects any assertion signed with a stale challenge.
 
 ```tsx
 // src/features/auth/hooks/use-passkey-support.ts
+import { useState, useEffect } from 'react';
 
 export function usePasskeySupport() {
   const [isSupported, setIsSupported] = useState(false);

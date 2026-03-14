@@ -41,8 +41,8 @@ function add(a, b) {
   return a + b;
 }
 
-// Arrow function — same thing, shorter syntax
-const add = (a, b) => a + b;
+// Arrow function — same logic, shorter syntax
+const addArrow = (a, b) => a + b;
 
 // Arrow function with a body (when you need multiple lines)
 const greet = (name) => {
@@ -761,7 +761,7 @@ React's ecosystem has many tools you will NOT need:
 | Class components | Legacy pattern — all new code uses functions |
 | Redux | Too complex for most use cases — Zustand is simpler (A09) |
 | Context API for state management | Causes unnecessary re-renders — Zustand solves this (A09) |
-| `fetch` for data fetching | We standardize on Axios throughout these guides (B03) |
+| `fetch` for data fetching | We standardize on Axios from B03 onward — `fetch` is used in early examples for simplicity |
 
 ---
 

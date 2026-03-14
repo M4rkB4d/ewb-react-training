@@ -586,11 +586,16 @@ function TransferStatus({ state }: { state: TransferState }) {
           {state.error.retryable && <button>Retry</button>}
         </div>
       );
+
+    default: {
+      const _exhaustive: never = state;
+      return _exhaustive;
+    }
   }
 }
 ```
 
-If you add a new status later (like `'cancelled'`), TypeScript will warn you about every `switch` statement that does not handle it. This is called **exhaustive checking** — it prevents bugs when your state machine evolves.
+If you add a new status later (like `'cancelled'`), the `default` case will trigger a compile error — `never` cannot be assigned to the new variant. This is called **exhaustive checking** — it prevents bugs when your state machine evolves. Note that TypeScript does not warn about missing `switch` cases on its own; you need the `default: never` pattern (or enable the ESLint `switch-exhaustiveness-check` rule) to enforce it.
 
 ### 4.3 Utility Types
 

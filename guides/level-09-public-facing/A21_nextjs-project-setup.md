@@ -155,6 +155,9 @@ const securityHeaders = [
     value: [
       "default-src 'self'",
       "script-src 'self'",
+      // Next.js may inject inline styles for built-in components like next/image
+      // and next/font. Unlike the Vite SPA (see A15), 'unsafe-inline' is needed
+      // here unless you implement nonce-based CSP.
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: https://cdn.ewbanking.com",
       "connect-src 'self' https://api.ewbanking.com https://*.sentry.io",

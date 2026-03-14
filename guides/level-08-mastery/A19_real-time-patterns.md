@@ -68,8 +68,8 @@ no transactions are occurring.
 
 ```tsx
 // src/hooks/use-polling.ts
-import { useEffect, useRef } from 'react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useEffect, useRef, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import type { QueryKey } from '@tanstack/react-query';
 
 interface UsePollingOptions {
@@ -247,21 +247,29 @@ import { useEventSource } from '@/hooks/use-event-source';
 import { useQueryClient } from '@tanstack/react-query';
 import { accountKeys } from '../api/query-keys';
 import { useCallback } from 'react';
+import { z } from 'zod';
 
-interface TransactionAlert {
-  type: 'credit' | 'debit';
-  accountId: string;
-  amount: number;
-  description: string;
-  timestamp: string;
-}
+const transactionAlertSchema = z.object({
+  type: z.enum(['credit', 'debit']),
+  accountId: z.string(),
+  amount: z.number(),
+  description: z.string(),
+  timestamp: z.string().datetime(),
+});
+
+type TransactionAlert = z.infer<typeof transactionAlertSchema>;
 
 export function useTransactionAlerts(accountId: string) {
   const queryClient = useQueryClient();
 
   const handleMessage = useCallback(
     (event: MessageEvent) => {
-      const alert: TransactionAlert = JSON.parse(event.data);
+      const parsed = transactionAlertSchema.safeParse(JSON.parse(event.data));
+      if (!parsed.success) {
+        console.warn('[SSE] Invalid transaction alert:', parsed.error.issues);
+        return;
+      }
+      const alert: TransactionAlert = parsed.data;
 
       // Invalidate account balance — TanStack Query will refetch
       queryClient.invalidateQueries({

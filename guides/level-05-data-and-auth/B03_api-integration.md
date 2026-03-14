@@ -111,8 +111,9 @@ EastWest Bank standardizes on Axios for all HTTP communication:
 Interceptors are the critical differentiator — they enable centralized auth token
 injection, error logging, and audit trail capture without modifying individual API calls.
 
-> **Security Note:** Use Axios >= 1.13.5. Earlier versions are affected by
-> CVE-2026-25639 (DoS via prototype pollution in `mergeConfig`).
+> **Security Note:** Always use the latest stable Axios version. Run
+> `npm audit` regularly — Axios has had past vulnerabilities including
+> CSRF token leakage (CVE-2023-45857) and SSRF via proxy misconfiguration.
 
 ### Base client setup
 

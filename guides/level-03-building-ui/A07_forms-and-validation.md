@@ -252,11 +252,15 @@ option tells React Hook Form which field to attach the error to.
 ```tsx
 const dateSchema = z.coerce
   .date()
-  .min(new Date(), 'Date must be in the future')
-  .max(
-    new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
-    'Date must be within one year',
+  .refine((d) => d > new Date(), { message: 'Date must be in the future' })
+  .refine(
+    (d) => d < new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
+    { message: 'Date must be within one year' },
   );
+// IMPORTANT: Do NOT use `.min(new Date())` — it evaluates `new Date()` once
+// at module load time. If the app runs for hours (common in banking ops
+// centers), the "now" reference becomes stale. `.refine()` evaluates
+// `new Date()` at validation time, so it is always current.
 ```
 
 ### Checkpoint 3

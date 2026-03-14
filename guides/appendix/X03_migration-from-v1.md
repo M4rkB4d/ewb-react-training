@@ -8,8 +8,8 @@
 
 ## Overview
 
-This guide maps v1 documentation (19 guides) to v2 documentation (24 guides
-across 8 levels). Use this reference if you completed parts of v1 and want
+This guide maps v1 documentation (19 guides) to v2 documentation (34 guides
+across 9 levels). Use this reference if you completed parts of v1 and want
 to know where to pick up in v2.
 
 ---
@@ -61,7 +61,7 @@ These topics have no v1 equivalent:
 
 | Technology | v1 | v2 | Migration Notes |
 |-----------|----|----|----------------|
-| Node.js | 20/22 | 24 LTS | Update `.nvmrc` and CI configs |
+| Node.js | 20/22 | 22 LTS | Update `.nvmrc` and CI configs |
 | React | 18 | 19 | Remove manual `useMemo`/`useCallback` (React Compiler) |
 | Vite | 5/6 | 7 | Update `vite.config.ts`, check plugin compatibility |
 | Tailwind | 3 | 4 | `@theme` replaces `theme.extend`, CSS-first config |

@@ -320,7 +320,7 @@ Hands-on exercises reinforce each level. Work through them during afternoon sess
 
 > **Rule**: Attempt every exercise before checking the answer key. The struggle is where the learning happens.
 
-### Capstone Project (Day 12)
+### Capstone Project (Day 13)
 
 The capstone is your graduation requirement. You will build a **fund transfer flow** in the portal application that exercises every major pattern from the program.
 
@@ -348,7 +348,7 @@ A complete transfer feature: select source account, enter recipient details, spe
 
 #### Passing Score
 
-You must score **70% or higher** across all criteria. Any criterion scoring below 50% is an automatic re-do regardless of total score. Your team lead will conduct a code review on Day 12 — come prepared to explain your decisions.
+You must score **70% or higher** across all criteria. Any criterion scoring below 50% is an automatic re-do regardless of total score. Your team lead will conduct a code review on Day 13 — come prepared to explain your decisions.
 
 ---
 

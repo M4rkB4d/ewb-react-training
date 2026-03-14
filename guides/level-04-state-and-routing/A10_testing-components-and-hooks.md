@@ -164,6 +164,8 @@ Test the UI store from A09: toggling sidebar, setting theme, persistence behavio
 // src/test/mocks/handlers.ts
 import { http, HttpResponse } from 'msw';
 
+// These URLs must match your app's actual API paths. If apiClient uses
+// env.VITE_API_BASE_URL, set that env var in your test setup.
 export const handlers = [
   http.get('/api/accounts', () => {
     return HttpResponse.json([
@@ -326,6 +328,8 @@ export function renderWithProviders(
   );
 }
 ```
+
+> **Data Router note:** If your app uses `createBrowserRouter` (from B02), use `createMemoryRouter` with `RouterProvider` instead of `MemoryRouter`. Data router hooks like `useBlocker`, `useMatches`, and `useNavigation` require the data router context.
 
 Usage:
 

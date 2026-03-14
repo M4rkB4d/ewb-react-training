@@ -156,7 +156,7 @@ Lazy loading means only the active locale is downloaded.
   "auth.mfa.title": "Two-Factor Authentication",
   "auth.mfa.prompt": "Enter the 6-digit code from your authenticator app.",
   "auth.logout": "Sign Out",
-  "auth.session.warning": "Your session will expire in {minutes} {minutes, plural, one {minute} other {minutes}}.",
+  "auth.session.warning": "Your session will expire in {minutes, plural, one {# minute} other {# minutes}}.",
   "auth.session.extend": "Stay Signed In",
 
   "errors.network": "Unable to connect. Please check your internet connection.",
@@ -208,7 +208,7 @@ Lazy loading means only the active locale is downloaded.
   "auth.mfa.title": "Two-Factor Authentication",
   "auth.mfa.prompt": "Ilagay ang 6 na digit code mula sa iyong authenticator app.",
   "auth.logout": "Mag-sign Out",
-  "auth.session.warning": "Mag-e-expire ang iyong session sa {minutes} {minutes, plural, one {minuto} other {minuto}}.",
+  "auth.session.warning": "Mag-e-expire ang iyong session sa {minutes, plural, one {# minuto} other {# minuto}}.",
   "auth.session.extend": "Manatiling Naka-sign In",
 
   "errors.network": "Hindi makakonekta. Pakisuri ang iyong internet connection.",

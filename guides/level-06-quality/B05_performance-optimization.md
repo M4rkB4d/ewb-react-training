@@ -33,8 +33,17 @@ By the end of this guide, you will:
 
 ### What React Compiler does
 
-React 19 includes the React Compiler (formerly React Forget). It automatically
-memoizes components, values, and callbacks at build time.
+React Compiler (formerly React Forget) works with React 19 and automatically
+memoizes components, values, and callbacks at build time. It is a **separate
+build-time tool** — not bundled with React 19 itself. You must install and
+configure it in your Vite/Babel pipeline:
+
+```bash
+npm install -D babel-plugin-react-compiler react-compiler-runtime
+```
+
+> See your `vite.config.ts` for the Babel plugin configuration. The compiler
+> requires React 19 as the minimum React version but is not included in it.
 
 **Before React Compiler** (React 18 and below):
 

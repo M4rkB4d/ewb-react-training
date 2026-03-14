@@ -222,7 +222,7 @@ export default async function ProductsPage() {
               <div className="p-4">
                 <h2 className="font-semibold text-gray-900">{product.name}</h2>
                 <p className="mt-1 text-sm text-gray-600">{product.summary}</p>
-                {product.interestRate && (
+                {product.interestRate != null && (
                   <p className="mt-2 text-sm font-medium text-ewb-purple">
                     From {product.interestRate}% p.a.
                   </p>
@@ -460,13 +460,13 @@ export default async function ProductPage({
           <h1 className="text-3xl font-bold text-gray-900">{product.name}</h1>
           <p className="mt-4 text-gray-600">{product.description}</p>
 
-          {product.interestRate && (
+          {product.interestRate != null && (
             <p className="mt-4 text-2xl font-bold text-ewb-purple">
               {product.interestRate}% p.a.
             </p>
           )}
 
-          {product.minDeposit && (
+          {product.minDeposit != null && (
             <p className="mt-2 text-sm text-gray-500">
               Minimum deposit: ₱{product.minDeposit.toLocaleString('en-PH')}
             </p>

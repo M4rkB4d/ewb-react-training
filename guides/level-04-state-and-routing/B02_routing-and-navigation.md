@@ -371,8 +371,11 @@ export function Component() {
       <div className="text-center">
         <h1 className="text-6xl font-bold text-ewb-purple">404</h1>
         <p className="mt-4 text-lg text-gray-600">Page not found</p>
-        <Link to="/">
-          <Button className="mt-6">Return to Dashboard</Button>
+        <Link
+          to="/"
+          className="mt-6 inline-flex items-center justify-center rounded-lg bg-ewb-purple px-6 py-2 text-white hover:bg-ewb-purple-700"
+        >
+          Return to Dashboard
         </Link>
       </div>
     </div>
@@ -396,7 +399,7 @@ export function RouteErrorBoundary() {
         <div className="text-center">
           <h1 className="text-4xl font-bold text-red-600">{error.status}</h1>
           <p className="mt-2 text-gray-600">{error.statusText}</p>
-          <Link to="/"><Button className="mt-4">Go Home</Button></Link>
+          <Link to="/" className="mt-4 inline-flex items-center justify-center rounded-lg bg-ewb-purple px-4 py-2 text-white hover:bg-ewb-purple-700">Go Home</Link>
         </div>
       </div>
     );
@@ -407,7 +410,7 @@ export function RouteErrorBoundary() {
       <div className="text-center">
         <h1 className="text-4xl font-bold text-red-600">Something went wrong</h1>
         <p className="mt-2 text-gray-600">An unexpected error occurred.</p>
-        <Link to="/"><Button className="mt-4">Go Home</Button></Link>
+        <Link to="/" className="mt-4 inline-flex items-center justify-center rounded-lg bg-ewb-purple px-4 py-2 text-white hover:bg-ewb-purple-700">Go Home</Link>
       </div>
     </div>
   );

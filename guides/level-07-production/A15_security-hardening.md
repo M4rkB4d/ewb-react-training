@@ -96,8 +96,10 @@ the application. Move to enforcing mode after all violations are resolved.
 
 ### Checkpoint 1
 
-Why does the CSP include `'unsafe-inline'` for `style-src` but NOT for
-`script-src`? What risk does each `'unsafe-inline'` introduce?
+The CSP above uses `style-src 'self'` without `'unsafe-inline'`. What
+would adding `'unsafe-inline'` to `style-src` allow an attacker to do?
+Under what circumstances would a team legitimately need it (hint: not
+with Tailwind CSS 4)?
 
 ---
 
@@ -251,8 +253,8 @@ function SafeLink({ url, children }: { url: string; children: React.ReactNode })
 ```
 
 ```bash
-# Minimum version 3.3.2 required — CVE-2026-0540 (XSS bypass) affects earlier versions
-npm install dompurify@^3.3.3
+# Always use the latest stable version — older versions have known XSS bypass vulnerabilities
+npm install dompurify@latest
 ```
 
 ```tsx
@@ -1061,9 +1063,9 @@ user activity (mouse, keyboard) resets the timer.
 ## Exercises
 
 ### Exercise 1 — CSP Nonce Strategy
-Research and implement CSP nonce-based script loading to eliminate
-`'unsafe-inline'` from `style-src`. How would this work with Vite and
-Tailwind CSS?
+Research CSP nonce-based script loading for `script-src`. How would you
+generate a per-request nonce in an Express/Fastify server and pass it to
+Vite's build output? When would nonces be necessary versus `'self'`-only?
 
 ### Exercise 2 — Security Headers Audit
 Write a script that fetches your deployed application and verifies all

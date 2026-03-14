@@ -781,15 +781,29 @@ export { generateEvidencePackage };
 Add an evidence generation step to your CI workflow:
 
 ```yaml
-# In your CI pipeline configuration
-compliance-evidence:
-  stage: post-test
-  script:
-    - npx tsx scripts/generate-compliance-evidence.ts
-  artifacts:
-    paths:
-      - compliance-evidence-report.json
-    expire_in: 1 year
+# In your Azure Pipelines configuration
+- stage: ComplianceEvidence
+  displayName: 'Compliance Evidence'
+  dependsOn: Test
+  jobs:
+    - job: GenerateEvidence
+      displayName: 'Generate Compliance Evidence'
+      pool:
+        vmImage: 'ubuntu-latest'
+      steps:
+        - task: NodeTool@0
+          inputs:
+            versionSpec: '22'
+          displayName: 'Install Node.js'
+        - script: npm ci
+          displayName: 'Install dependencies'
+        - script: npx tsx scripts/generate-compliance-evidence.ts
+          displayName: 'Generate compliance evidence report'
+        - task: PublishBuildArtifacts@1
+          inputs:
+            pathToPublish: compliance-evidence-report.json
+            artifactName: compliance-evidence
+          displayName: 'Publish compliance evidence artifact'
 ```
 
 Every successful build produces a timestamped evidence package. When an

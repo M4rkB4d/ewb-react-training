@@ -45,13 +45,14 @@ When you write:
 const element = <h1 className="text-xl">Account Summary</h1>;
 ```
 
-The React Compiler transforms it into:
+The JSX transform compiles it into:
 
 ```typescript
-const element = React.createElement('h1', { className: 'text-xl' }, 'Account Summary');
+import { jsx as _jsx } from 'react/jsx-runtime';
+const element = _jsx('h1', { className: 'text-xl', children: 'Account Summary' });
 ```
 
-You never write `React.createElement` by hand. JSX makes your components readable.
+You never write `_jsx()` calls by hand. JSX makes your components readable.
 But understanding that JSX compiles to function calls helps you understand its rules.
 
 ### JSX Rules

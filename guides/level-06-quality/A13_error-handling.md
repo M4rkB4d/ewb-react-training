@@ -214,12 +214,21 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     this.props.onError?.(error, errorInfo);
   }
 
+  resetError = (): void => {
+    this.setState({ hasError: false, error: null });
+  };
+
   render(): ReactNode {
     if (this.state.hasError && this.state.error != null) {
       if (typeof this.props.fallback === 'function') {
         return this.props.fallback(this.state.error);
       }
-      return this.props.fallback;
+      return (
+        <>
+          {this.props.fallback}
+          <button onClick={this.resetError}>Try Again</button>
+        </>
+      );
     }
     return this.props.children;
   }
@@ -324,7 +333,9 @@ export function setupGlobalErrorHandlers(): void {
   // Catch unhandled promise rejections
   window.addEventListener('unhandledrejection', (event) => {
     logError(event.reason);
-    event.preventDefault(); // Prevent console noise
+    if (import.meta.env.PROD) {
+      event.preventDefault(); // Suppress console noise in production only
+    }
   });
 
   // Catch uncaught errors

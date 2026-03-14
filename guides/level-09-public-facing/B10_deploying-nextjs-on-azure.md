@@ -363,11 +363,14 @@ stages:
                     scriptType: bash
                     scriptLocation: inlineScript
                     inlineScript: |
-                      az webapp deployment slot wait \
-                        --name $(AZURE_APP_NAME) \
-                        --resource-group $(AZURE_RG) \
-                        --slot staging \
-                        --created
+                      # Poll the staging slot health endpoint until ready
+                      for i in $(seq 1 30); do
+                        STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+                          "https://$(AZURE_APP_NAME)-staging.azurewebsites.net/api/health")
+                        if [ "$STATUS" = "200" ]; then break; fi
+                        echo "Waiting for staging slot... (attempt $i)"
+                        sleep 10
+                      done
                 - script: |
                     STAGING_URL="https://$(AZURE_APP_NAME)-staging.azurewebsites.net"
                     STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$STAGING_URL/api/health")
@@ -412,11 +415,14 @@ stages:
                     scriptType: bash
                     scriptLocation: inlineScript
                     inlineScript: |
-                      az webapp deployment slot wait \
-                        --name $(AZURE_APP_NAME) \
-                        --resource-group $(AZURE_RG) \
-                        --slot staging \
-                        --created
+                      # Poll the staging slot health endpoint until ready
+                      for i in $(seq 1 30); do
+                        STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+                          "https://$(AZURE_APP_NAME)-staging.azurewebsites.net/api/health")
+                        if [ "$STATUS" = "200" ]; then break; fi
+                        echo "Waiting for staging slot... (attempt $i)"
+                        sleep 10
+                      done
                 - script: |
                     STAGING_URL="https://$(AZURE_APP_NAME)-staging.azurewebsites.net"
                     STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$STAGING_URL/api/health")
@@ -533,8 +539,8 @@ az afd origin create \
   --origin-group-name ewb-appservice-origin \
   --profile-name ewb-public-fd \
   --resource-group ewb-digital \
-  --host-name ${{ vars.AZURE_APP_NAME }}.azurewebsites.net \
-  --origin-host-header ${{ vars.AZURE_APP_NAME }}.azurewebsites.net \
+  --host-name $(AZURE_APP_NAME).azurewebsites.net \
+  --origin-host-header $(AZURE_APP_NAME).azurewebsites.net \
   --http-port 80 \
   --https-port 443 \
   --priority 1
@@ -951,7 +957,7 @@ This extends the B07 release checklist with Next.js-specific items.
    az webapp config container set --slot staging ...
 
 2. Wait for container to start
-   az webapp deployment slot wait --slot staging --created
+   Poll health endpoint until staging slot responds with 200
 
 3. Smoke tests
    curl https://app-staging.azurewebsites.net/api/health
