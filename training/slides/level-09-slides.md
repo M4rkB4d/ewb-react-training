@@ -8,7 +8,7 @@
 
 ### Slide 2: Learning Objectives
 - Evaluate SPA vs SSR trade-offs for different banking applications
-- Set up a Next.js 15 project with the App Router and EWB design system
+- Set up a Next.js 16 project with the App Router and EWB design system
 - Build pages with Server Components and multiple rendering strategies
 - Deploy Next.js on Azure App Service with Front Door and Application Insights
 
@@ -41,7 +41,7 @@
 - Account portal, fund transfers → CSR (Vite SPA, Levels 1–8)
 - *Speaker notes: This mapping shows why we need both architectures. One size does not fit all — match the rendering strategy to the use case.*
 
-### Slide 7: Next.js 15 Project Setup
+### Slide 7: Next.js 16 Project Setup
 - `npx create-next-app@latest ewb-public --typescript --tailwind --app`
 - App Router: file-based routing with `app/` directory conventions
 - Same EWB design system (Tailwind CSS 4 tokens, shared components)

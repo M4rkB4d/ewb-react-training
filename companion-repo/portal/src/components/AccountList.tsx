@@ -42,7 +42,7 @@ function AccountList() {
             {new Intl.NumberFormat('en-PH', {
               style: 'currency',
               currency: account.currency,
-            }).format(account.balance)}
+            }).format(account.balance / 100)}
           </span>
         </li>
       ))}

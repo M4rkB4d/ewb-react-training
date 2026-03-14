@@ -28,7 +28,7 @@
 - *Speaker notes: Demo what happens when the API returns unexpected data — Zod catches it immediately instead of a runtime crash later.*
 
 ### Slide 5: Token Refresh Flow
-- Access tokens expire (15 minutes) — refresh tokens extend the session
+- Access tokens expire (30 minutes) — refresh tokens extend the session
 - Interceptor detects 401, pauses requests, refreshes token, retries
 - Queue concurrent requests during refresh — do not fire multiple refresh calls
 - If refresh fails → force logout, clear all state, redirect to login

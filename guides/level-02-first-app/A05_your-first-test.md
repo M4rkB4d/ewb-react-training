@@ -292,7 +292,7 @@ describe('AccountCard', () => {
   });
 ```
 
-> **Money handling note:** These test examples use pesos as a plain number for simplicity. Starting in B03 (API Integration), all monetary values use integer centavos with `formatPeso()`. See B01 Phase 6 for the full explanation.
+> **Money handling note:** These test examples use pesos as a plain number for simplicity. Starting in B03 (API Integration), all monetary values use integer centavos with `formatPeso()` — one peso = 100 centavos, so ₱1,500.00 is stored as `150000`. This avoids IEEE 754 floating-point errors.
 
 ```tsx
   // ── Conditional Rendering ──────────────────────────

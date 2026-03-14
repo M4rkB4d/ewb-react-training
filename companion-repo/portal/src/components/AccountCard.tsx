@@ -17,7 +17,7 @@ function AccountCard({ accountName, accountNumber, balance, currency }: AccountC
         {new Intl.NumberFormat('en-PH', {
           style: 'currency',
           currency,
-        }).format(balance)}
+        }).format(balance / 100)}
       </p>
     </div>
   );

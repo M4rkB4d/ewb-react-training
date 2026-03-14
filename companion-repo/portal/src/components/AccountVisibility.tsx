@@ -1,6 +1,7 @@
 // src/components/AccountVisibility.tsx
 import { useState } from 'react';
 
+/** @param balance — Balance in centavos (integer). Divided by 100 for display. */
 function AccountBalance({ balance }: { balance: number }) {
   const [isVisible, setIsVisible] = useState(false);
 
@@ -11,7 +12,7 @@ function AccountBalance({ balance }: { balance: number }) {
           ? new Intl.NumberFormat('en-PH', {
               style: 'currency',
               currency: 'PHP',
-            }).format(balance)
+            }).format(balance / 100)
           : '****'}
       </span>
       <button

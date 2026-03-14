@@ -4,7 +4,8 @@ import { useIntl } from 'react-intl';
 export function TransferSuccess({ amount, reference }: { amount: number; reference: string }) {
   const intl = useIntl();
 
-  const formattedAmount = intl.formatNumber(amount, {
+  // amount is in centavos — divide by 100 for display
+  const formattedAmount = intl.formatNumber(amount / 100, {
     style: 'currency',
     currency: 'PHP',
   });

@@ -13,8 +13,9 @@ export const searchQuerySchema = z
   .max(200)
   .transform((val) => val.trim());
 
+// User enters pesos; transform converts to integer centavos for storage/API
 export const amountSchema = z
   .number()
   .positive('Amount must be positive')
-  .max(1_000_000, 'Amount exceeds maximum limit')
-  .transform((val) => Math.round(val * 100) / 100); // Round to centavos
+  .max(1_000_000, 'Amount exceeds maximum limit (₱1,000,000)')
+  .transform((pesos) => Math.round(pesos * 100)); // Convert pesos → centavos (integer)

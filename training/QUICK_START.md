@@ -201,7 +201,7 @@ After 3 days, you should be able to demonstrate all of the following. If you can
 
 ### Should Have
 
-- [ ] **Build with Next.js**: Set up a Next.js 15 project with Server Components and deploy to Azure App Service.
+- [ ] **Build with Next.js**: Set up a Next.js 16 project with Server Components and deploy to Azure App Service.
 - [ ] **Implement real-time features**: WebSocket or SSE connection with reconnection logic and state synchronization.
 - [ ] **Write comprehensive tests**: Unit tests for utilities, component tests for key flows, integration tests with MSW.
 - [ ] **Describe the architecture**: Explain the feature-sliced architecture pattern and module boundary rules used at EWB.

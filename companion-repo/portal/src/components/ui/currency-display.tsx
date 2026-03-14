@@ -9,7 +9,8 @@ interface CurrencyDisplayProps {
 export function CurrencyDisplay({ amount, currency = 'PHP' }: CurrencyDisplayProps) {
   const intl = useIntl();
 
-  const formatted = intl.formatNumber(amount, {
+  // Amount is in centavos — divide by 100 for display
+  const formatted = intl.formatNumber(amount / 100, {
     style: 'currency',
     currency,
   });

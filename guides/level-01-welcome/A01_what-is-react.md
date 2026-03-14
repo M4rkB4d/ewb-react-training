@@ -261,7 +261,7 @@ function AccountCard({ accountName, accountNumber, balance, currency }: AccountC
 }
 ```
 
-> **Money handling note:** These introductory examples use pesos as a plain number for simplicity. In real banking code (starting from B03), all monetary values are stored as integer centavos to avoid IEEE 754 floating-point errors. See B01 Phase 6 for the full explanation.
+> **Money handling note:** These introductory examples use pesos as a plain number for simplicity. In real banking code (starting from B03), all monetary values are stored as **integer centavos** to avoid IEEE 754 floating-point errors (e.g., `0.1 + 0.2 !== 0.3`). One peso = 100 centavos, so ₱1,500.00 is stored as `150000`. The `Centavos` branded type is introduced in B01 Phase 6.
 
 Notice:
 - **TypeScript interface** defines the exact shape of props

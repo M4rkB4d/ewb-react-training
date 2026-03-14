@@ -37,7 +37,7 @@ Explain why BSP Circular 1033 (fee disclosures) favors server-side rendering ove
 
 ### Question 4 (Multiple Choice)
 
-In Next.js 15 with the App Router, which file makes a URL route accessible?
+In Next.js 16 with the App Router, which file makes a URL route accessible?
 
 A. `route.tsx`
 B. `index.tsx`

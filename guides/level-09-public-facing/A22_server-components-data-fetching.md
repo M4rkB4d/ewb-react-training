@@ -262,7 +262,7 @@ await fetch(url, { next: { revalidate: 60 } });
 await fetch(url, { cache: 'no-store' });
 ```
 
-> **Next.js 15 change:** In Next.js 15, `fetch` calls are NOT cached by default (unlike Next.js 14 where `force-cache` was the default). Always specify your caching intent explicitly with `cache` or `next.revalidate`.
+> **Since Next.js 15:** `fetch` calls are NOT cached by default (unlike Next.js 14 where `force-cache` was the default). This behavior continues in Next.js 16. Always specify your caching intent explicitly with `cache` or `next.revalidate`.
 
 Applied to EWB pages:
 

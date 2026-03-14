@@ -1,11 +1,12 @@
 // src/components/TransferStatus.tsx
 import type { TransferState } from '../types/transfer';
 
-function formatCurrency(amount: number): string {
+/** Format centavos as PHP currency. 150000 → ₱1,500.00 */
+function formatCurrency(centavos: number): string {
   return new Intl.NumberFormat('en-PH', {
     style: 'currency',
     currency: 'PHP',
-  }).format(amount);
+  }).format(centavos / 100);
 }
 
 function TransferStatus({ state }: { state: TransferState }) {

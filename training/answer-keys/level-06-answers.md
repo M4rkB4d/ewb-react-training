@@ -22,7 +22,7 @@ Error boundaries catch errors during rendering, lifecycle methods, and construct
 
 ### Question 4 — Answer: False
 
-React Compiler in React 19 automatically memoizes components, values, and callbacks at build time. For new code, developers should not add manual `useMemo` or `useCallback` — the compiler handles this. Existing manual memoization can remain (the compiler skips already-optimized code), but the claim that "the compiler only handles class components" is incorrect. The compiler specifically targets functional components and hooks.
+React Compiler is a **separate build-time tool** (not bundled with React 19) that automatically memoizes functional components, values, and callbacks at build time. When installed, developers should not add manual `useMemo` or `useCallback` for new code — the compiler handles this. Existing manual memoization can remain (the compiler skips already-optimized code). The claim that "the compiler only handles class components" is incorrect — it specifically targets **functional components and hooks**.
 
 ### Question 5 — Answer: B
 

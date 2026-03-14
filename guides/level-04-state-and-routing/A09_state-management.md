@@ -134,6 +134,10 @@ it needs. Changes to unrelated state do not cause re-renders.
 
 ### Auth store (critical pattern)
 
+> **Note:** This is a simplified auth store for learning state management patterns.
+> The production auth store with MFA support, status state machine, and session
+> management is built in B04.
+
 ```tsx
 // src/stores/auth-store.ts
 import { create } from 'zustand';
@@ -413,45 +417,39 @@ export function useCreateTransfer() {
 
 ### Optimistic updates
 
-For a better user experience, update the UI immediately before the server responds:
+Optimistic updates improve perceived performance by updating the UI before the server responds. They work well for **non-financial** actions like toggling a favorite or renaming an account:
 
 ```tsx
-// src/features/transfers/hooks/use-create-transfer.ts
-import type { Account } from '@/features/accounts/types';
-
-export function useCreateTransfer() {
+// src/features/accounts/hooks/use-toggle-favorite.ts
+export function useToggleFavorite() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (payload: TransferPayload) => {
-      const response = await axios.post('/api/transfers', payload);
+    mutationFn: async (accountId: string) => {
+      const response = await axios.post(`/api/accounts/${accountId}/favorite`);
       return response.data;
     },
 
-    onMutate: async (payload) => {
+    onMutate: async (accountId) => {
       // Cancel any outgoing account queries
       await queryClient.cancelQueries({ queryKey: accountKeys.all });
 
       // Snapshot the previous value
       const previousAccounts = queryClient.getQueryData(accountKeys.all);
 
-      // Optimistically update the balance
+      // Optimistically toggle the favorite flag
       queryClient.setQueryData(accountKeys.all, (old: Account[] | undefined) =>
-        old?.map((account) => {
-          if (account.number === payload.fromAccount) {
-            return { ...account, balance: account.balance - payload.amount };
-          }
-          if (account.number === payload.toAccount) {
-            return { ...account, balance: account.balance + payload.amount };
-          }
-          return account;
-        }),
+        old?.map((account) =>
+          account.id === accountId
+            ? { ...account, isFavorite: !account.isFavorite }
+            : account,
+        ),
       );
 
       return { previousAccounts };
     },
 
-    onError: (_err, _payload, context) => {
+    onError: (_err, _accountId, context) => {
       // Rollback on error
       if (context?.previousAccounts != null) {
         queryClient.setQueryData(accountKeys.all, context.previousAccounts);
@@ -471,9 +469,10 @@ export function useCreateTransfer() {
 2. `onError` — Rollback to the snapshot if the mutation fails
 3. `onSettled` — Refetch to ensure the UI matches the server (regardless of success/failure)
 
-> **BSP 1033 Note:** Optimistic updates must always be followed by server confirmation.
-> The user sees the updated balance immediately, but the actual balance is confirmed
-> by the `onSettled` refetch.
+> **Banking constraint:** Optimistic updates must **never** be used for financial
+> mutations (transfers, payments, balance changes). Showing a transfer as successful
+> before the server confirms it is a compliance incident under BSP 1033. In B03, you
+> will learn the server-confirmed mutation pattern used for all financial operations.
 
 ### Checkpoint 5
 

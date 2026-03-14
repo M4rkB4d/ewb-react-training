@@ -10,7 +10,7 @@
 
 By the end of this guide, you will:
 
-- Create a Next.js 15 project with the App Router and TypeScript
+- Create a Next.js 16 project with the App Router and TypeScript
 - Configure the EWB design system with Tailwind CSS 4 for the public site
 - Understand the `app/` directory structure and file-based routing conventions
 - Build shared layouts with the EWB header, footer, and navigation
@@ -92,7 +92,7 @@ npx create-next-app@latest ewb-public \
 
 | Technology | Version | Purpose |
 |------------|---------|---------|
-| Next.js | 15 | React framework with App Router |
+| Next.js | 16 | React framework with App Router |
 | React | 19 | UI library |
 | TypeScript | 5.9 | Type safety |
 | Tailwind CSS | 4 | Utility-first styling |
@@ -154,7 +154,10 @@ const securityHeaders = [
     key: 'Content-Security-Policy',
     value: [
       "default-src 'self'",
-      "script-src 'self'",
+      // Next.js injects inline scripts for data serialization between server
+      // and client. A bare 'self' would block them. Use nonce-based CSP in
+      // production — see Phase 7 below for the full implementation.
+      "script-src 'self' 'nonce-${nonce}'",
       // Next.js may inject inline styles for built-in components like next/image
       // and next/font. Unlike the Vite SPA (see A15), 'unsafe-inline' is needed
       // here unless you implement nonce-based CSP.
@@ -748,7 +751,7 @@ client. The CSP needs to account for this with either a nonce or `unsafe-inline`
 (nonce is preferred for security).
 
 To implement nonces, generate a random value per request in `middleware.ts` and
-inject it into the CSP header. Next.js 15+ supports this via the `nonce` prop on
+inject it into the CSP header. Next.js 16 supports this via the `nonce` prop on
 `<Script>` components and the `headers()` API. The full nonce implementation
 pattern is covered in A15's CSP section — the key difference for Next.js is that
 nonce generation happens in middleware (server-side, per-request) rather than in

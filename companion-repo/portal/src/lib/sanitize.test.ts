@@ -33,13 +33,16 @@ describe('searchQuerySchema', () => {
 });
 
 describe('amountSchema', () => {
-  it('accepts valid amounts', () => {
-    expect(amountSchema.parse(1000)).toBe(1000);
+  it('converts pesos to centavos', () => {
+    // User enters ₱1,000 → schema returns 100000 centavos
+    expect(amountSchema.parse(1000)).toBe(100_000);
   });
 
-  it('rounds to centavos', () => {
-    expect(amountSchema.parse(99.999)).toBe(100);
-    expect(amountSchema.parse(50.555)).toBe(50.56);
+  it('rounds fractional centavos to nearest integer', () => {
+    // ₱99.999 → 9999.9 → rounds to 10000 centavos
+    expect(amountSchema.parse(99.999)).toBe(10_000);
+    // ₱50.555 → 5055.5 → rounds to 5056 centavos
+    expect(amountSchema.parse(50.555)).toBe(5056);
   });
 
   it('rejects zero and negative amounts', () => {
@@ -47,7 +50,7 @@ describe('amountSchema', () => {
     expect(() => amountSchema.parse(-100)).toThrow();
   });
 
-  it('rejects amounts over 1,000,000', () => {
+  it('rejects amounts over ₱1,000,000', () => {
     expect(() => amountSchema.parse(1_000_001)).toThrow();
   });
 });

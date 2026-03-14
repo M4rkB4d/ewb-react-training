@@ -506,7 +506,7 @@ export function PaymentReview() {
     submitPayment({
       billerId: draft.biller.id,
       accountId: draft.accountId,
-      amount: draft.amount,
+      amount: draft.amount * 100, // Convert pesos → centavos
       fields: draft.fields,
       notes: draft.notes,
     });

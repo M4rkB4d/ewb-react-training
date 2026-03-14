@@ -241,7 +241,7 @@ Transition from Vite SPA to Next.js. Learn SSR vs SPA decision-making, Server Co
 
 > **B10 (Deploying Next.js on Azure)** is recommended reading but not required for the capstone. Complete it if time allows, or read it when you first deploy a Next.js project to production.
 
-**End-of-day checkpoint**: You can set up a Next.js 15 project, build pages with Server Components, implement server-side authentication, create API routes, and explain when to use SSR vs SPA at EWB.
+**End-of-day checkpoint**: You can set up a Next.js 16 project, build pages with Server Components, implement server-side authentication, create API routes, and explain when to use SSR vs SPA at EWB.
 
 ---
 

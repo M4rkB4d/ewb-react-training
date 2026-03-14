@@ -8,7 +8,7 @@
 
 ## Demo Overview
 
-Demonstrate the public-facing application architecture using Next.js 15. Show the contrast between the Vite SPA (internal portal) and the Next.js application (public site). Cover Server Components, rendering strategies, and Azure deployment.
+Demonstrate the public-facing application architecture using Next.js 16. Show the contrast between the Vite SPA (internal portal) and the Next.js application (public site). Cover Server Components, rendering strategies, and Azure deployment.
 
 ---
 

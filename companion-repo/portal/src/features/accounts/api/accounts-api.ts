@@ -8,7 +8,7 @@ const accountSchema = z.object({
   name: z.string(),
   number: z.string(),
   type: z.enum(['savings', 'checking', 'time-deposit']),
-  balance: z.number(),
+  balance: z.number().int(), // centavos
   currency: z.string().default('PHP'),
   isActive: z.boolean(),
 });

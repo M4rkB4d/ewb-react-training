@@ -126,7 +126,7 @@ The component must:
 
 1. Format the displayed value according to the active locale
 2. Parse the input back to a numeric value regardless of formatting
-3. Validate the amount with Zod (positive, max 500,000 PHP, round to centavos)
+3. Validate the amount with Zod (positive, max ₱500,000 i.e. 50,000,000 centavos, store as integer centavos)
 4. Show the formatted amount in real-time as the user types
 5. Work correctly with react-hook-form via `register` or `Controller`
 
@@ -179,7 +179,7 @@ export const CurrencyInput = forwardRef<HTMLInputElement, CurrencyInputProps>(
 
 - [ ] Correctly formats displayed amount per active locale
 - [ ] Parses typed input back to a numeric value regardless of locale formatting
-- [ ] Validates with Zod: positive number, max 500,000, rounded to 2 decimal places
+- [ ] Validates with Zod: positive number, max ₱500,000 (50,000,000 centavos), stored as integer centavos
 - [ ] Handles edge cases: no decimals, cents only, empty input
 - [ ] Integrates with react-hook-form (usable via `Controller`)
 - [ ] Works across all three EWB locales: `en-US`, `fil-PH`, `zh-Hans`

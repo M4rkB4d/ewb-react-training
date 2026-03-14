@@ -590,6 +590,11 @@ before resetting timers? What would happen without this throttle?
 
 ## Phase 5 — Protected Routes
 
+> **Note:** B02 introduced a `ProtectedRoute` as a layout route using `<Outlet />`.
+> This version uses the `children` prop pattern instead, which is simpler to unit-test
+> (no router context needed) and integrates with the MFA status check below. Replace
+> the B02 version with this one.
+
 ### Auth-aware route guard
 
 ```tsx

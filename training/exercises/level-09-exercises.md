@@ -12,7 +12,7 @@
 
 ### Learning Objectives
 
-- Build a page mixing Server Components and Client Components in Next.js 15
+- Build a page mixing Server Components and Client Components in Next.js 16
 - Implement `generateStaticParams` for pre-rendering known product pages
 - Use the `'use client'` boundary correctly for interactive sections
 

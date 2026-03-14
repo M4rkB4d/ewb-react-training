@@ -40,14 +40,14 @@ npm run lint       # ESLint
 
 ### Public Site — Next.js Public Website
 
-Server-rendered public-facing website built with Next.js 15 App Router. Covers Level 9 including Server Components, ISR, Route Handlers, Azure Key Vault integration, Redis sessions, rate limiting, and Azure Pipelines deployment.
+Server-rendered public-facing website built with Next.js 16 App Router. Covers Level 9 including Server Components, ISR, Route Handlers, Azure Key Vault integration, Redis sessions, rate limiting, and Azure Pipelines deployment.
 
 | Technology | Version |
 |-----------|---------|
-| Next.js | 15.3 |
+| Next.js | 16.2 |
 | React | 19.2 |
 | TypeScript | 5.9 |
-| Zod | 3.24 |
+| Zod | 4.3 |
 | Tailwind CSS | 4.1 |
 | ioredis | 5.6 |
 | Azure Identity SDK | 4.6 |
@@ -84,13 +84,13 @@ The two applications are completely independent — separate `package.json`, sep
 
 | Level | Guides | Application |
 |-------|--------|-------------|
-| 1 — Welcome | A01, A02 | Portal |
-| 2 — First App | A04, A05, B01 | Portal |
+| 1 — Welcome | A01, A02, A03 | Portal |
+| 2 — First App | A04, A05, B01, B01b | Portal |
 | 3 — Building UI | A06, A07, A08 | Portal |
 | 4 — State & Routing | A09, A10, B02 | Portal |
 | 5 — Data & Auth | A11, A12, B03, B04 | Portal |
 | 6 — Quality | A13, A14, B05, B06 | Portal |
 | 7 — Production | A15, A16, A17, B07 | Portal |
-| 8 — Mastery | A18, A19, B08, B09 | Portal |
-| 9 — Public-Facing | A20, A21, A22, B10 | Public Site |
-| Appendix | X01, X03 | Portal |
+| 8 — Mastery | A18, A19, A20, B08, B09 | Portal |
+| 9 — Public-Facing | A21, A22, A23, B10 | Public Site |
+| Appendix | X01, X02, X03 | Portal |

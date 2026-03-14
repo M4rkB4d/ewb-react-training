@@ -91,7 +91,7 @@ export function TransferWizard({ accounts, onSubmit }: TransferWizardProps) {
                 <option value="">Select an account</option>
                 {accounts.map((acc) => (
                   <option key={acc.number} value={acc.number}>
-                    {acc.name} (••••{acc.number.slice(-4)}) — ₱{acc.balance.toLocaleString('en-PH')}
+                    {acc.name} (••••{acc.number.slice(-4)}) — ₱{(acc.balance / 100).toLocaleString('en-PH', { minimumFractionDigits: 2 })}
                   </option>
                 ))}
               </select>

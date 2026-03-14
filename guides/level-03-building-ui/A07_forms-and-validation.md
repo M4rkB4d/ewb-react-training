@@ -216,9 +216,11 @@ const accountNumberSchema = z
 
 ### Transfer amount
 
+HTML `<input type="number">` still delivers its value as a **string** to JavaScript (via `e.target.value`). Using `z.number()` alone would reject `"1000"` because it is a string. `z.coerce.number()` converts the string to a number first, _then_ validates.
+
 ```tsx
 const transferAmountSchema = z.coerce
-  .number()
+  .number() // z.coerce converts the input string → number before validation
   .positive('Amount must be greater than zero')
   .max(1_000_000, 'Maximum transfer amount is ₱1,000,000');
 // NOTE: This accepts pesos from user input for simplicity.

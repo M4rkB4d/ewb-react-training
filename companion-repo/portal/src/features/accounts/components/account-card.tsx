@@ -29,7 +29,7 @@ export function AccountCard({
     style: 'currency',
     currency,
     minimumFractionDigits: 2,
-  }).format(balance);
+  }).format(balance / 100); // balance is in centavos
 
   // Account type display
   const typeLabels: Record<AccountCardProps['accountType'], string> = {

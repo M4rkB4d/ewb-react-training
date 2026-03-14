@@ -20,7 +20,7 @@ function TransactionRow({
   const formattedAmount = new Intl.NumberFormat('en-PH', {
     style: 'currency',
     currency,
-  }).format(amount);
+  }).format(amount / 100); // amount is in centavos
 
   return (
     <div className="flex items-center justify-between border-b py-3">

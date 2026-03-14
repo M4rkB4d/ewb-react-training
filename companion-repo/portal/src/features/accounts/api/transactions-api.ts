@@ -6,9 +6,9 @@ const transactionSchema = z.object({
   id: z.string(),
   date: z.string().datetime(),
   description: z.string(),
-  amount: z.number(),
+  amount: z.number().int(), // centavos
   type: z.enum(['credit', 'debit']),
-  balance: z.number(),
+  balance: z.number().int(), // centavos
   reference: z.string(),
   channel: z.string(),
 });

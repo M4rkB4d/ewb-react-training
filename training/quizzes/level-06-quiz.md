@@ -45,7 +45,7 @@ D. All JavaScript errors anywhere in the application
 
 ### Question 4 (True/False)
 
-In React 19 with React Compiler, developers should still manually add `useMemo` and `useCallback` to optimize new components because the compiler only handles class components.
+React Compiler is a separate build-time tool (not bundled with React 19) that automatically memoizes functional components. Developers should still manually add `useMemo` and `useCallback` to optimize new components because the compiler only handles class components.
 
 ---
 

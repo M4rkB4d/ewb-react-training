@@ -5,7 +5,7 @@ import { apiClient } from '@/lib/api-client';
 const transferRequestSchema = z.object({
   fromAccount: z.string(),
   toAccount: z.string(),
-  amount: z.number().positive(),
+  amount: z.number().int().positive(), // centavos
   notes: z.string().optional(),
 });
 

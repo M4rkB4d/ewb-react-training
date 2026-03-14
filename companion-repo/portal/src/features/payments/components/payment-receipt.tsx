@@ -25,13 +25,13 @@ export function PaymentReceipt({ receipt }: PaymentReceiptProps) {
         <dd>{receipt.billerName}</dd>
 
         <dt className="text-gray-500">Amount</dt>
-        <dd>₱{receipt.amount.toLocaleString()}</dd>
+        <dd>₱{(receipt.amount / 100).toLocaleString('en-PH', { minimumFractionDigits: 2 })}</dd>
 
         <dt className="text-gray-500">Fee</dt>
-        <dd>₱{receipt.fee.toLocaleString()}</dd>
+        <dd>₱{(receipt.fee / 100).toLocaleString('en-PH', { minimumFractionDigits: 2 })}</dd>
 
         <dt className="text-gray-500">Total</dt>
-        <dd className="font-semibold">₱{receipt.total.toLocaleString()}</dd>
+        <dd className="font-semibold">₱{(receipt.total / 100).toLocaleString('en-PH', { minimumFractionDigits: 2 })}</dd>
 
         <dt className="text-gray-500">Status</dt>
         <dd className="capitalize">{receipt.status}</dd>
