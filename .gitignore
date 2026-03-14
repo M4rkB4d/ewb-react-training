@@ -1,0 +1,12 @@
+# Audit tracking (auto-generated)
+.tracking/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
