@@ -497,6 +497,8 @@ The ternary operator `condition ? trueResult : falseResult` is the standard patt
 ### Checkpoint 3
 
 > Why does React require you to use `setCount` instead of directly modifying `count`? What would happen if you wrote `count = count + 1` instead?
+>
+> **Hint:** React needs to _detect_ that state changed in order to re-render the component. Direct assignment (`count = count + 1`) mutates a local variable that React never sees — the UI will not update. `setCount` is the mechanism that tells React "the value changed, please re-render."
 
 ---
 

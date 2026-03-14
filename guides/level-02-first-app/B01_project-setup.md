@@ -85,8 +85,12 @@ nvm alias default 24
 
 ### Checkpoint 1
 
-Run `node --version` and confirm you see `v24.x.x`. If you see an older version,
-check that your version manager is pointing to Node 24.
+Run `node --version` and confirm you see `v24.x.x`.
+
+If you see an older version:
+- **Windows (nvm-windows):** `nvm list` to see installed versions, then `nvm use 24` from an Administrator terminal
+- **macOS/Linux (nvm):** `nvm use 24 && nvm alias default 24`
+- **No version manager:** Install [nvm-windows](https://github.com/coreybutler/nvm-windows) or [nvm](https://github.com/nvm-sh/nvm), then install Node 24
 
 ---
 

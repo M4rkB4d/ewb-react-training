@@ -42,7 +42,7 @@ TanStack Query hooks require a `QueryClientProvider` context. `renderHook` with 
 
 ### Question 9 — Answer: B
 
-The `RoleGuard` component checks the user's role against `allowedRoles`. Since `customer` is not in `['admin', 'manager']`, the guard renders `<Navigate to="/" replace />`, redirecting the user to the home page.
+The `RoleGuard` component checks the user's role against `allowedRoles`. Since `customer` is not in `['admin', 'manager']`, the guard renders `<Navigate to="/unauthorized" replace />`, redirecting the user to the unauthorized page.
 
 ### Question 10 — Answer
 
@@ -285,6 +285,11 @@ describe('ProtectedRoute', () => {
   });
 
   it('preserves the original URL for post-login redirect', () => {
+    // Helper to display the current location state for assertions
+    function LocationDisplay() {
+      return <div>Login Page</div>;
+    }
+
     render(
       <MemoryRouter initialEntries={['/accounts/ACC-001/transactions']}>
         <Routes>

@@ -680,7 +680,10 @@ export function PinInput() {
 
   return (
     <div className="flex gap-2">
-      {/* Fixed list — index keys are acceptable here */}
+      {/* Fixed list — index keys are acceptable here. In Phase 4, you learned that
+          index keys are forbidden for dynamic lists because reordering breaks identity.
+          But this PIN input always has exactly 6 fields, in the same order, forever.
+          When the list never changes, index keys are safe. */}
       {inputRefs.map((ref, index) => (
         <input
           key={index}

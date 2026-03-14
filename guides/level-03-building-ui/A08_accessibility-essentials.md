@@ -137,9 +137,11 @@ Headings must follow a logical order — `h1`, then `h2`, then `h3`. Never skip 
 
 ### Checkpoint 2
 
-Audit the AccountCard component from A04. Does it use semantic elements correctly?
-Does the heading level make sense when used in a list? What landmark region should
-contain a list of AccountCards?
+Audit the AccountCard component from A04:
+
+1. Does every interactive element use a semantic element (`<button>`, `<a>`) or have an ARIA role?
+2. The `<h3>` inside AccountCard — is that heading level correct if the card appears under an `<h2>` section heading?
+3. A page showing 10 account cards — what landmark (`<section>`, `<main>`, `<nav>`) should wrap them, and should the landmark have an accessible label?
 
 ---
 

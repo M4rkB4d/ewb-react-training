@@ -71,6 +71,8 @@ type Currency = 'PHP' | 'USD' | 'EUR' | 'JPY' | 'CNY';
 
 /**
  * Format a number as Philippine Peso.
+ * NOTE: At this stage, `amount` is in pesos (not centavos). Starting in B03,
+ * monetary values switch to integer centavos and this function will divide by 100.
  */
 export function formatPHP(amount: number): string {
   return new Intl.NumberFormat('en-PH', {

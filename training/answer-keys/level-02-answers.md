@@ -175,6 +175,8 @@ const typeLabels: Record<AccountSummary['type'], string> = {
   'time-deposit': 'Time Deposit',
 };
 
+// NOTE: Takes pesos at this stage. From B03 onward, money is integer centavos
+// and this function divides by 100 before formatting.
 function formatPHP(amount: number): string {
   return new Intl.NumberFormat('en-PH', {
     style: 'currency',

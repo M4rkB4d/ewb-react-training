@@ -235,8 +235,11 @@ Using the query priority list, determine the best query for each:
 3. An email input with label "Email Address"
 4. An image of the EWB logo
 
-Answers: 1→`getByRole('button', { name: 'Submit' })`, 2→`getByText('No transactions found.')`,
-3→`getByLabelText('Email Address')`, 4→`getByAltText(...)` or `getByRole('img', { name: ... })`
+Answers:
+1. `getByRole('button', { name: 'Submit' })` — buttons are interactive, so `getByRole` is highest priority
+2. `getByText('No transactions found.')` — non-interactive text content
+3. `getByLabelText('Email Address')` — form inputs with labels
+4. `getByAltText('EastWest Bank logo')` — images with alt text; use `getByRole('img', { name: '...' })` if querying by accessible name instead
 
 ---
 
