@@ -131,7 +131,7 @@ Every API response, every form input, every route parameter is validated with Zo
 // This is how every API call looks at EWB
 const AccountSchema = z.object({
   accountNumber: z.string().regex(/^\d{10,12}$/),
-  balance: z.number().nonnegative(),
+  balance: z.number().int().nonnegative(), // centavos
   currency: z.enum(['PHP', 'USD']),
   status: z.enum(['active', 'dormant', 'closed']),
 });

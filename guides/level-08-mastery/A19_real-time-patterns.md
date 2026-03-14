@@ -669,6 +669,7 @@ static generation, and Azure App Service deployment:
 - [A20 — SPA vs SSR Decision Framework](../level-09-public-facing/A20_spa-vs-ssr-decision-framework.md)
 - [A21 — Next.js Project Setup](../level-09-public-facing/A21_nextjs-project-setup.md)
 - [A22 — Server Components and Data Fetching](../level-09-public-facing/A22_server-components-data-fetching.md)
+- [A23 — Server-Side Auth, API Routes, and Composition](../level-09-public-facing/A23_server-components-advanced.md)
 - [B10 — Deploying Next.js on Azure](../level-09-public-facing/B10_deploying-nextjs-on-azure.md)
 
 The **Appendix** provides reference materials:

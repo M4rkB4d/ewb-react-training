@@ -177,9 +177,11 @@ function ProtectedRoute({ children }: { children: ReactNode }) {
 ## Axios + Interceptors
 
 ```tsx
+import { env } from '@/lib/env';
+
 // Create client
 const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: env.VITE_API_BASE_URL,
   withCredentials: true,
 });
 
@@ -196,7 +198,7 @@ apiClient.interceptors.response.use(
   async (error) => {
     if (error.response?.status === 401 && !error.config._retry) {
       error.config._retry = true;
-      const { data } = await axios.post('/auth/refresh', {}, { withCredentials: true });
+      const { data } = await axios.post(`${env.VITE_API_BASE_URL}/auth/refresh`, null, { withCredentials: true });
       useAuthStore.getState().setAuth(data.user, data.accessToken);
       error.config.headers.Authorization = `Bearer ${data.accessToken}`;
       return apiClient(error.config);

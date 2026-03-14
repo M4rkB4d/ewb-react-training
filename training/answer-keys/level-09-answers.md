@@ -77,8 +77,8 @@ const ProductSchema = z.object({
   name: z.string(),
   category: z.string(),
   interestRate: z.number().optional(),
-  minimumDeposit: z.number().optional(),
-  monthlyFee: z.number(),
+  minimumDeposit: z.number().int().optional(), // centavos
+  monthlyFee: z.number().int(), // centavos
   features: z.array(z.string()),
 });
 

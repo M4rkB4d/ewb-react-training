@@ -135,8 +135,9 @@ factors. BSP 982 mandates MFA for digital banking.
 **MSW** — Mock Service Worker. Library for intercepting API calls in tests.
 Uses service workers in the browser and Node.js in test environments.
 
-**Money (Value Object)** — Immutable pairing of amount and currency. Never
-pass raw numbers for financial amounts.
+**Money (Value Object)** — Immutable pairing of amount (in centavos) and
+currency. Example: `Money { amount: 500_000, currency: 'PHP' }` = ₱5,000.00.
+Never use floating-point for financial amounts.
 
 ---
 

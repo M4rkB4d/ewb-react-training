@@ -64,7 +64,7 @@ Build a simple mutation with optimistic update:
 
 ```tsx
 const mutation = useMutation({
-  mutationFn: (payload) => axios.post('/api/transfers', payload),
+  mutationFn: (payload) => apiClient.post('/transfers', payload),
   onMutate: async (payload) => {
     await queryClient.cancelQueries({ queryKey: ['accounts'] });
     const previous = queryClient.getQueryData(['accounts']);

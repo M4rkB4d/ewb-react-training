@@ -456,7 +456,7 @@ Level 6 is complete. You have error handling, performance optimization, advanced
 testing, and monitoring. Level 7 takes you to production — deployment, security,
 and compliance.
 
-**Next guide:** [B07 — Deployment and CI/CD](../level-07-production/B07_deployment-and-cicd.md)
+**Next guide:** [A15 — Security Hardening](../level-07-production/A15_security-hardening.md)
 
 ---
 

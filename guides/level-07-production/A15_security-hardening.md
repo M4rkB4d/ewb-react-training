@@ -1093,9 +1093,9 @@ verification steps. Present this as you would to a BSP examiner.
 
 ## What Comes Next
 
-**Next guide:** [A16 — BSP Compliance Framework](A16_bsp-compliance-framework.md) —
-where you build the compliance dashboard, audit trail implementation, and
-map every BSP circular to concrete frontend controls.
+**Next guide:** [B07 — Deployment and CI/CD](B07_deployment-and-cicd.md) —
+where you containerize the portal with Docker, build Azure Pipelines, and
+set up staging and production environments.
 
 ---
 

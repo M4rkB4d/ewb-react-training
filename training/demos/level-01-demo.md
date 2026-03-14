@@ -128,7 +128,7 @@ import { z } from 'zod';
 const accountSchema = z.object({
   id: z.string().min(1),
   accountNumber: z.string().regex(/^\d{10}$/),
-  balance: z.number().nonnegative(),
+  balance: z.number().int().nonnegative(), // centavos
   currency: z.enum(['PHP', 'USD', 'EUR']),
 });
 
