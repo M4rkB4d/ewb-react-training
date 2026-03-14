@@ -31,7 +31,7 @@ React automatically escapes all content rendered in JSX, including content passe
 
 ### Question 3 (Multiple Choice)
 
-Under BSP Circular 982, where should authentication tokens be stored in a banking SPA?
+Under BSP Circular 982, where should access tokens be stored in a banking SPA?
 
 A. `localStorage` with encryption
 B. `sessionStorage` with a short TTL

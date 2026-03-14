@@ -167,4 +167,36 @@ The migration timeline:
 
 ---
 
+---
+
+## If Things Go Wrong
+
+### Pre-Demo Checklist
+
+- [ ] MSW enabled and mock auth endpoints responding (`POST /auth/login`, `POST /auth/mfa`)
+- [ ] jwt.io open in a browser tab with a sample JWT ready to paste
+- [ ] Dev server running with login page accessible at `/login`
+- [ ] Network tab open and cleared before starting the auth flow demo
+- [ ] WebAuthn/passkey demo tested on the current machine (not all environments support it)
+
+### Common Issues
+
+**WebAuthn prompt does not appear when clicking "Sign in with Passkey"**
+- Cause: Browser does not support WebAuthn, localhost not treated as secure context, or no passkey registered on the device
+- Recovery: Show the `use-passkey-support.ts` feature detection code. Say "This hook checks `window.PublicKeyCredential` — on devices without support, we hide the passkey button and fall back to password + MFA. That is the progressive enhancement pattern."
+
+**Token refresh loop or 401 errors on every request**
+- Cause: MSW not handling `/auth/refresh`, or the `_retry` flag logic has a bug
+- Recovery: Show the interceptor code and walk through the flow on the whiteboard. Draw the sequence: request fails 401 → refresh fires → new token → retry original request. The concept is more important than the live demo.
+
+**JWT decode on jwt.io shows "Invalid Signature"**
+- Cause: Using a real JWT that jwt.io cannot verify (expected behavior — it does not have the secret)
+- Recovery: This is actually a teaching moment. Say "Correct — jwt.io cannot verify the signature because it does not have the server's secret key. That is exactly the point: only the server can verify tokens."
+
+**MFA form does not transition after entering credentials**
+- Cause: MSW login handler not returning `mfaRequired: true`, or state machine not advancing
+- Recovery: Hardcode the auth state to `mfa-required` temporarily to show the MFA form. Say "The state machine drives the UI. When status is `mfa-required`, this form appears."
+
+---
+
 *EastWest Bank Digital Platforms & Innovations | Confidential*

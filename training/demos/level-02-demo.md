@@ -249,4 +249,35 @@ Show the Tailwind theme in `index.css` briefly. Point out the EWB purple value `
 
 ---
 
+---
+
+## If Things Go Wrong
+
+### Pre-Demo Checklist
+
+- [ ] Dev server running at `http://localhost:5173` and showing content in the browser
+- [ ] Test runner works: `npm run test:run` completes without config errors
+- [ ] `@testing-library/react` and `@testing-library/user-event` installed
+- [ ] VS Code split terminal ready: one for dev server, one for tests
+
+### Common Issues
+
+**Dev server fails to start or shows a blank page**
+- Cause: Port conflict, missing dependencies, or Vite config error
+- Recovery: Run `npx vite --port 5174` to try another port. If dependencies are missing, run `npm install` first. If still broken, switch to the companion repo's working branch.
+
+**Test fails with "Cannot find module" or JSX transform error**
+- Cause: Vitest not configured for JSX, or path alias (`@/`) not resolved
+- Recovery: Show the test concept on the code itself — walk through what each assertion checks and why. Say "The test logic is what matters. We will fix the config in the exercise."
+
+**`userEvent.click` does not trigger the callback**
+- Cause: Button not rendered (conditional rendering hides it), or `userEvent.setup()` missing
+- Recovery: Add `screen.debug()` to print the rendered DOM. Show the audience the output — this is itself a useful debugging technique to teach.
+
+**AccountCard does not render the masked number**
+- Cause: Masking logic not yet added, or component not imported correctly
+- Recovery: Type the masking line live and save. If hot reload does not pick it up, refresh the browser manually.
+
+---
+
 *EastWest Bank Digital Platforms & Innovations | Confidential*

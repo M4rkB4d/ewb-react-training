@@ -109,4 +109,35 @@ document.head.appendChild(script);
 
 ---
 
+---
+
+## If Things Go Wrong
+
+### Pre-Demo Checklist
+
+- [ ] Staging site deployed and accessible (or have screenshots of response headers ready)
+- [ ] `azure-pipelines.yml` open in editor and reviewed before the session
+- [ ] Browser console cleared before the CSP injection demo
+- [ ] Consent management component renders without errors on the dev server
+
+### Common Issues
+
+**CSP demo script injection does not produce a visible error**
+- Cause: CSP not configured on localhost, or the dev server does not set security headers
+- Recovery: Show the CSP header from the staging site's response headers (screenshot or curl output). Say "CSP is configured at the server level, not in React. On localhost we skip it — but in staging and production, this script would be blocked."
+
+**Azure DevOps pipeline is not accessible or approval gate cannot be shown live**
+- Cause: VPN required, permissions restricted, or no recent pipeline run
+- Recovery: Walk through the `azure-pipelines.yml` file in the editor stage by stage. Draw the pipeline flow on the whiteboard: QualityGates → Build → Staging → Approval → Production. The YAML is the source of truth.
+
+**Audit events do not appear in the browser console**
+- Cause: Audit service not initialized, or console filter hiding log messages
+- Recovery: Open the audit service source code and trace the function call. Add a temporary `console.log('AUDIT TEST')` in the login handler to prove the hook point. Say "The wiring is what matters — the production backend receives these via `sendBeacon`."
+
+**Consent toggle component crashes or does not render**
+- Cause: Missing context provider or localStorage state corruption
+- Recovery: Clear localStorage and refresh. If the component still fails, show the source code and walk through the consent logic. The key point is granular consent with an immutable essential tier — that can be explained from the code.
+
+---
+
 *EastWest Bank Digital Platforms & Innovations | Confidential*

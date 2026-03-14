@@ -150,4 +150,35 @@ Switch locale and show how the message adapts.
 
 ---
 
+---
+
+## If Things Go Wrong
+
+### Pre-Demo Checklist
+
+- [ ] Feature-slice structure exists in `src/features/` with `index.ts` barrel exports
+- [ ] Event bus module exists and exports `emit`/`on` functions
+- [ ] Locale files for English, Filipino, and Chinese loaded in the project
+- [ ] Bill Payment wizard renders and steps are navigable on the dev server
+
+### Common Issues
+
+**Locale switch does not change UI text**
+- Cause: i18n library not initialized, locale bundle failed to lazy-load, or components not using translation hooks
+- Recovery: Show the locale JSON files side by side in the editor. Say "These are the translation bundles. The `t()` function swaps them at runtime. Let me show you the key structure." Walk through the English and Filipino keys.
+
+**Event bus emission does not trigger the accounts query refresh**
+- Cause: Subscription not registered, or event name string mismatch between emitter and listener
+- Recovery: Add `console.log` to both the emit and subscribe calls to prove the wiring. Say "This is the tradeoff of event-driven patterns — you cannot 'Go to Definition' on event strings. A shared event catalog solves this."
+
+**Bill Payment wizard loses state between steps**
+- Cause: Zustand store reset on re-render, or wizard component unmounts between steps
+- Recovery: Show the Zustand store in the console via `getState()`. If state is present but not rendering, the issue is in the step component. Switch to the companion repo's working version of the wizard and continue the walkthrough from there.
+
+**Import from feature internals does not produce a lint error**
+- Cause: ESLint boundary rule not configured, or `eslint-plugin-boundaries` not installed
+- Recovery: Show the bad import and good import side by side in the editor. Say "Without the lint rule, this compiles fine — but it creates a hidden dependency. The rule catches it in CI. Let me show you what the pipeline would report."
+
+---
+
 *EastWest Bank Digital Platforms & Innovations | Confidential*

@@ -51,7 +51,7 @@ A JWT's payload is encrypted, so sensitive data like the user's role and email a
 
 ### Question 5 (Multiple Choice)
 
-In the EWB authentication flow, what does the backend return after the user submits a correct username and password (before MFA)?
+In the EWB authentication flow, what does the backend return after the user submits a correct username and password when MFA is enabled (before the MFA step)?
 
 A. An access token and refresh token
 B. A temporary MFA token and a list of available MFA methods

@@ -2,19 +2,19 @@
 
 > **EastWest Bank — Digital Platforms & Innovations**
 >
-> 2-Week Intensive · 9 Levels · 35 Guides · Capstone Project
+> 12-Day Intensive · 9 Levels · 35 Guides · Capstone Project
 
 ---
 
 ## Program Overview
 
-This is the official React onboarding program for EastWest Bank developers. Over two weeks, you will go from zero React knowledge to building production-grade banking applications that meet BSP regulatory requirements.
+This is the official React onboarding program for EastWest Bank developers. Over 12 working days, you will go from zero React knowledge to building production-grade banking applications that meet BSP regulatory requirements.
 
 **What you will build**: A fully functional internal banking portal (Vite SPA) and a public-facing application (Next.js) — both with authentication, compliance controls, real-time features, and Azure deployment pipelines.
 
-**Time commitment**: Full-time, 8 hours per day. Morning sessions focus on reading guides and working through examples. Afternoon sessions focus on hands-on exercises, demos, and quizzes.
+**Time commitment**: Full-time, 8 hours per day. Morning sessions focus on reading guides and working through examples. Afternoon sessions focus on hands-on exercises, demos, and quizzes. Breaks are built into each day — take them.
 
-**Pacing**: Each day covers one level. If you finish early, review the companion repo code for that level. If you fall behind, prioritize the Core (A-series) guides — the Vite SPA (B-series) guides can be caught up later.
+**Pacing**: Most days cover one level. Heavier levels (Data & Auth, Security & Compliance) are split across two days so you have time to absorb the material. If you finish early, review the companion repo code for that level. If you fall behind, prioritize the Core (A-series) guides — the Vite SPA (B-series) guides can be caught up later.
 
 ---
 
@@ -27,6 +27,14 @@ Before Day 1, make sure you have:
 - [ ] Git configured with your EWB credentials
 - [ ] Access to the companion repo (ask your team lead)
 - [ ] Basic HTML/CSS knowledge (you do not need to know React or TypeScript)
+
+**Verify your setup** by running the setup check script:
+
+```bash
+bash scripts/verify-setup.sh
+```
+
+Fix any failures before Day 1. If you hit issues, ask your team lead — do not spend Day 1 morning debugging your environment.
 
 ---
 
@@ -98,77 +106,109 @@ Learn state management with Zustand, client-side routing with React Router, and 
 
 ---
 
-### Day 5: Level 5 — Data and Auth
+### Days 5–6: Level 5 — Data and Auth
 
-Connect to APIs with TanStack Query, implement authentication (JWT + refresh tokens), and build passkey/WebAuthn support for BSP Circular 1213 compliance.
+This is the heaviest level — API integration, authentication, and passkeys. Split across two days so you have time to absorb the material properly. Authentication is critical for banking; rushing it creates security gaps.
+
+**Day 5 — API Integration and Auth Concepts**
 
 | Session | Content | Est. Time |
 |---------|---------|-----------|
 | **Morning** | [B03 — API Integration](../guides/level-05-data-and-auth/B03_api-integration.md) | 3 hours |
+| | Break | 15 min |
 | | [A11 — Authentication Part 1: Concepts](../guides/level-05-data-and-auth/A11_authentication-part1.md) | 3 hours |
-| **Afternoon** | [B04 — Authentication Part 2: Implementation](../guides/level-05-data-and-auth/B04_authentication-part2.md) | 3 hours |
+| **Afternoon** | [Level 5 Exercises](exercises/level-05-exercises.md) — Exercise 1 (API Client) | 1 hour |
+| | [Level 5 Demo](demos/level-05-demo.md) — Parts 1-2 (API Client, JWT) | 30 min |
+
+**Day 5 checkpoint**: You can fetch and cache API data with TanStack Query, build an Axios client with interceptors, and explain JWT + refresh token architecture.
+
+**Day 6 — Auth Implementation and Passkeys**
+
+| Session | Content | Est. Time |
+|---------|---------|-----------|
+| **Morning** | [B04 — Authentication Part 2: Implementation](../guides/level-05-data-and-auth/B04_authentication-part2.md) | 3 hours |
+| | Break | 15 min |
 | | [A12 — Passkeys and WebAuthn](../guides/level-05-data-and-auth/A12_passkeys-and-webauthn.md) | 3 hours |
+| **Afternoon** | [Level 5 Exercises](exercises/level-05-exercises.md) — Exercises 2-3 (MFA Login, Passkeys) | 2.5 hours |
 | | [Level 5 Quiz](quizzes/level-05-quiz.md) | 30 min |
+| | [Level 5 Demo](demos/level-05-demo.md) — Parts 3-4 (MFA, WebAuthn) | 30 min |
 
-> **Note**: Day 5 is the heaviest day (12 hours of guide content). Focus on A11 and B04 if you need to prioritize — A12 (Passkeys) can overflow into the weekend or Day 6 morning.
-
-**End-of-day checkpoint**: You can fetch and cache API data with TanStack Query, implement JWT authentication with token refresh, and explain the WebAuthn registration/authentication flow.
+**Day 6 checkpoint**: You can implement JWT authentication with token refresh, build a login flow with MFA, and explain the WebAuthn registration/authentication ceremony for BSP 1213 compliance.
 
 ---
 
-## Week 2 — Production (Levels 6–9 + Capstone)
+## Week 2 — Production (Levels 6–9)
 
-### Day 6: Level 6 — Quality
+### Day 7: Level 6 — Quality
 
 Error handling patterns, performance optimization, advanced testing strategies, and monitoring with Azure Application Insights.
 
 | Session | Content | Est. Time |
 |---------|---------|-----------|
 | **Morning** | [A13 — Error Handling](../guides/level-06-quality/A13_error-handling.md) | 3 hours |
-| | [B05 — Performance Optimization](../guides/level-06-quality/B05_performance-optimization.md) | 3 hours |
-| **Afternoon** | [A14 — Testing Advanced](../guides/level-06-quality/A14_testing-advanced.md) | 3 hours |
-| | [B06 — Monitoring and Observability](../guides/level-06-quality/B06_monitoring-and-observability.md) | 2 hours |
+| | Break | 15 min |
+| | [B05 — Performance Optimization](../guides/level-06-quality/B05_performance-optimization.md) | 2.5 hours |
+| **Afternoon** | [A14 — Testing Advanced](../guides/level-06-quality/A14_testing-advanced.md) | 2.5 hours |
 | | [Level 6 Quiz](quizzes/level-06-quiz.md) | 30 min |
+| | [Level 6 Exercises](exercises/level-06-exercises.md) — Exercise 1 (Error Boundary) | 1 hour |
 
-**End-of-day checkpoint**: You can implement error boundaries, optimize bundle size and rendering, write integration tests with MSW, and configure Application Insights.
+> **B06 (Monitoring)** moves to Day 8 morning. This keeps Day 7 at a manageable 7.5 hours of guide content.
+
+**End-of-day checkpoint**: You can implement error boundaries, optimize bundle size and rendering, and write integration tests with MSW.
 
 ---
 
-### Day 7: Level 7 — Security and Compliance
+### Days 8–9: Level 7 — Security and Compliance
 
-The most critical level for banking. Security hardening, BSP compliance framework, and data privacy (RA 10173). Everything here directly affects audit readiness.
+The most critical level for banking. Security hardening, BSP compliance framework, and data privacy (RA 10173). Everything here directly affects audit readiness. Split across two days because these topics demand focus — a misunderstood security control is worse than no control at all.
+
+**Day 8 — CI/CD, Monitoring, and Security Hardening**
 
 | Session | Content | Est. Time |
 |---------|---------|-----------|
-| **Morning** | [B07 — Deployment and CI/CD](../guides/level-07-production/B07_deployment-and-cicd.md) | 3 hours |
-| | [A15 — Security Hardening](../guides/level-07-production/A15_security-hardening.md) | 3 hours |
-| **Afternoon** | [A16 — BSP Compliance Framework](../guides/level-07-production/A16_bsp-compliance-framework.md) | 3 hours |
+| **Morning** | [B06 — Monitoring and Observability](../guides/level-06-quality/B06_monitoring-and-observability.md) | 2.5 hours |
+| | Break | 15 min |
+| | [B07 — Deployment and CI/CD](../guides/level-07-production/B07_deployment-and-cicd.md) | 3 hours |
+| **Afternoon** | [A15 — Security Hardening](../guides/level-07-production/A15_security-hardening.md) | 3 hours |
+| | [Level 7 Exercises](exercises/level-07-exercises.md) — Exercise 1 (Security Headers) | 1 hour |
+
+**Day 8 checkpoint**: You can configure Azure Application Insights, set up Azure Pipelines for CI/CD, and implement CSP headers and XSS prevention.
+
+**Day 9 — BSP Compliance and Data Privacy**
+
+| Session | Content | Est. Time |
+|---------|---------|-----------|
+| **Morning** | [A16 — BSP Compliance Framework](../guides/level-07-production/A16_bsp-compliance-framework.md) | 3 hours |
+| | Break | 15 min |
 | | [A17 — Data Privacy and Consent](../guides/level-07-production/A17_data-privacy-and-consent.md) | 3 hours |
+| **Afternoon** | [Level 7 Exercises](exercises/level-07-exercises.md) — Exercises 2-3 (Consent, CI/CD) | 2 hours |
 | | [Level 7 Quiz](quizzes/level-07-quiz.md) | 30 min |
+| | [Level 7 Demo](demos/level-07-demo.md) | 30 min |
 
-> **Note**: Day 7 is 12+ hours of content. Prioritize A15 and A16 — these are non-negotiable for any EWB developer. B07 and A17 can overflow into Day 8 morning.
-
-**End-of-day checkpoint**: You can configure Azure Pipelines for CI/CD, implement CSP headers and XSS prevention, map BSP circulars to frontend controls, and handle PII according to RA 10173.
+**Day 9 checkpoint**: You can map BSP circulars to frontend controls, implement audit trail logging, handle PII per RA 10173, and build a consent management flow.
 
 ---
 
-### Day 8: Level 8 — Architecture and Mastery
+### Day 10: Level 8 — Architecture and Mastery
 
 Advanced architecture patterns, real-time features (WebSocket, SSE), and internationalization for multi-language banking interfaces.
 
 | Session | Content | Est. Time |
 |---------|---------|-----------|
 | **Morning** | [A18 — Architecture Patterns](../guides/level-08-mastery/A18_architecture-patterns.md) | 3 hours |
-| | [B08 — Internationalization](../guides/level-08-mastery/B08_internationalization.md) | 3 hours |
-| **Afternoon** | [A19 — Real-Time Patterns](../guides/level-08-mastery/A19_real-time-patterns.md) | 3 hours |
-| | [Level 8 Exercises](exercises/level-08-exercises.md) | 2 hours |
+| | Break | 15 min |
+| | [B08 — Internationalization](../guides/level-08-mastery/B08_internationalization.md) | 2.5 hours |
+| **Afternoon** | [A19 — Real-Time Patterns](../guides/level-08-mastery/A19_real-time-patterns.md) | 2.5 hours |
 | | [Level 8 Quiz](quizzes/level-08-quiz.md) | 30 min |
+| | [Level 8 Exercises](exercises/level-08-exercises.md) — Exercise 1 (Event Catalog) | 1 hour |
 
 **End-of-day checkpoint**: You can implement feature-sliced architecture, add multi-language support with proper currency/date formatting, and build real-time notification systems.
 
 ---
 
-### Day 9: Level 9 — Public-Facing Applications
+## Week 3 — Next.js and Capstone (Days 11–12)
+
+### Day 11: Level 9 — Public-Facing Applications
 
 Transition from Vite SPA to Next.js. Learn SSR vs SPA decision-making, Server Components, and Azure App Service deployment.
 
@@ -176,15 +216,16 @@ Transition from Vite SPA to Next.js. Learn SSR vs SPA decision-making, Server Co
 |---------|---------|-----------|
 | **Morning** | [A20 — SPA vs SSR Decision Framework](../guides/level-09-public-facing/A20_spa-vs-ssr-decision-framework.md) | 2 hours |
 | | [A21 — Next.js Project Setup](../guides/level-09-public-facing/A21_nextjs-project-setup.md) | 3 hours |
-| **Afternoon** | [A22 — Server Components and Data Fetching](../guides/level-09-public-facing/A22_server-components-data-fetching.md) | 3.5 hours |
-| | [B10 — Deploying Next.js on Azure](../guides/level-09-public-facing/B10_deploying-nextjs-on-azure.md) | 3 hours |
+| **Afternoon** | [A22 — Server Components and Data Fetching](../guides/level-09-public-facing/A22_server-components-data-fetching.md) | 3 hours |
 | | [Level 9 Quiz](quizzes/level-09-quiz.md) | 30 min |
 
-**End-of-day checkpoint**: You can set up a Next.js 15 project, build pages with Server Components, implement SSR data fetching, and deploy to Azure App Service.
+> **B10 (Deploying Next.js on Azure)** is recommended reading but not required for the capstone. Complete it if time allows, or read it when you first deploy a Next.js project to production.
+
+**End-of-day checkpoint**: You can set up a Next.js 15 project, build pages with Server Components, implement SSR data fetching, and explain when to use SSR vs SPA at EWB.
 
 ---
 
-### Day 10: Capstone
+### Day 12: Capstone
 
 Bring everything together. Complete the integration capstone, participate in a code review, and demonstrate your work.
 
@@ -259,17 +300,35 @@ Hands-on exercises reinforce each level. Work through them during afternoon sess
 
 > **Rule**: Attempt every exercise before checking the answer key. The struggle is where the learning happens.
 
-### Capstone Project (Day 10)
+### Capstone Project (Day 12)
 
-The capstone is your graduation requirement. You must demonstrate:
+The capstone is your graduation requirement. You will build a **fund transfer flow** in the portal application that exercises every major pattern from the program.
 
-1. **Working application** — Portal builds, runs, and passes all tests
-2. **Authentication flow** — Login, token refresh, and session management work correctly
-3. **Compliance controls** — Audit logging, data masking, and CSP headers are in place
-4. **Code quality** — TypeScript strict mode, Zod validation on all external data, proper error boundaries
-5. **Test coverage** — Unit tests for utilities, component tests for key flows, at least one integration test
+#### What You Build
 
-Your team lead will conduct a code review on Day 10. Come prepared to explain your decisions.
+A complete transfer feature: select source account, enter recipient details, specify amount/currency, confirm with MFA, show success receipt with transaction reference. The flow must:
+
+- Fetch accounts from the API (TanStack Query + Zod validation)
+- Use a multi-step form wizard (React Hook Form + Zod)
+- Mask account numbers and PII in the UI (RA 10173)
+- Require MFA confirmation before executing (BSP 982)
+- Log an audit event for the transfer (BSP 1033)
+- Handle errors with an error boundary and user-friendly messages
+- Pass TypeScript strict mode with zero errors
+
+#### Grading Criteria
+
+| Criterion | Weight | What Your Team Lead Checks |
+|-----------|--------|---------------------------|
+| **Working application** | 20% | Portal builds (`npm run build` clean), runs, and the transfer flow works end-to-end |
+| **Authentication** | 20% | Login, token refresh, session timeout, and MFA confirmation are implemented |
+| **Compliance controls** | 25% | Audit logging, data masking, CSP headers, and consent checks are in place |
+| **Code quality** | 20% | TypeScript strict, Zod on all external data, error boundaries, no `any` types |
+| **Test coverage** | 15% | Unit tests for utilities, component tests for the transfer form, at least one integration test with MSW |
+
+#### Passing Score
+
+You must score **70% or higher** across all criteria. Any criterion scoring below 50% is an automatic re-do regardless of total score. Your team lead will conduct a code review on Day 12 — come prepared to explain your decisions.
 
 ---
 

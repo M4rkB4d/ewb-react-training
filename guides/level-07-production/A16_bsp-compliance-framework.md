@@ -188,7 +188,11 @@ export function emitAuditEvent(
     metadata,
   };
 
-  // BSP 1019 — All audit events must be persisted
+  // BSP 1019 — All audit events must be persisted.
+  // We use sendBeacon instead of fetch because sendBeacon is guaranteed
+  // to complete even during page unload (tab close, navigation away).
+  // A regular fetch() may be cancelled by the browser mid-navigation,
+  // which would silently drop audit events — unacceptable for compliance.
   if (import.meta.env.PROD) {
     navigator.sendBeacon('/api/audit', JSON.stringify(event));
   }

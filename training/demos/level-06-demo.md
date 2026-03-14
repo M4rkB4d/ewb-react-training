@@ -167,4 +167,36 @@ Web Vitals         — Performance metrics (LCP, INP, CLS)
 
 ---
 
+---
+
+## If Things Go Wrong
+
+### Pre-Demo Checklist
+
+- [ ] Playwright installed: `npx playwright --version` returns a version
+- [ ] Playwright browsers installed: `npx playwright install` completed previously
+- [ ] Dev server running (Playwright tests need a running app unless configured otherwise)
+- [ ] Sentry dashboard accessible or screenshots prepared as fallback
+- [ ] Performance tab in DevTools opens without crashing (close other heavy tabs)
+
+### Common Issues
+
+**Playwright UI mode fails to launch or shows a blank window**
+- Cause: Playwright browsers not installed, or display server issue on the machine
+- Recovery: Run tests in headless mode: `npx playwright test --reporter=list`. Show the terminal output — pass/fail with timing. Say "UI mode is convenient but the CLI output tells you everything you need."
+
+**Error boundary does not catch the deliberately broken component**
+- Cause: React's development mode shows the error overlay on top of the boundary fallback
+- Recovery: Click the "X" on the React error overlay to dismiss it — the error boundary fallback is underneath. Explain that production builds do not show this overlay.
+
+**Performance tab recording shows no useful data**
+- Cause: Recording too short, or page was idle during the capture
+- Recovery: Focus on the Web Vitals console output instead. Show LCP, INP, and CLS values. Say "Web Vitals give you the three numbers that matter. The Performance tab is for deep dives."
+
+**Virtualized list does not show reduced DOM nodes**
+- Cause: Virtualization library not installed, or the list has too few items to trigger virtualization
+- Recovery: Open Elements tab, manually count the rendered rows, and compare to the data array length. If they match, say "With only 20 items, virtualization is unnecessary. The benefit appears at 500+ rows — the DOM node count stays constant regardless of data size."
+
+---
+
 *EastWest Bank Digital Platforms & Innovations | Confidential*

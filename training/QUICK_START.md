@@ -73,20 +73,19 @@ BSP Circular 1213 (AFASA) mandates phishing-resistant authentication by June 202
 
 | Order | Guide | Time | Why It Matters |
 |-------|-------|------|----------------|
-| 1 | [A11 — Authentication Part 1: Concepts](../guides/level-05-data-and-auth/A11_authentication-part1.md) | 3 hrs | JWT architecture, refresh token rotation, session management. EWB's auth is more complex than most SPAs because of BSP requirements. |
-| 2 | [A12 — Passkeys and WebAuthn](../guides/level-05-data-and-auth/A12_passkeys-and-webauthn.md) | 3 hrs | WebAuthn registration and authentication flows, resident credentials, platform authenticators. Required for BSP 1213 compliance. |
+| 1 | [A11 — Authentication Part 1: Concepts](../guides/level-05-data-and-auth/A11_authentication-part1.md) | 2 hrs | JWT architecture, refresh token rotation, session management. As an experienced dev, skim the JWT basics but read the EWB-specific interceptor and refresh patterns carefully. |
+| 2 | [A15 — Security Hardening](../guides/level-07-production/A15_security-hardening.md) | 2 hrs | CSP headers, XSS prevention, CSRF protection, subresource integrity. Skim patterns you already know; focus on the hardening checklist. |
 
 ### Afternoon (4 hours)
 
 | Order | Guide | Time | Why It Matters |
 |-------|-------|------|----------------|
-| 3 | [A15 — Security Hardening](../guides/level-07-production/A15_security-hardening.md) | 3 hrs | CSP headers, XSS prevention, CSRF protection, subresource integrity, security headers. The hardening checklist is mandatory for all EWB applications. |
-| 4 | [A16 — BSP Compliance Framework](../guides/level-07-production/A16_bsp-compliance-framework.md) | 3 hrs | Maps every BSP circular to frontend controls. Audit trail implementation, data retention, compliance dashboard. This is what auditors look at. |
-| 5 | [A17 — Data Privacy and Consent](../guides/level-07-production/A17_data-privacy-and-consent.md) | 3 hrs | RA 10173 (Philippine DPA) implementation: PII handling, consent management, data masking, breach notification. |
+| 3 | [A16 — BSP Compliance Framework](../guides/level-07-production/A16_bsp-compliance-framework.md) | 2.5 hrs | Maps every BSP circular to frontend controls. Audit trail implementation, data retention. This is what auditors look at. |
+| 4 | [A17 — Data Privacy and Consent](../guides/level-07-production/A17_data-privacy-and-consent.md) | 1.5 hrs | RA 10173 (Philippine DPA) implementation: PII handling, consent management, data masking. Skim implementation details; focus on the requirements. |
 
-> **Note**: Day 2 has 15 hours of guide content. Prioritize A11, A15, and A16. If A12 and A17 overflow, finish them on Day 3 morning before starting the integration material.
+> **A12 (Passkeys and WebAuthn)** is listed under Day 3 morning. It requires focused attention — do not rush it alongside all of security and compliance.
 
-**Day 2 checkpoint**: You can implement JWT auth with refresh token rotation, explain the WebAuthn flow, configure security headers, and describe the BSP compliance controls required for your application.
+**Day 2 checkpoint**: You can implement JWT auth with refresh token rotation, configure security headers, and describe the BSP compliance controls required for your application.
 
 ---
 
@@ -98,16 +97,16 @@ Connect everything. API integration, CI/CD, real-time patterns, and the Next.js 
 
 | Order | Guide | Time | Why It Matters |
 |-------|-------|------|----------------|
-| 1 | [B03 — API Integration](../guides/level-05-data-and-auth/B03_api-integration.md) | 3 hrs | TanStack Query patterns, API client architecture, Zod response validation, optimistic updates. The "Zod everywhere" pattern is an EWB standard — every API response is validated at runtime. |
-| 2 | [B07 — Deployment and CI/CD](../guides/level-07-production/B07_deployment-and-cicd.md) | 3 hrs | Azure Pipelines configuration, staging/production environments, blue-green deployment via Azure Front Door. No GitHub Actions — EWB uses Azure Pipelines exclusively. |
+| 1 | [A12 — Passkeys and WebAuthn](../guides/level-05-data-and-auth/A12_passkeys-and-webauthn.md) | 2 hrs | WebAuthn registration and authentication flows, resident credentials. Required for BSP 1213 (AFASA) compliance — June 2026 deadline. |
+| 2 | [B03 — API Integration](../guides/level-05-data-and-auth/B03_api-integration.md) | 2 hrs | TanStack Query patterns, Zod response validation, optimistic updates. The "Zod everywhere" pattern is an EWB standard. Skim the TanStack basics if you know them; focus on EWB's API client architecture. |
 
 ### Afternoon (4 hours)
 
 | Order | Guide | Time | Why It Matters |
 |-------|-------|------|----------------|
-| 3 | [A19 — Real-Time Patterns](../guides/level-08-mastery/A19_real-time-patterns.md) | 3 hrs | WebSocket and SSE patterns for live data (transaction feeds, notifications, rate updates). |
-| 4 | [A20 — SPA vs SSR Decision Framework](../guides/level-09-public-facing/A20_spa-vs-ssr-decision-framework.md) | 2 hrs | When to use Vite SPA vs Next.js at EWB. Decision matrix based on auth requirements, SEO needs, and compliance constraints. |
-| 5 | [A21 — Next.js Project Setup](../guides/level-09-public-facing/A21_nextjs-project-setup.md) | 3 hrs | Next.js 15 setup with EWB configuration. Server Components, App Router, Azure App Service deployment target. |
+| 3 | [B07 — Deployment and CI/CD](../guides/level-07-production/B07_deployment-and-cicd.md) | 2 hrs | Azure Pipelines configuration, staging/production environments, blue-green deployment. No GitHub Actions — EWB uses Azure Pipelines exclusively. Skim if you know CI/CD; focus on the EWB pipeline structure. |
+| 4 | [A19 — Real-Time Patterns](../guides/level-08-mastery/A19_real-time-patterns.md) | 1.5 hrs | WebSocket and SSE patterns for live data (transaction feeds, notifications). Skim for patterns; you likely know the fundamentals. |
+| 5 | [A20 — SPA vs SSR Decision Framework](../guides/level-09-public-facing/A20_spa-vs-ssr-decision-framework.md) | 1 hr | When to use Vite SPA vs Next.js at EWB. The decision matrix is the key takeaway. |
 
 ### Day 3 Exercises
 

@@ -155,4 +155,35 @@ describe('useFilterStore', () => {
 
 ---
 
+---
+
+## If Things Go Wrong
+
+### Pre-Demo Checklist
+
+- [ ] React DevTools and Redux DevTools extensions installed in Chrome
+- [ ] Dev server running with accounts page accessible
+- [ ] TanStack Query DevTools visible (floating icon in bottom-right)
+- [ ] MSW enabled and intercepting API requests (check console for `[MSW] Mocking enabled`)
+
+### Common Issues
+
+**Redux DevTools does not show Zustand state**
+- Cause: Zustand `devtools` middleware not applied to the store
+- Recovery: Use `useFilterStore.getState()` in the browser console instead. Say "Zustand exposes `getState()` on every store — you can inspect state without DevTools."
+
+**TanStack Query DevTools panel does not appear**
+- Cause: `ReactQueryDevtools` component not mounted, or production mode hiding it
+- Recovery: Open the Network tab and show the cached vs fresh requests directly. The caching behavior is visible in the response timing — stale requests show `(from cache)` or instant response times.
+
+**Route guard does not redirect — protected page loads without auth**
+- Cause: Auth store initialized with a default authenticated state, or ProtectedRoute not wrapping the route
+- Recovery: Show the ProtectedRoute source code and walk through the logic on the whiteboard. Say "The redirect is conditional on auth state. Let me show you the code path."
+
+**MSW mock returns unexpected data or 404**
+- Cause: Handler path mismatch, or MSW service worker not registered
+- Recovery: Check the browser console for MSW warnings. If MSW is not running, show the Network tab requests and explain the expected flow conceptually. Switch to the companion repo branch that has working mocks.
+
+---
+
 *EastWest Bank Digital Platforms & Innovations | Confidential*

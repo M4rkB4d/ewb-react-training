@@ -220,4 +220,31 @@ Walk through the compliance checklist for a "Fund Transfer" feature:
 
 ---
 
+---
+
+## If Things Go Wrong
+
+### Pre-Demo Checklist
+
+- [ ] VS Code open with `demo.ts` file ready and TypeScript extension active
+- [ ] `npx tsc --noEmit` runs without errors on existing code
+- [ ] Zod installed in the demo project (`npm ls zod` shows a version)
+- [ ] Code snippets pre-loaded in a separate file for quick paste
+
+### Common Issues
+
+**TypeScript red squiggly does not appear in VS Code**
+- Cause: TypeScript language server not running, or file not saved as `.ts`
+- Recovery: Run `npx tsc --noEmit` in the terminal instead — the error shows there. Say "VS Code shows this inline, but the terminal catches it too."
+
+**Zod `safeParse` output is not visible or unclear**
+- Cause: Console not open, or Node not executing the script
+- Recovery: Run `npx tsx demo.ts` in the terminal. If tsx is not installed, paste the snippet into the browser console using a plain object validation example without imports.
+
+**Audience asks about a BSP circular you do not know**
+- Cause: Obscure or recently issued circular
+- Recovery: Acknowledge it, note it down, and say "Good catch — I will verify the specifics and follow up. The principle still applies: every circular maps to frontend controls."
+
+---
+
 *EastWest Bank Digital Platforms & Innovations | Confidential*

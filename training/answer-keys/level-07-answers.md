@@ -18,7 +18,7 @@ React escapes content rendered via `{variable}` in JSX, but `dangerouslySetInner
 
 ### Question 3 — C
 
-BSP 982 requires that authentication tokens are not persisted in browser storage mechanisms. In-memory JavaScript variables are cleared when the tab closes or the page is refreshed, providing the strongest protection against token theft via XSS. `localStorage` and `sessionStorage` are accessible to any JavaScript running on the page.
+BSP 982 requires that access tokens are not persisted in browser storage mechanisms. In-memory JavaScript variables (e.g., a Zustand store variable) are cleared when the tab closes or the page is refreshed, providing the strongest protection against token theft via XSS. `localStorage` and `sessionStorage` are accessible to any JavaScript running on the page. Note: refresh tokens use a separate strategy (HttpOnly cookies set by the server).
 
 ### Question 4
 

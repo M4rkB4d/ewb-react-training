@@ -252,4 +252,36 @@ Show the AccountCard status dot:
 
 ---
 
+---
+
+## If Things Go Wrong
+
+### Pre-Demo Checklist
+
+- [ ] Dev server running and Button component renders all variants without errors
+- [ ] React Hook Form and `@hookform/resolvers` installed (`npm ls react-hook-form`)
+- [ ] Transfer schema file compiles: `npx tsc --noEmit src/schemas/transfer.ts`
+- [ ] Browser DevTools Accessibility tab accessible (Chrome or Firefox)
+- [ ] Screen reader installed and tested if planning the ARIA demo
+
+### Common Issues
+
+**Button variants render unstyled or with broken Tailwind classes**
+- Cause: Tailwind not processing the component's file, or `cn()` utility missing
+- Recovery: Show the raw component with inline styles instead. The point is the variant pattern, not the visual polish. Say "Tailwind config needs a content path update — the pattern is what matters."
+
+**Form validation errors do not appear after submit**
+- Cause: Missing `zodResolver` import, or `noValidate` omitted so browser validation fires first
+- Recovery: Add `console.log(errors)` inside the component to show the Zod errors object. Walk through them in the console — this teaches debugging form state.
+
+**Screen reader does not announce error messages**
+- Cause: `role="alert"` missing on error elements, or screen reader not configured
+- Recovery: Skip the live screen reader demo. Open the Accessibility tab in DevTools instead and inspect the ARIA tree. Show `aria-invalid` and `aria-describedby` attributes directly in the DOM.
+
+**Keyboard focus ring not visible**
+- Cause: Browser or OS overrides focus styles, or Tailwind's `focus-visible` ring not applied
+- Recovery: Open DevTools, force `:focus-visible` state on the element. Show the CSS rule that should apply. Say "Some browsers suppress focus rings for mouse users — `focus-visible` only shows for keyboard."
+
+---
+
 *EastWest Bank Digital Platforms & Innovations | Confidential*

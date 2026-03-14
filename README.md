@@ -139,7 +139,7 @@ EastWest Bank runs on **Microsoft Azure**. Deployment guides target:
 | Azure Key Vault | Secrets management |
 | Azure Container Registry | Docker image storage |
 | Azure App Service | Next.js deployment (Level 9) |
-| GitHub Actions | CI/CD pipelines |
+| Azure Pipelines | CI/CD pipelines |
 
 ---
 

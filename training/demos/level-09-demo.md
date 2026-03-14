@@ -172,4 +172,35 @@ az webapp deployment slot swap \
 
 ---
 
+---
+
+## If Things Go Wrong
+
+### Pre-Demo Checklist
+
+- [ ] Next.js dev server running (`npm run dev`) and accessible at `localhost:3000`
+- [ ] Vite SPA also running on a different port for the side-by-side comparison
+- [ ] "View Page Source" tested on both apps to confirm the HTML difference
+- [ ] Azure CLI authenticated if planning the live slot swap demo (`az account show`)
+
+### Common Issues
+
+**Next.js page shows a hydration mismatch error**
+- Cause: Server-rendered HTML differs from client render — often caused by `Date.now()`, `Math.random()`, or browser-only APIs in Server Components
+- Recovery: Dismiss the error overlay and say "Hydration mismatches happen when server and client produce different HTML. The fix is to move dynamic content into a Client Component with `'use client'`. Let me show you the pattern."
+
+**"View Page Source" shows identical empty shells for both apps**
+- Cause: Next.js running in development mode with client-side rendering, or the page is a Client Component
+- Recovery: Use `curl http://localhost:3000/products` in the terminal to show the HTML response directly. If the page is a Client Component, open the Server Component version instead. The key contrast is `async function` with `await fetch()` vs `useEffect`.
+
+**`'use client'` removal demo does not produce the expected error**
+- Cause: The component does not use hooks or browser APIs, so it works as a Server Component
+- Recovery: Add `useState` to the component first, then remove `'use client'`. The error will appear. Say "Server Components cannot use hooks. The directive tells Next.js to ship this code to the browser."
+
+**Azure slot swap command fails or CLI is not available**
+- Cause: Azure CLI not installed, not authenticated, or no permissions on the resource group
+- Recovery: Show the command in the editor and explain the concept. Say "Slot swap is an atomic operation — the staging slot becomes production and vice versa. Rollback is the same command in reverse. Zero downtime, instant cutover."
+
+---
+
 *EastWest Bank Digital Platforms & Innovations | Confidential*
