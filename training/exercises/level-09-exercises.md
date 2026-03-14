@@ -130,7 +130,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
-  const sessionId = request.cookies.get('ewb-session')?.value;
+  const sessionId = request.cookies.get('ewb_session')?.value;
 
   // TODO: Check if session cookie exists
   // If not, redirect to login page with return URL

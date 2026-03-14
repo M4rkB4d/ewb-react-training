@@ -11,7 +11,7 @@ export function usePayment() {
   const setStep = usePaymentDraftStore((s) => s.setStep);
 
   const mutation = useMutation({
-    mutationFn: (request: PaymentRequest) => paymentApi.submitPayment(request),
+    mutationFn: (request: PaymentRequest) => paymentApi.submit(request),
     onSuccess: (receipt: PaymentReceipt) => {
       // 1. Move wizard to receipt step
       setStep('receipt');

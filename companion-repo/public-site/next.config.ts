@@ -16,7 +16,7 @@ const securityHeaders = [
   },
   {
     key: 'Permissions-Policy',
-    value: 'camera=(), microphone=(), geolocation=()',
+    value: 'camera=(), microphone=(), geolocation=(), payment=(), usb=()',
   },
   {
     key: 'Strict-Transport-Security',
@@ -26,7 +26,7 @@ const securityHeaders = [
     key: 'Content-Security-Policy',
     value: [
       "default-src 'self'",
-      "script-src 'self'",
+      "script-src 'self' 'unsafe-inline'",
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: https://cdn.ewbanking.com",
       "connect-src 'self' https://api.ewbanking.com https://*.sentry.io",

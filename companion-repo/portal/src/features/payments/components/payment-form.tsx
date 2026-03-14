@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { usePaymentDraftStore } from '../stores/payment-draft-store';
 import { useAccounts } from '@/features/accounts';
 import { maskAccountNumber } from '@/lib/masking';
+import { formatPHP } from '@/lib/format';
 import { Button } from '@/components/ui/button';
 
 const paymentSchema = z.object({
@@ -76,8 +77,7 @@ export function PaymentForm() {
           <option value="">Select account</option>
           {accounts?.map((account) => (
             <option key={account.id} value={account.id}>
-              {account.name} ({maskAccountNumber(account.number)}) — ₱
-              {account.balance.toLocaleString()}
+              {account.name} ({maskAccountNumber(account.number)}) — {formatPHP(account.balance)}
             </option>
           ))}
         </select>

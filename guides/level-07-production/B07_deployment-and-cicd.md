@@ -229,6 +229,8 @@ stages:
             displayName: 'Lint'
           - script: npm run type-check
             displayName: 'Type check'
+          - script: npm audit --audit-level=high
+            displayName: 'Security audit'
 
       - job: UnitTests
         displayName: 'Unit Tests'

@@ -300,6 +300,8 @@ User            Frontend               Backend             Authenticator
 
 ```tsx
 // src/features/auth/api/passkey-api.ts (continued)
+import axios from 'axios';
+import { env } from '@/lib/env';
 
 const authOptionsSchema = z.object({
   challenge: z.string(),
@@ -315,7 +317,7 @@ const authOptionsSchema = z.object({
 export async function getAuthenticationOptions(): Promise<z.infer<typeof authOptionsSchema>> {
   // Use plain axios — user is not yet authenticated, so apiClient's token
   // interceptor would send an empty Authorization header.
-  const response = await axios.get('/webauthn/login/options', { withCredentials: true });
+  const response = await axios.get(`${env.VITE_API_BASE_URL}/webauthn/login/options`, { withCredentials: true });
   return authOptionsSchema.parse(response.data);
 }
 
@@ -332,7 +334,7 @@ const authResultSchema = z.object({
 export async function verifyAuthentication(credential: PublicKeyCredential): Promise<z.infer<typeof authResultSchema>> {
   const assertionResponse = credential.response as AuthenticatorAssertionResponse;
 
-  const response = await axios.post('/webauthn/login/verify', {
+  const response = await axios.post(`${env.VITE_API_BASE_URL}/webauthn/login/verify`, {
     id: credential.id,
     rawId: bufferToBase64url(credential.rawId),
     response: {

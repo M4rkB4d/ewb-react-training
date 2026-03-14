@@ -1,6 +1,5 @@
 import { usePaymentDraftStore } from '../stores/payment-draft-store';
 import { usePayment } from '../hooks/use-payment';
-import { maskAccountNumber } from '@/lib/masking';
 import { formatPHP } from '@/lib/format';
 import { Button } from '@/components/ui/button';
 import { ErrorAlert } from '@/components/error/error-alert';
@@ -9,15 +8,17 @@ export function PaymentReview() {
   const draft = usePaymentDraftStore();
   const { submitPayment, isPending, error } = usePayment();
 
-  const fee = 15; // Standard processing fee
-  const total = draft.amount + fee;
+  const fee = 15_00; // ₱15 processing fee in centavos
+  // draft.amount is raw user input in pesos — multiply by 100 to convert to centavos
+  const amountCentavos = Math.round(draft.amount * 100);
+  const total = amountCentavos + fee;
 
   const handleConfirm = () => {
     if (draft.biller == null) return;
     submitPayment({
       billerId: draft.biller.id,
       accountId: draft.accountId,
-      amount: draft.amount,
+      amount: amountCentavos, // Converted from pesos input
       fields: draft.fields,
       notes: draft.notes,
     });
@@ -34,11 +35,11 @@ export function PaymentReview() {
         </div>
         <div className="flex justify-between">
           <span className="text-gray-600">Account</span>
-          <span>{maskAccountNumber(draft.accountId)}</span>
+          <span>••••{draft.accountId.slice(-4)}</span>
         </div>
         <div className="flex justify-between">
           <span className="text-gray-600">Amount</span>
-          <span>{formatPHP(draft.amount)}</span>
+          <span>{formatPHP(amountCentavos)}</span>
         </div>
         <div className="flex justify-between">
           <span className="text-gray-600">Processing Fee</span>

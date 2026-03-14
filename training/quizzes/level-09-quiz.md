@@ -2,7 +2,7 @@
 
 > **EastWest Bank — Digital Platforms & Innovations**
 >
-> Covers: A21 (Next.js Setup), A22 (Server Components & Data Fetching), A23 (Public Pages), B10 (Deploying Next.js on Azure)
+> Covers: A20 (SPA vs SSR Decision Framework), A21 (Next.js Setup), A22 (Server Components & Data Fetching), A23 (Public Pages), B10 (Deploying Next.js on Azure)
 >
 > **Note:** Questions 7-9 and 11-12 cover B10 deployment content. If B10 was assigned as optional reading, facilitators may score these separately or treat them as bonus questions.
 

@@ -716,8 +716,8 @@ monitoring would miss.
 
 ### Session management
 
-In the Vite SPA (B04), authentication tokens are stored in the browser
-(`localStorage` or cookies). In Next.js, sessions can be managed server-side
+In the Vite SPA (B04), authentication tokens are stored in-memory (Zustand
+store) with refresh tokens in httpOnly cookies. In Next.js, sessions can be managed server-side
 with Redis, providing stronger security guarantees.
 
 ```tsx

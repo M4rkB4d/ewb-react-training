@@ -6,7 +6,7 @@ const defaultProps = {
   accountName: 'Personal Savings',
   accountNumber: '1234567890',
   accountType: 'savings' as const,
-  balance: 150000,
+  balance: 15_000_000, // centavos — ₱150,000.00
   isActive: true,
 };
 

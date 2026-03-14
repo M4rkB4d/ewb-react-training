@@ -80,9 +80,9 @@
 | ID | Title | Part |
 |----|-------|------|
 | A20 | [SPA vs SSR Decision Framework](../guides/level-09-public-facing/A20_spa-vs-ssr-decision-framework.md) | Core |
-| A21 | [Next.js Project Setup](../guides/level-09-public-facing/A21_nextjs-project-setup.md) | Core |
-| A22 | [Server Components and Data Fetching](../guides/level-09-public-facing/A22_server-components-data-fetching.md) | Core |
-| A23 | [Server-Side Auth, API Routes, and Composition](../guides/level-09-public-facing/A23_server-components-advanced.md) | Core |
+| A21 | [Next.js Project Setup](../guides/level-09-public-facing/A21_nextjs-project-setup.md) | Next.js |
+| A22 | [Server Components and Data Fetching](../guides/level-09-public-facing/A22_server-components-data-fetching.md) | Next.js |
+| A23 | [Server-Side Auth, API Routes, and Composition](../guides/level-09-public-facing/A23_server-components-advanced.md) | Next.js |
 | B10 | [Deploying Next.js on Azure](../guides/level-09-public-facing/B10_deploying-nextjs-on-azure.md) | Next.js |
 
 ### Appendix

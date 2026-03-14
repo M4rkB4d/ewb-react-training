@@ -37,7 +37,7 @@ describe('useAccounts', () => {
       id: 'acc-1',
       name: 'Personal Savings',
       type: 'savings',
-      balance: 150000,
+      balance: 15_000_000,
     });
   });
 

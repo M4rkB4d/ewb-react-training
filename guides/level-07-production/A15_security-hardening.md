@@ -762,7 +762,7 @@ import { z } from 'zod';
 const accountResponseSchema = z.object({
   id: z.string().uuid(),
   accountNumber: z.string().regex(/^\d{10,12}$/),
-  balance: z.number().nonnegative(),
+  balance: z.number().int().nonnegative(),
   currency: z.literal('PHP'),
   status: z.enum(['active', 'frozen', 'closed']),
 });
@@ -953,17 +953,17 @@ and touch events.
 
 ```tsx
 // src/features/auth/hooks/use-idle-timeout.ts
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef } from 'react';
 
 export function useIdleTimeout(timeoutMs: number, onTimeout: () => void): void {
   const timerRef = useRef<ReturnType<typeof setTimeout>>();
 
-  const resetTimer = useCallback(() => {
+  const resetTimer = () => {
     if (timerRef.current) {
       clearTimeout(timerRef.current);
     }
     timerRef.current = setTimeout(onTimeout, timeoutMs);
-  }, [timeoutMs, onTimeout]);
+  };
 
   useEffect(() => {
     const events: Array<keyof WindowEventMap> = [

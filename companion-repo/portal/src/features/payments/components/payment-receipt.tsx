@@ -1,13 +1,12 @@
 // src/features/payments/components/payment-receipt.tsx
 import { usePaymentDraftStore } from '../stores/payment-draft-store';
-import type { PaymentReceipt as PaymentReceiptType } from '../types';
+import { usePayment } from '../hooks/use-payment';
+import { formatPHP } from '@/lib/format';
+import { Button } from '@/components/ui/button';
 
-interface PaymentReceiptProps {
-  receipt?: PaymentReceiptType;
-}
-
-export function PaymentReceipt({ receipt }: PaymentReceiptProps) {
+export function PaymentReceipt() {
   const reset = usePaymentDraftStore((s) => s.reset);
+  const { receipt } = usePayment();
 
   if (receipt == null) {
     return <p className="text-gray-500">No receipt available.</p>;
@@ -25,13 +24,13 @@ export function PaymentReceipt({ receipt }: PaymentReceiptProps) {
         <dd>{receipt.billerName}</dd>
 
         <dt className="text-gray-500">Amount</dt>
-        <dd>₱{(receipt.amount / 100).toLocaleString('en-PH', { minimumFractionDigits: 2 })}</dd>
+        <dd>{formatPHP(receipt.amount)}</dd>
 
         <dt className="text-gray-500">Fee</dt>
-        <dd>₱{(receipt.fee / 100).toLocaleString('en-PH', { minimumFractionDigits: 2 })}</dd>
+        <dd>{formatPHP(receipt.fee)}</dd>
 
         <dt className="text-gray-500">Total</dt>
-        <dd className="font-semibold">₱{(receipt.total / 100).toLocaleString('en-PH', { minimumFractionDigits: 2 })}</dd>
+        <dd className="font-semibold">{formatPHP(receipt.total)}</dd>
 
         <dt className="text-gray-500">Status</dt>
         <dd className="capitalize">{receipt.status}</dd>
@@ -40,13 +39,9 @@ export function PaymentReceipt({ receipt }: PaymentReceiptProps) {
         <dd>{new Date(receipt.paidAt).toLocaleString()}</dd>
       </dl>
 
-      <button
-        type="button"
-        onClick={reset}
-        className="mt-4 rounded bg-ewb-purple px-4 py-2 text-white hover:bg-ewb-purple/90"
-      >
+      <Button onClick={reset} className="mt-4">
         Make Another Payment
-      </button>
+      </Button>
     </div>
   );
 }

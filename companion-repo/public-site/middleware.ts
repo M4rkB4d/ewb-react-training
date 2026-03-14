@@ -11,7 +11,7 @@ export function middleware(request: NextRequest) {
     '/contact', '/faq', '/privacy', '/terms', '/login', '/register'];
 
   const isPublic = publicPaths.some(
-    (path) => pathname === path || pathname.startsWith(`${path}/`),
+    (path) => pathname === path || (path !== '/' && pathname.startsWith(`${path}/`)),
   );
 
   if (isPublic) {

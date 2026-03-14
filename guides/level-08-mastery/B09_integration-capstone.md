@@ -112,6 +112,7 @@ export interface BillerField {
 export interface PaymentRequest {
   billerId: string;
   accountId: string;
+  /** Amount in centavos (integer). The form collects pesos and converts before submission. */
   amount: number;
   fields: Record<string, string>;
   notes: string;
@@ -123,6 +124,7 @@ export interface PaymentReceipt {
   billerId: string;
   billerName: string;
   accountId: string;
+  /** All monetary fields are integer centavos. */
   amount: number;
   fee: number;
   total: number;
@@ -187,9 +189,9 @@ const paymentReceiptSchema = z.object({
   billerId: z.string(),
   billerName: z.string(),
   accountId: z.string(),
-  amount: z.number(),
-  fee: z.number(),
-  total: z.number(),
+  amount: z.number().int(), // centavos
+  fee: z.number().int(),    // centavos
+  total: z.number().int(),  // centavos
   status: z.enum(['completed', 'pending', 'failed']),
   paidAt: z.string(),
 });
@@ -356,7 +358,7 @@ import { z } from 'zod';
 import { usePaymentDraftStore } from '../stores/payment-draft-store';
 import { useAccounts } from '@/features/accounts';
 import { maskAccountNumber } from '@/lib/masking';
-import { formatPHP } from '@/lib/format';
+import { formatPHP } from '@/lib/format'; // B08 upgraded formatPeso → formatPHP with locale support
 import { Button } from '@/components/ui/button';
 
 // User enters pesos; converted to centavos (* 100) before API call
@@ -497,16 +499,17 @@ export function PaymentReview() {
   const draft = usePaymentDraftStore();
   const { submitPayment, isPending, error } = usePayment();
 
-  const fee = 1500; // 15 pesos in centavos
+  const fee = 15_00; // ₱15 processing fee in centavos
   // draft.amount is raw user input in pesos — multiply by 100 to convert to centavos
-  const total = draft.amount * 100 + fee;
+  const amountCentavos = Math.round(draft.amount * 100);
+  const total = amountCentavos + fee;
 
   const handleConfirm = () => {
     if (draft.biller == null) return;
     submitPayment({
       billerId: draft.biller.id,
       accountId: draft.accountId,
-      amount: draft.amount * 100, // Convert pesos → centavos
+      amount: amountCentavos, // Converted from pesos input
       fields: draft.fields,
       notes: draft.notes,
     });
@@ -523,11 +526,11 @@ export function PaymentReview() {
         </div>
         <div className="flex justify-between">
           <span className="text-gray-600">Account</span>
-          <span>{maskAccountNumber(draft.accountId)}</span>{/* TODO: use account number, not ID */}
+          <span>••••{draft.accountId.slice(-4)}</span>
         </div>
         <div className="flex justify-between">
           <span className="text-gray-600">Amount</span>
-          <span>{formatPHP(draft.amount * 100)}</span>
+          <span>{formatPHP(amountCentavos)}</span>
         </div>
         <div className="flex justify-between">
           <span className="text-gray-600">Processing Fee</span>
@@ -559,11 +562,65 @@ export function PaymentReview() {
 }
 ```
 
+### Payment receipt
+
+```tsx
+// src/features/payments/components/payment-receipt.tsx
+import { usePaymentDraftStore } from '../stores/payment-draft-store';
+import { formatPHP } from '@/lib/format';
+import { Button } from '@/components/ui/button';
+import type { PaymentReceipt as PaymentReceiptType } from '../types';
+
+interface PaymentReceiptProps {
+  receipt?: PaymentReceiptType;
+}
+
+export function PaymentReceipt({ receipt }: PaymentReceiptProps) {
+  const reset = usePaymentDraftStore((s) => s.reset);
+
+  if (receipt == null) {
+    return <p className="text-gray-500">No receipt available.</p>;
+  }
+
+  return (
+    <div className="space-y-4 rounded border p-6">
+      <h2 className="text-lg font-semibold text-green-700">Payment Successful</h2>
+
+      <dl className="grid grid-cols-2 gap-y-2 text-sm">
+        <dt className="text-gray-500">Reference</dt>
+        <dd className="font-mono">{receipt.reference}</dd>
+
+        <dt className="text-gray-500">Biller</dt>
+        <dd>{receipt.billerName}</dd>
+
+        <dt className="text-gray-500">Amount</dt>
+        <dd>{formatPHP(receipt.amount)}</dd>
+
+        <dt className="text-gray-500">Fee</dt>
+        <dd>{formatPHP(receipt.fee)}</dd>
+
+        <dt className="text-gray-500">Total</dt>
+        <dd className="font-semibold">{formatPHP(receipt.total)}</dd>
+
+        <dt className="text-gray-500">Status</dt>
+        <dd className="capitalize">{receipt.status}</dd>
+
+        <dt className="text-gray-500">Date</dt>
+        <dd>{new Date(receipt.paidAt).toLocaleString()}</dd>
+      </dl>
+
+      <Button onClick={reset}>Make Another Payment</Button>
+    </div>
+  );
+}
+```
+
 ### Payment wizard
 
 ```tsx
 // src/features/payments/components/payment-wizard.tsx
 import { usePaymentDraftStore } from '../stores/payment-draft-store';
+import { usePayment } from '../hooks/use-payment';
 import { BillerSearch } from './biller-search';
 import { PaymentForm } from './payment-form';
 import { PaymentReview } from './payment-review';
@@ -578,6 +635,7 @@ const steps = [
 
 export function PaymentWizard() {
   const step = usePaymentDraftStore((s) => s.step);
+  const { receipt } = usePayment();
 
   return (
     <div className="mx-auto max-w-2xl">
@@ -604,7 +662,7 @@ export function PaymentWizard() {
       {step === 'biller' && <BillerSearch />}
       {step === 'details' && <PaymentForm />}
       {step === 'review' && <PaymentReview />}
-      {step === 'receipt' && <PaymentReceipt />}
+      {step === 'receipt' && <PaymentReceipt receipt={receipt} />}
     </div>
   );
 }

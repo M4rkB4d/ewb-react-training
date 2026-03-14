@@ -264,7 +264,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
-  const sessionId = request.cookies.get('ewb-session')?.value;
+  const sessionId = request.cookies.get('ewb_session')?.value;
 
   if (!sessionId) {
     const loginUrl = new URL('/login', request.url);
@@ -321,7 +321,7 @@ async function getApplications(sessionToken: string) {
 
 export default async function ApplicationStatusPage() {
   const cookieStore = await cookies();
-  const sessionId = cookieStore.get('ewb-session')?.value;
+  const sessionId = cookieStore.get('ewb_session')?.value;
 
   if (!sessionId) redirect('/login?returnTo=/apply/status');
 

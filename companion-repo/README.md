@@ -91,6 +91,6 @@ The two applications are completely independent — separate `package.json`, sep
 | 5 — Data & Auth | A11, A12, B03, B04 | Portal |
 | 6 — Quality | A13, A14, B05, B06 | Portal |
 | 7 — Production | A15, A16, A17, B07 | Portal |
-| 8 — Mastery | A18, A19, A20, B08, B09 | Portal |
-| 9 — Public-Facing | A21, A22, A23, B10 | Public Site |
+| 8 — Mastery | A18, A19, B08, B09 | Portal |
+| 9 — Public-Facing | A20, A21, A22, A23, B10 | Public Site |
 | Appendix | X01, X02, X03 | Portal |

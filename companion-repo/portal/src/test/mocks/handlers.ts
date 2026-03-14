@@ -9,7 +9,7 @@ export const handlers = [
         name: 'Personal Savings',
         number: '1234567890',
         type: 'savings',
-        balance: 150000,
+        balance: 15_000_000, // centavos — ₱150,000.00
         currency: 'PHP',
         isActive: true,
       },
@@ -22,7 +22,7 @@ export const handlers = [
       name: 'Personal Savings',
       number: '1234567890',
       type: 'savings',
-      balance: 150000,
+      balance: 15_000_000, // centavos — ₱150,000.00
       currency: 'PHP',
       isActive: true,
     });
@@ -38,9 +38,9 @@ export const handlers = [
           id: 'txn-1',
           date: '2026-03-10T08:30:00Z',
           description: 'POS Purchase — SM Megamall',
-          amount: -2500,
+          amount: -250_000, // centavos — ₱2,500.00
           type: 'debit',
-          balance: 147500,
+          balance: 14_750_000, // centavos — ₱147,500.00
           reference: 'REF-001',
           channel: 'POS',
         },

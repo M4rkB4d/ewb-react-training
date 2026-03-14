@@ -406,7 +406,7 @@ export function useCreateTransfer() {
 
   return useMutation({
     mutationFn: async (payload: TransferPayload) => {
-      const response = await axios.post('/api/transfers', payload);
+      const response = await axios.post(`${env.VITE_API_BASE_URL}/transfers`, payload);
       return response.data;
     },
     onSuccess: () => {
@@ -428,7 +428,7 @@ export function useToggleFavorite() {
 
   return useMutation({
     mutationFn: async (accountId: string) => {
-      const response = await axios.post(`/api/accounts/${accountId}/favorite`);
+      const response = await axios.post(`${env.VITE_API_BASE_URL}/accounts/${accountId}/favorite`);
       return response.data;
     },
 

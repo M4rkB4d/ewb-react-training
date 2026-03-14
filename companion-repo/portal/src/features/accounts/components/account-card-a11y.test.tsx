@@ -16,7 +16,7 @@ describe('AccountCard accessibility', () => {
         accountName="Personal Savings"
         accountNumber="1234567890"
         accountType="savings"
-        balance={150000}
+        balance={15_000_000}
         isActive={true}
         onTransfer={() => {}}
         onViewDetails={() => {}}
@@ -33,7 +33,7 @@ describe('AccountCard accessibility', () => {
         accountName="Time Deposit"
         accountNumber="9876543210"
         accountType="time-deposit"
-        balance={500000}
+        balance={50_000_000} // centavos — ₱500,000.00
         isActive={false}
       />,
     );

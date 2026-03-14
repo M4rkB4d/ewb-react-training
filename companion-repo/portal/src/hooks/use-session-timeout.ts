@@ -1,5 +1,5 @@
 // src/hooks/use-session-timeout.ts
-import { useEffect, useRef, useCallback, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useAuthStore } from '@/stores/auth-store';
 import { logout as logoutApi } from '@/features/auth/api/auth-api';
 
@@ -22,7 +22,7 @@ export function useSessionTimeout(options: SessionTimeoutOptions = {}) {
   const countdownRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const lastActivityRef = useRef(Date.now());
 
-  const handleLogout = useCallback(async () => {
+  async function handleLogout() {
     setShowWarning(false);
     try {
       await logoutApi();
@@ -31,9 +31,9 @@ export function useSessionTimeout(options: SessionTimeoutOptions = {}) {
     }
     clearAuth();
     window.location.href = '/login?reason=timeout';
-  }, [clearAuth]);
+  }
 
-  const resetTimers = useCallback(() => {
+  function resetTimers() {
     lastActivityRef.current = Date.now();
     setShowWarning(false);
 
@@ -60,7 +60,7 @@ export function useSessionTimeout(options: SessionTimeoutOptions = {}) {
 
     // Set logout timer
     timeoutRef.current = setTimeout(handleLogout, timeoutMs);
-  }, [timeoutMs, warningMs, handleLogout]);
+  }
 
   useEffect(() => {
     if (!isAuthenticated) return;

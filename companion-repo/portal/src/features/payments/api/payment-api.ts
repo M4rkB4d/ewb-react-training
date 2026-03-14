@@ -61,11 +61,6 @@ export const paymentApi = {
     return paymentReceiptSchema.parse(response.data);
   },
 
-  submitPayment: async (request: PaymentRequest) => {
-    const response = await apiClient.post('/payments', request);
-    return paymentReceiptSchema.parse(response.data);
-  },
-
   getHistory: async (accountId: string) => {
     const response = await apiClient.get(`/payments/history/${accountId}`);
     return z.array(paymentReceiptSchema).parse(response.data);

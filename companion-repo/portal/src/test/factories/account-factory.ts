@@ -14,7 +14,7 @@ export function createAccount(overrides: Partial<Account> = {}): Account {
     name: 'Personal Savings',
     number: `${1000000000 + accountCounter}`,
     type: 'savings',
-    balance: 150000,
+    balance: 15_000_000, // centavos — ₱150,000.00
     currency: 'PHP',
     isActive: true,
     ...overrides,

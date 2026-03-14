@@ -155,9 +155,10 @@ const securityHeaders = [
     value: [
       "default-src 'self'",
       // Next.js injects inline scripts for data serialization between server
-      // and client. A bare 'self' would block them. Use nonce-based CSP in
-      // production — see Phase 7 below for the full implementation.
-      "script-src 'self' 'nonce-${nonce}'",
+      // and client. A bare 'self' would block them. In production, use
+      // nonce-based CSP via middleware — see Phase 7 below for the full
+      // implementation. For now, allow unsafe-inline as a development fallback.
+      "script-src 'self' 'unsafe-inline'",
       // Next.js may inject inline styles for built-in components like next/image
       // and next/font. Unlike the Vite SPA (see A15), 'unsafe-inline' is needed
       // here unless you implement nonce-based CSP.
@@ -228,7 +229,7 @@ export default nextConfig;
 
 | Concern | Vite (`vite.config.ts`) | Next.js (`next.config.ts`) |
 |---------|------------------------|---------------------------|
-| Bundler | Rollup (via Vite) | Turbopack (dev) / Webpack (prod) |
+| Bundler | Rollup (via Vite) | Turbopack |
 | Dev server | Vite dev server (port 5173) | Next.js dev server (port 3000) |
 | Security headers | Nginx config / Azure CDN rules | `headers()` function in config |
 | Image optimization | Manual (via plugins) | Built-in `next/image` |

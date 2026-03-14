@@ -249,7 +249,6 @@ export function useEventSource({
 import { useEventSource } from '@/hooks/use-event-source';
 import { useQueryClient } from '@tanstack/react-query';
 import { accountKeys } from '../api/query-keys';
-import { useCallback } from 'react';
 import { z } from 'zod';
 
 const transactionAlertSchema = z.object({
@@ -265,27 +264,24 @@ type TransactionAlert = z.infer<typeof transactionAlertSchema>;
 export function useTransactionAlerts(accountId: string) {
   const queryClient = useQueryClient();
 
-  const handleMessage = useCallback(
-    (event: MessageEvent) => {
-      const parsed = transactionAlertSchema.safeParse(JSON.parse(event.data));
-      if (!parsed.success) {
-        console.warn('[SSE] Invalid transaction alert:', parsed.error.issues);
-        return;
-      }
-      const alert: TransactionAlert = parsed.data;
+  const handleMessage = (event: MessageEvent) => {
+    const parsed = transactionAlertSchema.safeParse(JSON.parse(event.data));
+    if (!parsed.success) {
+      console.warn('[SSE] Invalid transaction alert:', parsed.error.issues);
+      return;
+    }
+    const alert: TransactionAlert = parsed.data;
 
-      // Invalidate account balance — TanStack Query will refetch
-      queryClient.invalidateQueries({
-        queryKey: accountKeys.balance(alert.accountId),
-      });
+    // Invalidate account balance — TanStack Query will refetch
+    queryClient.invalidateQueries({
+      queryKey: accountKeys.balance(alert.accountId),
+    });
 
-      // Invalidate transaction list
-      queryClient.invalidateQueries({
-        queryKey: accountKeys.transactions(alert.accountId),
-      });
-    },
-    [queryClient],
-  );
+    // Invalidate transaction list
+    queryClient.invalidateQueries({
+      queryKey: accountKeys.transactions(alert.accountId),
+    });
+  };
 
   return useEventSource({
     url: `/api/accounts/${accountId}/events`,

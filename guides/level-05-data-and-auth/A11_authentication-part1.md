@@ -423,15 +423,18 @@ support immediate session termination:
 
 ```tsx
 // src/features/auth/api/auth-api.ts
+import axios from 'axios';
+import { env } from '@/lib/env';
+
 export async function revokeSession(): Promise<void> {
   // Use plain axios, not apiClient — during revocation the access token may
   // already be expired, and the interceptor would trigger a refresh loop.
-  await axios.post('/auth/revoke', null, { withCredentials: true });
+  await axios.post(`${env.VITE_API_BASE_URL}/auth/revoke`, null, { withCredentials: true });
 }
 
 export async function revokeAllSessions(): Promise<void> {
   // Invalidate ALL refresh tokens for this user (all devices)
-  await axios.post('/auth/revoke-all', null, { withCredentials: true });
+  await axios.post(`${env.VITE_API_BASE_URL}/auth/revoke-all`, null, { withCredentials: true });
 }
 ```
 
