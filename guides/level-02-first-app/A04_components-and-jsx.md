@@ -819,6 +819,8 @@ export function AccountCard({
 }
 ```
 
+> **Note:** This example uses pesos as a plain number for simplicity. Starting in B03 (API Integration), all monetary values use integer centavos with `formatPeso()`. See B01 Phase 6 for why.
+
 **What this component demonstrates:**
 
 | Concept | Where |

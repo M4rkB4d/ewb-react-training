@@ -183,7 +183,7 @@ export const handlers = [
         name: 'Payroll Checking',
         number: '0987654321',
         type: 'checking',
-        balance: 42500.5,
+        balance: 4_250_050, // ₱42,500.50 in centavos
         currency: 'PHP',
         isActive: true,
       },

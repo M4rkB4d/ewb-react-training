@@ -39,8 +39,11 @@ build-time tool** — not bundled with React 19 itself. You must install and
 configure it in your Vite/Babel pipeline:
 
 ```bash
-npm install -D babel-plugin-react-compiler react-compiler-runtime
+npm install -D babel-plugin-react-compiler
+npm install react-compiler-runtime
 ```
+
+> The runtime package is a production dependency (imported by compiled output), while the Babel plugin is dev-only.
 
 > See your `vite.config.ts` for the Babel plugin configuration. The compiler
 > requires React 19 as the minimum React version but is not included in it.

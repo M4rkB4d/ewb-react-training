@@ -46,6 +46,11 @@ export function initMonitoring(): void {
       environment: import.meta.env.MODE,
       release: env.VITE_APP_VERSION,
 
+      integrations: [
+        Sentry.browserTracingIntegration(),
+        Sentry.replayIntegration({ maskAllText: true, blockAllMedia: true }),
+      ],
+
       // Performance monitoring
       tracesSampleRate: 0.1, // 10% of transactions
 

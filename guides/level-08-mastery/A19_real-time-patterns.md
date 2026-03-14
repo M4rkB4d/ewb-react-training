@@ -152,7 +152,6 @@ export function useLiveBalance(accountId: string) {
 ```tsx
 // src/hooks/use-event-source.ts
 import { useEffect, useRef, useState } from 'react';
-import { useAuthStore } from '@/features/auth/stores/auth-store';
 
 interface UseEventSourceOptions {
   url: string;
@@ -171,6 +170,10 @@ export function useEventSource({
 }: UseEventSourceOptions) {
   const [connectionState, setConnectionState] = useState<ConnectionState>('disconnected');
   const eventSourceRef = useRef<EventSource | null>(null);
+  const onMessageRef = useRef(onMessage);
+  onMessageRef.current = onMessage;
+  const onErrorRef = useRef(onError);
+  if (onError) onErrorRef.current = onError;
 
   useEffect(() => {
     if (!enabled) return;
@@ -195,12 +198,12 @@ export function useEventSource({
     };
 
     es.onmessage = (event) => {
-      onMessage(event);
+      onMessageRef.current(event);
     };
 
     es.onerror = (event) => {
       setConnectionState('error');
-      onError?.(event);
+      onErrorRef.current?.(event);
       // EventSource auto-reconnects — no manual retry needed
     };
 
@@ -252,7 +255,7 @@ import { z } from 'zod';
 const transactionAlertSchema = z.object({
   type: z.enum(['credit', 'debit']),
   accountId: z.string(),
-  amount: z.number(),
+  amount: z.number().int(), // Centavos
   description: z.string(),
   timestamp: z.string().datetime(),
 });

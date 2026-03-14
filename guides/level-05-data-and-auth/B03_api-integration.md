@@ -380,7 +380,7 @@ import { apiClient } from '@/lib/api-client';
 
 const transactionSchema = z.object({
   id: z.string(),
-  date: z.iso.datetime(),
+  date: z.string().datetime(),
   description: z.string(),
   amount: z.number().int(), // Centavos
   type: z.enum(['credit', 'debit']),
@@ -442,7 +442,7 @@ const transferResponseSchema = z.object({
   id: z.string(),
   status: z.enum(['completed', 'pending', 'failed']),
   referenceNumber: z.string(),
-  timestamp: z.iso.datetime(),
+  timestamp: z.string().datetime(),
 });
 
 export type TransferResponse = z.infer<typeof transferResponseSchema>;

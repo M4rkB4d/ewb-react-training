@@ -198,7 +198,7 @@ React is the most widely used JavaScript library for building user interfaces:
 - **Industry standard:** Used by banks, fintech companies, and enterprises worldwide
 - **Hiring:** The largest talent pool of any frontend framework
 - **Ecosystem:** Thousands of production-tested libraries for forms, state management, data fetching, and more
-- **Performance:** React 19's compiler automatically optimizes rendering — no manual tuning needed
+- **Performance:** React 19 is compatible with the React Compiler (a separate build tool) that automatically optimizes rendering — no manual tuning needed
 - **TypeScript support:** First-class TypeScript integration catches errors before they reach production
 - **Testing:** Mature testing ecosystem (Vitest, React Testing Library, Playwright) ensures reliability
 
@@ -260,6 +260,8 @@ function AccountCard({ accountName, accountNumber, balance, currency }: AccountC
   );
 }
 ```
+
+> **Money handling note:** These introductory examples use pesos as a plain number for simplicity. In real banking code (starting from B03), all monetary values are stored as integer centavos to avoid IEEE 754 floating-point errors. See B01 Phase 6 for the full explanation.
 
 Notice:
 - **TypeScript interface** defines the exact shape of props
@@ -744,7 +746,7 @@ React 19 introduces several features you will encounter throughout these guides:
 
 | Feature | What It Does | Where You'll Learn It |
 |---------|-------------|----------------------|
-| React Compiler | Automatically memoizes components — no more manual `useMemo`/`useCallback` | B05 (Performance) |
+| React Compiler (separate tool) | Automatically memoizes components — no more manual `useMemo`/`useCallback` | B05 (Performance) |
 | `ref` as prop | Pass refs directly — no `forwardRef` wrapper | This guide (Phase 5) |
 | `useActionState` | Manage form submission state | A07 (Forms) |
 | `use` API | Read resources (promises, context) during render | A09 (State Management) |
@@ -756,7 +758,7 @@ React's ecosystem has many tools you will NOT need:
 
 | Tool | Why Not |
 |------|---------|
-| `useMemo` / `useCallback` | React 19's Compiler handles this automatically |
+| `useMemo` / `useCallback` | The React Compiler (separate build plugin, see B05) handles this automatically |
 | `forwardRef` | React 19 accepts `ref` as a regular prop |
 | Class components | Legacy pattern — all new code uses functions |
 | Redux | Too complex for most use cases — Zustand is simpler (A09) |

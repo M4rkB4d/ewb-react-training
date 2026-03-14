@@ -57,7 +57,7 @@ that can become stale. TanStack Query keeps server data fresh automatically.
 │   (Client State)     │   (Server State)      │
 │                      │                       │
 │ • UI preferences     │ • GET /accounts       │
-│ • Auth tokens        │ • GET /transactions   │
+│ • Auth status (in-memory only — never persisted) │ • GET /transactions   │
 │ • Wizard steps       │ • GET /user/profile   │
 │ • Selected filters   │ • POST /transfers     │
 │ • Modal open/closed  │ • PUT /settings       │
@@ -293,7 +293,7 @@ const accountSchema = z.object({
   name: z.string(),
   number: z.string(),
   type: z.enum(['savings', 'checking', 'time-deposit']),
-  balance: z.number(),
+  balance: z.number().int(), // Centavos
   currency: z.string().default('PHP'),
   isActive: z.boolean(),
 });

@@ -290,7 +290,11 @@ describe('AccountCard', () => {
     render(<AccountCard {...defaultProps} balance={42500.5} />);
     expect(screen.getByText('₱42,500.50')).toBeInTheDocument();
   });
+```
 
+> **Money handling note:** These test examples use pesos as a plain number for simplicity. Starting in B03 (API Integration), all monetary values use integer centavos with `formatPeso()`. See B01 Phase 6 for the full explanation.
+
+```tsx
   // ── Conditional Rendering ──────────────────────────
 
   it('shows active indicator for active accounts', () => {

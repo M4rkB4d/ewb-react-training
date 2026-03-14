@@ -211,7 +211,7 @@ import { useAuthStore } from '@/stores/auth-store';
 
 export function useLogin() {
   const navigate = useNavigate();
-  const { setAuth, setMfaRequired, setLoading, setError } = useAuthStore();
+  const { setAuth, setMfaRequired, setLoading, setError } = useAuthStore.getState();
 
   return useMutation({
     mutationFn: ({ username, password }: { username: string; password: string }) =>
@@ -248,7 +248,8 @@ import { useAuthStore } from '@/stores/auth-store';
 
 export function useVerifyMfa() {
   const navigate = useNavigate();
-  const { setAuth, mfaToken } = useAuthStore();
+  const mfaToken = useAuthStore((state) => state.mfaToken);
+  const { setAuth } = useAuthStore.getState();
 
   return useMutation({
     mutationFn: (code: string) => {
@@ -535,41 +536,47 @@ export function useSessionTimeout(options: SessionTimeoutOptions = {}) {
 
 ```tsx
 // src/components/auth/session-warning-dialog.tsx
+import { useRef, useEffect } from 'react';
 import { useSessionTimeout } from '@/hooks/use-session-timeout';
 import { Button } from '@/components/ui/button';
 
 export function SessionWarningDialog() {
   const { showWarning, remainingSeconds, extendSession, logoutNow } =
     useSessionTimeout();
+  const dialogRef = useRef<HTMLDialogElement>(null);
 
-  if (!showWarning) return null;
+  useEffect(() => {
+    if (showWarning) {
+      dialogRef.current?.showModal();
+    } else {
+      dialogRef.current?.close();
+    }
+  }, [showWarning]);
 
   return (
-    <div
-      role="alertdialog"
+    <dialog
+      ref={dialogRef}
       aria-labelledby="session-title"
       aria-describedby="session-desc"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+      className="rounded-lg bg-white p-6 shadow-xl backdrop:bg-black/50"
     >
-      <div className="rounded-lg bg-white p-6 shadow-xl">
-        <h2 id="session-title" className="text-lg font-bold">
-          Session Expiring
-        </h2>
-        <p id="session-desc" className="mt-2 text-gray-600">
-          Your session will expire in{' '}
-          <span className="font-mono font-bold text-red-600">
-            {Math.floor(remainingSeconds / 60)}:{String(remainingSeconds % 60).padStart(2, '0')}
-          </span>
-          . Would you like to continue?
-        </p>
-        <div className="mt-4 flex gap-3">
-          <Button onClick={extendSession}>Continue Session</Button>
-          <Button variant="outline" onClick={logoutNow}>
-            Sign Out
-          </Button>
-        </div>
+      <h2 id="session-title" className="text-lg font-bold">
+        Session Expiring
+      </h2>
+      <p id="session-desc" className="mt-2 text-gray-600">
+        Your session will expire in{' '}
+        <span className="font-mono font-bold text-red-600">
+          {Math.floor(remainingSeconds / 60)}:{String(remainingSeconds % 60).padStart(2, '0')}
+        </span>
+        . Would you like to continue?
+      </p>
+      <div className="mt-4 flex gap-3">
+        <Button onClick={extendSession}>Continue Session</Button>
+        <Button variant="outline" onClick={logoutNow}>
+          Sign Out
+        </Button>
       </div>
-    </div>
+    </dialog>
   );
 }
 ```

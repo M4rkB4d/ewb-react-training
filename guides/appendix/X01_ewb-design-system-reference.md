@@ -162,32 +162,30 @@ export function Button({
 
 ```tsx
 // src/components/ui/input.tsx
-import { type InputHTMLAttributes, forwardRef } from 'react';
+import { type InputHTMLAttributes } from 'react';
 import { cn } from '@/lib/utils';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   error?: boolean;
+  ref?: React.Ref<HTMLInputElement>;
 }
 
-export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ className, error, ...props }, ref) => {
-    return (
-      <input
-        ref={ref}
-        className={cn(
-          'flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm',
-          'placeholder:text-gray-400',
-          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ewb-purple focus-visible:ring-offset-2',
-          'disabled:cursor-not-allowed disabled:opacity-50',
-          error ? 'border-red-500' : 'border-gray-300',
-          className,
-        )}
-        {...props}
-      />
-    );
-  },
-);
-Input.displayName = 'Input';
+export function Input({ className, error, ref, ...props }: InputProps) {
+  return (
+    <input
+      ref={ref}
+      className={cn(
+        'flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm',
+        'placeholder:text-gray-400',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ewb-purple focus-visible:ring-offset-2',
+        'disabled:cursor-not-allowed disabled:opacity-50',
+        error ? 'border-red-500' : 'border-gray-300',
+        className,
+      )}
+      {...props}
+    />
+  );
+}
 ```
 
 ### Card

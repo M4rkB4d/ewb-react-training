@@ -324,7 +324,8 @@ import { useIntl } from 'react-intl';
 export function TransferSuccess({ amount, reference }: { amount: number; reference: string }) {
   const intl = useIntl();
 
-  const formattedAmount = intl.formatNumber(amount, {
+  // amount is in centavos — divide by 100 for display
+  const formattedAmount = intl.formatNumber(amount / 100, {
     style: 'currency',
     currency: 'PHP',
   });
@@ -356,17 +357,18 @@ export function TransferSuccess({ amount, reference }: { amount: number; referen
 
 ```tsx
 // src/lib/format.ts
-export function formatPHP(amount: number, locale: string = 'en-PH'): string {
+// centavos → formatted peso string (matches formatPeso from B03)
+export function formatPHP(centavos: number, locale: string = 'en-PH'): string {
   return new Intl.NumberFormat(locale, {
     style: 'currency',
     currency: 'PHP',
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
-  }).format(amount);
+  }).format(centavos / 100);
 }
 ```
 
-| Locale | Output for 1234567.89 |
+| Locale | Output for `formatPHP(123_456_789)` (123,456,789 centavos) |
 |--------|---------------------|
 | `en-PH` | ₱1,234,567.89 |
 | `fil-PH` | ₱1,234,567.89 |
@@ -386,7 +388,8 @@ interface CurrencyDisplayProps {
 export function CurrencyDisplay({ amount, currency = 'PHP' }: CurrencyDisplayProps) {
   const intl = useIntl();
 
-  const formatted = intl.formatNumber(amount, {
+  // amount is in centavos — divide by 100 for display
+  const formatted = intl.formatNumber(amount / 100, {
     style: 'currency',
     currency,
   });

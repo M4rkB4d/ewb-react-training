@@ -217,11 +217,15 @@ const accountNumberSchema = z
 ### Transfer amount
 
 ```tsx
-const transferAmountSchema = z
+const transferAmountSchema = z.coerce
   .number()
   .positive('Amount must be greater than zero')
-  .max(1_000_000, 'Maximum transfer amount is ₱1,000,000')
-  .multipleOf(0.01, 'Amount cannot have more than 2 decimal places');
+  .max(1_000_000, 'Maximum transfer amount is ₱1,000,000');
+// NOTE: This accepts pesos from user input for simplicity.
+// In B03, you will learn that money is stored as integer centavos
+// to avoid IEEE 754 floating-point errors (e.g., 0.1 + 0.2 !== 0.3).
+// The input component accepts pesos; the form's onSubmit converts
+// to centavos before sending to the API.
 ```
 
 > **AMLA Note:** Transaction amount limits must be enforced on both frontend and
@@ -352,7 +356,7 @@ const transferSchema = z.object({
   amount: z.coerce
     .number()
     .positive('Amount must be greater than zero')
-    .max(1_000_000, 'Maximum transfer is ₱1,000,000'),
+    .max(1_000_000, 'Maximum transfer is ₱1,000,000'), // Pesos from user input; converted to centavos in onSubmit
   notes: z.string().max(100, 'Notes cannot exceed 100 characters').optional(),
 }).refine(
   (data) => data.fromAccount !== data.toAccount,
@@ -473,7 +477,7 @@ export function TransferWizard({ accounts, onSubmit }: TransferWizardProps) {
             <Input
               label="Transfer Amount (₱)"
               type="number"
-              {...register('amount', { valueAsNumber: true })}
+              {...register('amount')}
               error={errors.amount?.message}
               placeholder="0.00"
               step="0.01"

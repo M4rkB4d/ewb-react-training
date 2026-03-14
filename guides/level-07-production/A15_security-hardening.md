@@ -735,6 +735,8 @@ export default defineConfig({
 });
 ```
 
+> **Note:** Vite uses esbuild for minification by default. To use Terser (needed for `drop_console`), install it: `npm install -D terser`. Alternatively, use esbuild's built-in drop: `esbuild: { drop: ['console', 'debugger'] }` which works without extra dependencies.
+
 Error pages must never expose stack traces, file paths, or internal
 architecture details. Use generic error messages in production (see A13).
 

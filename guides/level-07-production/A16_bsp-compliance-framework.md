@@ -341,7 +341,7 @@ emitAuditEvent('AUTH_MFA_CHALLENGE', { methods: ['otp'] });
 emitAuditEvent('TRANSFER_INITIATE', {
   fromAccountId: 'acc-1',
   toAccountId: 'acc-2',
-  amount: 5000,
+  amount: 500_000, // ₱5,000.00 in centavos
   currency: 'PHP',
 });
 

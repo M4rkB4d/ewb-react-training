@@ -84,7 +84,7 @@ The types you will use most often:
 ```typescript
 // Basic types
 const accountName: string = 'Maria Santos';
-const balance: number = 125430.50;
+const transactionCount: number = 42;
 const isActive: boolean = true;
 const createdAt: Date = new Date('2024-01-15');
 
@@ -765,7 +765,7 @@ const envSchema = z.object({
   VITE_API_BASE_URL: z.string().url(),
   VITE_APP_NAME: z.string().default('EastWest Bank'),
   VITE_SENTRY_DSN: z.string().url().optional(),
-  VITE_ENABLE_MOCKS: z.stringbool().default('false'),
+  VITE_ENABLE_MOCKS: z.string().transform((v) => v === 'true').pipe(z.boolean()).default(false),
   VITE_SESSION_TIMEOUT_MS: z.coerce.number().default(900_000), // 15 minutes
 });
 

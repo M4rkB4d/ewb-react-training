@@ -97,7 +97,7 @@ npx create-next-app@latest ewb-public \
 | TypeScript | 5.9 | Type safety |
 | Tailwind CSS | 4 | Utility-first styling |
 | Zod | 4 | Runtime validation |
-| Node.js | 24 LTS | Server runtime |
+| Node.js | 22 LTS | Server runtime |
 
 ### Verifying the scaffold
 

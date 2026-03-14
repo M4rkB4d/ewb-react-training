@@ -12,7 +12,7 @@ function AccountCard({ name, balance }: { name: string; balance: number }) {
   return (
     <div>
       <h3>{name}</h3>
-      <p>{formatPHP(balance)}</p>
+      <p>{formatPeso(balance)}</p> {/* balance is in centavos */}
     </div>
   );
 }
@@ -31,8 +31,9 @@ function Input({ ref, ...props }: { ref?: React.Ref<HTMLInputElement> }) {
 }
 ```
 
-**React Compiler (React 19):** No manual `useMemo` or `useCallback` needed.
-The compiler auto-memoizes at build time.
+**React Compiler (separate build tool):** No manual `useMemo` or `useCallback`
+needed when the compiler is installed. It is NOT bundled with React 19 — see B05
+for setup.
 
 ---
 
@@ -210,12 +211,12 @@ apiClient.interceptors.response.use(
 
 ```tsx
 // Unit test (Vitest)
-it('formats PHP currency', () => {
-  expect(formatPHP(1234.56)).toBe('₱1,234.56');
+it('formats peso from centavos', () => {
+  expect(formatPeso(123_456)).toBe('₱1,234.56'); // 123456 centavos = ₱1,234.56
 });
 
 // Component test (RTL)
-render(<AccountCard name="Savings" balance={50000} />);
+render(<AccountCard name="Savings" balance={5_000_000} />); // 5,000,000 centavos = ₱50,000.00
 expect(screen.getByText('₱50,000.00')).toBeInTheDocument();
 
 // Hook test

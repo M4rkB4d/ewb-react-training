@@ -99,7 +99,7 @@ is a critical security vulnerability and what would happen in production.
 ```dockerfile
 # Dockerfile
 # Stage 1: Build
-FROM node:24-alpine AS builder
+FROM node:22-alpine AS builder
 WORKDIR /app
 
 COPY package.json package-lock.json ./
@@ -158,8 +158,8 @@ server {
     add_header X-Frame-Options "DENY" always;
     add_header X-Content-Type-Options "nosniff" always;
     add_header Referrer-Policy "strict-origin-when-cross-origin" always;
-    add_header Permissions-Policy "camera=(), microphone=(), geolocation=()" always;
-    add_header Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self' https://api.ewbanking.com https://*.sentry.io; font-src 'self'; frame-src 'none'; frame-ancestors 'none'; form-action 'self'; base-uri 'self';" always;
+    add_header Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=()" always;
+    add_header Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self' https://api.ewbanking.com https://*.sentry.io; font-src 'self'; frame-src 'none'; frame-ancestors 'none'; form-action 'self'; base-uri 'self'; upgrade-insecure-requests;" always;
 
     # Disable server version disclosure
     server_tokens off;
@@ -200,7 +200,7 @@ pr:
       - main
 
 variables:
-  nodeVersion: '24'
+  nodeVersion: '22'
   azureSubscription: 'ewb-azure-service-connection'
   # Variable group 'ewb-portal-vars' contains:
   # AZURE_STORAGE_ACCOUNT_STAGING, AZURE_STORAGE_ACCOUNT_PROD,

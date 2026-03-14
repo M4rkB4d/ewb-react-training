@@ -217,6 +217,10 @@ export function hasMinimumRole(userRole: Role, requiredRole: Role): boolean {
   return roleHierarchy[userRole] >= roleHierarchy[requiredRole];
 }
 
+// This uses role hierarchy (manager inherits teller access).
+// B02's RoleGuard uses allowedRoles.includes() for exact matching.
+// Choose one pattern for your project — hierarchy is more flexible
+// for banking apps where managers should access all teller features.
 export function canAccessRoute(userRole: Role, routeRoles: Role[]): boolean {
   return routeRoles.some((role) => hasMinimumRole(userRole, role));
 }

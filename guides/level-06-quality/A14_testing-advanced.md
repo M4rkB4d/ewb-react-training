@@ -99,7 +99,12 @@ export function createAdmin(overrides: Partial<User> = {}): User {
 }
 
 export function createTeller(overrides: Partial<User> = {}): User {
-  return createUser({ role: 'teller', name: 'Maria Cruz', branch: 'BGC', ...overrides });
+  return createUser({ role: 'teller', name: 'Maria Cruz', ...overrides });
+}
+
+// Call in beforeEach to ensure deterministic IDs across tests
+export function resetFactories(): void {
+  idCounter = 0;
 }
 ```
 

@@ -26,6 +26,7 @@ By the end of this guide, you will:
 |------------|-------|
 | Completed A22 — Server Components and Data Fetching | Level 9 |
 | Completed B07 — Deployment and CI/CD (Vite SPA) | Level 7 |
+| Completed A23 — Server-Side Auth and API Routes | Level 9 |
 | Completed B06 — Monitoring and Observability | Level 6 |
 | Docker installed | Local setup |
 
@@ -45,7 +46,7 @@ fundamentally.
 | Concern | Vite SPA (B07) | Next.js |
 |---------|---------------|---------|
 | Hosting | Azure Blob Storage (`$web` container) | Azure App Service (Linux, Node.js) |
-| Runtime | None (static files) | Node.js 24 LTS |
+| Runtime | None (static files) | Node.js 22 LTS |
 | Server | Nginx (for Docker) or CDN (for Blob) | Next.js standalone server |
 | Container | Nginx Alpine (if containerized) | Node.js Alpine |
 | CDN role | Origin (serves the app) | Cache layer (in front of App Service) |
@@ -126,14 +127,14 @@ Next.js Dockerfile has three stages: dependencies, build, and runner.
 # Dockerfile
 
 # Stage 1: Dependencies
-FROM node:24-alpine AS deps
+FROM node:22-alpine AS deps
 WORKDIR /app
 
 COPY package.json package-lock.json ./
 RUN npm ci --ignore-scripts
 
 # Stage 2: Build
-FROM node:24-alpine AS builder
+FROM node:22-alpine AS builder
 WORKDIR /app
 
 COPY --from=deps /app/node_modules ./node_modules
@@ -144,7 +145,7 @@ ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm run build
 
 # Stage 3: Runner
-FROM node:24-alpine AS runner
+FROM node:22-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
@@ -248,7 +249,7 @@ pr:
       - main
 
 variables:
-  nodeVersion: '24'
+  nodeVersion: '22'
   azureSubscription: 'ewb-azure-service-connection'
   imageName: 'ewb-public-site'
   # Variable group 'ewb-nextjs-vars' contains:
@@ -910,7 +911,7 @@ This extends the B07 release checklist with Next.js-specific items.
 - [ ] Code review approved by 2+ reviewers
 - [ ] Security scan completed (no critical/high findings)
 - [ ] Docker image vulnerability scan passed
-- [ ] Node.js version is current LTS (24.x)
+- [ ] Node.js version is current LTS (22.x)
 - [ ] Performance baseline verified (LCP < 2.5s on 4G)
 - [ ] Staging environment tested by QA
 - [ ] Change request ticket approved

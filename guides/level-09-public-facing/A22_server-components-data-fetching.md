@@ -62,8 +62,10 @@ export function LoanCalculator() {
   const [rate, setRate] = useState(8.5);
   const [term, setTerm] = useState(12);
 
-  const monthly = (principal * (rate / 100 / 12)) /
-    (1 - Math.pow(1 + rate / 100 / 12, -term));
+  const monthly = rate === 0
+    ? principal / term
+    : (principal * (rate / 100 / 12)) /
+      (1 - Math.pow(1 + rate / 100 / 12, -term));
 
   return (
     <div className="rounded-xl border border-gray-200 p-6">
@@ -180,6 +182,9 @@ const ProductListSchema = z.array(ProductSchema);
 
 type Product = z.infer<typeof ProductSchema>;
 
+// For production, consider using serverEnv.INTERNAL_API_URL for server-side
+// fetches to avoid the public internet round-trip. We use NEXT_PUBLIC_API_URL
+// here because the same URL works in both server and client contexts.
 async function getProducts(): Promise<Product[]> {
   const res = await fetch(`${clientEnv.NEXT_PUBLIC_API_URL}/products`, {
     next: { revalidate: 3600 }, // Revalidate every hour (ISR)
@@ -256,6 +261,8 @@ await fetch(url, { next: { revalidate: 60 } });
 // SSR — fetches fresh data on every request
 await fetch(url, { cache: 'no-store' });
 ```
+
+> **Next.js 15 change:** In Next.js 15, `fetch` calls are NOT cached by default (unlike Next.js 14 where `force-cache` was the default). Always specify your caching intent explicitly with `cache` or `next.revalidate`.
 
 Applied to EWB pages:
 

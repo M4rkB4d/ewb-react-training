@@ -146,14 +146,18 @@ Value objects are immutable and compared by value, not identity:
 
 /**
  * Money is a value object — always paired with currency.
- * Never pass raw numbers for financial amounts.
+ * Amount is in centavos (integer). ₱100.50 = 10050.
+ * Never pass raw floating-point numbers for financial amounts.
  */
 export interface Money {
-  readonly amount: number;
+  readonly amount: number; // Centavos (integer)
   readonly currency: 'PHP' | 'USD';
 }
 
 export function createMoney(amount: number, currency: 'PHP' | 'USD' = 'PHP'): Money {
+  if (!Number.isInteger(amount)) {
+    throw new Error('Money amount must be in centavos (integer)');
+  }
   return Object.freeze({ amount, currency });
 }
 
@@ -168,7 +172,7 @@ export function formatMoney(money: Money): string {
   return new Intl.NumberFormat('en-PH', {
     style: 'currency',
     currency: money.currency,
-  }).format(money.amount);
+  }).format(money.amount / 100); // Convert centavos to pesos for display
 }
 ```
 
