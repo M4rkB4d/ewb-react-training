@@ -24,8 +24,8 @@ By the end of this guide, you will:
 
 | Requirement | Where |
 |------------|-------|
-| Completed B07 — Deployment and CI/CD | Level 7 |
 | Completed A13 — Error Handling | Level 6 |
+| Completed A14 — Testing Advanced | Level 6 |
 
 ---
 
@@ -218,9 +218,9 @@ export const searchQuerySchema = z
 
 export const amountSchema = z
   .number()
+  .int('Amount must be in centavos (integer)')
   .positive('Amount must be positive')
-  .max(1_000_000, 'Amount exceeds maximum limit')
-  .transform((val) => Math.round(val * 100) / 100); // Round to centavos
+  .max(100_000_000, 'Amount exceeds maximum limit'); // Max ₱1,000,000.00 in centavos
 ```
 
 ### PCI-DSS scope reduction
@@ -255,7 +255,119 @@ export function CardInput() {
 
 ---
 
-## Phase 5 — Security Checklist
+## Phase 5 — CSRF Protection
+
+### What CSRF is
+
+Cross-Site Request Forgery (CSRF) tricks an authenticated user's browser into
+making unwanted requests. If your session relies on cookies (including the
+HttpOnly refresh token), a malicious page can forge requests to your API.
+
+```
+1. User logs into banking portal (session cookie set)
+2. User visits malicious site in another tab
+3. Malicious site sends: POST /api/transfers { to: "attacker", amount: 50000 }
+4. Browser attaches the session cookie automatically
+5. Server processes the transfer — it looks legitimate
+```
+
+### CSRF protection strategies for SPAs
+
+**Strategy 1: SameSite cookies (primary defense)**
+
+```
+Set-Cookie: refreshToken=...; HttpOnly; Secure; SameSite=Strict; Path=/api/auth
+```
+
+`SameSite=Strict` prevents the browser from sending the cookie on cross-site
+requests. This is the strongest protection and works in all modern browsers.
+
+**Strategy 2: CSRF token (defense in depth)**
+
+For sensitive operations (transfers, password changes), use a server-issued
+CSRF token in addition to SameSite cookies:
+
+```tsx
+// src/lib/api-client.ts
+// Request a CSRF token before sensitive operations
+async function getCsrfToken(): Promise<string> {
+  const response = await apiClient.get('/auth/csrf-token');
+  return response.data.token;
+}
+
+// Include it in mutation requests
+async function createTransfer(payload: TransferRequest): Promise<TransferResponse> {
+  const csrfToken = await getCsrfToken();
+  const response = await apiClient.post('/transfers', payload, {
+    headers: { 'X-CSRF-Token': csrfToken },
+  });
+  return transferResponseSchema.parse(response.data);
+}
+```
+
+**Strategy 3: Check Origin header (server-side)**
+
+The server should verify that the `Origin` or `Referer` header matches the
+expected domain for all state-changing requests.
+
+### Checkpoint 5
+
+A developer argues that CSRF is not a problem for SPAs because "we use Bearer
+tokens, not cookies." Under what circumstances is this wrong? (Hint: think about
+the refresh token.)
+
+---
+
+## Phase 6 — Additional Security Headers
+
+### Permissions-Policy
+
+Restricts which browser features your application can use. Banking apps should
+not need camera, microphone, or geolocation access:
+
+```
+Permissions-Policy:
+  camera=(),
+  microphone=(),
+  geolocation=(),
+  payment=(),
+  usb=()
+```
+
+| Feature | Setting | Why |
+|---------|---------|-----|
+| `camera=()` | Disabled | Banking portal does not use the camera |
+| `microphone=()` | Disabled | No audio features |
+| `geolocation=()` | Disabled | Location not needed (if needed, allow `self` only) |
+| `payment=()` | Disabled | Payment Request API handled by tokenization iframe |
+| `usb=()` | Disabled | No USB device access |
+
+Add this header alongside your other security headers in the deployment
+configuration (Azure Front Door or the application itself).
+
+### Content-Type validation
+
+Always verify that API responses are actually JSON before parsing:
+
+```tsx
+// In your API client interceptor
+apiClient.interceptors.response.use((response) => {
+  const contentType = response.headers['content-type'];
+  if (contentType != null && !contentType.includes('application/json')) {
+    // A non-JSON response could be a sign of a proxy injection or
+    // misconfigured server returning HTML error pages
+    throw new Error(`Unexpected Content-Type: ${contentType}`);
+  }
+  return response;
+});
+```
+
+This prevents scenarios where a compromised proxy serves an HTML page containing
+malicious scripts instead of the expected JSON response.
+
+---
+
+## Phase 7 — Security Checklist
 
 ### Development security checklist
 
@@ -273,6 +385,9 @@ export function CardInput() {
 | `rel="noopener noreferrer"` on external links | Prevent tab-napping |
 | HTTPS everywhere | `upgrade-insecure-requests` in CSP |
 | Clickjacking protection | `X-Frame-Options: DENY` |
+| CSRF protection | `SameSite=Strict` on cookies + CSRF tokens for transfers |
+| Permissions-Policy header | Restrict camera, microphone, geolocation, payment, USB |
+| Content-Type validation | Reject non-JSON responses from API endpoints |
 
 ---
 
@@ -292,6 +407,13 @@ export function CardInput() {
 
 5. **Validate all input with Zod** at system boundaries. Never trust
    data from users, APIs, or URLs.
+
+6. **CSRF protection** combines `SameSite=Strict` cookies with CSRF tokens
+   for sensitive operations. Bearer tokens alone do not protect against CSRF
+   when HttpOnly cookies are also in play.
+
+7. **Permissions-Policy** restricts browser features your app should never use.
+   Disable camera, microphone, geolocation, and payment API access.
 
 ---
 

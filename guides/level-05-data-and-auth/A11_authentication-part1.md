@@ -321,6 +321,35 @@ Using a discriminated union for auth state ensures you cannot accidentally
 show the dashboard in the `mfa-required` state — TypeScript will not let you
 access `user` or `accessToken` until `status` is `'authenticated'`.
 
+### Rate limiting and brute force UX
+
+The backend will rate-limit login attempts (typically 5 failed attempts per
+account within 15 minutes). The frontend must handle this gracefully:
+
+```tsx
+// src/features/auth/components/login-form.tsx (rate limit handling)
+function getLoginErrorMessage(error: ApiError): string {
+  switch (error.code) {
+    case 'ACCOUNT_LOCKED':
+      return 'Your account has been temporarily locked after multiple failed attempts. Please try again in 15 minutes or contact support.';
+    case 'RATE_LIMITED':
+      return 'Too many login attempts. Please wait before trying again.';
+    case 'INVALID_CREDENTIALS':
+      // Never reveal whether the username or password was wrong
+      return 'Invalid username or password.';
+    default:
+      return 'An error occurred. Please try again.';
+  }
+}
+```
+
+Key rules for login error handling:
+- **Never reveal which field was wrong** — "Invalid username or password" (not
+  "User not found" or "Wrong password"). This prevents username enumeration.
+- **Show a countdown timer** when rate-limited so users know when to retry.
+- **Disable the submit button** during the lockout period to prevent frustration.
+- **Log all failed attempts** for BSP 1019 audit trail requirements.
+
 ### Checkpoint 4
 
 A developer wants to skip MFA for "low-risk" transactions like viewing an
@@ -382,6 +411,38 @@ cookie. The user sees no interruption.
 
 When the refresh token expires (7 days), the user must log in again with
 full credentials + MFA.
+
+### Token revocation
+
+When a token is compromised (or suspected compromised), the frontend must
+support immediate session termination:
+
+```tsx
+// src/features/auth/api/auth-api.ts
+export async function revokeSession(): Promise<void> {
+  // Tell the server to invalidate the refresh token
+  await apiClient.post('/auth/revoke', null, { withCredentials: true });
+}
+
+export async function revokeAllSessions(): Promise<void> {
+  // Invalidate ALL refresh tokens for this user (all devices)
+  await apiClient.post('/auth/revoke-all', null, { withCredentials: true });
+}
+```
+
+Scenarios requiring token revocation:
+- **Password change** — revoke all other sessions
+- **Suspicious activity detected** — revoke the compromised session
+- **User logs out** — revoke the current session's refresh token
+- **Admin action** — revoke all sessions for a user (e.g., terminated employee)
+
+> **BSP 982 Section 5.4:** Systems must provide the ability to immediately
+> terminate authenticated sessions when unauthorized access is detected.
+
+The key insight: revoking an access token is not possible (it is stateless and
+valid until it expires). Revocation works by invalidating the refresh token on
+the server. When the short-lived access token expires, the refresh attempt
+fails, and the user is forced to re-authenticate.
 
 ---
 

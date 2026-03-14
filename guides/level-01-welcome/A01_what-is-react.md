@@ -23,6 +23,121 @@ By the end of this guide, you will be able to:
 
 None — this is the starting guide. No prior React or TypeScript knowledge is assumed.
 
+However, this guide uses modern JavaScript syntax. If any of the concepts below
+are unfamiliar, spend 30 minutes reviewing them first. You do not need to master
+them — just recognize the syntax so you are not lost when you see it in examples.
+
+---
+
+## Phase 0: JavaScript Essentials (Review)
+
+If you are comfortable with all of these, skip to Phase 1.
+
+### Arrow functions
+
+```javascript
+// Traditional function
+function add(a, b) {
+  return a + b;
+}
+
+// Arrow function — same thing, shorter syntax
+const add = (a, b) => a + b;
+
+// Arrow function with a body (when you need multiple lines)
+const greet = (name) => {
+  const message = `Hello, ${name}`;
+  return message;
+};
+```
+
+Arrow functions are used everywhere in React. The `=>` is not an operator — it
+is how you define a function.
+
+### Template literals
+
+```javascript
+const name = 'Maria';
+const greeting = `Hello, ${name}!`; // "Hello, Maria!"
+// Uses backticks (`) not quotes. ${} inserts a value.
+```
+
+### Destructuring
+
+```javascript
+// Object destructuring — extract values by name
+const user = { name: 'Maria', age: 30, role: 'teller' };
+const { name, role } = user; // name = 'Maria', role = 'teller'
+
+// Array destructuring — extract values by position
+const colors = ['red', 'green', 'blue'];
+const [first, second] = colors; // first = 'red', second = 'green'
+```
+
+React uses destructuring constantly for props and state.
+
+### Spread operator
+
+```javascript
+// Copy an object and change one property
+const original = { name: 'Maria', role: 'teller' };
+const updated = { ...original, role: 'manager' };
+// updated = { name: 'Maria', role: 'manager' }
+
+// Copy an array and add an item
+const items = [1, 2, 3];
+const moreItems = [...items, 4]; // [1, 2, 3, 4]
+```
+
+The `...` (three dots) spreads an object or array into a new one. React uses
+this pattern to update state without mutating the original.
+
+### Promises and async/await
+
+```javascript
+// Fetching data from an API
+async function getAccounts() {
+  const response = await fetch('/api/accounts');
+  const data = await response.json();
+  return data;
+}
+// `await` pauses until the operation completes.
+// `async` marks a function that uses `await`.
+```
+
+### ES Modules (import/export)
+
+```javascript
+// math.ts — exporting
+export function add(a, b) { return a + b; }
+export default function multiply(a, b) { return a * b; }
+
+// app.ts — importing
+import multiply, { add } from './math';
+```
+
+Every React file uses `import` and `export` to share code between files.
+
+### Checkpoint 0
+
+If you can read this code and understand roughly what it does, you are ready
+for Phase 1:
+
+```javascript
+const users = [
+  { name: 'Maria', role: 'teller' },
+  { name: 'Juan', role: 'manager' },
+];
+
+const managers = users.filter((u) => u.role === 'manager');
+const names = users.map((u) => u.name);
+const updated = { ...users[0], role: 'supervisor' };
+```
+
+If the `.filter()`, `.map()`, and `...` syntax is unfamiliar, search
+"JavaScript array methods MDN" and "JavaScript spread operator MDN" before
+continuing. 15 minutes of reading will save hours of confusion.
+
 ---
 
 ## Phase 1: Why React Exists
