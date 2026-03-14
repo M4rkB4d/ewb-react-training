@@ -337,7 +337,7 @@ export function SensitiveField({ label, value, maskType }: SensitiveFieldProps) 
 
 ```tsx
 // src/features/transfers/components/account-selector.tsx
-import { useRef, useCallback } from 'react';
+import { useRef } from 'react';
 import { Badge } from '@/components/ui/badge';
 
 interface Account {
@@ -381,34 +381,31 @@ export function AccountSelector({
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
   const errorId = error != null ? 'account-selector-error' : undefined;
 
-  const handleKeyDown = useCallback(
-    (event: React.KeyboardEvent, index: number) => {
-      let nextIndex: number | null = null;
+  const handleKeyDown = (event: React.KeyboardEvent, index: number) => {
+    let nextIndex: number | null = null;
 
-      switch (event.key) {
-        case 'ArrowDown':
-        case 'ArrowRight':
-          event.preventDefault();
-          nextIndex = (index + 1) % accounts.length;
-          break;
-        case 'ArrowUp':
-        case 'ArrowLeft':
-          event.preventDefault();
-          nextIndex = (index - 1 + accounts.length) % accounts.length;
-          break;
-        case ' ':
-        case 'Enter':
-          event.preventDefault();
-          onSelect(accounts[index]!.id);
-          return;
-      }
+    switch (event.key) {
+      case 'ArrowDown':
+      case 'ArrowRight':
+        event.preventDefault();
+        nextIndex = (index + 1) % accounts.length;
+        break;
+      case 'ArrowUp':
+      case 'ArrowLeft':
+        event.preventDefault();
+        nextIndex = (index - 1 + accounts.length) % accounts.length;
+        break;
+      case ' ':
+      case 'Enter':
+        event.preventDefault();
+        onSelect(accounts[index]!.id);
+        return;
+    }
 
-      if (nextIndex != null) {
-        itemRefs.current[nextIndex]?.focus();
-      }
-    },
-    [accounts, onSelect],
-  );
+    if (nextIndex != null) {
+      itemRefs.current[nextIndex]?.focus();
+    }
+  };
 
   return (
     <div>

@@ -300,7 +300,7 @@ export function TransferStatusTracker({ transferId }: { transferId: string }) {
 'use client';
 
 import { useIntl } from 'react-intl';
-import { useState, useCallback, type Ref } from 'react';
+import { useState, type Ref } from 'react';
 
 interface CurrencyInputProps {
   name: string;
@@ -341,35 +341,32 @@ export function CurrencyInput({ name, label, value, onChange, error, currency = 
     );
     const [isFocused, setIsFocused] = useState(false);
 
-    const handleChange = useCallback(
-      (e: React.ChangeEvent<HTMLInputElement>) => {
-        const raw = e.target.value;
-        setDisplayValue(raw);
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const raw = e.target.value;
+      setDisplayValue(raw);
 
-        const parsed = parseLocaleNumber(raw, intl.locale);
-        if (parsed >= 0 && parsed <= max) {
-          onChange?.(parsed);
-        }
-      },
-      [intl.locale, max, onChange],
-    );
+      const parsed = parseLocaleNumber(raw, intl.locale);
+      if (parsed >= 0 && parsed <= max) {
+        onChange?.(parsed);
+      }
+    };
 
-    const handleBlur = useCallback(() => {
+    const handleBlur = () => {
       setIsFocused(false);
       const parsed = parseLocaleNumber(displayValue, intl.locale);
       if (parsed > 0) {
         setDisplayValue(intl.formatNumber(parsed, { style: 'currency', currency }));
       }
-    }, [displayValue, intl, currency]);
+    };
 
-    const handleFocus = useCallback(() => {
+    const handleFocus = () => {
       setIsFocused(true);
       // Show raw number when focused for easier editing
       const parsed = parseLocaleNumber(displayValue, intl.locale);
       if (parsed > 0) {
         setDisplayValue(parsed.toString());
       }
-    }, [displayValue, intl.locale]);
+    };
 
     return (
       <div>
