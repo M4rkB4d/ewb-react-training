@@ -69,7 +69,7 @@ import type { Plugin } from 'vite';
 const CSP_DIRECTIVES = [
   "default-src 'self'",
   "script-src 'self'",
-  "style-src 'self' 'unsafe-inline'",
+  "style-src 'self'",
   "img-src 'self' data: https://cdn.ewbanking.com",
   "connect-src 'self' https://api.ewbanking.com https://*.sentry.io",
   "font-src 'self'",

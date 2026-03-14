@@ -498,7 +498,8 @@ export function PaymentReview() {
   const { submitPayment, isPending, error } = usePayment();
 
   const fee = 1500; // 15 pesos in centavos
-  const total = draft.amount * 100 + fee; // Convert peso amount to centavos, then add fee
+  // draft.amount is raw user input in pesos — multiply by 100 to convert to centavos
+  const total = draft.amount * 100 + fee;
 
   const handleConfirm = () => {
     if (draft.biller == null) return;

@@ -52,7 +52,7 @@ export function securityHeaders(): Plugin {
 
 - [ ] All five security headers are present on every response in development
 - [ ] CSP blocks inline scripts (`script-src 'self'` — no `unsafe-inline`)
-- [ ] CSP allows Tailwind CSS inline styles (`style-src 'self' 'unsafe-inline'`)
+- [ ] CSP allows Tailwind CSS inline styles (`style-src 'self'`)
 - [ ] CSP allows connections to `https://api.ewbanking.com` and Sentry
 - [ ] A Vitest test verifies each header is present and correctly configured
 - [ ] The plugin is registered in `vite.config.ts`

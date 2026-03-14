@@ -71,7 +71,7 @@
 - *Speaker notes: Show the pipeline stages. Emphasize that tests are not optional — if they fail, the code does not ship.*
 
 ### Slide 11: React Compiler — Automatic Optimization
-- React 19 includes the React Compiler (automatic memoization)
+- React Compiler (separate opt-in tool) — automatic memoization when configured
 - No more manual `React.memo`, `useMemo`, `useCallback` in most cases
 - The compiler analyzes component dependencies and memoizes at build time
 - Focus on writing correct code — the compiler handles performance
