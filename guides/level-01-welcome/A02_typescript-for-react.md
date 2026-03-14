@@ -765,7 +765,7 @@ const envSchema = z.object({
   VITE_API_BASE_URL: z.string().url(),
   VITE_APP_NAME: z.string().default('EastWest Bank'),
   VITE_SENTRY_DSN: z.string().url().optional(),
-  VITE_ENABLE_MOCKS: z.string().transform((v) => v === 'true').pipe(z.boolean()).default(false),
+  VITE_ENABLE_MOCKS: z.string().default('false').transform((v) => v === 'true').pipe(z.boolean()),
   VITE_SESSION_TIMEOUT_MS: z.coerce.number().default(900_000), // 15 minutes
 });
 

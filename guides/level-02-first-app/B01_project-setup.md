@@ -467,6 +467,8 @@ Update `tsconfig.app.json`:
 | `noUncheckedIndexedAccess` | Array/object access may be `undefined` | Prevents runtime crashes from missing data |
 | `exactOptionalPropertyTypes` | `prop?: string` means `string \| undefined`, not `string \| undefined \| null` | Precise optional handling |
 | `noImplicitOverride` | Must use `override` keyword | Prevents accidental method shadowing |
+
+> **Warning:** `exactOptionalPropertyTypes` is stricter than most projects use. It distinguishes between "property is missing" and "property is explicitly `undefined`". Some third-party libraries may produce type errors with this flag. If you encounter confusing type errors, this flag is the likely cause.
 | `noFallthroughCasesInSwitch` | Switch cases must break or return | Prevents logic bugs |
 
 > **BSP 808 Note:** Strict TypeScript is a proactive risk management control. Type

@@ -13,6 +13,7 @@ function AccountCard({ name, balance }: { name: string; balance: number }) {
     <div>
       <h3>{name}</h3>
       <p>{formatPeso(balance)}</p> {/* balance is in centavos */}
+      {/* B03 calls this formatPeso; B08 renames to formatPHP for i18n locale support */}
     </div>
   );
 }
@@ -123,7 +124,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
 const schema = z.object({
-  amount: z.coerce.number().positive().max(500000),
+  amount: z.coerce.number().positive().max(500000), // User enters pesos; convert to centavos (* 100) before API call
   notes: z.string().max(100).optional(),
 });
 

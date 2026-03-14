@@ -655,6 +655,8 @@ dimensions. Do not use refs to store state that should trigger re-renders.
 import { useRef } from 'react';
 
 export function PinInput() {
+  // These 6 refs are always created — never conditional. For variable-length
+  // inputs, use a single useRef<(HTMLInputElement | null)[]>([]) instead.
   const inputRefs = [
     useRef<HTMLInputElement>(null),
     useRef<HTMLInputElement>(null),
@@ -679,6 +681,7 @@ export function PinInput() {
   return (
     <div className="flex gap-2">
       {inputRefs.map((ref, index) => (
+        {/* Fixed list — index keys are acceptable here */}
         <input
           key={index}
           ref={ref}

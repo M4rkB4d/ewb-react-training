@@ -155,7 +155,7 @@ Key differences from the Vite SPA approach (B04):
 |---------|---------------|-------------------------|
 | Where auth runs | Browser (after JS loads) | Server (before HTML sent) |
 | Flash of content | Possible (mitigated with guards) | Impossible (redirect before render) |
-| Token storage | `localStorage` or cookie | Cookie (HttpOnly, server-read) |
+| Token storage | In-memory (Zustand store) | Cookie (HttpOnly, server-read) |
 | API secret keys | Not available (client-side) | Available via `serverEnv` |
 | Auth verification | Client calls auth endpoint | Server calls auth endpoint with service key |
 | BSP 982 risk | Token in browser memory | Session in HttpOnly cookie only |

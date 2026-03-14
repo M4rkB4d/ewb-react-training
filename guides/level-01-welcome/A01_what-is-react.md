@@ -835,6 +835,6 @@ npx tsc --noEmit
 
 ## What's Next
 
-**[A02 — TypeScript for React →](../level-01-welcome/A02_typescript-for-react.md)**
+**[A02 — TypeScript for React →](./A02_typescript-for-react.md)**
 
 Now that you understand React's core concepts, the next guide teaches you TypeScript — the type system that catches bugs before they reach production. You will learn to type props, state, events, and hooks with confidence.

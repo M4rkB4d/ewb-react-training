@@ -245,10 +245,14 @@ interface BreadcrumbHandle {
   breadcrumb: string | ((params: Record<string, string>) => string);
 }
 
+function hasBreadcrumb(handle: unknown): handle is BreadcrumbHandle {
+  return handle != null && typeof handle === 'object' && 'breadcrumb' in handle;
+}
+
 export function Breadcrumbs() {
   const matches = useMatches();
   const crumbs = matches
-    .filter((match) => (match.handle as BreadcrumbHandle)?.breadcrumb != null)
+    .filter((match) => hasBreadcrumb(match.handle))
     .map((match) => {
       const handle = match.handle as BreadcrumbHandle;
       const label =

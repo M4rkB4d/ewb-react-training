@@ -8,7 +8,7 @@
 
 ## Overview
 
-This guide maps v1 documentation (19 guides) to v2 documentation (34 guides
+This guide maps v1 documentation (19 guides) to v2 documentation (37 guides
 across 9 levels). Use this reference if you completed parts of v1 and want
 to know where to pick up in v2.
 
@@ -19,7 +19,7 @@ to know where to pick up in v2.
 | v1 Guide | v1 Topic | v2 Guide(s) | Notes |
 |----------|----------|-------------|-------|
 | Doc 01 | React Fundamentals | A01, A02 | Split into React core + TypeScript |
-| Doc 02 | Project Setup | B01 | Vite 7, Tailwind 4, Node 24 |
+| Doc 02 | Project Setup | B01 | Vite 7, Tailwind 4, Node 22 |
 | Doc 03 | Components | A04 | React 19 patterns (ref as prop) |
 | Doc 04 | Design System | A06 | EWB brand colors, Tailwind 4 @theme |
 | Doc 05 | Forms | A07 | Zod 4, React Hook Form 7 |
@@ -134,7 +134,7 @@ WCAG AA verified contrast ratios.
 If you completed v1 and want to update your knowledge to v2:
 
 - [ ] Read A03 — Thinking in Compliance (BSP context, new in v2)
-- [ ] Review B01 — Project Setup (Node 24, Vite 7, Tailwind 4 changes)
+- [ ] Review B01 — Project Setup (Node 22, Vite 7, Tailwind 4 changes)
 - [ ] Review A09 — State Management (Zustand 5 changes)
 - [ ] Read A11+B04 — Authentication (complete rewrite, in-memory tokens)
 - [ ] Read A12 — Passkeys and WebAuthn (entirely new)

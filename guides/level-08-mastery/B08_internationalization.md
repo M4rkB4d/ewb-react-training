@@ -260,7 +260,7 @@ Lazy loading means only the active locale is downloaded.
   "auth.mfa.title": "双重身份验证",
   "auth.mfa.prompt": "请输入验证器应用中的6位数字代码。",
   "auth.logout": "退出登录",
-  "auth.session.warning": "您的会话将在 {minutes} 分钟后过期。",
+  "auth.session.warning": "您的会话将在 {minutes, plural, other {# 分钟}}后过期。",
   "auth.session.extend": "保持登录",
 
   "errors.network": "无法连接。请检查您的网络连接。",

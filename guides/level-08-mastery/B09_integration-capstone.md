@@ -356,8 +356,10 @@ import { z } from 'zod';
 import { usePaymentDraftStore } from '../stores/payment-draft-store';
 import { useAccounts } from '@/features/accounts';
 import { maskAccountNumber } from '@/lib/masking';
+import { formatPHP } from '@/lib/format';
 import { Button } from '@/components/ui/button';
 
+// User enters pesos; converted to centavos (* 100) before API call
 const paymentSchema = z.object({
   accountId: z.string().min(1, 'Please select an account'),
   amount: z.coerce
@@ -428,8 +430,8 @@ export function PaymentForm() {
           <option value="">Select account</option>
           {accounts?.map((account) => (
             <option key={account.id} value={account.id}>
-              {account.name} ({maskAccountNumber(account.number)}) — ₱
-              {account.balance.toLocaleString()}
+              {account.name} ({maskAccountNumber(account.number)}) —{' '}
+              {formatPHP(account.balance)}
             </option>
           ))}
         </select>
@@ -495,8 +497,8 @@ export function PaymentReview() {
   const draft = usePaymentDraftStore();
   const { submitPayment, isPending, error } = usePayment();
 
-  const fee = 15; // Standard processing fee
-  const total = draft.amount + fee;
+  const fee = 1500; // 15 pesos in centavos
+  const total = draft.amount * 100 + fee; // Convert peso amount to centavos, then add fee
 
   const handleConfirm = () => {
     if (draft.biller == null) return;
@@ -520,11 +522,11 @@ export function PaymentReview() {
         </div>
         <div className="flex justify-between">
           <span className="text-gray-600">Account</span>
-          <span>{maskAccountNumber(draft.accountId)}</span>
+          <span>{maskAccountNumber(draft.accountId)}</span>{/* TODO: use account number, not ID */}
         </div>
         <div className="flex justify-between">
           <span className="text-gray-600">Amount</span>
-          <span>{formatPHP(draft.amount)}</span>
+          <span>{formatPHP(draft.amount * 100)}</span>
         </div>
         <div className="flex justify-between">
           <span className="text-gray-600">Processing Fee</span>
