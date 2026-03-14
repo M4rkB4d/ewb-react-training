@@ -186,8 +186,9 @@ cache keys. Enables targeted cache invalidation.
 **RBAC** — Role-Based Access Control. Users are assigned roles (customer,
 teller, manager, admin) that determine feature access.
 
-**React Compiler** — Build-time optimization in React 19 that automatically
-inserts memoization. Replaces manual `useMemo` and `useCallback`.
+**React Compiler** — Separate build tool that performs compile-time optimization
+for React 19, automatically inserting memoization. Replaces manual `useMemo`
+and `useCallback`.
 
 **RTL** — React Testing Library. Testing utility that encourages testing
 components the way users interact with them.

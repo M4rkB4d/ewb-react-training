@@ -10,7 +10,7 @@
 
 By the end of this guide, you will:
 
-- Install and verify Node.js 24 LTS
+- Install and verify Node.js 22 LTS
 - Create a new React 19 project with Vite 7 and TypeScript
 - Configure the EastWest Bank design system with Tailwind CSS 4
 - Set up strict TypeScript with path aliases
@@ -32,24 +32,24 @@ By the end of this guide, you will:
 
 ---
 
-## Phase 1 — Node.js 24 LTS
+## Phase 1 — Node.js 22 LTS
 
-### Why Node 24?
+### Why Node 22?
 
-Node.js 24 is the current Active LTS (Long-Term Support) release. Active LTS means
-it receives security updates and bug fixes until April 2028. For a banking application,
+Node.js 22 is the current Active LTS (Long-Term Support) release. Active LTS means
+it receives security updates and bug fixes until April 2027. For a banking application,
 LTS is not optional — running a non-LTS version in production is an IT risk management
 concern (BSP Circular 808).
 
 ### Install Node.js
 
-Download Node.js 24 from [nodejs.org](https://nodejs.org). Choose the LTS version.
+Download Node.js 22 from [nodejs.org](https://nodejs.org). Choose the LTS version.
 
 After installation, verify:
 
 ```bash
 node --version
-# Expected: v24.x.x (24.14.0 or later)
+# Expected: v22.x.x (22.14.0 or later)
 
 npm --version
 # Expected: 11.x.x
@@ -68,25 +68,25 @@ manager. Note that **Windows and macOS/Linux use different tools** with the same
 
 **Windows (nvm-windows):**
 ```bash
-nvm install 24
-nvm use 24
+nvm install 22
+nvm use 22
 ```
 
 **macOS/Linux (nvm):**
 ```bash
-nvm install 24
-nvm use 24
-nvm alias default 24
+nvm install 22
+nvm use 22
+nvm alias default 22
 ```
 
 > The `nvm alias default` command only exists in Unix nvm. On Windows, `nvm use`
 > sets the active version. To persist across terminal sessions on Windows, run
-> `nvm use 24` from an elevated (Administrator) terminal.
+> `nvm use 22` from an elevated (Administrator) terminal.
 
 ### Checkpoint 1
 
-Run `node --version` and confirm you see `v24.x.x`. If you see an older version,
-check that your version manager is pointing to Node 24.
+Run `node --version` and confirm you see `v22.x.x`. If you see an older version,
+check that your version manager is pointing to Node 22.
 
 ---
 
@@ -207,7 +207,7 @@ npm ls --depth=0
 ```
 
 This should show all packages installed without errors. If you see `ERESOLVE` errors,
-check that you are using Node 24 and npm 11.
+check that you are using Node 22 and npm 11.
 
 ### Checkpoint 3
 
@@ -865,8 +865,8 @@ Run `npm run test:run` and verify both tests pass with zero failures.
 
 ## Key Takeaways
 
-1. **Node 24 LTS is mandatory.** Not the latest, not the oldest — the current LTS
-   release with support until April 2028.
+1. **Node 22 LTS is mandatory.** Not the latest, not the oldest — the current LTS
+   release with support until April 2027.
 
 2. **Vite 7 scaffolds React 19 + TypeScript** in one command. The scaffold gives you
    a working project in under a minute.
