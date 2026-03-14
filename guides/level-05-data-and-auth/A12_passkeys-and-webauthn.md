@@ -133,6 +133,7 @@ User            Frontend               Backend             Authenticator
 // src/features/auth/api/passkey-api.ts
 import { z } from 'zod';
 import { apiClient } from '@/lib/api-client';
+import { bufferToBase64url } from '@/lib/webauthn-utils';
 
 const registrationOptionsSchema = z.object({
   challenge: z.string(),
