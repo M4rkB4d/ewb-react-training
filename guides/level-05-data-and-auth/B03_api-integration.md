@@ -199,6 +199,32 @@ of React components because Zustand stores are plain JavaScript objects.
 ```tsx
 // src/lib/api-client.ts (continued)
 
+// Refresh token race condition prevention:
+// When multiple requests fail with 401 simultaneously (e.g., a dashboard
+// loading 5 API calls at once), without this guard each would trigger its
+// own refresh request. The first would succeed but the rest would fail
+// (the old refresh token is now invalidated). This mutex ensures only one
+// refresh runs; all others wait for its result.
+let refreshPromise: Promise<string> | null = null;
+
+function refreshAccessToken(): Promise<string> {
+  if (refreshPromise != null) return refreshPromise;
+
+  refreshPromise = axios
+    .post(`${env.VITE_API_BASE_URL}/auth/refresh`, null, {
+      withCredentials: true,
+    })
+    .then(({ data }) => {
+      useAuthStore.getState().setAuth(data.user, data.accessToken);
+      return data.accessToken as string;
+    })
+    .finally(() => {
+      refreshPromise = null;
+    });
+
+  return refreshPromise;
+}
+
 apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -209,20 +235,13 @@ apiClient.interceptors.response.use(
     const status = error.response?.status;
     const originalRequest = error.config;
 
-    // 401 — Token expired, attempt refresh
+    // 401 — Token expired, attempt refresh (with race condition guard)
     if (status === 401 && originalRequest != null && !originalRequest._retry) {
       originalRequest._retry = true;
 
       try {
-        const { data } = await axios.post(
-          `${env.VITE_API_BASE_URL}/auth/refresh`,
-          null,
-          { withCredentials: true },
-        );
-
-        useAuthStore.getState().setAuth(data.user, data.accessToken);
-        originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
-
+        const newToken = await refreshAccessToken();
+        originalRequest.headers.Authorization = `Bearer ${newToken}`;
         return apiClient(originalRequest);
       } catch {
         useAuthStore.getState().clearAuth();
@@ -250,6 +269,14 @@ The 401 interceptor implements **silent token refresh**: when the access token
 expires, the interceptor calls `/auth/refresh` (which uses the HttpOnly cookie),
 gets a new access token, updates the auth store, and retries the original request.
 The user never sees a login screen for expired tokens.
+
+The `refreshPromise` mutex is critical for banking dashboards. A typical dashboard
+page fires 5–10 API calls on mount. If the access token expires between sessions,
+all of them hit 401 simultaneously. Without the mutex, you get 5–10 concurrent
+refresh requests — the first succeeds and invalidates the refresh token, but the
+remaining requests fail because they are trying to use an already-consumed refresh
+token. The mutex ensures exactly one refresh call runs; every other 401 handler
+awaits the same promise and retries with the new token.
 
 > **BSP 982 Critical:** The refresh endpoint uses `withCredentials: true` on a
 > fresh Axios instance (not `apiClient`) to avoid infinite loops. The refresh

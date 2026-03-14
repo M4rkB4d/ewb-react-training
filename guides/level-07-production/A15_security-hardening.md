@@ -47,7 +47,7 @@ CSP, an XSS vulnerability lets an attacker load any script from any domain.
 Content-Security-Policy:
   default-src 'self';
   script-src 'self';
-  style-src 'self' 'unsafe-inline';
+  style-src 'self';
   img-src 'self' data: https://cdn.ewbanking.com;
   connect-src 'self' https://api.ewbanking.com https://*.sentry.io;
   font-src 'self';
@@ -58,11 +58,18 @@ Content-Security-Policy:
   upgrade-insecure-requests;
 ```
 
+> **Tailwind CSS 4 note:** Tailwind 4 compiles all utility classes to standard
+> CSS files at build time — no inline styles are injected at runtime. This means
+> `style-src` does **not** need `'unsafe-inline'`. Adding `'unsafe-inline'`
+> would weaken your CSP for no benefit. If you use a CSS-in-JS library that
+> injects styles at runtime (e.g., Emotion, styled-components), you would need
+> `'unsafe-inline'` or nonce-based CSP — but Tailwind 4 does not require it.
+
 | Directive | Value | Purpose |
 |-----------|-------|---------|
 | `default-src` | `'self'` | Default: only same-origin |
 | `script-src` | `'self'` | No inline scripts, no external scripts |
-| `style-src` | `'self' 'unsafe-inline'` | Tailwind needs inline styles |
+| `style-src` | `'self'` | Tailwind 4 compiles to CSS files — no inline styles |
 | `img-src` | `'self' data:` | Same-origin images + data URIs |
 | `connect-src` | `'self' + API domains` | API and monitoring endpoints |
 | `frame-src` | `'none'` | No iframes allowed |

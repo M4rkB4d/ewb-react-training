@@ -272,6 +272,56 @@ Create a Zod schema for a "New Beneficiary" form with:
 
 ## Phase 4 — The Fund Transfer Form
 
+### Building up to the wizard
+
+Before looking at the full wizard, let's understand each concept it uses.
+If you try to read 220 lines of code that combines 8 patterns at once, you
+will struggle. Instead, we will introduce each piece and *then* show how
+they fit together.
+
+**Concept 1 — Multi-step state.** A wizard is just a component that renders
+different content based on a `step` state variable:
+
+```tsx
+type Step = 'details' | 'amount' | 'review';
+const [step, setStep] = useState<Step>('details');
+
+// Render different UI based on step
+if (step === 'details') return <DetailsStep />;
+if (step === 'amount') return <AmountStep />;
+return <ReviewStep />;
+```
+
+**Concept 2 — Per-step validation.** Before advancing, validate only the
+fields relevant to the current step using React Hook Form's `trigger()`:
+
+```tsx
+const { trigger } = useForm<TransferData>({ resolver: zodResolver(schema) });
+
+const goToNextStep = async () => {
+  const fieldsToValidate: (keyof TransferData)[] =
+    step === 'details' ? ['fromAccount', 'toAccount', 'recipientName'] : ['amount'];
+  const isValid = await trigger(fieldsToValidate);
+  if (isValid) setStep(nextStep);
+};
+```
+
+**Concept 3 — `watch()` for the review step.** React Hook Form's `watch()`
+gives you live access to form values without triggering re-renders for every
+keystroke (only the watched fields cause re-renders):
+
+```tsx
+const formValues = watch(); // Read all form values
+// Use in review: formValues.recipientName, formValues.amount, etc.
+```
+
+**Concept 4 — Compliance patterns.** Banking forms mask account numbers in
+review screens, enforce transfer limits via Zod, and disable the submit
+button while submitting to prevent double-charges.
+
+With these four concepts clear, the full wizard below should be readable.
+Each section is marked with comments showing which concept applies.
+
 ### Multi-step wizard
 
 Banking forms often collect data in steps. A fund transfer needs:

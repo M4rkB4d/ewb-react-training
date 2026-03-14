@@ -335,6 +335,14 @@ By extending `React.InputHTMLAttributes`, your `Input` component automatically a
 
 ## Phase 3: Generics in React
 
+> **Pacing note:** Phases 3 and 4 introduce intermediate TypeScript patterns
+> (generics, discriminated unions) that you will use heavily from Level 3
+> onward. If these feel overwhelming on first read, that is normal — skim
+> them now to recognize the syntax, then come back after Levels 2–3 when
+> you have more React context. The critical takeaways for now are:
+> **useState needs explicit types when the initial value is null or empty**
+> (Section 3.2) and **interfaces define the shape of your data** (Section 4.1).
+
 ### 3.1 What Are Generics?
 
 Generics let you write code that works with any type while still being type-safe:

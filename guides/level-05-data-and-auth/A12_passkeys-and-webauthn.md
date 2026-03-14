@@ -420,10 +420,34 @@ for each login attempt and rejects any assertion signed with a stale challenge.
 // src/features/auth/hooks/use-passkey-support.ts
 
 export function usePasskeySupport() {
-  const isSupported =
-    typeof window !== 'undefined' &&
-    window.PublicKeyCredential !== undefined &&
-    typeof window.PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable === 'function';
+  const [isSupported, setIsSupported] = useState(false);
+
+  useEffect(() => {
+    async function checkSupport() {
+      if (
+        typeof window === 'undefined' ||
+        window.PublicKeyCredential === undefined ||
+        typeof window.PublicKeyCredential
+          .isUserVerifyingPlatformAuthenticatorAvailable !== 'function'
+      ) {
+        setIsSupported(false);
+        return;
+      }
+
+      // Actually call the check — the function existing does not mean
+      // the device has a platform authenticator (e.g., fingerprint, Face ID).
+      try {
+        const available =
+          await window.PublicKeyCredential
+            .isUserVerifyingPlatformAuthenticatorAvailable();
+        setIsSupported(available);
+      } catch {
+        setIsSupported(false);
+      }
+    }
+
+    checkSupport();
+  }, []);
 
   return { isSupported };
 }
@@ -462,7 +486,10 @@ export function PasskeyEnrollment() {
 
       {register.isError && (
         <div role="alert" className="rounded bg-red-50 p-3 text-sm text-red-700">
-          Failed to register passkey. Please try again.
+          {register.error instanceof DOMException &&
+           register.error.name === 'NotAllowedError'
+            ? 'Passkey setup was cancelled. You can try again when ready.'
+            : 'Failed to register passkey. Please try again.'}
         </div>
       )}
 

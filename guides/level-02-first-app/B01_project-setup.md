@@ -151,7 +151,10 @@ at `http://localhost:5173`.
 
 ### Core Dependencies
 
-Install the production dependencies for an EastWest Bank React application:
+Install the production dependencies for an EastWest Bank React application.
+These are the standard libraries used across all EWB React projects — each one
+is covered in depth in later guides. For now, just install them and trust the
+list; by the end of Level 5, you will understand exactly why each one is here.
 
 ```bash
 npm install zustand @tanstack/react-query zod react-hook-form \
@@ -613,7 +616,19 @@ export interface ApiError {
   details?: Record<string, string[]>;
 }
 
-/** Philippine Peso currency value (stored as centavos for precision) */
+/**
+ * Philippine Peso currency value (stored as centavos for precision).
+ *
+ * Why centavos? Floating-point numbers (IEEE 754) cannot represent ₱100.10
+ * exactly — it becomes 100.0999999... in memory. In banking, this causes
+ * rounding errors that accumulate across millions of transactions. The
+ * industry standard is to store money as integers in the smallest unit
+ * (centavos). ₱100.10 becomes 10010. You only convert to pesos for display.
+ *
+ * The `& { readonly __brand: 'Centavos' }` is a TypeScript "branded type" —
+ * it prevents accidentally mixing raw numbers with centavo values. You will
+ * see this pattern used in B03 (API Integration) and throughout the codebase.
+ */
 export type Centavos = number & { readonly __brand: 'Centavos' };
 ```
 

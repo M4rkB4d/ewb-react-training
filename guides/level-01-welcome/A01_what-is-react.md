@@ -138,6 +138,13 @@ If the `.filter()`, `.map()`, and `...` syntax is unfamiliar, search
 "JavaScript array methods MDN" and "JavaScript spread operator MDN" before
 continuing. 15 minutes of reading will save hours of confusion.
 
+> **Heads up — TypeScript is coming.** From Phase 1 onward, code examples use
+> TypeScript (`.tsx` files, type annotations like `: string`, `<AccountCardProps>`).
+> Do not worry about understanding the types yet — the next guide (A02) covers
+> TypeScript in depth. For now, read past the type annotations and focus on the
+> React concepts. If you see `function Greeting({ name }: { name: string })`,
+> just read it as "a function that takes a name parameter."
+
 ---
 
 ## Phase 1: Why React Exists

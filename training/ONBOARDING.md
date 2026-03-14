@@ -181,29 +181,30 @@ The most critical level for banking. Security hardening, BSP compliance framewor
 
 **Day 8 checkpoint**: You can configure Azure Application Insights, implement CSP headers, prevent XSS and CSRF attacks, and identify common audit findings.
 
-**Day 9 — BSP Compliance Framework and Deployment**
+**Day 9 — BSP Compliance Framework**
 
 | Session | Content | Est. Time |
 |---------|---------|-----------|
 | **Morning** | [A16 — BSP Compliance Framework](../guides/level-07-production/A16_bsp-compliance-framework.md) — Phases 1-3 (BSP Mapping, Audit Trail, Compliance Dashboard) | 3 hours |
 | | Break | 15 min |
 | | [A16 — BSP Compliance Framework](../guides/level-07-production/A16_bsp-compliance-framework.md) — Phases 4-6 (Automated Checks, Evidence, Examination Prep) | 2.5 hours |
-| **Afternoon** | [B07 — Deployment and CI/CD](../guides/level-07-production/B07_deployment-and-cicd.md) | 3 hours |
+| **Afternoon** | [Level 7 Exercises](exercises/level-07-exercises.md) — Exercise 2 (Compliance Dashboard) | 1.5 hours |
+| | Review and catch-up time | 1 hour |
 
-**Day 9 checkpoint**: You can map BSP circulars to frontend controls, implement audit trail logging, generate compliance evidence, prepare for BSP examination, and configure Azure Pipelines.
+**Day 9 checkpoint**: You can map BSP circulars to frontend controls, implement audit trail logging, generate compliance evidence, and prepare for BSP examination.
 
-**Day 10 — Data Privacy and Compliance Exercises**
+**Day 10 — Deployment, Data Privacy, and Compliance Wrap-Up**
 
 | Session | Content | Est. Time |
 |---------|---------|-----------|
-| **Morning** | [A17 — Data Privacy and Consent](../guides/level-07-production/A17_data-privacy-and-consent.md) | 3 hours |
+| **Morning** | [B07 — Deployment and CI/CD](../guides/level-07-production/B07_deployment-and-cicd.md) | 3 hours |
 | | Break | 15 min |
-| | [Level 7 Exercises](exercises/level-07-exercises.md) — Exercises 2-3 (Consent, CI/CD) | 2 hours |
-| **Afternoon** | [Level 7 Quiz](quizzes/level-07-quiz.md) | 30 min |
+| | [A17 — Data Privacy and Consent](../guides/level-07-production/A17_data-privacy-and-consent.md) | 3 hours |
+| **Afternoon** | [Level 7 Exercises](exercises/level-07-exercises.md) — Exercise 3 (Consent, CI/CD) | 1.5 hours |
+| | [Level 7 Quiz](quizzes/level-07-quiz.md) | 30 min |
 | | [Level 7 Demo](demos/level-07-demo.md) | 30 min |
-| | Review and catch-up time | 1.5 hours |
 
-**Day 10 checkpoint**: You can handle PII per RA 10173, build a consent management flow, and pass the Level 7 compliance quiz.
+**Day 10 checkpoint**: You can configure Azure Pipelines, handle PII per RA 10173, build a consent management flow, and pass the Level 7 compliance quiz.
 
 ---
 

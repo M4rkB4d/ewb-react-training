@@ -34,6 +34,16 @@ By the end of this guide, you will:
 
 ---
 
+> **Disclaimer on BSP circular references:** The section numbers cited
+> throughout this guide (e.g., "Section 5.3", "Section 6.4") are
+> **paraphrased for instructional purposes** and reflect the general
+> requirements of each circular as understood at the time of writing.
+> They are **not verbatim citations** from official BSP publications.
+> Always verify requirements against the latest version of the actual
+> BSP circular text from the Bangko Sentral ng Pilipinas website before
+> making compliance decisions. Circular requirements are subject to
+> amendment, and specific section numbering may differ between versions.
+
 ## Phase 1 — BSP Circular Mapping
 
 ### Complete circular-to-control mapping

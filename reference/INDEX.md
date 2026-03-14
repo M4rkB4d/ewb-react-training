@@ -43,7 +43,7 @@
 
 | ID | Title | Part | Est. Time |
 |----|-------|------|-----------|
-| B03 | [API Integration](../guides/level-05-data-and-auth/B03_api-integration.md) | Vite SPA | 3 hours |
+| B03 | [API Integration](../guides/level-05-data-and-auth/B03_api-integration.md) | Vite SPA | 3.5 hours |
 | A11 | [Authentication Part 1: Concepts](../guides/level-05-data-and-auth/A11_authentication-part1.md) | Core | 3 hours |
 | B04 | [Authentication Part 2: Implementation](../guides/level-05-data-and-auth/B04_authentication-part2.md) | Vite SPA | 3 hours |
 | A12 | [Passkeys and WebAuthn](../guides/level-05-data-and-auth/A12_passkeys-and-webauthn.md) | Core | 3 hours |
@@ -80,10 +80,10 @@
 | ID | Title | Part | Est. Time |
 |----|-------|------|-----------|
 | A20 | [SPA vs SSR Decision Framework](../guides/level-09-public-facing/A20_spa-vs-ssr-decision-framework.md) | Core | 2 hours |
-| A21 | [Next.js Foundations](../guides/level-09-public-facing/A21_nextjs-foundations.md) | Core | 3 hours |
+| A21 | [Next.js Project Setup](../guides/level-09-public-facing/A21_nextjs-project-setup.md) | Core | 3 hours |
 | A22 | [Server Components and Data Fetching](../guides/level-09-public-facing/A22_server-components-data-fetching.md) | Core | 2 hours |
 | A23 | [Server-Side Auth, API Routes, and Composition](../guides/level-09-public-facing/A23_server-components-advanced.md) | Core | 2 hours |
-| B10 | [Public Site Implementation](../guides/level-09-public-facing/B10_public-site-implementation.md) | Next.js | 3 hours |
+| B10 | [Deploying Next.js on Azure](../guides/level-09-public-facing/B10_deploying-nextjs-on-azure.md) | Next.js | 3 hours |
 
 ### Appendix
 
@@ -137,12 +137,13 @@ A20, A21, A22, A23, B10
 | Level 2 | 4 | 7.5 |
 | Level 3 | 3 | 8 |
 | Level 4 | 3 | 8 |
-| Level 5 | 4 | 12 |
+| Level 5 | 4 | 12.5 |
 | Level 6 | 4 | 11 |
 | Level 7 | 4 | 16.5 |
 | Level 8 | 4 | 13 |
 | Level 9 | 5 | 12 |
-| **Total** | **34** | **94 hours** |
+| Appendix | 3 | — |
+| **Total** | **37** | **94.5 hours** |
 
 ---
 

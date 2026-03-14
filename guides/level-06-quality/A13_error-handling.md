@@ -230,6 +230,14 @@ Error boundaries are the one case where class components are still required in
 React — the `getDerivedStateFromError` and `componentDidCatch` lifecycle methods
 have no hook equivalents.
 
+> **Practical alternative:** The [`react-error-boundary`](https://github.com/bvaughn/react-error-boundary)
+> library wraps this class component boilerplate into a declarative API with
+> `<ErrorBoundary fallbackRender={...} onReset={...} />`. It adds retry/reset
+> support, `useErrorBoundary()` for programmatic error throwing, and eliminates
+> the need to write class components yourself. In production projects, prefer
+> `react-error-boundary` over hand-rolling the class above — the implementation
+> shown here is for understanding what happens under the hood.
+
 ### Using error boundaries
 
 ```tsx

@@ -92,33 +92,33 @@ export function usePolling({
   adaptive = false,
   enabled = true,
 }: UsePollingOptions) {
-  const queryClient = useQueryClient();
-  const currentInterval = useRef(interval);
+  const [currentInterval, setCurrentInterval] = useState(interval);
+  const previousDataRef = useRef<string | undefined>(undefined);
 
   const query = useQuery({
     queryKey,
     queryFn,
-    refetchInterval: enabled ? currentInterval.current : false,
+    // TanStack Query re-evaluates refetchInterval on every cycle,
+    // so changing `currentInterval` via useState triggers a re-render
+    // and the new value takes effect on the next tick.
+    refetchInterval: enabled ? currentInterval : false,
     refetchIntervalInBackground: !pauseWhenHidden,
   });
 
-  // Adaptive interval — slow down when data is unchanged
+  // Adaptive interval — slow down when data is unchanged, reset when it changes
   useEffect(() => {
-    if (!adaptive) return;
+    if (!adaptive || !query.isSuccess) return;
 
-    if (query.isSuccess && !query.isRefetching) {
-      // If data hash is the same, increase interval (max 5x base)
-      const maxInterval = interval * 5;
-      currentInterval.current = Math.min(currentInterval.current * 1.5, maxInterval);
+    const dataHash = JSON.stringify(query.data);
+    if (previousDataRef.current === dataHash) {
+      // Data unchanged — slow down (max 5x base interval)
+      setCurrentInterval((prev) => Math.min(prev * 1.5, interval * 5));
+    } else {
+      // Data changed — reset to base interval
+      setCurrentInterval(interval);
     }
-  }, [query.dataUpdatedAt, adaptive, interval]);
-
-  // Reset interval when data actually changes
-  useEffect(() => {
-    if (adaptive) {
-      currentInterval.current = interval;
-    }
-  }, [JSON.stringify(query.data), adaptive, interval]);
+    previousDataRef.current = dataHash;
+  }, [query.dataUpdatedAt, adaptive, interval, query.data, query.isSuccess]);
 
   return query;
 }
@@ -182,6 +182,11 @@ export function useEventSource({
     // Instead, rely on HttpOnly cookie authentication. The browser
     // automatically attaches cookies to the SSE request. Configure the
     // SSE endpoint to validate the session cookie (same as refresh token).
+    //
+    // CORS note: `withCredentials: true` requires the server to respond with
+    // `Access-Control-Allow-Credentials: true` and an explicit origin in
+    // `Access-Control-Allow-Origin` (not `*`). Without this, the browser
+    // blocks the SSE connection silently.
     const es = new EventSource(url, { withCredentials: true });
     eventSourceRef.current = es;
 
@@ -209,6 +214,30 @@ export function useEventSource({
   return { connectionState };
 }
 ```
+
+> **Always validate SSE payloads.** The `onMessage` callback receives a raw
+> `MessageEvent`. Parse and validate `event.data` with Zod before using it:
+>
+> ```tsx
+> const notificationSchema = z.object({
+>   type: z.enum(['transaction', 'alert', 'system']),
+>   accountId: z.string(),
+>   message: z.string(),
+>   timestamp: z.string().datetime(),
+> });
+>
+> onMessage: (event) => {
+>   const parsed = notificationSchema.safeParse(JSON.parse(event.data));
+>   if (!parsed.success) {
+>     console.warn('[SSE] Invalid message:', parsed.error.issues);
+>     return;
+>   }
+>   handleNotification(parsed.data);
+> }
+> ```
+>
+> Never cast SSE data with `as` — a compromised or buggy server can send
+> anything. Zod validation is your runtime safety net.
 
 ### Transaction alerts with SSE
 
@@ -303,11 +332,18 @@ proxy logs, and Referer headers — all unacceptable for a banking application.
 
 ```tsx
 // src/lib/websocket.ts
+import { z } from 'zod';
+
+// Validate every message from the server — defense-in-depth
+const wsMessageSchema = z.object({
+  type: z.string(),
+  payload: z.unknown(),
+});
+
 type MessageHandler = (data: unknown) => void;
 
 interface WebSocketOptions {
   url: string;
-  token: string;
   onOpen?: () => void;
   onClose?: () => void;
   onError?: (error: Event) => void;
@@ -318,7 +354,6 @@ interface WebSocketOptions {
 export function createWebSocket(options: WebSocketOptions) {
   const {
     url,
-    token,
     onOpen,
     onClose,
     onError,
@@ -335,8 +370,16 @@ export function createWebSocket(options: WebSocketOptions) {
   function connect(): void {
     if (isDestroyed) return;
 
-    // Pass token in WebSocket protocol (sub-protocol auth)
-    ws = new WebSocket(url, [`auth-${token}`]);
+    // Authentication: rely on HttpOnly cookies (same as SSE and REST).
+    // The browser automatically sends cookies with the WebSocket handshake
+    // when the connection is same-origin or CORS is configured with
+    // Access-Control-Allow-Credentials.
+    //
+    // NEVER pass tokens in sub-protocols (`new WebSocket(url, [`auth-${token}`])`)
+    // or query strings — sub-protocol values appear in server logs, proxy logs,
+    // and are visible in browser DevTools Network tab. Query strings have the
+    // same leakage risks as with SSE (browser history, Referer headers).
+    ws = new WebSocket(url);
 
     ws.onopen = () => {
       reconnectAttempts = 0;
@@ -344,13 +387,17 @@ export function createWebSocket(options: WebSocketOptions) {
     };
 
     ws.onmessage = (event) => {
-      try {
-        const message = JSON.parse(event.data) as { type: string; payload: unknown };
-        const channelHandlers = handlers.get(message.type);
-        channelHandlers?.forEach((handler) => handler(message.payload));
-      } catch {
-        // Ignore malformed messages
+      // Validate every incoming message with Zod — never trust server data blindly.
+      // Malformed messages from a compromised or buggy server should not crash
+      // the client or corrupt React state.
+      const parsed = wsMessageSchema.safeParse(JSON.parse(event.data));
+      if (!parsed.success) {
+        console.warn('[WebSocket] Invalid message:', parsed.error.issues);
+        return;
       }
+      const { type, payload } = parsed.data;
+      const channelHandlers = handlers.get(type);
+      channelHandlers?.forEach((handler) => handler(payload));
     };
 
     ws.onclose = () => {
@@ -403,21 +450,18 @@ export function createWebSocket(options: WebSocketOptions) {
 // src/hooks/use-websocket.ts
 import { useEffect, useRef, useState } from 'react';
 import { createWebSocket } from '@/lib/websocket';
-import { useAuthStore } from '@/features/auth/stores/auth-store';
 
 type ConnectionState = 'connecting' | 'connected' | 'disconnected';
 
 export function useWebSocket(url: string) {
   const [state, setState] = useState<ConnectionState>('disconnected');
   const wsRef = useRef<ReturnType<typeof createWebSocket> | null>(null);
-  const token = useAuthStore((s) => s.accessToken);
 
   useEffect(() => {
-    if (token == null) return;
-
+    // No token needed — authentication is handled via HttpOnly cookies
+    // on the WebSocket handshake request (same as SSE and REST).
     const ws = createWebSocket({
       url,
-      token,
       onOpen: () => setState('connected'),
       onClose: () => setState('disconnected'),
     });
@@ -430,7 +474,7 @@ export function useWebSocket(url: string) {
       wsRef.current = null;
       setState('disconnected');
     };
-  }, [url, token]);
+  }, [url]);
 
   const subscribe = (channel: string, handler: (data: unknown) => void) => {
     return wsRef.current?.subscribe(channel, handler) ?? (() => {});
@@ -522,6 +566,7 @@ real-time channels trigger invalidation:
 // src/features/accounts/hooks/use-account-with-live-updates.ts
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
+import { z } from 'zod';
 import { accountsApi } from '../api/accounts-api';
 import { accountKeys } from '../api/query-keys';
 import { useWebSocket } from '@/hooks/use-websocket';
@@ -538,9 +583,12 @@ export function useAccountWithLiveUpdates(accountId: string) {
 
   // Subscribe to real-time updates — invalidate instead of directly setting data
   useEffect(() => {
+    const accountUpdateSchema = z.object({ accountId: z.string() });
+
     const unsubscribe = subscribe('account:updated', (data: unknown) => {
-      const update = data as { accountId: string };
-      if (update.accountId === accountId) {
+      const parsed = accountUpdateSchema.safeParse(data);
+      if (!parsed.success) return; // Ignore malformed updates
+      if (parsed.data.accountId === accountId) {
         // Invalidate triggers a fresh fetch — ensures data consistency
         queryClient.invalidateQueries({
           queryKey: accountKeys.detail(accountId),
