@@ -40,9 +40,10 @@ echo ""
 
 # Parse the manifest to get file-to-level mappings
 # We use Node.js to parse the JSON since bash can't do it natively
-FILE_LEVELS=$(node -e "
+FILE_LEVELS=$(cd "$REPO_ROOT" && node -e "
   const fs = require('fs');
-  const m = JSON.parse(fs.readFileSync('$MANIFEST', 'utf8'));
+  const path = require('path');
+  const m = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'scripts', 'level-manifest.json'), 'utf8'));
   const result = {};
 
   // Portal src files
