@@ -616,6 +616,9 @@ const serverSchema = z.object({
   API_SECRET_KEY: z.string().min(32),
   REDIS_URL: z.string().url(),
   REDIS_TOKEN: z.string().min(1),
+  INTERNAL_AUTH_URL: z.string().url(),
+  INTERNAL_API_URL: z.string().url(),
+  AUTH_SERVICE_KEY: z.string().min(1),
 });
 
 // Client-safe variables — embedded in the JavaScript bundle
@@ -739,8 +742,14 @@ script-src 'self' 'nonce-{random}';
 
 Next.js may inject inline scripts for data serialization between server and
 client. The CSP needs to account for this with either a nonce or `unsafe-inline`
-(nonce is preferred for security). The implementation details are covered in
-A15's CSP section.
+(nonce is preferred for security).
+
+To implement nonces, generate a random value per request in `middleware.ts` and
+inject it into the CSP header. Next.js 15+ supports this via the `nonce` prop on
+`<Script>` components and the `headers()` API. The full nonce implementation
+pattern is covered in A15's CSP section — the key difference for Next.js is that
+nonce generation happens in middleware (server-side, per-request) rather than in
+a meta tag (which would be static and insecure).
 
 ### Checkpoint 7
 
