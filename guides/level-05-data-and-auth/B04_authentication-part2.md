@@ -635,8 +635,8 @@ export function RoleRoute({ requiredRole, children }: RoleRouteProps) {
 ### Post-login redirect
 
 ```tsx
-// src/features/auth/hooks/use-login.ts (updated)
-import { useLocation } from 'react-router';
+// src/features/auth/hooks/use-login.ts (updated — showing only the changes)
+import { useNavigate, useLocation } from 'react-router';
 
 export function useLogin() {
   const navigate = useNavigate();

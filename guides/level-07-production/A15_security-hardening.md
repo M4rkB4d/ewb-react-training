@@ -12,7 +12,7 @@ By the end of this guide, you will:
 
 - Implement Content Security Policy (CSP) for XSS prevention
 - Use Subresource Integrity (SRI) for third-party scripts
-- Understand Trusted Types for DOM-based XSS prevention
+- Understand browser-native XSS prevention mechanisms
 - Prevent common OWASP Top 10 vulnerabilities in React
 - Implement secure input handling and output encoding
 - Configure CORS correctly for banking APIs
@@ -184,10 +184,10 @@ Vite can generate SRI hashes for output files:
 ```tsx
 // vite.config.ts
 import { defineConfig } from 'vite';
-import { sriPlugin } from 'vite-plugin-sri';
+import sri from 'vite-plugin-sri';
 
 export default defineConfig({
-  plugins: [sriPlugin()],
+  plugins: [sri()],
 });
 ```
 

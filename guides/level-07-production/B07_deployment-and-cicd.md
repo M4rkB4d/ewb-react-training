@@ -515,13 +515,13 @@ headers that Azure CDN rules cannot express.
 # Build and push to Azure Container Registry
 az acr build \
   --registry ewbregistry \
-  --image ewb-portal:${{ github.sha }} .
+  --image ewb-portal:$(Build.SourceVersion) .
 
 # Deploy to Azure Container Apps
 az containerapp update \
   --name ewb-portal-staging \
   --resource-group ewb-digital \
-  --image ewbregistry.azurecr.io/ewb-portal:${{ github.sha }}
+  --image ewbregistry.azurecr.io/ewb-portal:$(Build.SourceVersion)
 ```
 
 ### Which option to choose

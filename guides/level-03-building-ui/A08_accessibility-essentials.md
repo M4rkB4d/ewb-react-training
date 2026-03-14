@@ -508,8 +508,11 @@ Do they all meet WCAG AA requirements?
 Install the testing utility:
 
 ```bash
-npm install -D vitest-axe
+npm install -D @chialab/vitest-axe
 ```
+
+> **Note:** The original `vitest-axe` package is unmaintained (last release 2023).
+> `@chialab/vitest-axe` is an actively maintained fork with the same API.
 
 Create accessibility tests:
 
@@ -517,7 +520,7 @@ Create accessibility tests:
 // src/components/ui/button.a11y.test.tsx
 import { render } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import { axe } from 'vitest-axe';
+import { axe } from '@chialab/vitest-axe';
 import { Button } from './button';
 
 describe('Button accessibility', () => {

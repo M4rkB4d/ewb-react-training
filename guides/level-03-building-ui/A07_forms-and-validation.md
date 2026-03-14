@@ -557,8 +557,9 @@ export function maskPhone(phone: string): string {
   const digits = phone.replace(/\D/g, '');
   if (digits.length < 7) return phone;
   const visible = digits.slice(-4);
-  const prefix = digits.slice(0, digits.length - 7);
-  return `+${prefix} ${'•'.repeat(3)} ${visible}`;
+  const countryCode = digits.slice(0, 2); // 63
+  const networkCode = digits.slice(2, 5); // 917
+  return `+${countryCode} ${networkCode} ${'•'.repeat(3)} ${visible}`;
 }
 
 /** Format and mask card number: •••• •••• •••• 9012 */

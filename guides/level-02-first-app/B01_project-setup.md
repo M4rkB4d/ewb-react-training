@@ -1076,11 +1076,13 @@ changes and browsers fetch the new file instead of serving a stale cache.
 ### Check bundle size
 
 ```bash
-npx vite build --report
+npx vite build
 ```
 
-For a fresh project, your JavaScript bundle should be under 200 KB (gzipped). As you
-add features, monitor this number. Performance budgets are covered in B05.
+Vite prints file sizes in the build output. For a fresh project, your JavaScript
+bundle should be under 200 KB (gzipped). As you add features, monitor this number.
+For detailed bundle analysis, see B05 (Performance Optimization) which covers
+`rollup-plugin-visualizer`.
 
 ### Checkpoint 11
 
