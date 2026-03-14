@@ -60,8 +60,8 @@
 
 | ID | Title | Part | Est. Time |
 |----|-------|------|-----------|
-| B07 | [Deployment and CI/CD](../guides/level-07-production/B07_deployment-and-cicd.md) | Vite SPA | 3 hours |
 | A15 | [Security Hardening](../guides/level-07-production/A15_security-hardening.md) | Core | 3 hours |
+| B07 | [Deployment and CI/CD](../guides/level-07-production/B07_deployment-and-cicd.md) | Vite SPA | 3 hours |
 | A16 | [BSP Compliance Framework](../guides/level-07-production/A16_bsp-compliance-framework.md) | Core | 3 hours |
 | A17 | [Data Privacy and Consent](../guides/level-07-production/A17_data-privacy-and-consent.md) | Core | 3 hours |
 
@@ -73,6 +73,15 @@
 | B08 | [Internationalization](../guides/level-08-mastery/B08_internationalization.md) | Vite SPA | 3 hours |
 | B09 | [Integration Capstone](../guides/level-08-mastery/B09_integration-capstone.md) | Vite SPA | 4 hours |
 | A19 | [Real-Time Patterns](../guides/level-08-mastery/A19_real-time-patterns.md) | Core | 3 hours |
+
+### Level 9 — Public-Facing
+
+| ID | Title | Part | Est. Time |
+|----|-------|------|-----------|
+| A20 | [SPA vs SSR Decision Framework](../guides/level-09-public-facing/A20_spa-vs-ssr-decision-framework.md) | Core | 2 hours |
+| A21 | [Next.js Foundations](../guides/level-09-public-facing/A21_nextjs-foundations.md) | Core | 3 hours |
+| A22 | [Server Components and Data Fetching](../guides/level-09-public-facing/A22_server-components-data-fetching.md) | Core | 3 hours |
+| B10 | [Public Site Implementation](../guides/level-09-public-facing/B10_public-site-implementation.md) | Next.js | 3 hours |
 
 ### Appendix
 
@@ -113,6 +122,9 @@ B01, B02, B05, B07, B06
 ### Architecture
 A13, A18, B09
 
+### Public-Facing / Next.js
+A20, A21, A22, B10
+
 ---
 
 ## Total Estimated Time
@@ -127,7 +139,8 @@ A13, A18, B09
 | Level 6 | 4 | 11 |
 | Level 7 | 4 | 12 |
 | Level 8 | 4 | 13 |
-| **Total** | **28** | **77 hours** |
+| Level 9 | 4 | 11 |
+| **Total** | **32** | **88 hours** |
 
 ---
 

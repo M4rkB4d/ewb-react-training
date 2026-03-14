@@ -329,10 +329,12 @@ describe('BSP Compliance Checks', () => {
     expect(authStore.default).not.toContain('sessionStorage');
   });
 
-  it('all API functions validate responses with Zod', () => {
-    // This is verified by TypeScript types — Zod schemas are required
-    // by the API function pattern established in B03
-    expect(true).toBe(true);
+  it('all API functions validate responses with Zod', async () => {
+    // Import the API module source to verify Zod usage.
+    // Every API function must call .parse() on response data.
+    const apiSource = await import('@/features/accounts/api/accounts-api?raw');
+    expect(apiSource.default).toContain('.parse(');
+    expect(apiSource.default).toContain("from 'zod'");
   });
 });
 ```

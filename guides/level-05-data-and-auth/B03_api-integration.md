@@ -116,6 +116,13 @@ of React components because Zustand stores are plain JavaScript objects.
 ```tsx
 // src/lib/api-client.ts (continued)
 
+// Extend Axios config to track retry state (TypeScript-safe)
+declare module 'axios' {
+  interface InternalAxiosRequestConfig {
+    _retry?: boolean;
+  }
+}
+
 apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -215,7 +222,7 @@ const accountSchema = z.object({
   name: z.string(),
   number: z.string(),
   type: z.enum(['savings', 'checking', 'time-deposit']),
-  balance: z.number(),
+  balance: z.number().int(), // Centavos — avoids IEEE 754 floating-point errors
   currency: z.string().default('PHP'),
   isActive: z.boolean(),
 });
@@ -235,6 +242,29 @@ export async function getAccount(id: string): Promise<Account> {
 }
 ```
 
+### Why centavos, not pesos?
+
+All monetary amounts in our API use **integer centavos** (₱100.50 = `10050`). This avoids
+IEEE 754 floating-point errors where `0.1 + 0.2 !== 0.3` in JavaScript. In banking,
+a rounding error of even one centavo across thousands of transactions is unacceptable.
+
+The frontend converts to display format only at the presentation layer:
+
+```tsx
+// src/lib/format-currency.ts
+export function formatPeso(centavos: number): string {
+  return new Intl.NumberFormat('en-PH', {
+    style: 'currency',
+    currency: 'PHP',
+  }).format(centavos / 100);
+}
+
+// Usage: formatPeso(10050) → "₱100.50"
+```
+
+This is a standard practice across all financial APIs. Never store or transmit money
+as a floating-point number.
+
 ### Transaction API with pagination
 
 ```tsx
@@ -246,9 +276,9 @@ const transactionSchema = z.object({
   id: z.string(),
   date: z.iso.datetime(),
   description: z.string(),
-  amount: z.number(),
+  amount: z.number().int(), // Centavos
   type: z.enum(['credit', 'debit']),
-  balance: z.number(),
+  balance: z.number().int(), // Centavos
   reference: z.string(),
   channel: z.string(),
 });
@@ -296,7 +326,7 @@ import { apiClient } from '@/lib/api-client';
 const transferRequestSchema = z.object({
   fromAccount: z.string(),
   toAccount: z.string(),
-  amount: z.number().positive(),
+  amount: z.number().int().positive(), // Centavos — ₱100.50 is stored as 10050
   notes: z.string().optional(),
 });
 
@@ -415,21 +445,17 @@ export function useCreateTransfer() {
   return useMutation({
     mutationFn: (payload: TransferRequest) => createTransfer(payload),
 
-    onMutate: async (payload) => {
-      await queryClient.cancelQueries({ queryKey: accountKeys.all });
-      const previousAccounts = queryClient.getQueryData(accountKeys.lists());
-      return { previousAccounts };
-    },
+    // IMPORTANT: No optimistic updates for financial transactions.
+    // We NEVER show a transfer as successful before the server confirms it.
+    // A failed transfer displayed as successful is a compliance incident
+    // and erodes user trust. Wait for the server response, then invalidate.
 
-    onError: (_error, _payload, context) => {
-      if (context?.previousAccounts != null) {
-        queryClient.setQueryData(accountKeys.lists(), context.previousAccounts);
-      }
-    },
-
-    onSettled: () => {
+    onSuccess: () => {
+      // Server confirmed the transfer — now refresh account data
       queryClient.invalidateQueries({ queryKey: accountKeys.all });
     },
+
+    // onError is handled by the component (show error state to user)
   });
 }
 ```
@@ -595,7 +621,7 @@ export const handlers = [
         name: 'Personal Savings',
         number: '1234567890',
         type: 'savings',
-        balance: 150000,
+        balance: 150000_00, // ₱150,000.00 in centavos
         currency: 'PHP',
         isActive: true,
       },
@@ -608,7 +634,7 @@ export const handlers = [
       name: 'Personal Savings',
       number: '1234567890',
       type: 'savings',
-      balance: 150000,
+      balance: 150000_00, // ₱150,000.00 in centavos
       currency: 'PHP',
       isActive: true,
     });
@@ -624,9 +650,9 @@ export const handlers = [
           id: 'txn-1',
           date: '2026-03-10T08:30:00Z',
           description: 'POS Purchase — SM Megamall',
-          amount: -2500,
+          amount: -2500_00, // -₱2,500.00 in centavos
           type: 'debit',
-          balance: 147500,
+          balance: 147500_00, // ₱147,500.00 in centavos
           reference: 'REF-001',
           channel: 'POS',
         },

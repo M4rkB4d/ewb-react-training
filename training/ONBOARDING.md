@@ -162,17 +162,23 @@ Error handling patterns, performance optimization, advanced testing strategies, 
 
 The most critical level for banking. Security hardening, BSP compliance framework, and data privacy (RA 10173). Everything here directly affects audit readiness. Split across two days because these topics demand focus — a misunderstood security control is worse than no control at all.
 
-**Day 8 — CI/CD, Monitoring, and Security Hardening**
+**Day 8 — Monitoring, Security Hardening, and CI/CD**
+
+> **Why this order:** Security hardening (A15) comes before deployment (B07).
+> You must understand CSP headers, XSS prevention, and security controls
+> *before* deploying anything to a real environment. Deploying first and
+> hardening later teaches the wrong habit — and in banking, it means
+> production exposure before controls are in place.
 
 | Session | Content | Est. Time |
 |---------|---------|-----------|
 | **Morning** | [B06 — Monitoring and Observability](../guides/level-06-quality/B06_monitoring-and-observability.md) | 2.5 hours |
 | | Break | 15 min |
-| | [B07 — Deployment and CI/CD](../guides/level-07-production/B07_deployment-and-cicd.md) | 3 hours |
-| **Afternoon** | [A15 — Security Hardening](../guides/level-07-production/A15_security-hardening.md) | 3 hours |
+| | [A15 — Security Hardening](../guides/level-07-production/A15_security-hardening.md) | 3 hours |
+| **Afternoon** | [B07 — Deployment and CI/CD](../guides/level-07-production/B07_deployment-and-cicd.md) | 3 hours |
 | | [Level 7 Exercises](exercises/level-07-exercises.md) — Exercise 1 (Security Headers) | 1 hour |
 
-**Day 8 checkpoint**: You can configure Azure Application Insights, set up Azure Pipelines for CI/CD, and implement CSP headers and XSS prevention.
+**Day 8 checkpoint**: You can configure Azure Application Insights, implement CSP headers and XSS prevention, and set up Azure Pipelines for CI/CD.
 
 **Day 9 — BSP Compliance and Data Privacy**
 

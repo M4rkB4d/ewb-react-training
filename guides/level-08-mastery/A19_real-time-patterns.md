@@ -171,17 +171,18 @@ export function useEventSource({
 }: UseEventSourceOptions) {
   const [connectionState, setConnectionState] = useState<ConnectionState>('disconnected');
   const eventSourceRef = useRef<EventSource | null>(null);
-  const token = useAuthStore((s) => s.accessToken);
 
   useEffect(() => {
-    if (!enabled || token == null) return;
+    if (!enabled) return;
 
-    // SSE does not support custom headers — pass token as query parameter
-    // The backend should validate this token the same way it validates Bearer tokens
-    const sseUrl = `${url}?token=${encodeURIComponent(token)}`;
-
-    setConnectionState('connecting');
-    const es = new EventSource(sseUrl);
+    // SSE (native EventSource) does not support custom headers.
+    // NEVER pass tokens as query parameters — they leak into server logs,
+    // browser history, proxy logs, and Referer headers.
+    //
+    // Instead, rely on HttpOnly cookie authentication. The browser
+    // automatically attaches cookies to the SSE request. Configure the
+    // SSE endpoint to validate the session cookie (same as refresh token).
+    const es = new EventSource(url, { withCredentials: true });
     eventSourceRef.current = es;
 
     es.onopen = () => {
@@ -203,7 +204,7 @@ export function useEventSource({
       eventSourceRef.current = null;
       setConnectionState('disconnected');
     };
-  }, [url, token, enabled]);
+  }, [url, enabled]);
 
   return { connectionState };
 }
@@ -284,15 +285,15 @@ export function AccountDetail({ accountId }: { accountId: string }) {
 
 ### Checkpoint 2
 
-SSE does not support custom headers — you cannot send a Bearer token in the
-Authorization header. How does the hook above solve this? What are the
-security implications?
+SSE (native `EventSource`) does not support custom headers — you cannot send
+a Bearer token in the Authorization header. How does the hook above handle
+authentication?
 
-Answer: The hook passes the token as a query parameter. The security
-implication is that the token appears in server access logs and browser
-history. Mitigations: use short-lived tokens specifically for SSE, ensure
-the SSE endpoint only returns non-sensitive notification data, and rotate
-the token on reconnection.
+Answer: The hook uses `withCredentials: true`, which tells the browser to
+attach HttpOnly cookies to the SSE request. The backend validates the session
+cookie (same mechanism as the refresh token). This avoids putting tokens in
+URL query parameters, which would leak into server logs, browser history,
+proxy logs, and Referer headers — all unacceptable for a banking application.
 
 ---
 
