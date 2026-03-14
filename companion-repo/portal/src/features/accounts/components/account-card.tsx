@@ -53,6 +53,7 @@ export function AccountCard({
             {typeLabels[accountType]}
           </span>
           <span
+            role="img"
             className={`inline-block h-2 w-2 rounded-full ${
               isActive ? 'bg-green-500' : 'bg-red-500'
             }`}
