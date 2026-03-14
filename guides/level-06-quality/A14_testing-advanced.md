@@ -2,7 +2,7 @@
 
 > **EastWest Bank — Digital Platforms & Innovations**
 >
-> Part A (Core) · Level 6 — Quality · Est. 3.5 hours
+> Part A (Core) · Level 6 — Quality
 
 ---
 

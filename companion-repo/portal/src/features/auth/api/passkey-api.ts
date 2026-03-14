@@ -1,6 +1,8 @@
 // src/features/auth/api/passkey-api.ts
 import { z } from 'zod';
+import axios from 'axios';
 import { apiClient } from '@/lib/api-client';
+import { env } from '@/lib/env';
 import { bufferToBase64url } from '@/lib/webauthn-utils';
 
 // --- Registration (Phase 2) ---
@@ -68,7 +70,8 @@ const authOptionsSchema = z.object({
 });
 
 export async function getAuthenticationOptions(): Promise<z.infer<typeof authOptionsSchema>> {
-  const response = await apiClient.get('/webauthn/login/options');
+  // Pre-auth: plain axios (user not yet logged in)
+  const response = await axios.get(`${env.VITE_API_BASE_URL}/webauthn/login/options`);
   return authOptionsSchema.parse(response.data);
 }
 
@@ -85,7 +88,8 @@ const authResultSchema = z.object({
 export async function verifyAuthentication(credential: PublicKeyCredential): Promise<z.infer<typeof authResultSchema>> {
   const assertionResponse = credential.response as AuthenticatorAssertionResponse;
 
-  const response = await apiClient.post('/webauthn/login/verify', {
+  // Pre-auth: plain axios (user not yet logged in)
+  const response = await axios.post(`${env.VITE_API_BASE_URL}/webauthn/login/verify`, {
     id: credential.id,
     rawId: bufferToBase64url(credential.rawId),
     response: {

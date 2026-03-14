@@ -2,7 +2,7 @@
 
 > **EastWest Bank — Digital Platforms & Innovations**
 >
-> Part A (Core) · Level 9 — Public-Facing Applications · Est. 2 hours
+> Part A (Core) · Level 9 — Public-Facing Applications
 
 ---
 

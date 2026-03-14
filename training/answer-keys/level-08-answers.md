@@ -212,8 +212,8 @@ export function TransferStatusTracker({ transferId }: { transferId: string }) {
   const { data: transfer, isLoading } = useQuery<Transfer>({
     queryKey: ['transfers', transferId, 'status'],
     queryFn: async () => {
-      const res = await fetch(`/api/transfers/${transferId}/status`);
-      return res.json();
+      const res = await apiClient.get(`/transfers/${transferId}/status`);
+      return res.data;
     },
     refetchInterval: (query) => {
       const status = query.state.data?.status;
@@ -297,8 +297,6 @@ export function TransferStatusTracker({ transferId }: { transferId: string }) {
 
 ```tsx
 // src/components/ui/currency-input.tsx
-'use client';
-
 import { useIntl } from 'react-intl';
 import { useState, type Ref } from 'react';
 
@@ -329,10 +327,10 @@ function parseLocaleNumber(value: string, locale: string): number {
   const cleaned = normalized.replace(/[^0-9.\-]/g, '');
 
   const parsed = parseFloat(cleaned);
-  return isNaN(parsed) ? 0 : Math.round(parsed * 100) / 100;
+  return isNaN(parsed) ? 0 : Math.round(parsed * 100); // Returns integer centavos
 }
 
-export function CurrencyInput({ name, label, value, onChange, error, currency = 'PHP', max = 500_000, ref }: CurrencyInputProps) {
+export function CurrencyInput({ name, label, value, onChange, error, currency = 'PHP', max = 50_000_000, ref }: CurrencyInputProps) {
     const intl = useIntl();
     const [displayValue, setDisplayValue] = useState(
       value != null && value > 0

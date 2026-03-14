@@ -2,7 +2,7 @@
 
 > **EastWest Bank — Digital Platforms & Innovations**
 >
-> Part B (Vite SPA) · Level 8 — Mastery · Est. 3.5 hours
+> Part B (Vite SPA) · Level 8 — Mastery
 
 ---
 
@@ -357,7 +357,7 @@ export function TransferSuccess({ amount, reference }: { amount: number; referen
 
 ```tsx
 // src/lib/format.ts
-// centavos → formatted peso string (matches formatPeso from B03)
+// centavos → formatted peso string (replaces formatPeso from B03 with locale support)
 export function formatPHP(centavos: number, locale: string = 'en-PH'): string {
   return new Intl.NumberFormat(locale, {
     style: 'currency',

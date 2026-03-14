@@ -2,7 +2,7 @@
 
 > **EastWest Bank — Digital Platforms & Innovations**
 >
-> Part A (Core) · Level 5 — Data and Auth · Est. 3 hours
+> Part A (Core) · Level 5 — Data and Auth
 
 ---
 

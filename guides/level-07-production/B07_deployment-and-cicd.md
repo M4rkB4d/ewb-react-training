@@ -2,7 +2,7 @@
 
 > **EastWest Bank — Digital Platforms & Innovations**
 >
-> Part B (Vite SPA) · Level 7 — Production · Est. 3.5 hours
+> Part B (Vite SPA) · Level 7 — Production
 
 ---
 

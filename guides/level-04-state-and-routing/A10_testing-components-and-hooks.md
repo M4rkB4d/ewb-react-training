@@ -2,7 +2,7 @@
 
 > **EastWest Bank — Digital Platforms & Innovations**
 >
-> Part A (Core) · Level 4 — State and Routing · Est. 3 hours
+> Part A (Core) · Level 4 — State and Routing
 
 ---
 

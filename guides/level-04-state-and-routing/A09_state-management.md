@@ -2,7 +2,7 @@
 
 > **EastWest Bank — Digital Platforms & Innovations**
 >
-> Part A (Core) · Level 4 — State and Routing · Est. 3 hours
+> Part A (Core) · Level 4 — State and Routing
 
 ---
 
@@ -299,7 +299,7 @@ const accountSchema = z.object({
   name: z.string(),
   number: z.string(),
   type: z.enum(['savings', 'checking', 'time-deposit']),
-  balance: z.number().int(), // Centavos
+  balance: z.number().int().nonnegative(), // Centavos
   currency: z.string().default('PHP'),
   isActive: z.boolean(),
 });

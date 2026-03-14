@@ -1,12 +1,12 @@
 // src/pages/dashboard-page.tsx
 import { FormattedMessage, FormattedDate } from 'react-intl';
 
-interface User {
+interface DashboardUser {
   name: string;
   lastLoginAt: string | Date;
 }
 
-export function DashboardPage({ user }: { user: User }) {
+export function DashboardPage({ user }: { user: DashboardUser }) {
   return (
     <div>
       <h1>

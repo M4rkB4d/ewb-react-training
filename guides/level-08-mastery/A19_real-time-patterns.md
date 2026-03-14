@@ -2,7 +2,7 @@
 
 > **EastWest Bank — Digital Platforms & Innovations**
 >
-> Part A (Core) · Level 8 — Mastery · Est. 2.5 hours
+> Part A (Core) · Level 8 — Mastery
 
 ---
 
@@ -284,7 +284,7 @@ export function useTransactionAlerts(accountId: string) {
   };
 
   return useEventSource({
-    url: `/api/accounts/${accountId}/events`,
+    url: `${env.VITE_API_BASE_URL}/accounts/${accountId}/events`,
     onMessage: handleMessage,
     enabled: accountId.length > 0,
   });

@@ -134,8 +134,6 @@ The component must:
 
 ```tsx
 // src/components/ui/currency-input.tsx
-'use client';
-
 import { useIntl } from 'react-intl';
 import { useState, type Ref } from 'react';
 
@@ -150,7 +148,7 @@ interface CurrencyInputProps {
   ref?: Ref<HTMLInputElement>;
 }
 
-export function CurrencyInput({ name, label, value, onChange, error, currency = 'PHP', max = 500_000, ref }: CurrencyInputProps) {
+export function CurrencyInput({ name, label, value, onChange, error, currency = 'PHP', max = 50_000_000, ref }: CurrencyInputProps) {
     const intl = useIntl();
     const [displayValue, setDisplayValue] = useState(
       value != null ? intl.formatNumber(value, { style: 'currency', currency }) : ''

@@ -10,7 +10,7 @@ const ProductSchema = z.object({
   name: z.string(),
   summary: z.string(),
   category: z.enum(['savings', 'loans', 'credit-cards', 'investments']),
-  interestRate: z.number().optional(),
+  interestRate: z.number().nonnegative().optional(),
 });
 
 const ProductListSchema = z.array(ProductSchema);
@@ -66,7 +66,7 @@ export default async function ProductsPage() {
               <div className="p-4">
                 <h2 className="font-semibold text-gray-900">{product.name}</h2>
                 <p className="mt-1 text-sm text-gray-600">{product.summary}</p>
-                {product.interestRate && (
+                {product.interestRate != null && (
                   <p className="mt-2 text-sm font-medium text-ewb-purple">
                     From {product.interestRate}% p.a.
                   </p>

@@ -2,7 +2,7 @@
 
 > **EastWest Bank — Digital Platforms & Innovations**
 >
-> Part A (Core) · Level 8 — Mastery · Est. 3.5 hours
+> Part A (Core) · Level 8 — Mastery
 
 ---
 

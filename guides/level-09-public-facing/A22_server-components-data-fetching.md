@@ -2,7 +2,7 @@
 
 > **EastWest Bank — Digital Platforms & Innovations**
 >
-> Part C (Next.js) · Level 9 — Public-Facing Applications · Est. 2 hours
+> Part C (Next.js) · Level 9 — Public-Facing Applications
 
 ---
 
@@ -175,7 +175,7 @@ const ProductSchema = z.object({
   name: z.string(),
   summary: z.string(),
   category: z.enum(['savings', 'loans', 'credit-cards', 'investments']),
-  interestRate: z.number().optional(),
+  interestRate: z.number().nonnegative().optional(),
 });
 
 const ProductListSchema = z.array(ProductSchema);
@@ -391,10 +391,10 @@ const ProductDetailSchema = z.object({
   name: z.string(),
   description: z.string(),
   category: z.string(),
-  interestRate: z.number().optional(),
+  interestRate: z.number().nonnegative().optional(),
   features: z.array(z.string()),
   requirements: z.array(z.string()),
-  minDeposit: z.number().optional(),
+  minDeposit: z.number().int().nonnegative().optional(), // centavos
 });
 
 type ProductDetail = z.infer<typeof ProductDetailSchema>;

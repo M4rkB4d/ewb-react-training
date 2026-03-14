@@ -8,7 +8,7 @@ const transactionSchema = z.object({
   description: z.string(),
   amount: z.number().int(), // centavos
   type: z.enum(['credit', 'debit']),
-  balance: z.number().int(), // centavos
+  balance: z.number().int().nonnegative(), // centavos
   reference: z.string(),
   channel: z.string(),
 });

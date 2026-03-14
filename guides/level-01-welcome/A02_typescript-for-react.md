@@ -2,7 +2,7 @@
 
 > **EastWest Bank — Digital Platforms & Innovations**
 >
-> Part A (Core) · Level 1 — Welcome · Est. 3 hours
+> Part A (Core) · Level 1 — Welcome
 
 ---
 

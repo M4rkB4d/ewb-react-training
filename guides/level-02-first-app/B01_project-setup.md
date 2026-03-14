@@ -2,7 +2,7 @@
 
 > **EastWest Bank — Digital Platforms & Innovations**
 >
-> Part B (Vite SPA) · Level 2 — First App · Est. 2 hours
+> Part B (Vite SPA) · Level 2 — First App
 
 ---
 

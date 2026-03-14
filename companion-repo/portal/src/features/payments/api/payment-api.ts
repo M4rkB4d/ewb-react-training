@@ -33,9 +33,9 @@ const paymentReceiptSchema = z.object({
   billerId: z.string(),
   billerName: z.string(),
   accountId: z.string(),
-  amount: z.number().int(), // centavos
-  fee: z.number().int(), // centavos
-  total: z.number().int(), // centavos
+  amount: z.number().int().nonnegative(), // centavos
+  fee: z.number().int().nonnegative(), // centavos
+  total: z.number().int().nonnegative(), // centavos
   status: z.enum(['completed', 'pending', 'failed']),
   paidAt: z.string(),
 });

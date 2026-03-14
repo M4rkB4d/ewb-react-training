@@ -2,7 +2,7 @@
 
 > **EastWest Bank — Digital Platforms & Innovations**
 >
-> Part B (Vite SPA) · Level 5 — Data and Auth · Est. 3.5 hours
+> Part B (Vite SPA) · Level 5 — Data and Auth
 
 ---
 
@@ -45,7 +45,7 @@ import { z } from 'zod';
 const accountSchema = z.object({
   id: z.string(),
   name: z.string(),
-  balance: z.number().int(),
+  balance: z.number().int().nonnegative(),
 });
 
 type Account = z.infer<typeof accountSchema>;
@@ -328,7 +328,7 @@ const accountSchema = z.object({
   name: z.string(),
   number: z.string(),
   type: z.enum(['savings', 'checking', 'time-deposit']),
-  balance: z.number().int(), // Centavos — avoids IEEE 754 floating-point errors
+  balance: z.number().int().nonnegative(), // Centavos — avoids IEEE 754 floating-point errors
   currency: z.string().default('PHP'),
   isActive: z.boolean(),
 });
@@ -384,7 +384,7 @@ const transactionSchema = z.object({
   description: z.string(),
   amount: z.number().int(), // Centavos
   type: z.enum(['credit', 'debit']),
-  balance: z.number().int(), // Centavos
+  balance: z.number().int().nonnegative(), // Centavos
   reference: z.string(),
   channel: z.string(),
 });

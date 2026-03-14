@@ -2,7 +2,7 @@
 
 > **EastWest Bank — Digital Platforms & Innovations**
 >
-> Part B (Vite SPA) · Level 6 — Quality · Est. 2.5 hours
+> Part B (Vite SPA) · Level 6 — Quality
 
 ---
 

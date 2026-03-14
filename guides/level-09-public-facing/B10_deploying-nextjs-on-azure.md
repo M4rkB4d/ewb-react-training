@@ -2,7 +2,7 @@
 
 > **EastWest Bank — Digital Platforms & Innovations**
 >
-> Part C (Next.js) · Level 9 — Public-Facing Applications · Est. 3 hours
+> Part C (Next.js) · Level 9 — Public-Facing Applications
 
 ---
 

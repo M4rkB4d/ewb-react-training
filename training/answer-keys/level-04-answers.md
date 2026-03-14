@@ -135,7 +135,7 @@ const accountSchema = z.object({
   name: z.string(),
   number: z.string(),
   type: z.enum(['savings', 'checking', 'time-deposit']),
-  balance: z.number(),
+  balance: z.number().int().nonnegative(), // centavos
   currency: z.string().default('PHP'),
   isActive: z.boolean(),
 });
@@ -161,9 +161,9 @@ const transactionSchema = z.object({
   id: z.string(),
   date: z.string(),
   description: z.string(),
-  amount: z.number(),
+  amount: z.number().int(), // centavos (can be negative for debits)
   type: z.enum(['credit', 'debit']),
-  balance: z.number(),
+  balance: z.number().int().nonnegative(), // centavos
   reference: z.string(),
   channel: z.string(),
 });

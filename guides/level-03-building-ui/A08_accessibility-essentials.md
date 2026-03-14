@@ -2,7 +2,7 @@
 
 > **EastWest Bank — Digital Platforms & Innovations**
 >
-> Part A (Core) · Level 3 — Building UI · Est. 2.5 hours
+> Part A (Core) · Level 3 — Building UI
 
 ---
 

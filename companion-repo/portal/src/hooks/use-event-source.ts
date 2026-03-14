@@ -21,6 +21,12 @@ export function useEventSource({
   const eventSourceRef = useRef<EventSource | null>(null);
   const token = useAuthStore((s) => s.accessToken);
 
+  // Use refs for callbacks to avoid reconnecting when handlers change
+  const onMessageRef = useRef(onMessage);
+  const onErrorRef = useRef(onError);
+  onMessageRef.current = onMessage;
+  onErrorRef.current = onError;
+
   useEffect(() => {
     if (!enabled || token == null) return;
 
@@ -37,12 +43,12 @@ export function useEventSource({
     };
 
     es.onmessage = (event) => {
-      onMessage(event);
+      onMessageRef.current(event);
     };
 
     es.onerror = (event) => {
       setConnectionState('error');
-      onError?.(event);
+      onErrorRef.current?.(event);
       // EventSource auto-reconnects — no manual retry needed
     };
 

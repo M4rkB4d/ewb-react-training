@@ -2,7 +2,7 @@
 
 > **EastWest Bank — Digital Platforms & Innovations**
 >
-> Part A (Core) · Level 2 — First App · Est. 2.5 hours
+> Part A (Core) · Level 2 — First App
 
 ---
 

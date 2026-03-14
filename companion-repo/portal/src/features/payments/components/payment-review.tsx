@@ -8,7 +8,7 @@ export function PaymentReview() {
   const draft = usePaymentDraftStore();
   const { submitPayment, isPending, error } = usePayment();
 
-  const fee = 15_00; // ₱15 processing fee in centavos
+  const fee = 1_500; // ₱15 processing fee in centavos
   // draft.amount is raw user input in pesos — multiply by 100 to convert to centavos
   const amountCentavos = Math.round(draft.amount * 100);
   const total = amountCentavos + fee;

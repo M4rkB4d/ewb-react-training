@@ -2,7 +2,7 @@
 
 > **EastWest Bank — Digital Platforms & Innovations**
 >
-> Part A (Core) · Level 7 — Production · Est. 5 hours
+> Part A (Core) · Level 7 — Production
 
 ---
 
@@ -528,7 +528,7 @@ HttpOnly refresh token), a malicious page can forge requests to your API.
 **Strategy 1: SameSite cookies (primary defense)**
 
 ```
-Set-Cookie: refreshToken=...; HttpOnly; Secure; SameSite=Strict; Path=/api/auth
+Set-Cookie: ewb_session=...; HttpOnly; Secure; SameSite=Strict; Path=/api/auth
 ```
 
 `SameSite=Strict` prevents the browser from sending the cookie on cross-site

@@ -2,7 +2,7 @@
 
 > **EastWest Bank — Digital Platforms & Innovations**
 >
-> Part B (Vite SPA) · Level 8 — Mastery · Est. 4 hours
+> Part B (Vite SPA) · Level 8 — Mastery
 
 ---
 
@@ -189,9 +189,9 @@ const paymentReceiptSchema = z.object({
   billerId: z.string(),
   billerName: z.string(),
   accountId: z.string(),
-  amount: z.number().int(), // centavos
-  fee: z.number().int(),    // centavos
-  total: z.number().int(),  // centavos
+  amount: z.number().int().nonnegative(), // centavos
+  fee: z.number().int().nonnegative(),    // centavos
+  total: z.number().int().nonnegative(),  // centavos
   status: z.enum(['completed', 'pending', 'failed']),
   paidAt: z.string(),
 });
@@ -499,7 +499,7 @@ export function PaymentReview() {
   const draft = usePaymentDraftStore();
   const { submitPayment, isPending, error } = usePayment();
 
-  const fee = 15_00; // ₱15 processing fee in centavos
+  const fee = 1_500; // ₱15 processing fee in centavos
   // draft.amount is raw user input in pesos — multiply by 100 to convert to centavos
   const amountCentavos = Math.round(draft.amount * 100);
   const total = amountCentavos + fee;

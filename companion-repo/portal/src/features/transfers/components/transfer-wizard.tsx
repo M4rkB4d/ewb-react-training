@@ -167,7 +167,7 @@ export function TransferWizard({ accounts, onSubmit }: TransferWizardProps) {
 
   // ── Step: Review ──────────────────────────────────
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit((data) => onSubmit({ ...data, amount: Math.round(data.amount * 100) }))}>
       <Card>
         <CardHeader>
           <CardTitle>Step 3: Review Transfer</CardTitle>

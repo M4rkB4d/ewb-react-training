@@ -156,7 +156,7 @@ export function logError(
   if (import.meta.env.DEV) {
     console.error('[ErrorLog]', entry);
   } else {
-    navigator.sendBeacon('/api/errors', JSON.stringify(entry));
+    navigator.sendBeacon(`${env.VITE_API_BASE_URL}/errors`, JSON.stringify(entry));
   }
 }
 
@@ -265,7 +265,7 @@ export function initWebVitals(): void {
       );
     } else {
       navigator.sendBeacon(
-        '/api/vitals',
+        `${env.VITE_API_BASE_URL}/vitals`,
         JSON.stringify({
           name: metric.name,
           value: metric.value,
@@ -314,7 +314,7 @@ export function createAccount(overrides: Partial<Account> = {}): Account {
     name: 'Personal Savings',
     number: `${1000000000 + accountCounter}`,
     type: 'savings',
-    balance: 150000,
+    balance: 15_000_000, // centavos (₱150,000.00)
     currency: 'PHP',
     isActive: true,
     ...overrides,

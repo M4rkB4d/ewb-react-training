@@ -40,7 +40,7 @@ The account detail page occasionally crashes when the API returns malformed tran
    - Fallback shows a full-page error with "Refresh Page" button
 5. Implement the `logError` function that:
    - In development: logs to console with structured format
-   - In production: sends via `navigator.sendBeacon('/api/errors', ...)`
+   - In production: sends via `` navigator.sendBeacon(`${env.VITE_API_BASE_URL}/errors`, ...) ``
 
 ### Acceptance Criteria
 
@@ -84,7 +84,7 @@ The transaction history page must handle accounts with up to 10,000 transactions
 5. Implement Web Vitals tracking:
    - Measure LCP, INP, and CLS using the `web-vitals` library
    - In development: log to console with color-coded ratings
-   - In production: send to `/api/vitals` via `navigator.sendBeacon`
+   - In production: send to `` `${env.VITE_API_BASE_URL}/vitals` `` via `navigator.sendBeacon`
 6. Verify performance targets: LCP < 2.5s, INP < 200ms, CLS < 0.1
 
 ### Acceptance Criteria
