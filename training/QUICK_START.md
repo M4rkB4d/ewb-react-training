@@ -18,7 +18,7 @@ What you *do* need is EWB-specific context: our design system, compliance requir
 
 ## What You Can Skip
 
-The full onboarding program is 9 levels across 35 guides. As an experienced developer, you can skip the foundational material:
+The full onboarding program is 9 levels across 37 guides. As an experienced developer, you can skip the foundational material:
 
 | Skip | Guide | Reason |
 |------|-------|--------|
@@ -26,7 +26,7 @@ The full onboarding program is 9 levels across 35 guides. As an experienced deve
 | Yes | A02 — TypeScript for React | You know this |
 | Yes | A04 — Components and JSX | You know this |
 | Yes | A05 — Your First Test | You know this |
-| Skim | B01 — Project Setup | Skim for EWB-specific config (Tailwind theme, `cn()` utility, folder structure) |
+| Skim | B01 + B01b — Project Setup & Tooling | Skim for EWB-specific config (Tailwind theme, `cn()` utility, folder structure, Git hooks) |
 | Skim | A08 — Accessibility Essentials | Skim unless you need a WCAG 2.1 AA refresher |
 | Skim | A09 — State Management | Skim if you already know Zustand; read the EWB store patterns |
 | Skim | B02 — Routing and Navigation | Skim for protected route patterns |
@@ -220,7 +220,8 @@ If you finish early or want deeper context on specific topics:
 | [B05 — Performance Optimization](../guides/level-06-quality/B05_performance-optimization.md) | Bundle splitting, lazy loading, render optimization |
 | [B06 — Monitoring and Observability](../guides/level-06-quality/B06_monitoring-and-observability.md) | Azure Application Insights, custom telemetry |
 | [B08 — Internationalization](../guides/level-08-mastery/B08_internationalization.md) | Multi-language support, currency/date formatting |
-| [A22 — Server Components and Data Fetching](../guides/level-09-public-facing/A22_server-components-data-fetching.md) | React Server Components, streaming, caching |
+| [A22 — Server Components and Data Fetching](../guides/level-09-public-facing/A22_server-components-data-fetching.md) | React Server Components, data fetching, caching |
+| [A23 — Server-Side Auth, API Routes, and Composition](../guides/level-09-public-facing/A23_server-components-advanced.md) | Server-side auth, route handlers, composition patterns |
 | [X02 — BSP Circular Quick Reference](../guides/appendix/X02_bsp-circular-quick-reference.md) | All BSP circulars in one page |
 
 ---

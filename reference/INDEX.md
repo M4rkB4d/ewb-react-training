@@ -18,7 +18,8 @@
 
 | ID | Title | Part | Est. Time |
 |----|-------|------|-----------|
-| B01 | [Project Setup](../guides/level-02-first-app/B01_project-setup.md) | Vite SPA | 3 hours |
+| B01 | [Project Setup](../guides/level-02-first-app/B01_project-setup.md) | Vite SPA | 2 hours |
+| B01b | [Project Tooling and Quality Gates](../guides/level-02-first-app/B01b_project-tooling.md) | Vite SPA | 1.5 hours |
 | A04 | [Components and JSX](../guides/level-02-first-app/A04_components-and-jsx.md) | Core | 2 hours |
 | A05 | [Your First Test](../guides/level-02-first-app/A05_your-first-test.md) | Core | 2 hours |
 
@@ -60,9 +61,9 @@
 
 | ID | Title | Part | Est. Time |
 |----|-------|------|-----------|
-| A15 | [Security Hardening](../guides/level-07-production/A15_security-hardening.md) | Core | 3 hours |
+| A15 | [Security Hardening](../guides/level-07-production/A15_security-hardening.md) | Core | 5 hours |
 | B07 | [Deployment and CI/CD](../guides/level-07-production/B07_deployment-and-cicd.md) | Vite SPA | 3 hours |
-| A16 | [BSP Compliance Framework](../guides/level-07-production/A16_bsp-compliance-framework.md) | Core | 3 hours |
+| A16 | [BSP Compliance Framework](../guides/level-07-production/A16_bsp-compliance-framework.md) | Core | 5.5 hours |
 | A17 | [Data Privacy and Consent](../guides/level-07-production/A17_data-privacy-and-consent.md) | Core | 3 hours |
 
 ### Level 8 — Mastery
@@ -80,7 +81,8 @@
 |----|-------|------|-----------|
 | A20 | [SPA vs SSR Decision Framework](../guides/level-09-public-facing/A20_spa-vs-ssr-decision-framework.md) | Core | 2 hours |
 | A21 | [Next.js Foundations](../guides/level-09-public-facing/A21_nextjs-foundations.md) | Core | 3 hours |
-| A22 | [Server Components and Data Fetching](../guides/level-09-public-facing/A22_server-components-data-fetching.md) | Core | 3 hours |
+| A22 | [Server Components and Data Fetching](../guides/level-09-public-facing/A22_server-components-data-fetching.md) | Core | 2 hours |
+| A23 | [Server-Side Auth, API Routes, and Composition](../guides/level-09-public-facing/A23_server-components-advanced.md) | Core | 2 hours |
 | B10 | [Public Site Implementation](../guides/level-09-public-facing/B10_public-site-implementation.md) | Next.js | 3 hours |
 
 ### Appendix
@@ -117,13 +119,13 @@ A03, A16, A17
 A04, A06, A08, B08
 
 ### Infrastructure
-B01, B02, B05, B07, B06
+B01, B01b, B02, B05, B07, B06
 
 ### Architecture
 A13, A18, B09
 
 ### Public-Facing / Next.js
-A20, A21, A22, B10
+A20, A21, A22, A23, B10
 
 ---
 
@@ -132,15 +134,15 @@ A20, A21, A22, B10
 | Level | Guides | Hours |
 |-------|--------|-------|
 | Level 1 | 3 | 6 |
-| Level 2 | 3 | 7 |
+| Level 2 | 4 | 7.5 |
 | Level 3 | 3 | 8 |
 | Level 4 | 3 | 8 |
 | Level 5 | 4 | 12 |
 | Level 6 | 4 | 11 |
-| Level 7 | 4 | 12 |
+| Level 7 | 4 | 16.5 |
 | Level 8 | 4 | 13 |
-| Level 9 | 4 | 11 |
-| **Total** | **32** | **88 hours** |
+| Level 9 | 5 | 12 |
+| **Total** | **34** | **94 hours** |
 
 ---
 

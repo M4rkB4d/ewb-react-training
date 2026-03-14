@@ -43,7 +43,7 @@ Before the first cohort starts, record these numbers. Without a baseline, improv
 
 ### Per-Learner Scorecard
 
-Track for every participant across all 12 days:
+Track for every participant across all 13 days:
 
 | Indicator | Target | Red Flag |
 |-----------|--------|----------|
@@ -98,7 +98,7 @@ Track for every participant across all 12 days:
 
 | Item | Notes |
 |------|-------|
-| Developer time during training (12 days × N developers) | Work with HR/Finance for actual cost per developer-day |
+| Developer time during training (13 days × N developers) | Work with HR/Finance for actual cost per developer-day |
 | Program development time | Already invested (sunk cost) |
 | Infrastructure (companion repo, Azure sandbox) | Minimal — uses existing Azure subscription |
 
@@ -140,7 +140,7 @@ To build your ROI case:
 
 ### To HR/L&D
 
-> "The program includes 35 guides, 9 quizzes with answer keys, 27 hands-on exercises, and a graded capstone project. It has a 12-day structured curriculum with two tracks (beginner and fast-track). All materials are maintained internally and updated with each technology upgrade."
+> "The program includes 37 guides, 9 quizzes with answer keys, 27 hands-on exercises, and a graded capstone project. It has a 13-day structured curriculum with two tracks (beginner and fast-track). All materials are maintained internally and updated with each technology upgrade."
 
 ---
 

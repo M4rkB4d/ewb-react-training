@@ -10,13 +10,14 @@
 
 By the end of this guide, you will:
 
-- Configure Axios with interceptors for authentication and error handling
-- Build a type-safe API client layer
-- Integrate Axios with TanStack Query
-- Implement request/response logging for audit trails
-- Handle token refresh transparently
-- Build retry logic with exponential backoff
-- Validate all API responses with Zod
+- Make your first API call with `fetch()` and validate the response with Zod
+- Configure Axios as a robust HTTP client with base URL, timeout, and credentials
+- Add interceptors for authentication and error handling
+- Build a type-safe API layer with Zod schemas for all endpoints
+- Integrate with TanStack Query for declarative data fetching
+- Handle mutations with server-confirmed cache invalidation (no optimistic updates)
+- Build structured error handling with custom error classes and smart retry logic
+- Test the full API stack with MSW
 
 ---
 
@@ -31,7 +32,68 @@ By the end of this guide, you will:
 
 ---
 
-## Phase 1 — The API Client
+## Phase 1 — Your First API Call
+
+Before reaching for any library, you need to understand what an API call actually does at the browser level. In this phase, you will make a raw `fetch()` call and validate the response with Zod. Once you see the pattern, you will understand exactly what Axios improves upon in Phase 2.
+
+### Raw fetch with Zod validation
+
+```tsx
+// src/lib/fetch-accounts.ts
+import { z } from 'zod';
+
+const accountSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  balance: z.number().int(),
+});
+
+type Account = z.infer<typeof accountSchema>;
+
+export async function fetchAccounts(): Promise<Account[]> {
+  const response = await fetch('/api/accounts', {
+    headers: { 'Content-Type': 'application/json' },
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+  }
+
+  const json: unknown = await response.json();
+  return z.array(accountSchema).parse(json); // Zod validates at runtime
+}
+```
+
+This works — but notice the friction. You must manually check `response.ok`, manually parse JSON, and there is no built-in way to attach auth tokens or retry logic to every request. Every API function would repeat this boilerplate.
+
+### A simple MSW mock to test against
+
+Before calling a real backend, set up a mock so you can develop and test in isolation:
+
+```tsx
+// src/test/mocks/handlers.ts
+import { http, HttpResponse } from 'msw';
+
+export const handlers = [
+  http.get('/api/accounts', () => {
+    return HttpResponse.json([
+      { id: 'acc-1', name: 'Personal Savings', balance: 150000_00 },
+    ]);
+  }),
+];
+```
+
+With MSW intercepting network requests, your `fetchAccounts()` function works without a running backend. The Zod schema catches any shape mismatch between what the mock returns and what your code expects.
+
+### Checkpoint 1
+
+Try removing the `id` field from the MSW mock response. What error does Zod throw? This is the safety net — if the backend changes its response shape, you find out immediately instead of rendering `undefined` in the UI.
+
+---
+
+## Phase 2 — Axios Client Setup
+
+Now that you understand raw `fetch()` and its limitations, it is time to introduce Axios. Axios solves the boilerplate problems you just encountered: it throws on non-2xx status codes automatically, parses JSON by default, and — most importantly — supports interceptors that let you attach auth tokens and error handling to every request without modifying individual API functions.
 
 ### Why Axios over fetch
 
@@ -74,14 +136,35 @@ export const apiClient = axios.create({
 request. The refresh token lives in an HttpOnly cookie managed by the backend —
 our frontend never reads or writes it directly.
 
-### Checkpoint 1
+Compare this to the raw `fetch()` version: base URL, timeout, headers, and credentials are configured once. Every call through `apiClient` inherits them automatically — the same improvement pattern as a `cn()` utility over raw class string concatenation.
+
+### TypeScript module augmentation
+
+Before adding interceptors in the next phase, you need to extend the Axios type definitions to support a `_retry` flag. This flag will prevent infinite refresh loops when a 401 is encountered:
+
+```tsx
+// src/lib/api-client.ts (continued)
+
+// Extend Axios config to track retry state (TypeScript-safe)
+declare module 'axios' {
+  interface InternalAxiosRequestConfig {
+    _retry?: boolean;
+  }
+}
+```
+
+This is a TypeScript module augmentation — it adds the `_retry` property to Axios's internal config type so you can use it without type errors. You will see it in action in Phase 3.
+
+### Checkpoint 2
 
 Explain why `withCredentials: true` is necessary for our auth strategy but would
 be a security risk if the API allowed `Access-Control-Allow-Origin: *`.
 
 ---
 
-## Phase 2 — Interceptors
+## Phase 3 — Auth Interceptors
+
+With the base client configured, you can now add the behavior that makes Axios worth the dependency: interceptors. Request interceptors run before every outgoing request (injecting the auth token). Response interceptors run after every response (handling 401s with silent token refresh). This is the centralized auth layer — individual API functions never think about tokens.
 
 ### Auth token injection
 
@@ -111,17 +194,10 @@ apiClient.interceptors.request.use(
 We read the token from the Zustand store using `getState()` — this works outside
 of React components because Zustand stores are plain JavaScript objects.
 
-### Error interceptor
+### Response interceptor with token refresh
 
 ```tsx
 // src/lib/api-client.ts (continued)
-
-// Extend Axios config to track retry state (TypeScript-safe)
-declare module 'axios' {
-  interface InternalAxiosRequestConfig {
-    _retry?: boolean;
-  }
-}
 
 apiClient.interceptors.response.use(
   (response) => response,
@@ -196,7 +272,7 @@ apiClient.interceptors.response.use(
 );
 ```
 
-### Checkpoint 2
+### Checkpoint 3
 
 Why does the 401 refresh logic use a plain `axios.post()` instead of `apiClient.post()`?
 What would happen if it used `apiClient`?
@@ -207,7 +283,9 @@ infinite loop. Using plain `axios` bypasses the interceptors.
 
 ---
 
-## Phase 3 — Type-Safe API Functions
+## Phase 4 — Type-Safe API Functions
+
+You now have a fully configured HTTP client with auth and error handling built in. The next step is building the API functions that the rest of the application calls. Each function defines a Zod schema for its response, makes the request through `apiClient`, and validates the data before returning it. This is the contract between your frontend and the backend.
 
 ### API function pattern
 
@@ -349,14 +427,16 @@ export async function createTransfer(payload: TransferRequest): Promise<Transfer
 }
 ```
 
-### Checkpoint 3
+### Checkpoint 4
 
 Why do we validate the outgoing payload in `createTransfer` even though the
 server will also validate it?
 
 ---
 
-## Phase 4 — TanStack Query Integration
+## Phase 5 — TanStack Query (Reads)
+
+With type-safe API functions in place, you can now connect them to React's rendering cycle. TanStack Query handles caching, background refetching, loading states, and error states — all declaratively. This phase covers read operations only. Mutations (writes) come in Phase 6, because reads and writes have fundamentally different cache semantics.
 
 ### Query key factories
 
@@ -430,6 +510,17 @@ export function useTransactions(options: UseTransactionsOptions) {
 }
 ```
 
+### Checkpoint 5
+
+Explain what `placeholderData: keepPreviousData` does in the transactions hook.
+What would the user experience be without it when changing pages?
+
+---
+
+## Phase 6 — Mutations & Cache Invalidation
+
+Reading data is straightforward — TanStack Query caches it and keeps it fresh. Writing data is different. When a user initiates a transfer, you must send it to the server, wait for confirmation, and only then update the UI. In banking, there are no optimistic updates. This phase introduces `useMutation` and the server-confirmed cache invalidation pattern.
+
 ### Mutation hooks with cache updates
 
 ```tsx
@@ -460,14 +551,17 @@ export function useCreateTransfer() {
 }
 ```
 
-### Checkpoint 4
+### Checkpoint 6
 
-Explain what `placeholderData: keepPreviousData` does in the transactions hook.
-What would the user experience be without it when changing pages?
+Why does this mutation use `invalidateQueries` instead of `setQueryData` with an
+optimistic update? What could go wrong if you optimistically showed a transfer as
+successful before the server responded?
 
 ---
 
-## Phase 5 — Error Handling
+## Phase 7 — Error Handling
+
+With reads, writes, and cache management in place, the final runtime concern is what happens when things go wrong. Network failures, expired sessions, validation errors, and server errors all need different treatment. This phase builds a structured error handling layer that gives components rich context about failures and configures TanStack Query to retry intelligently.
 
 ### Custom error class
 
@@ -603,9 +697,17 @@ export const queryClient = new QueryClient({
 });
 ```
 
+### Checkpoint 7
+
+Why should the retry function never retry 401 or 422 errors? What would happen
+if TanStack Query retried a 401 three times while the response interceptor was
+also attempting a token refresh?
+
 ---
 
-## Phase 6 — Testing API Integration
+## Phase 8 — Testing the Full Stack
+
+Every layer built in Phases 1 through 7 is testable in isolation thanks to MSW. In this final phase, you will set up comprehensive mock handlers for all endpoints and write tests that verify the API client, auth token injection, and request correlation IDs all work correctly.
 
 ### MSW handlers for the full API
 
@@ -740,21 +842,27 @@ describe('apiClient', () => {
 
 ## Key Takeaways
 
-1. **Axios is the standard.** Interceptors enable centralized auth, logging, and
+1. **Start with the fundamentals.** Raw `fetch()` + Zod proves the concept before
+   adding tooling. Understand what Axios abstracts before relying on it.
+
+2. **Axios is the standard.** Interceptors enable centralized auth, logging, and
    error handling without modifying individual API calls.
 
-2. **Silent token refresh** keeps users logged in without interruption. The
+3. **Silent token refresh** keeps users logged in without interruption. The
    interceptor handles 401s transparently.
 
-3. **Validate everything with Zod** — incoming and outgoing data (BSP 1122).
+4. **Validate everything with Zod** — incoming and outgoing data (BSP 1122).
 
-4. **Query key factories** enable precise cache invalidation. Structure keys
+5. **Query key factories** enable precise cache invalidation. Structure keys
    hierarchically.
 
-5. **Custom error classes** give components rich error context — network errors,
+6. **Server-confirmed mutations only.** In banking, never show a write as
+   successful before the server confirms it.
+
+7. **Custom error classes** give components rich error context — network errors,
    auth errors, and server errors each get appropriate UI treatment.
 
-6. **Smart retry logic** in TanStack Query — never retry auth or validation
+8. **Smart retry logic** in TanStack Query — never retry auth or validation
    errors, retry server errors up to 2 times.
 
 ---

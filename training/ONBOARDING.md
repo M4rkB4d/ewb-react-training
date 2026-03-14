@@ -2,19 +2,19 @@
 
 > **EastWest Bank — Digital Platforms & Innovations**
 >
-> 12-Day Intensive · 9 Levels · 35 Guides · Capstone Project
+> 13-Day Intensive · 9 Levels · 37 Guides · Capstone Project
 
 ---
 
 ## Program Overview
 
-This is the official React onboarding program for EastWest Bank developers. Over 12 working days, you will go from zero React knowledge to building production-grade banking applications that meet BSP regulatory requirements.
+This is the official React onboarding program for EastWest Bank developers. Over 13 working days, you will go from zero React knowledge to building production-grade banking applications that meet BSP regulatory requirements.
 
 **What you will build**: A fully functional internal banking portal (Vite SPA) and a public-facing application (Next.js) — both with authentication, compliance controls, real-time features, and Azure deployment pipelines.
 
 **Time commitment**: Full-time, 8 hours per day. Morning sessions focus on reading guides and working through examples. Afternoon sessions focus on hands-on exercises, demos, and quizzes. Breaks are built into each day — take them.
 
-**Pacing**: Most days cover one level. Heavier levels (Data & Auth, Security & Compliance) are split across two days so you have time to absorb the material. If you finish early, review the companion repo code for that level. If you fall behind, prioritize the Core (A-series) guides — the Vite SPA (B-series) guides can be caught up later.
+**Pacing**: Most days cover one level. Heavier levels (Data & Auth, Security & Compliance) are split across two or three days so you have time to absorb the material. If you finish early, review the companion repo code for that level. If you fall behind, prioritize the Core (A-series) guides — the Vite SPA (B-series) guides can be caught up later.
 
 ---
 
@@ -63,7 +63,8 @@ Set up the project from scratch, build your first components, and write your fir
 
 | Session | Content | Est. Time |
 |---------|---------|-----------|
-| **Morning** | [B01 — Project Setup](../guides/level-02-first-app/B01_project-setup.md) | 3 hours |
+| **Morning** | [B01 — Project Setup](../guides/level-02-first-app/B01_project-setup.md) | 2 hours |
+| | [B01b — Project Tooling and Quality Gates](../guides/level-02-first-app/B01b_project-tooling.md) | 1.5 hours |
 | | [A04 — Components and JSX](../guides/level-02-first-app/A04_components-and-jsx.md) | 2 hours |
 | **Afternoon** | [A05 — Your First Test](../guides/level-02-first-app/A05_your-first-test.md) | 2 hours |
 | | [Level 2 Quiz](quizzes/level-02-quiz.md) | 30 min |
@@ -137,7 +138,7 @@ This is the heaviest level — API integration, authentication, and passkeys. Sp
 
 ---
 
-## Week 2 — Production (Levels 6–9)
+## Week 2 — Production (Levels 6–8)
 
 ### Day 7: Level 6 — Quality
 
@@ -158,11 +159,11 @@ Error handling patterns, performance optimization, advanced testing strategies, 
 
 ---
 
-### Days 8–9: Level 7 — Security and Compliance
+### Days 8–10: Level 7 — Security and Compliance
 
-The most critical level for banking. Security hardening, BSP compliance framework, and data privacy (RA 10173). Everything here directly affects audit readiness. Split across two days because these topics demand focus — a misunderstood security control is worse than no control at all.
+The most critical level for banking. Security hardening, BSP compliance framework, and data privacy (RA 10173). Everything here directly affects audit readiness. Split across **three days** because these topics demand focus — a misunderstood security control is worse than no control at all.
 
-**Day 8 — Monitoring, Security Hardening, and CI/CD**
+**Day 8 — Monitoring and Security Hardening**
 
 > **Why this order:** Security hardening (A15) comes before deployment (B07).
 > You must understand CSP headers, XSS prevention, and security controls
@@ -174,28 +175,39 @@ The most critical level for banking. Security hardening, BSP compliance framewor
 |---------|---------|-----------|
 | **Morning** | [B06 — Monitoring and Observability](../guides/level-06-quality/B06_monitoring-and-observability.md) | 2.5 hours |
 | | Break | 15 min |
-| | [A15 — Security Hardening](../guides/level-07-production/A15_security-hardening.md) | 3 hours |
-| **Afternoon** | [B07 — Deployment and CI/CD](../guides/level-07-production/B07_deployment-and-cicd.md) | 3 hours |
+| | [A15 — Security Hardening](../guides/level-07-production/A15_security-hardening.md) — Phases 1-4 (CSP, XSS, SRI, Input Handling) | 3 hours |
+| **Afternoon** | [A15 — Security Hardening](../guides/level-07-production/A15_security-hardening.md) — Phases 5-8 (CSRF, OWASP, Audit Findings, Checklist) | 2 hours |
 | | [Level 7 Exercises](exercises/level-07-exercises.md) — Exercise 1 (Security Headers) | 1 hour |
 
-**Day 8 checkpoint**: You can configure Azure Application Insights, implement CSP headers and XSS prevention, and set up Azure Pipelines for CI/CD.
+**Day 8 checkpoint**: You can configure Azure Application Insights, implement CSP headers, prevent XSS and CSRF attacks, and identify common audit findings.
 
-**Day 9 — BSP Compliance and Data Privacy**
+**Day 9 — BSP Compliance Framework and Deployment**
 
 | Session | Content | Est. Time |
 |---------|---------|-----------|
-| **Morning** | [A16 — BSP Compliance Framework](../guides/level-07-production/A16_bsp-compliance-framework.md) | 3 hours |
+| **Morning** | [A16 — BSP Compliance Framework](../guides/level-07-production/A16_bsp-compliance-framework.md) — Phases 1-3 (BSP Mapping, Audit Trail, Compliance Dashboard) | 3 hours |
 | | Break | 15 min |
-| | [A17 — Data Privacy and Consent](../guides/level-07-production/A17_data-privacy-and-consent.md) | 3 hours |
-| **Afternoon** | [Level 7 Exercises](exercises/level-07-exercises.md) — Exercises 2-3 (Consent, CI/CD) | 2 hours |
-| | [Level 7 Quiz](quizzes/level-07-quiz.md) | 30 min |
-| | [Level 7 Demo](demos/level-07-demo.md) | 30 min |
+| | [A16 — BSP Compliance Framework](../guides/level-07-production/A16_bsp-compliance-framework.md) — Phases 4-6 (Automated Checks, Evidence, Examination Prep) | 2.5 hours |
+| **Afternoon** | [B07 — Deployment and CI/CD](../guides/level-07-production/B07_deployment-and-cicd.md) | 3 hours |
 
-**Day 9 checkpoint**: You can map BSP circulars to frontend controls, implement audit trail logging, handle PII per RA 10173, and build a consent management flow.
+**Day 9 checkpoint**: You can map BSP circulars to frontend controls, implement audit trail logging, generate compliance evidence, prepare for BSP examination, and configure Azure Pipelines.
+
+**Day 10 — Data Privacy and Compliance Exercises**
+
+| Session | Content | Est. Time |
+|---------|---------|-----------|
+| **Morning** | [A17 — Data Privacy and Consent](../guides/level-07-production/A17_data-privacy-and-consent.md) | 3 hours |
+| | Break | 15 min |
+| | [Level 7 Exercises](exercises/level-07-exercises.md) — Exercises 2-3 (Consent, CI/CD) | 2 hours |
+| **Afternoon** | [Level 7 Quiz](quizzes/level-07-quiz.md) | 30 min |
+| | [Level 7 Demo](demos/level-07-demo.md) | 30 min |
+| | Review and catch-up time | 1.5 hours |
+
+**Day 10 checkpoint**: You can handle PII per RA 10173, build a consent management flow, and pass the Level 7 compliance quiz.
 
 ---
 
-### Day 10: Level 8 — Architecture and Mastery
+### Day 11: Level 8 — Architecture and Mastery
 
 Advanced architecture patterns, real-time features (WebSocket, SSE), and internationalization for multi-language banking interfaces.
 
@@ -212,9 +224,9 @@ Advanced architecture patterns, real-time features (WebSocket, SSE), and interna
 
 ---
 
-## Week 3 — Next.js and Capstone (Days 11–12)
+## Week 3 — Next.js and Capstone (Days 12–13)
 
-### Day 11: Level 9 — Public-Facing Applications
+### Day 12: Level 9 — Public-Facing Applications
 
 Transition from Vite SPA to Next.js. Learn SSR vs SPA decision-making, Server Components, and Azure App Service deployment.
 
@@ -222,16 +234,17 @@ Transition from Vite SPA to Next.js. Learn SSR vs SPA decision-making, Server Co
 |---------|---------|-----------|
 | **Morning** | [A20 — SPA vs SSR Decision Framework](../guides/level-09-public-facing/A20_spa-vs-ssr-decision-framework.md) | 2 hours |
 | | [A21 — Next.js Project Setup](../guides/level-09-public-facing/A21_nextjs-project-setup.md) | 3 hours |
-| **Afternoon** | [A22 — Server Components and Data Fetching](../guides/level-09-public-facing/A22_server-components-data-fetching.md) | 3 hours |
+| **Afternoon** | [A22 — Server Components and Data Fetching](../guides/level-09-public-facing/A22_server-components-data-fetching.md) | 2 hours |
+| | [A23 — Server-Side Auth, API Routes, and Composition](../guides/level-09-public-facing/A23_server-components-advanced.md) | 2 hours |
 | | [Level 9 Quiz](quizzes/level-09-quiz.md) | 30 min |
 
 > **B10 (Deploying Next.js on Azure)** is recommended reading but not required for the capstone. Complete it if time allows, or read it when you first deploy a Next.js project to production.
 
-**End-of-day checkpoint**: You can set up a Next.js 15 project, build pages with Server Components, implement SSR data fetching, and explain when to use SSR vs SPA at EWB.
+**End-of-day checkpoint**: You can set up a Next.js 15 project, build pages with Server Components, implement server-side authentication, create API routes, and explain when to use SSR vs SPA at EWB.
 
 ---
 
-### Day 12: Capstone
+### Day 13: Capstone
 
 Bring everything together. Complete the integration capstone, participate in a code review, and demonstrate your work.
 
@@ -265,7 +278,7 @@ companion-repo/
 |----------|-------------|
 | [Cheat Sheet](../reference/CHEAT_SHEET.md) | Quick-reference for React, TypeScript, Tailwind, Zod, and more |
 | [Glossary](../reference/GLOSSARY.md) | Definitions of terms used across all guides |
-| [Guide Index](../reference/INDEX.md) | Complete list of all 35 guides with time estimates |
+| [Guide Index](../reference/INDEX.md) | Complete list of all 37 guides with time estimates |
 
 ### Appendix Guides
 

@@ -20,16 +20,16 @@ Internal React training documentation and companion code for **EastWest Bank** (
 
 ```
 react-enterprise-docs-v2/
-├── guides/                  ← 35 markdown files (THE source of truth)
+├── guides/                  ← 37 markdown files (THE source of truth)
 │   ├── level-01-welcome/       A01, A02, A03
-│   ├── level-02-first-app/     B01, A04, A05
+│   ├── level-02-first-app/     B01, B01b, A04, A05
 │   ├── level-03-building-ui/   A06, A07, A08
 │   ├── level-04-state-and-routing/  A09, B02, A10
 │   ├── level-05-data-and-auth/      B03, A11, B04, A12
 │   ├── level-06-quality/       A13, B05, A14, B06
-│   ├── level-07-production/    B07, A15, A16, A17
+│   ├── level-07-production/    A15, B07, A16, A17
 │   ├── level-08-mastery/       A18, B08, B09, A19
-│   ├── level-09-public-facing/ A20, A21, A22, B10
+│   ├── level-09-public-facing/ A20, A21, A22, A23, B10
 │   └── appendix/              X01, X02, X03
 ├── companion-repo/          ← Working code for learners (Git repo)
 │   ├── portal/                 Vite SPA (Levels 1-8)
@@ -100,7 +100,7 @@ Frontend requirements for Philippine banking regulations:
 ## What's Been Done
 
 ### Guides (COMPLETE)
-- 35 markdown files, 23,375 lines total
+- 37 markdown files (~28,000 lines total)
 - All 9 levels written, verified, committed
 - Azure Pipelines migration complete (zero GitHub Actions references)
 - Code examples verified across all 31 code-bearing guides
@@ -126,7 +126,7 @@ Clean level-by-level history from initial commit through Azure Pipelines migrati
 
 ### Training Materials (COMPLETE)
 - 47 files across quizzes, exercises, answer-keys, demos, slides
-- ONBOARDING.md — 12-day schedule (was 10, expanded for pacing)
+- ONBOARDING.md — 13-day schedule (expanded from 12 for security/compliance depth)
 - QUICK_START.md — 3-day fast-track for experienced developers
 - Capstone defined: fund transfer flow with grading rubric
 - Setup validation script: `scripts/verify-setup.sh`

