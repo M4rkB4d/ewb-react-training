@@ -10,17 +10,7 @@
     "preview": "vite preview",
     "test": "vitest",
     "test:run": "vitest run",
-    "test:coverage": "vitest run --coverage",
-    "test:exercises": "vitest run src/test/exercises/",
-    "test:exercises:01": "vitest run src/test/exercises/level-01",
-    "test:exercises:02": "vitest run src/test/exercises/level-02",
-    "test:exercises:03": "vitest run src/test/exercises/level-03",
-    "test:exercises:04": "vitest run src/test/exercises/level-04",
-    "test:exercises:05": "vitest run src/test/exercises/level-05",
-    "test:exercises:06": "vitest run src/test/exercises/level-06",
-    "test:exercises:07": "vitest run src/test/exercises/level-07",
-    "test:exercises:08": "vitest run src/test/exercises/level-08",
-    "test:exercises:09": "vitest run src/test/exercises/level-09"
+    "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@formatjs/intl-localematcher": "^0.8.1",
