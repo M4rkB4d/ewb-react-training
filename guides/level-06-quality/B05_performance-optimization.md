@@ -302,6 +302,7 @@ happens if the estimate is significantly wrong?
 ```tsx
 // src/lib/web-vitals.ts
 import { onCLS, onINP, onLCP } from 'web-vitals';
+import { env } from './env';
 
 interface VitalMetric {
   name: string;
@@ -314,7 +315,7 @@ function reportVital(metric: VitalMetric): void {
     const color = metric.rating === 'good' ? 'green' : metric.rating === 'poor' ? 'red' : 'orange';
     console.log(`%c[WebVital] ${metric.name}: ${metric.value.toFixed(1)}ms (${metric.rating})`, `color: ${color}`);
   } else {
-    navigator.sendBeacon('/api/vitals', JSON.stringify(metric));
+    navigator.sendBeacon(`${env.VITE_API_BASE_URL}/vitals`, JSON.stringify(metric));
   }
 }
 

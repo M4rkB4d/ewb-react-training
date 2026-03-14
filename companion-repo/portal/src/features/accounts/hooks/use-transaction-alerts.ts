@@ -1,6 +1,7 @@
 // src/features/accounts/hooks/use-transaction-alerts.ts
 import { useEventSource } from '@/hooks/use-event-source';
 import { useQueryClient } from '@tanstack/react-query';
+import { env } from '@/lib/env';
 import { accountKeys } from '../api/query-keys';
 
 interface TransactionAlert {
@@ -29,7 +30,7 @@ export function useTransactionAlerts(accountId: string) {
   }
 
   return useEventSource({
-    url: `/api/accounts/${accountId}/events`,
+    url: `${env.VITE_API_BASE_URL}/accounts/${accountId}/events`,
     onMessage: handleMessage,
     enabled: accountId.length > 0,
   });

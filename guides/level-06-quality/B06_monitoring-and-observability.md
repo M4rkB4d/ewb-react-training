@@ -131,6 +131,7 @@ session replay inappropriate for a banking app?
 
 ```tsx
 // src/lib/logger.ts
+import { env } from './env';
 
 type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 
@@ -165,7 +166,7 @@ export const logger = {
     if (import.meta.env.DEV) {
       console.info('[INFO]', message, context);
     } else {
-      navigator.sendBeacon('/api/logs', JSON.stringify(entry));
+      navigator.sendBeacon(`${env.VITE_API_BASE_URL}/logs`, JSON.stringify(entry));
     }
   },
 
@@ -173,7 +174,7 @@ export const logger = {
     const entry = createLog('warn', message, context);
     console.warn('[WARN]', message, context);
     if (import.meta.env.PROD) {
-      navigator.sendBeacon('/api/logs', JSON.stringify(entry));
+      navigator.sendBeacon(`${env.VITE_API_BASE_URL}/logs`, JSON.stringify(entry));
     }
   },
 
@@ -181,7 +182,7 @@ export const logger = {
     const entry = createLog('error', message, context);
     console.error('[ERROR]', message, context);
     if (import.meta.env.PROD) {
-      navigator.sendBeacon('/api/logs', JSON.stringify(entry));
+      navigator.sendBeacon(`${env.VITE_API_BASE_URL}/logs`, JSON.stringify(entry));
     }
   },
 };
@@ -253,11 +254,12 @@ actual account number? What BSP regulation drives this decision?
 ```tsx
 // src/lib/web-vitals.ts (production version)
 import { onCLS, onINP, onLCP, onFCP, onTTFB } from 'web-vitals';
+import { env } from './env';
 
 export function initWebVitals(): void {
   const report = (metric: { name: string; value: number; rating: string }) => {
     if (import.meta.env.PROD) {
-      navigator.sendBeacon('/api/vitals', JSON.stringify({
+      navigator.sendBeacon(`${env.VITE_API_BASE_URL}/vitals`, JSON.stringify({
         name: metric.name,
         value: metric.value,
         rating: metric.rating,
@@ -279,10 +281,11 @@ export function initWebVitals(): void {
 
 ```tsx
 // src/lib/navigation-tracking.ts
+import { env } from './env';
 
 export function trackNavigation(from: string, to: string, durationMs: number): void {
   if (import.meta.env.PROD) {
-    navigator.sendBeacon('/api/navigation', JSON.stringify({
+    navigator.sendBeacon(`${env.VITE_API_BASE_URL}/navigation`, JSON.stringify({
       from,
       to,
       durationMs,

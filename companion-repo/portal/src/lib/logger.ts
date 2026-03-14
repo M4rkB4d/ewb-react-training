@@ -1,4 +1,5 @@
 // src/lib/logger.ts
+import { env } from './env';
 
 type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 
@@ -33,7 +34,7 @@ export const logger = {
     if (import.meta.env.DEV) {
       console.info('[INFO]', message, context);
     } else {
-      navigator.sendBeacon('/api/logs', JSON.stringify(entry));
+      navigator.sendBeacon(`${env.VITE_API_BASE_URL}/logs`, JSON.stringify(entry));
     }
   },
 
@@ -41,7 +42,7 @@ export const logger = {
     const entry = createLog('warn', message, context);
     console.warn('[WARN]', message, context);
     if (import.meta.env.PROD) {
-      navigator.sendBeacon('/api/logs', JSON.stringify(entry));
+      navigator.sendBeacon(`${env.VITE_API_BASE_URL}/logs`, JSON.stringify(entry));
     }
   },
 
@@ -49,7 +50,7 @@ export const logger = {
     const entry = createLog('error', message, context);
     console.error('[ERROR]', message, context);
     if (import.meta.env.PROD) {
-      navigator.sendBeacon('/api/logs', JSON.stringify(entry));
+      navigator.sendBeacon(`${env.VITE_API_BASE_URL}/logs`, JSON.stringify(entry));
     }
   },
 };

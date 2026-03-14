@@ -282,6 +282,7 @@ export interface AuditEvent {
 ```tsx
 // src/compliance/audit-service.ts
 import { useAuthStore } from '@/stores/auth-store';
+import { env } from '@/lib/env';
 import type { AuditEventType } from './audit-types';
 
 let sessionId: string | null = null;
@@ -315,7 +316,7 @@ export function emitAuditEvent(
   // A regular fetch() may be cancelled by the browser mid-navigation,
   // which would silently drop audit events — unacceptable for compliance.
   if (import.meta.env.PROD) {
-    navigator.sendBeacon('/api/audit', JSON.stringify(event));
+    navigator.sendBeacon(`${env.VITE_API_BASE_URL}/audit`, JSON.stringify(event));
   }
 
   if (import.meta.env.DEV) {
@@ -904,7 +905,7 @@ streams by purpose and sensitivity.
  *    - Contains: All AuditEventType events (auth, transfers, consent)
  *    - May contain PII (stored in access-controlled audit database)
  *    - Retention: 5-7 years depending on event type
- *    - Transmitted via: navigator.sendBeacon('/api/audit')
+ *    - Transmitted via: navigator.sendBeacon(`${env.VITE_API_BASE_URL}/audit`)
  *
  * 2. TELEMETRY → Application Insights
  *    - Contains: Performance metrics, error tracking, usage analytics

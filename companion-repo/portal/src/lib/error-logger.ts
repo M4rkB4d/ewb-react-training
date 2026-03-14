@@ -1,5 +1,6 @@
 // src/lib/error-logger.ts
 import { AppError } from './errors';
+import { env } from './env';
 
 interface ErrorLogEntry {
   timestamp: string;
@@ -29,6 +30,6 @@ export function logError(error: unknown, extra?: { componentStack?: string }): v
     console.error('[ErrorLog]', entry);
   } else {
     // Send to Sentry / Azure App Insights (covered in B06)
-    navigator.sendBeacon('/api/errors', JSON.stringify(entry));
+    navigator.sendBeacon(`${env.VITE_API_BASE_URL}/errors`, JSON.stringify(entry));
   }
 }
