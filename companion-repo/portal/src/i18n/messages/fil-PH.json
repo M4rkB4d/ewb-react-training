@@ -1,0 +1,46 @@
+{
+  "app.title": "EastWest Digital Banking",
+  "nav.dashboard": "Dashboard",
+  "nav.accounts": "Mga Account",
+  "nav.transfers": "Paglipat ng Pondo",
+  "nav.payments": "Mga Bayarin",
+  "nav.settings": "Mga Setting",
+
+  "dashboard.greeting": "Mabuhay, {name}",
+  "dashboard.lastLogin": "Huling login: {date}",
+
+  "accounts.title": "Iyong Mga Account",
+  "accounts.balance": "Available na Balanse",
+  "accounts.transactions": "Kasaysayan ng Transaksyon",
+  "accounts.noTransactions": "Walang nahanap na transaksyon.",
+
+  "transfer.title": "Paglipat ng Pondo",
+  "transfer.from": "Mula sa Account",
+  "transfer.to": "Papunta sa Account",
+  "transfer.amount": "Halaga",
+  "transfer.notes": "Mga Tala (opsyonal)",
+  "transfer.confirm": "Kumpirmahin ang Paglipat",
+  "transfer.success": "Matagumpay na nailipat ang {amount}.",
+  "transfer.reference": "Reference: {reference}",
+
+  "auth.login": "Mag-sign In",
+  "auth.username": "Username",
+  "auth.password": "Password",
+  "auth.mfa.title": "Two-Factor Authentication",
+  "auth.mfa.prompt": "Ilagay ang 6 na digit code mula sa iyong authenticator app.",
+  "auth.logout": "Mag-sign Out",
+  "auth.session.warning": "Mag-e-expire ang iyong session sa {minutes} {minutes, plural, one {minuto} other {minuto}}.",
+  "auth.session.extend": "Manatiling Naka-sign In",
+
+  "errors.network": "Hindi makakonekta. Pakisuri ang iyong internet connection.",
+  "errors.generic": "May nangyaring mali. Pakisubukan muli.",
+  "errors.insufficientFunds": "Kulang ang pondo. Available na balanse: {balance}.",
+
+  "common.submit": "Isumite",
+  "common.cancel": "Kanselahin",
+  "common.save": "I-save",
+  "common.next": "Susunod",
+  "common.back": "Bumalik",
+  "common.loading": "Naglo-load...",
+  "common.retry": "Subukan Muli"
+}

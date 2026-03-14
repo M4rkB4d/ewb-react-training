@@ -1,0 +1,46 @@
+{
+  "app.title": "EastWest Digital Banking",
+  "nav.dashboard": "Dashboard",
+  "nav.accounts": "Accounts",
+  "nav.transfers": "Transfers",
+  "nav.payments": "Payments",
+  "nav.settings": "Settings",
+
+  "dashboard.greeting": "Welcome, {name}",
+  "dashboard.lastLogin": "Last login: {date}",
+
+  "accounts.title": "Your Accounts",
+  "accounts.balance": "Available Balance",
+  "accounts.transactions": "Transaction History",
+  "accounts.noTransactions": "No transactions found.",
+
+  "transfer.title": "Fund Transfer",
+  "transfer.from": "From Account",
+  "transfer.to": "To Account",
+  "transfer.amount": "Amount",
+  "transfer.notes": "Notes (optional)",
+  "transfer.confirm": "Confirm Transfer",
+  "transfer.success": "Transfer of {amount} completed successfully.",
+  "transfer.reference": "Reference: {reference}",
+
+  "auth.login": "Sign In",
+  "auth.username": "Username",
+  "auth.password": "Password",
+  "auth.mfa.title": "Two-Factor Authentication",
+  "auth.mfa.prompt": "Enter the 6-digit code from your authenticator app.",
+  "auth.logout": "Sign Out",
+  "auth.session.warning": "Your session will expire in {minutes} {minutes, plural, one {minute} other {minutes}}.",
+  "auth.session.extend": "Stay Signed In",
+
+  "errors.network": "Unable to connect. Please check your internet connection.",
+  "errors.generic": "Something went wrong. Please try again.",
+  "errors.insufficientFunds": "Insufficient funds. Available balance: {balance}.",
+
+  "common.submit": "Submit",
+  "common.cancel": "Cancel",
+  "common.save": "Save",
+  "common.next": "Next",
+  "common.back": "Back",
+  "common.loading": "Loading...",
+  "common.retry": "Try Again"
+}

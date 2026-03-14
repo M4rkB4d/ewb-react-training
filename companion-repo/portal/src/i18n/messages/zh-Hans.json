@@ -1,0 +1,46 @@
+{
+  "app.title": "EastWest 数字银行",
+  "nav.dashboard": "仪表板",
+  "nav.accounts": "账户",
+  "nav.transfers": "转账",
+  "nav.payments": "付款",
+  "nav.settings": "设置",
+
+  "dashboard.greeting": "欢迎，{name}",
+  "dashboard.lastLogin": "上次登录：{date}",
+
+  "accounts.title": "您的账户",
+  "accounts.balance": "可用余额",
+  "accounts.transactions": "交易记录",
+  "accounts.noTransactions": "未找到交易记录。",
+
+  "transfer.title": "资金转账",
+  "transfer.from": "转出账户",
+  "transfer.to": "转入账户",
+  "transfer.amount": "金额",
+  "transfer.notes": "备注（可选）",
+  "transfer.confirm": "确认转账",
+  "transfer.success": "成功转账 {amount}。",
+  "transfer.reference": "参考编号：{reference}",
+
+  "auth.login": "登录",
+  "auth.username": "用户名",
+  "auth.password": "密码",
+  "auth.mfa.title": "双重身份验证",
+  "auth.mfa.prompt": "请输入验证器应用中的6位数字代码。",
+  "auth.logout": "退出登录",
+  "auth.session.warning": "您的会话将在 {minutes} 分钟后过期。",
+  "auth.session.extend": "保持登录",
+
+  "errors.network": "无法连接。请检查您的网络连接。",
+  "errors.generic": "出了点问题。请重试。",
+  "errors.insufficientFunds": "余额不足。可用余额：{balance}。",
+
+  "common.submit": "提交",
+  "common.cancel": "取消",
+  "common.save": "保存",
+  "common.next": "下一步",
+  "common.back": "返回",
+  "common.loading": "加载中...",
+  "common.retry": "重试"
+}

@@ -1,0 +1,22 @@
+/* app/globals.css */
+@import "tailwindcss";
+
+@theme {
+  /* EWB Brand Colors */
+  --color-ewb-purple: #500778;
+  --color-ewb-magenta: #b1006f;
+  --color-ewb-gold: #dba464;
+  --color-ewb-lime: #d5e04d;
+  --color-ewb-navy: #06357A;
+
+  /* Semantic Colors */
+  --color-primary: #500778;
+  --color-secondary: #b1006f;
+  --color-accent: #dba464;
+  --color-success: #16a34a;
+  --color-warning: #d97706;
+  --color-danger: #dc2626;
+
+  /* Typography */
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+}
