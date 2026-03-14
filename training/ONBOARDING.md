@@ -12,7 +12,7 @@ This is the official React onboarding program for EastWest Bank developers. Over
 
 **What you will build**: A fully functional internal banking portal (Vite SPA) and a public-facing application (Next.js) — both with authentication, compliance controls, real-time features, and Azure deployment pipelines.
 
-**Time commitment**: Full-time, 8 hours per day. Morning sessions focus on reading guides and working through examples. Afternoon sessions focus on hands-on exercises, demos, and quizzes. Breaks are built into each day — take them.
+**Time commitment**: Full-time. Morning sessions focus on reading guides and working through examples. Afternoon sessions focus on hands-on exercises, demos, and quizzes. Pace yourself — take breaks as needed.
 
 **Pacing**: Most days cover one level. Heavier levels (Data & Auth, Security & Compliance) are split across two or three days so you have time to absorb the material. If you finish early, review the companion repo code for that level. If you fall behind, prioritize the Core (A-series) guides — the Vite SPA (B-series) guides can be caught up later.
 
@@ -44,14 +44,14 @@ Fix any failures before Day 1. If you hit issues, ask your team lead — do not 
 
 Get oriented. Understand what React is, learn TypeScript basics, and develop the compliance mindset that drives every technical decision at EWB.
 
-| Session | Content | Est. Time |
-|---------|---------|-----------|
-| **Morning** | [A01 — What Is React](../guides/level-01-welcome/A01_what-is-react.md) | 2 hours |
-| | [A02 — TypeScript for React](../guides/level-01-welcome/A02_typescript-for-react.md) | 3 hours |
-| **Afternoon** | [A03 — Thinking in Compliance](../guides/level-01-welcome/A03_thinking-in-compliance.md) | 1 hour |
-| | [Level 1 Quiz](quizzes/level-01-quiz.md) | 30 min |
-| | [Level 1 Exercises](exercises/level-01-exercises.md) | 1 hour |
-| | [Level 1 Demo](demos/level-01-demo.md) | 30 min |
+| Session | Content |
+|---------|---------|
+| **Morning** | [A01 — What Is React](../guides/level-01-welcome/A01_what-is-react.md) |
+| | [A02 — TypeScript for React](../guides/level-01-welcome/A02_typescript-for-react.md) |
+| **Afternoon** | [A03 — Thinking in Compliance](../guides/level-01-welcome/A03_thinking-in-compliance.md) |
+| | [Level 1 Quiz](quizzes/level-01-quiz.md) |
+| | [Level 1 Exercises](exercises/level-01-exercises.md) |
+| | [Level 1 Demo](demos/level-01-demo.md) |
 
 **End-of-day checkpoint**: You can explain what React is, write basic TypeScript types/interfaces, and describe why compliance matters for banking UIs.
 
@@ -61,14 +61,14 @@ Get oriented. Understand what React is, learn TypeScript basics, and develop the
 
 Set up the project from scratch, build your first components, and write your first test. By the end of today, you have a running application.
 
-| Session | Content | Est. Time |
-|---------|---------|-----------|
-| **Morning** | [B01 — Project Setup](../guides/level-02-first-app/B01_project-setup.md) | 2 hours |
-| | [B01b — Project Tooling and Quality Gates](../guides/level-02-first-app/B01b_project-tooling.md) | 1 hour |
-| | [A04 — Components and JSX](../guides/level-02-first-app/A04_components-and-jsx.md) | 2 hours |
-| **Afternoon** | [A05 — Your First Test](../guides/level-02-first-app/A05_your-first-test.md) | 1.5 hours |
-| | [Level 2 Quiz](quizzes/level-02-quiz.md) | 30 min |
-| | [Level 2 Exercises](exercises/level-02-exercises.md) | 1 hour |
+| Session | Content |
+|---------|---------|
+| **Morning** | [B01 — Project Setup](../guides/level-02-first-app/B01_project-setup.md) |
+| | [B01b — Project Tooling and Quality Gates](../guides/level-02-first-app/B01b_project-tooling.md) |
+| | [A04 — Components and JSX](../guides/level-02-first-app/A04_components-and-jsx.md) |
+| **Afternoon** | [A05 — Your First Test](../guides/level-02-first-app/A05_your-first-test.md) |
+| | [Level 2 Quiz](quizzes/level-02-quiz.md) |
+| | [Level 2 Exercises](exercises/level-02-exercises.md) |
 
 **End-of-day checkpoint**: You have a running Vite + React + TypeScript project with the EWB Tailwind theme configured and at least one passing test.
 
@@ -78,14 +78,14 @@ Set up the project from scratch, build your first components, and write your fir
 
 Build a component library with the EWB brand. Learn forms, validation with Zod and React Hook Form, and accessibility fundamentals.
 
-| Session | Content | Est. Time |
-|---------|---------|-----------|
-| **Morning** | [A06 — Design System Foundations](../guides/level-03-building-ui/A06_design-system-foundations.md) | 3 hours |
-| | [A07 — Forms and Validation](../guides/level-03-building-ui/A07_forms-and-validation.md) | 3 hours |
-| **Afternoon** | [A08 — Accessibility Essentials](../guides/level-03-building-ui/A08_accessibility-essentials.md) | 2 hours |
-| | [Level 3 Quiz](quizzes/level-03-quiz.md) | 30 min |
-| | [Level 3 Exercises](exercises/level-03-exercises.md) | 30 min |
-| | [Level 3 Demo](demos/level-03-demo.md) | 30 min |
+| Session | Content |
+|---------|---------|
+| **Morning** | [A06 — Design System Foundations](../guides/level-03-building-ui/A06_design-system-foundations.md) |
+| | [A07 — Forms and Validation](../guides/level-03-building-ui/A07_forms-and-validation.md) |
+| **Afternoon** | [A08 — Accessibility Essentials](../guides/level-03-building-ui/A08_accessibility-essentials.md) |
+| | [Level 3 Quiz](quizzes/level-03-quiz.md) |
+| | [Level 3 Exercises](exercises/level-03-exercises.md) |
+| | [Level 3 Demo](demos/level-03-demo.md) |
 
 **End-of-day checkpoint**: You have Button, Input, Card, and Badge components using EWB brand colors. You can build a form with Zod validation and explain WCAG 2.1 AA requirements.
 
@@ -95,13 +95,13 @@ Build a component library with the EWB brand. Learn forms, validation with Zod a
 
 Learn state management with Zustand, client-side routing with React Router, and how to test components and hooks properly.
 
-| Session | Content | Est. Time |
-|---------|---------|-----------|
-| **Morning** | [A09 — State Management](../guides/level-04-state-and-routing/A09_state-management.md) | 3 hours |
-| | [B02 — Routing and Navigation](../guides/level-04-state-and-routing/B02_routing-and-navigation.md) | 2 hours |
-| **Afternoon** | [A10 — Testing Components and Hooks](../guides/level-04-state-and-routing/A10_testing-components-and-hooks.md) | 3 hours |
-| | [Level 4 Quiz](quizzes/level-04-quiz.md) | 30 min |
-| | [Level 4 Exercises](exercises/level-04-exercises.md) | 30 min |
+| Session | Content |
+|---------|---------|
+| **Morning** | [A09 — State Management](../guides/level-04-state-and-routing/A09_state-management.md) |
+| | [B02 — Routing and Navigation](../guides/level-04-state-and-routing/B02_routing-and-navigation.md) |
+| **Afternoon** | [A10 — Testing Components and Hooks](../guides/level-04-state-and-routing/A10_testing-components-and-hooks.md) |
+| | [Level 4 Quiz](quizzes/level-04-quiz.md) |
+| | [Level 4 Exercises](exercises/level-04-exercises.md) |
 
 **End-of-day checkpoint**: You can manage client state with Zustand, set up protected routes, and write component tests with React Testing Library.
 
@@ -113,26 +113,24 @@ This is the heaviest level — API integration, authentication, and passkeys. Sp
 
 **Day 5 — API Integration and Auth Concepts**
 
-| Session | Content | Est. Time |
-|---------|---------|-----------|
-| **Morning** | [B03 — API Integration](../guides/level-05-data-and-auth/B03_api-integration.md) | 3 hours |
-| | Break | 15 min |
-| | [A11 — Authentication Part 1: Concepts](../guides/level-05-data-and-auth/A11_authentication-part1.md) | 3 hours |
-| **Afternoon** | [Level 5 Exercises](exercises/level-05-exercises.md) — Exercise 1 (API Client) | 1 hour |
-| | [Level 5 Demo](demos/level-05-demo.md) — Parts 1-2 (API Client, JWT) | 30 min |
+| Session | Content |
+|---------|---------|
+| **Morning** | [B03 — API Integration](../guides/level-05-data-and-auth/B03_api-integration.md) |
+| | [A11 — Authentication Part 1: Concepts](../guides/level-05-data-and-auth/A11_authentication-part1.md) |
+| **Afternoon** | [Level 5 Exercises](exercises/level-05-exercises.md) — Exercise 1 (API Client) |
+| | [Level 5 Demo](demos/level-05-demo.md) — Parts 1-2 (API Client, JWT) |
 
 **Day 5 checkpoint**: You can fetch and cache API data with TanStack Query, build an Axios client with interceptors, and explain JWT + refresh token architecture.
 
 **Day 6 — Auth Implementation and Passkeys**
 
-| Session | Content | Est. Time |
-|---------|---------|-----------|
-| **Morning** | [B04 — Authentication Part 2: Implementation](../guides/level-05-data-and-auth/B04_authentication-part2.md) | 3 hours |
-| | Break | 15 min |
-| | [A12 — Passkeys and WebAuthn](../guides/level-05-data-and-auth/A12_passkeys-and-webauthn.md) | 3 hours |
-| **Afternoon** | [Level 5 Exercises](exercises/level-05-exercises.md) — Exercises 2-3 (MFA Login, Passkeys) | 2.5 hours |
-| | [Level 5 Quiz](quizzes/level-05-quiz.md) | 30 min |
-| | [Level 5 Demo](demos/level-05-demo.md) — Parts 3-4 (MFA, WebAuthn) | 30 min |
+| Session | Content |
+|---------|---------|
+| **Morning** | [B04 — Authentication Part 2: Implementation](../guides/level-05-data-and-auth/B04_authentication-part2.md) |
+| | [A12 — Passkeys and WebAuthn](../guides/level-05-data-and-auth/A12_passkeys-and-webauthn.md) |
+| **Afternoon** | [Level 5 Exercises](exercises/level-05-exercises.md) — Exercises 2-3 (MFA Login, Passkeys) |
+| | [Level 5 Quiz](quizzes/level-05-quiz.md) |
+| | [Level 5 Demo](demos/level-05-demo.md) — Parts 3-4 (MFA, WebAuthn) |
 
 **Day 6 checkpoint**: You can implement JWT authentication with token refresh, build a login flow with MFA, and explain the WebAuthn registration/authentication ceremony for BSP 1213 compliance.
 
@@ -144,16 +142,15 @@ This is the heaviest level — API integration, authentication, and passkeys. Sp
 
 Error handling patterns, performance optimization, advanced testing strategies, and monitoring with Azure Application Insights.
 
-| Session | Content | Est. Time |
-|---------|---------|-----------|
-| **Morning** | [A13 — Error Handling](../guides/level-06-quality/A13_error-handling.md) | 3 hours |
-| | Break | 15 min |
-| | [B05 — Performance Optimization](../guides/level-06-quality/B05_performance-optimization.md) | 2.5 hours |
-| **Afternoon** | [A14 — Testing Advanced](../guides/level-06-quality/A14_testing-advanced.md) | 2.5 hours |
-| | [Level 6 Quiz](quizzes/level-06-quiz.md) | 30 min |
-| | [Level 6 Exercises](exercises/level-06-exercises.md) — Exercise 1 (Error Boundary) | 1 hour |
+| Session | Content |
+|---------|---------|
+| **Morning** | [A13 — Error Handling](../guides/level-06-quality/A13_error-handling.md) |
+| | [B05 — Performance Optimization](../guides/level-06-quality/B05_performance-optimization.md) |
+| **Afternoon** | [A14 — Testing Advanced](../guides/level-06-quality/A14_testing-advanced.md) |
+| | [Level 6 Quiz](quizzes/level-06-quiz.md) |
+| | [Level 6 Exercises](exercises/level-06-exercises.md) — Exercise 1 (Error Boundary) |
 
-> **B06 (Monitoring)** moves to Day 8 morning. This keeps Day 7 at a manageable 7.5 hours of guide content.
+> **B06 (Monitoring)** moves to Day 8 morning to keep Day 7 focused on error handling, performance, and testing.
 
 **End-of-day checkpoint**: You can implement error boundaries, optimize bundle size and rendering, and write integration tests with MSW.
 
@@ -171,38 +168,35 @@ The most critical level for banking. Security hardening, BSP compliance framewor
 > hardening later teaches the wrong habit — and in banking, it means
 > production exposure before controls are in place.
 
-| Session | Content | Est. Time |
-|---------|---------|-----------|
-| **Morning** | [B06 — Monitoring and Observability](../guides/level-06-quality/B06_monitoring-and-observability.md) | 2.5 hours |
-| | Break | 15 min |
-| | [A15 — Security Hardening](../guides/level-07-production/A15_security-hardening.md) — Phases 1-4 (CSP, XSS, SRI, Input Handling) | 3 hours |
-| **Afternoon** | [A15 — Security Hardening](../guides/level-07-production/A15_security-hardening.md) — Phases 5-8 (CSRF, OWASP, Audit Findings, Checklist) | 2 hours |
-| | [Level 7 Exercises](exercises/level-07-exercises.md) — Exercise 1 (Security Headers) | 1 hour |
+| Session | Content |
+|---------|---------|
+| **Morning** | [B06 — Monitoring and Observability](../guides/level-06-quality/B06_monitoring-and-observability.md) |
+| | [A15 — Security Hardening](../guides/level-07-production/A15_security-hardening.md) — Phases 1-4 (CSP, XSS, SRI, Input Handling) |
+| **Afternoon** | [A15 — Security Hardening](../guides/level-07-production/A15_security-hardening.md) — Phases 5-8 (CSRF, OWASP, Audit Findings, Checklist) |
+| | [Level 7 Exercises](exercises/level-07-exercises.md) — Exercise 1 (Security Headers) |
 
 **Day 8 checkpoint**: You can configure Azure Application Insights, implement CSP headers, prevent XSS and CSRF attacks, and identify common audit findings.
 
 **Day 9 — BSP Compliance Framework**
 
-| Session | Content | Est. Time |
-|---------|---------|-----------|
-| **Morning** | [A16 — BSP Compliance Framework](../guides/level-07-production/A16_bsp-compliance-framework.md) — Phases 1-3 (BSP Mapping, Audit Trail, Compliance Dashboard) | 3 hours |
-| | Break | 15 min |
-| | [A16 — BSP Compliance Framework](../guides/level-07-production/A16_bsp-compliance-framework.md) — Phases 4-6 (Automated Checks, Evidence, Examination Prep) | 2.5 hours |
-| **Afternoon** | [Level 7 Exercises](exercises/level-07-exercises.md) — Exercise 2 (Compliance Dashboard) | 1.5 hours |
-| | Review and catch-up time | 1 hour |
+| Session | Content |
+|---------|---------|
+| **Morning** | [A16 — BSP Compliance Framework](../guides/level-07-production/A16_bsp-compliance-framework.md) — Phases 1-3 (BSP Mapping, Audit Trail, Compliance Dashboard) |
+| | [A16 — BSP Compliance Framework](../guides/level-07-production/A16_bsp-compliance-framework.md) — Phases 4-6 (Automated Checks, Evidence, Examination Prep) |
+| **Afternoon** | [Level 7 Exercises](exercises/level-07-exercises.md) — Exercise 2 (Compliance Dashboard) |
+| | Review and catch-up time |
 
 **Day 9 checkpoint**: You can map BSP circulars to frontend controls, implement audit trail logging, generate compliance evidence, and prepare for BSP examination.
 
 **Day 10 — Deployment, Data Privacy, and Compliance Wrap-Up**
 
-| Session | Content | Est. Time |
-|---------|---------|-----------|
-| **Morning** | [B07 — Deployment and CI/CD](../guides/level-07-production/B07_deployment-and-cicd.md) | 3 hours |
-| | Break | 15 min |
-| | [A17 — Data Privacy and Consent](../guides/level-07-production/A17_data-privacy-and-consent.md) | 3 hours |
-| **Afternoon** | [Level 7 Exercises](exercises/level-07-exercises.md) — Exercise 3 (Consent, CI/CD) | 1.5 hours |
-| | [Level 7 Quiz](quizzes/level-07-quiz.md) | 30 min |
-| | [Level 7 Demo](demos/level-07-demo.md) | 30 min |
+| Session | Content |
+|---------|---------|
+| **Morning** | [B07 — Deployment and CI/CD](../guides/level-07-production/B07_deployment-and-cicd.md) |
+| | [A17 — Data Privacy and Consent](../guides/level-07-production/A17_data-privacy-and-consent.md) |
+| **Afternoon** | [Level 7 Exercises](exercises/level-07-exercises.md) — Exercise 3 (Consent, CI/CD) |
+| | [Level 7 Quiz](quizzes/level-07-quiz.md) |
+| | [Level 7 Demo](demos/level-07-demo.md) |
 
 **Day 10 checkpoint**: You can configure Azure Pipelines, handle PII per RA 10173, build a consent management flow, and pass the Level 7 compliance quiz.
 
@@ -212,14 +206,13 @@ The most critical level for banking. Security hardening, BSP compliance framewor
 
 Advanced architecture patterns, real-time features (WebSocket, SSE), and internationalization for multi-language banking interfaces.
 
-| Session | Content | Est. Time |
-|---------|---------|-----------|
-| **Morning** | [A18 — Architecture Patterns](../guides/level-08-mastery/A18_architecture-patterns.md) | 3 hours |
-| | Break | 15 min |
-| | [B08 — Internationalization](../guides/level-08-mastery/B08_internationalization.md) | 2.5 hours |
-| **Afternoon** | [A19 — Real-Time Patterns](../guides/level-08-mastery/A19_real-time-patterns.md) | 2.5 hours |
-| | [Level 8 Quiz](quizzes/level-08-quiz.md) | 30 min |
-| | [Level 8 Exercises](exercises/level-08-exercises.md) — Exercise 1 (Event Catalog) | 1 hour |
+| Session | Content |
+|---------|---------|
+| **Morning** | [A18 — Architecture Patterns](../guides/level-08-mastery/A18_architecture-patterns.md) |
+| | [B08 — Internationalization](../guides/level-08-mastery/B08_internationalization.md) |
+| **Afternoon** | [A19 — Real-Time Patterns](../guides/level-08-mastery/A19_real-time-patterns.md) |
+| | [Level 8 Quiz](quizzes/level-08-quiz.md) |
+| | [Level 8 Exercises](exercises/level-08-exercises.md) — Exercise 1 (Event Catalog) |
 
 **End-of-day checkpoint**: You can implement feature-sliced architecture, add multi-language support with proper currency/date formatting, and build real-time notification systems.
 
@@ -231,13 +224,13 @@ Advanced architecture patterns, real-time features (WebSocket, SSE), and interna
 
 Transition from Vite SPA to Next.js. Learn SSR vs SPA decision-making, Server Components, and Azure App Service deployment.
 
-| Session | Content | Est. Time |
-|---------|---------|-----------|
-| **Morning** | [A20 — SPA vs SSR Decision Framework](../guides/level-09-public-facing/A20_spa-vs-ssr-decision-framework.md) | 2 hours |
-| | [A21 — Next.js Project Setup](../guides/level-09-public-facing/A21_nextjs-project-setup.md) | 3 hours |
-| **Afternoon** | [A22 — Server Components and Data Fetching](../guides/level-09-public-facing/A22_server-components-data-fetching.md) | 2 hours |
-| | [A23 — Server-Side Auth, API Routes, and Composition](../guides/level-09-public-facing/A23_server-components-advanced.md) | 2 hours |
-| | [Level 9 Quiz](quizzes/level-09-quiz.md) | 30 min |
+| Session | Content |
+|---------|---------|
+| **Morning** | [A20 — SPA vs SSR Decision Framework](../guides/level-09-public-facing/A20_spa-vs-ssr-decision-framework.md) |
+| | [A21 — Next.js Project Setup](../guides/level-09-public-facing/A21_nextjs-project-setup.md) |
+| **Afternoon** | [A22 — Server Components and Data Fetching](../guides/level-09-public-facing/A22_server-components-data-fetching.md) |
+| | [A23 — Server-Side Auth, API Routes, and Composition](../guides/level-09-public-facing/A23_server-components-advanced.md) |
+| | [Level 9 Quiz](quizzes/level-09-quiz.md) |
 
 > **B10 (Deploying Next.js on Azure)** is recommended reading but not required for the capstone. Complete it if time allows, or read it when you first deploy a Next.js project to production.
 
@@ -249,13 +242,13 @@ Transition from Vite SPA to Next.js. Learn SSR vs SPA decision-making, Server Co
 
 Bring everything together. Complete the integration capstone, participate in a code review, and demonstrate your work.
 
-| Session | Content | Est. Time |
-|---------|---------|-----------|
-| **Morning** | [B09 — Integration Capstone](../guides/level-08-mastery/B09_integration-capstone.md) | 4 hours |
-| | Review and fix any failing tests across your project | 1 hour |
-| **Afternoon** | Code review session with your team lead | 1.5 hours |
-| | Final quiz: cross-level assessment | 1 hour |
-| | Wrap-up: questions, feedback, next steps | 30 min |
+| Session | Content |
+|---------|---------|
+| **Morning** | [B09 — Integration Capstone](../guides/level-08-mastery/B09_integration-capstone.md) |
+| | Review and fix any failing tests across your project |
+| **Afternoon** | Code review session with your team lead |
+| | Final quiz: cross-level assessment |
+| | Wrap-up: questions, feedback, next steps |
 
 **End-of-day checkpoint**: You have a working portal application that passes all tests, meets EWB design standards, handles authentication, and includes compliance controls. Your code has been reviewed and approved.
 
@@ -279,7 +272,7 @@ companion-repo/
 |----------|-------------|
 | [Cheat Sheet](../reference/CHEAT_SHEET.md) | Quick-reference for React, TypeScript, Tailwind, Zod, and more |
 | [Glossary](../reference/GLOSSARY.md) | Definitions of terms used across all guides |
-| [Guide Index](../reference/INDEX.md) | Complete list of all 37 guides with time estimates |
+| [Guide Index](../reference/INDEX.md) | Complete list of all 37 guides with descriptions and prerequisites |
 
 ### Appendix Guides
 

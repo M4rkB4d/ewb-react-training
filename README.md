@@ -30,72 +30,74 @@ Production-ready React documentation for enterprise banking applications. Built 
 ## Guide Index
 
 ### Level 1 — Welcome
-| ID | Title | Part | Est. Time |
-|----|-------|------|-----------|
-| A01 | What Is React | A (Core) | 2 hours |
-| A02 | TypeScript for React | A (Core) | 3 hours |
-| A03 | Thinking in Compliance | A (Core) | 1.5 hours |
+| ID | Title | Part |
+|----|-------|------|
+| A01 | What Is React | A (Core) |
+| A02 | TypeScript for React | A (Core) |
+| A03 | Thinking in Compliance | A (Core) |
 
 ### Level 2 — First App
-| ID | Title | Part | Est. Time |
-|----|-------|------|-----------|
-| B01 | Project Setup | B (Vite SPA) | 3 hours |
-| A04 | Components and JSX | A (Core) | 2.5 hours |
-| A05 | Your First Test | A (Core) | 2 hours |
+| ID | Title | Part |
+|----|-------|------|
+| B01 | Project Setup | B (Vite SPA) |
+| B01b | Project Tooling and Quality Gates | B (Vite SPA) |
+| A04 | Components and JSX | A (Core) |
+| A05 | Your First Test | A (Core) |
 
 ### Level 3 — Building UI
-| ID | Title | Part | Est. Time |
-|----|-------|------|-----------|
-| A06 | Design System Foundations | A (Core) | 3 hours |
-| A07 | Forms and Validation | A (Core) | 3.5 hours |
-| A08 | Accessibility Essentials | A (Core) | 2.5 hours |
+| ID | Title | Part |
+|----|-------|------|
+| A06 | Design System Foundations | A (Core) |
+| A07 | Forms and Validation | A (Core) |
+| A08 | Accessibility Essentials | A (Core) |
 
 ### Level 4 — State and Routing
-| ID | Title | Part | Est. Time |
-|----|-------|------|-----------|
-| A09 | State Management | A (Core) | 3 hours |
-| B02 | Routing and Navigation | B (Vite SPA) | 2.5 hours |
-| A10 | Testing Components and Hooks | A (Core) | 3 hours |
+| ID | Title | Part |
+|----|-------|------|
+| A09 | State Management | A (Core) |
+| B02 | Routing and Navigation | B (Vite SPA) |
+| A10 | Testing Components and Hooks | A (Core) |
 
 ### Level 5 — Data and Auth
-| ID | Title | Part | Est. Time |
-|----|-------|------|-----------|
-| B03 | API Integration | B (Vite SPA) | 3.5 hours |
-| A11 | Authentication Part 1: Concepts | A (Core) | 3 hours |
-| B04 | Authentication Part 2: Implementation | B (Vite SPA) | 3.5 hours |
-| A12 | Passkeys and WebAuthn | A (Core) | 3 hours |
+| ID | Title | Part |
+|----|-------|------|
+| B03 | API Integration | B (Vite SPA) |
+| A11 | Authentication Part 1: Concepts | A (Core) |
+| B04 | Authentication Part 2: Implementation | B (Vite SPA) |
+| A12 | Passkeys and WebAuthn | A (Core) |
 
 ### Level 6 — Quality
-| ID | Title | Part | Est. Time |
-|----|-------|------|-----------|
-| A13 | Error Handling | A (Core) | 3 hours |
-| B05 | Performance Optimization | B (Vite SPA) | 3 hours |
-| A14 | Testing Advanced | A (Core) | 3.5 hours |
-| B06 | Monitoring and Observability | B (Vite SPA) | 2.5 hours |
+| ID | Title | Part |
+|----|-------|------|
+| A13 | Error Handling | A (Core) |
+| B05 | Performance Optimization | B (Vite SPA) |
+| A14 | Testing Advanced | A (Core) |
+| B06 | Monitoring and Observability | B (Vite SPA) |
 
 ### Level 7 — Production
-| ID | Title | Part | Est. Time |
-|----|-------|------|-----------|
-| B07 | Deployment and CI/CD | B (Vite SPA) | 3.5 hours |
-| A15 | Security Hardening | A (Core) | 3.5 hours |
-| A16 | BSP Compliance Framework | A (Core) | 3.5 hours |
-| A17 | Data Privacy and Consent | A (Core) | 3 hours |
+| ID | Title | Part |
+|----|-------|------|
+| A15 | Security Hardening | A (Core) |
+| B07 | Deployment and CI/CD | B (Vite SPA) |
+| A16 | BSP Compliance Framework | A (Core) |
+| A17 | Data Privacy and Consent | A (Core) |
 
 ### Level 8 — Mastery
-| ID | Title | Part | Est. Time |
-|----|-------|------|-----------|
-| A18 | Architecture Patterns | A (Core) | 3.5 hours |
-| B08 | Internationalization | B (Vite SPA) | 3.5 hours |
-| B09 | Integration Capstone | B (Vite SPA) | 4 hours |
-| A19 | Real-Time Patterns | A (Core) | 2.5 hours |
+| ID | Title | Part |
+|----|-------|------|
+| A18 | Architecture Patterns | A (Core) |
+| B08 | Internationalization | B (Vite SPA) |
+| B09 | Integration Capstone | B (Vite SPA) |
+| A19 | Real-Time Patterns | A (Core) |
 
 ### Level 9 — Public-Facing Applications (Next.js)
-| ID | Title | Part | Est. Time |
-|----|-------|------|-----------|
-| A20 | SPA vs SSR Decision Framework | A (Core) | 2 hours |
-| A21 | Next.js Project Setup | C (Next.js) | 3 hours |
-| A22 | Server Components and Data Fetching | C (Next.js) | 3.5 hours |
-| B10 | Deploying Next.js on Azure | C (Next.js) | 3 hours |
+| ID | Title | Part |
+|----|-------|------|
+| A20 | SPA vs SSR Decision Framework | A (Core) |
+| A21 | Next.js Project Setup | C (Next.js) |
+| A22 | Server Components and Data Fetching | C (Next.js) |
+| A23 | Server-Side Auth, API Routes, and Composition | C (Next.js) |
+| B10 | Deploying Next.js on Azure | C (Next.js) |
 
 ### Appendix
 | ID | Title |

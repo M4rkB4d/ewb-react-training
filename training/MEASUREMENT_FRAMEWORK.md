@@ -52,7 +52,7 @@ Track for every participant across all 13 days:
 | Capstone score | ≥ 70% overall, no criterion below 50% | Fails capstone on first attempt |
 | Daily checkpoint pass rate | Self-assessed "yes" on all checkpoints | 2+ consecutive "no" answers |
 | Questions asked per day | 2-5 (healthy engagement) | Zero questions (disengaged or lost) |
-| Time to complete exercises | Within estimated time ± 30% | Consistently 2x+ over estimate |
+| Exercise completion | Learner completes all required exercises | Learner unable to finish exercises without extensive help |
 
 ### Cohort-Level Tracking
 

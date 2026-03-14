@@ -9,7 +9,7 @@
 ## Exercise 1 — Error Boundary with Banking Context
 
 **Difficulty:** Intermediate
-**Estimated Time:** 45 minutes
+
 
 ### Learning Objectives
 
@@ -56,7 +56,7 @@ The account detail page occasionally crashes when the API returns malformed tran
 ## Exercise 2 — Performance-Optimized Transaction List
 
 **Difficulty:** Challenge
-**Estimated Time:** 60 minutes
+
 
 ### Learning Objectives
 
@@ -101,7 +101,7 @@ The transaction history page must handle accounts with up to 10,000 transactions
 ## Exercise 3 — E2E Test for Fund Transfer with Monitoring
 
 **Difficulty:** Challenge
-**Estimated Time:** 60 minutes
+
 
 ### Learning Objectives
 

@@ -40,19 +40,19 @@ Everything else, you should read in full. The compliance, security, and architec
 
 The most important day. Everything at EWB is built on compliance. You need to internalize this before writing a single line of code.
 
-### Morning (4 hours)
+### Morning
 
-| Order | Guide | Time | Why It Matters |
-|-------|-------|------|----------------|
-| 1 | [A03 — Thinking in Compliance](../guides/level-01-welcome/A03_thinking-in-compliance.md) | 1 hr | The mental model. Every technical decision at EWB passes through a compliance lens. BSP circulars, RA 10173, PCI-DSS — this guide maps them to frontend concerns. |
-| 2 | [A06 — Design System Foundations](../guides/level-03-building-ui/A06_design-system-foundations.md) | 3 hrs | EWB brand tokens, component library patterns, Tailwind 4 theme. You will use these components in everything you build. |
+| Order | Guide | Why It Matters |
+|-------|-------|----------------|
+| 1 | [A03 — Thinking in Compliance](../guides/level-01-welcome/A03_thinking-in-compliance.md) | The mental model. Every technical decision at EWB passes through a compliance lens. BSP circulars, RA 10173, PCI-DSS — this guide maps them to frontend concerns. |
+| 2 | [A06 — Design System Foundations](../guides/level-03-building-ui/A06_design-system-foundations.md) | EWB brand tokens, component library patterns, Tailwind 4 theme. You will use these components in everything you build. |
 
-### Afternoon (4 hours)
+### Afternoon
 
-| Order | Guide | Time | Why It Matters |
-|-------|-------|------|----------------|
-| 3 | [A18 — Architecture Patterns](../guides/level-08-mastery/A18_architecture-patterns.md) | 3 hrs | Feature-sliced architecture, module boundaries, dependency rules. This is how EWB projects are structured. |
-| 4 | [A09 — State Management](../guides/level-04-state-and-routing/A09_state-management.md) | 1 hr | Skim for EWB-specific Zustand patterns: auth store, feature stores, devtools configuration. Skip the basics if you know Zustand. |
+| Order | Guide | Why It Matters |
+|-------|-------|----------------|
+| 3 | [A18 — Architecture Patterns](../guides/level-08-mastery/A18_architecture-patterns.md) | Feature-sliced architecture, module boundaries, dependency rules. This is how EWB projects are structured. |
+| 4 | [A09 — State Management](../guides/level-04-state-and-routing/A09_state-management.md) | Skim for EWB-specific Zustand patterns: auth store, feature stores, devtools configuration. Skip the basics if you know Zustand. |
 
 ### Day 1 Exercises
 
@@ -69,19 +69,19 @@ The most important day. Everything at EWB is built on compliance. You need to in
 
 BSP Circular 1213 (AFASA) mandates phishing-resistant authentication by June 2026. This is not theoretical — it is a regulatory deadline. Every EWB developer must understand the auth stack.
 
-### Morning (4 hours)
+### Morning
 
-| Order | Guide | Time | Why It Matters |
-|-------|-------|------|----------------|
-| 1 | [A11 — Authentication Part 1: Concepts](../guides/level-05-data-and-auth/A11_authentication-part1.md) | 2 hrs | JWT architecture, refresh token rotation, session management. As an experienced dev, skim the JWT basics but read the EWB-specific interceptor and refresh patterns carefully. |
-| 2 | [A15 — Security Hardening](../guides/level-07-production/A15_security-hardening.md) | 2 hrs | CSP headers, XSS prevention, CSRF protection, subresource integrity. Skim patterns you already know; focus on the hardening checklist. |
+| Order | Guide | Why It Matters |
+|-------|-------|----------------|
+| 1 | [A11 — Authentication Part 1: Concepts](../guides/level-05-data-and-auth/A11_authentication-part1.md) | JWT architecture, refresh token rotation, session management. As an experienced dev, skim the JWT basics but read the EWB-specific interceptor and refresh patterns carefully. |
+| 2 | [A15 — Security Hardening](../guides/level-07-production/A15_security-hardening.md) | CSP headers, XSS prevention, CSRF protection, subresource integrity. Skim patterns you already know; focus on the hardening checklist. |
 
-### Afternoon (4 hours)
+### Afternoon
 
-| Order | Guide | Time | Why It Matters |
-|-------|-------|------|----------------|
-| 3 | [A16 — BSP Compliance Framework](../guides/level-07-production/A16_bsp-compliance-framework.md) | 2.5 hrs | Maps every BSP circular to frontend controls. Audit trail implementation, data retention. This is what auditors look at. |
-| 4 | [A17 — Data Privacy and Consent](../guides/level-07-production/A17_data-privacy-and-consent.md) | 1.5 hrs | RA 10173 (Philippine DPA) implementation: PII handling, consent management, data masking. Skim implementation details; focus on the requirements. |
+| Order | Guide | Why It Matters |
+|-------|-------|----------------|
+| 3 | [A16 — BSP Compliance Framework](../guides/level-07-production/A16_bsp-compliance-framework.md) | Maps every BSP circular to frontend controls. Audit trail implementation, data retention. This is what auditors look at. |
+| 4 | [A17 — Data Privacy and Consent](../guides/level-07-production/A17_data-privacy-and-consent.md) | RA 10173 (Philippine DPA) implementation: PII handling, consent management, data masking. Skim implementation details; focus on the requirements. |
 
 > **A12 (Passkeys and WebAuthn)** is listed under Day 3 morning. It requires focused attention — do not rush it alongside all of security and compliance.
 
@@ -93,20 +93,20 @@ BSP Circular 1213 (AFASA) mandates phishing-resistant authentication by June 202
 
 Connect everything. API integration, CI/CD, real-time patterns, and the Next.js track for public-facing applications.
 
-### Morning (4 hours)
+### Morning
 
-| Order | Guide | Time | Why It Matters |
-|-------|-------|------|----------------|
-| 1 | [A12 — Passkeys and WebAuthn](../guides/level-05-data-and-auth/A12_passkeys-and-webauthn.md) | 2 hrs | WebAuthn registration and authentication flows, resident credentials. Required for BSP 1213 (AFASA) compliance — June 2026 deadline. |
-| 2 | [B03 — API Integration](../guides/level-05-data-and-auth/B03_api-integration.md) | 2 hrs | TanStack Query patterns, Zod response validation, optimistic updates. The "Zod everywhere" pattern is an EWB standard. Skim the TanStack basics if you know them; focus on EWB's API client architecture. |
+| Order | Guide | Why It Matters |
+|-------|-------|----------------|
+| 1 | [A12 — Passkeys and WebAuthn](../guides/level-05-data-and-auth/A12_passkeys-and-webauthn.md) | WebAuthn registration and authentication flows, resident credentials. Required for BSP 1213 (AFASA) compliance — June 2026 deadline. |
+| 2 | [B03 — API Integration](../guides/level-05-data-and-auth/B03_api-integration.md) | TanStack Query patterns, Zod response validation, optimistic updates. The "Zod everywhere" pattern is an EWB standard. Skim the TanStack basics if you know them; focus on EWB's API client architecture. |
 
-### Afternoon (4 hours)
+### Afternoon
 
-| Order | Guide | Time | Why It Matters |
-|-------|-------|------|----------------|
-| 3 | [B07 — Deployment and CI/CD](../guides/level-07-production/B07_deployment-and-cicd.md) | 2 hrs | Azure Pipelines configuration, staging/production environments, blue-green deployment. No GitHub Actions — EWB uses Azure Pipelines exclusively. Skim if you know CI/CD; focus on the EWB pipeline structure. |
-| 4 | [A19 — Real-Time Patterns](../guides/level-08-mastery/A19_real-time-patterns.md) | 1.5 hrs | WebSocket and SSE patterns for live data (transaction feeds, notifications). Skim for patterns; you likely know the fundamentals. |
-| 5 | [A20 — SPA vs SSR Decision Framework](../guides/level-09-public-facing/A20_spa-vs-ssr-decision-framework.md) | 1 hr | When to use Vite SPA vs Next.js at EWB. The decision matrix is the key takeaway. |
+| Order | Guide | Why It Matters |
+|-------|-------|----------------|
+| 3 | [B07 — Deployment and CI/CD](../guides/level-07-production/B07_deployment-and-cicd.md) | Azure Pipelines configuration, staging/production environments, blue-green deployment. No GitHub Actions — EWB uses Azure Pipelines exclusively. Skim if you know CI/CD; focus on the EWB pipeline structure. |
+| 4 | [A19 — Real-Time Patterns](../guides/level-08-mastery/A19_real-time-patterns.md) | WebSocket and SSE patterns for live data (transaction feeds, notifications). Skim for patterns; you likely know the fundamentals. |
+| 5 | [A20 — SPA vs SSR Decision Framework](../guides/level-09-public-facing/A20_spa-vs-ssr-decision-framework.md) | When to use Vite SPA vs Next.js at EWB. The decision matrix is the key takeaway. |
 
 ### Day 3 Exercises
 

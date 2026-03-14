@@ -9,7 +9,7 @@
 ## Exercise 1 — Transaction Filter Store
 
 **Difficulty:** Starter
-**Estimated Time:** 30 minutes
+
 
 ### Learning Objectives
 
@@ -61,7 +61,7 @@ export const useTransactionFilterStore = create<TransactionFilterState>((set, ge
 ## Exercise 2 — Account Detail with Query Key Factory
 
 **Difficulty:** Intermediate
-**Estimated Time:** 45 minutes
+
 
 ### Learning Objectives
 
@@ -101,7 +101,7 @@ The portal needs an account detail page that shows account information and its r
 ## Exercise 3 — Protected Route with Post-Login Redirect
 
 **Difficulty:** Challenge
-**Estimated Time:** 60 minutes
+
 
 ### Learning Objectives
 

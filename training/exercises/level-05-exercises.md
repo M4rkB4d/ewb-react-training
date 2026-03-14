@@ -9,7 +9,7 @@
 ## Exercise 1 — Secure API Client with Token Refresh
 
 **Difficulty:** Intermediate
-**Estimated Time:** 45 minutes
+
 
 ### Learning Objectives
 
@@ -70,7 +70,7 @@ export const apiClient = axios.create({
 ## Exercise 2 — Login Flow with MFA Support
 
 **Difficulty:** Challenge
-**Estimated Time:** 60 minutes
+
 
 ### Learning Objectives
 
@@ -111,7 +111,7 @@ The login flow has two steps: (1) username/password, and (2) MFA code verificati
 ## Exercise 3 — Passkey Registration and Feature Detection
 
 **Difficulty:** Challenge
-**Estimated Time:** 60 minutes
+
 
 ### Learning Objectives
 

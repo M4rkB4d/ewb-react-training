@@ -11,7 +11,7 @@
 - Answer all 12 questions.
 - For multiple choice, select the single best answer (A/B/C/D).
 - For short answer, keep responses to 2-3 sentences.
-- Time estimate: 20 minutes.
+
 
 ---
 
