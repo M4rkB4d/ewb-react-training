@@ -24,8 +24,11 @@ By the end of this guide, you will:
 
 | Requirement | Where |
 |------------|-------|
+| Completed A13 — Error Handling | Level 6 |
 | Completed B02 — Routing and Navigation | Level 4 |
 | Completed A09 — State Management | Level 4 |
+
+> **Note:** Level 6 interleaves A-track and B-track guides: A13 → B05 → A14 → B06. This is intentional — error handling patterns (A13) inform performance optimizations, and both feed into testing (A14) and monitoring (B06).
 
 ---
 

@@ -77,7 +77,7 @@ The two applications are completely independent — separate `package.json`, sep
 | State | Zustand + TanStack Query | Server-first, minimal client state |
 | Routing | React Router | File-based (app/) |
 | API | Direct fetch from browser | Route Handlers + server-side fetch |
-| Deployment | Static hosting | Docker + Azure Container Apps |
+| Deployment | Static hosting | Azure App Service (Node.js) |
 | CI/CD | Azure Pipelines | Azure Pipelines |
 
 ## Guide Mapping

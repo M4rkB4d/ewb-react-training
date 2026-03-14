@@ -734,7 +734,9 @@ import { useAuthStore } from '@/stores/auth-store';
 import { refreshSession } from '../api/auth-api';
 
 export function useAuthInit() {
-  const { setAuth, clearAuth, status } = useAuthStore();
+  const status = useAuthStore((s) => s.status);
+  // Use getState() for actions — avoids subscribing to unrelated store changes.
+  const { setAuth, clearAuth } = useAuthStore.getState();
 
   useEffect(() => {
     if (status !== 'idle') return;

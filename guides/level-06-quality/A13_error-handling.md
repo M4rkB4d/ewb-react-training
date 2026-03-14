@@ -192,7 +192,9 @@ import type { ErrorInfo, ReactNode } from 'react';
 
 interface ErrorBoundaryProps {
   children: ReactNode;
-  fallback: ReactNode | ((error: Error) => ReactNode);
+  /** Pass a function to receive the error and a reset callback.
+   *  A plain ReactNode fallback gets a generic "Try Again" button appended. */
+  fallback: ReactNode | ((error: Error, reset: () => void) => ReactNode);
   onError?: (error: Error, errorInfo: ErrorInfo) => void;
 }
 
@@ -221,7 +223,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   render(): ReactNode {
     if (this.state.hasError && this.state.error != null) {
       if (typeof this.props.fallback === 'function') {
-        return this.props.fallback(this.state.error);
+        return this.props.fallback(this.state.error, this.resetError);
       }
       return (
         <>

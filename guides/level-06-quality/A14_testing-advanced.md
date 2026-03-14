@@ -158,13 +158,17 @@ export function createTransaction(overrides: Partial<Transaction> = {}): Transac
   };
 }
 
-export function createTransactions(count: number): Transaction[] {
-  return Array.from({ length: count }, (_, i) =>
-    createTransaction({
-      amount: -((i + 1) * 500_00), // Deterministic: ₱500, ₱1000, ₱1500...
+export function createTransactions(count: number, startBalance = 150_000_00): Transaction[] {
+  let runningBalance = startBalance;
+  return Array.from({ length: count }, (_, i) => {
+    const amount = -((i + 1) * 500_00); // Deterministic: ₱500, ₱1000, ₱1500...
+    runningBalance += amount;
+    return createTransaction({
+      amount,
+      balance: runningBalance,
       description: `Transaction ${i + 1}`,
-    }),
-  );
+    });
+  });
 }
 ```
 

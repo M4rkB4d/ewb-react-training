@@ -172,7 +172,7 @@ export const handlers = [
       {
         id: 'acc-1',
         name: 'Personal Savings',
-        number: '1234567890', // Note: AccountCard may expect `accountNumber`
+        number: '1234567890', // Schema field is `number`, not `accountNumber`
         type: 'savings',
         balance: 15_000_000, // ₱150,000.00 in centavos
         currency: 'PHP',

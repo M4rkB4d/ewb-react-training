@@ -313,7 +313,9 @@ const authOptionsSchema = z.object({
 });
 
 export async function getAuthenticationOptions(): Promise<z.infer<typeof authOptionsSchema>> {
-  const response = await apiClient.get('/webauthn/login/options');
+  // Use plain axios — user is not yet authenticated, so apiClient's token
+  // interceptor would send an empty Authorization header.
+  const response = await axios.get('/webauthn/login/options', { withCredentials: true });
   return authOptionsSchema.parse(response.data);
 }
 
@@ -330,7 +332,7 @@ const authResultSchema = z.object({
 export async function verifyAuthentication(credential: PublicKeyCredential): Promise<z.infer<typeof authResultSchema>> {
   const assertionResponse = credential.response as AuthenticatorAssertionResponse;
 
-  const response = await apiClient.post('/webauthn/login/verify', {
+  const response = await axios.post('/webauthn/login/verify', {
     id: credential.id,
     rawId: bufferToBase64url(credential.rawId),
     response: {

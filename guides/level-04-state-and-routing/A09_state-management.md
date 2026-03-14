@@ -263,6 +263,8 @@ Should any of these be persisted? Why or why not?
 // src/main.tsx
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
+// Learning version — in B03, this moves to src/lib/query-client.ts
+// as a shared singleton with the same defaults.
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {

@@ -196,6 +196,8 @@ back to the original page works after login.
 // src/components/layout/sidebar-nav.tsx
 import { NavLink } from 'react-router';
 
+// In production, replace emoji with icon components from your design system (A06).
+// Emoji are used here to keep the routing example self-contained.
 const navItems = [
   { to: '/', label: 'Dashboard', icon: '📊' },
   { to: '/accounts', label: 'Accounts', icon: '🏦' },
