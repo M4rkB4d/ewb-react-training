@@ -30,13 +30,13 @@ echo "1. Node.js"
 if command -v node &>/dev/null; then
   NODE_VERSION=$(node --version | sed 's/v//')
   NODE_MAJOR=$(echo "$NODE_VERSION" | cut -d. -f1)
-  if [ "$NODE_MAJOR" -ge 22 ]; then
-    pass "Node.js $NODE_VERSION (>= 22 required)"
+  if [ "$NODE_MAJOR" -ge 24 ]; then
+    pass "Node.js $NODE_VERSION (>= 24 required)"
   else
-    fail "Node.js $NODE_VERSION found — version 22+ required"
+    fail "Node.js $NODE_VERSION found — version 24+ required"
   fi
 else
-  fail "Node.js not found — install Node.js 22 LTS from https://nodejs.org"
+  fail "Node.js not found — install Node.js 24 LTS from https://nodejs.org"
 fi
 
 # ── npm ──────────────────────────────────────────────────

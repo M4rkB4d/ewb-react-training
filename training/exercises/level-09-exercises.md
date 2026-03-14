@@ -186,7 +186,7 @@ const ApplicationSchema = z.object({
 ### Requirements
 
 1. **Dockerfile**: Write a production Dockerfile for the EWB public site following the three-stage pattern from B10 (deps, build, runner). The final image must:
-   - Use `node:22-alpine` as the base
+   - Use `node:24-alpine` as the base
    - Run as a non-root user
    - Include only the standalone output (no `node_modules`)
    - Expose port 3000

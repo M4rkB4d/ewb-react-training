@@ -19,7 +19,7 @@ to know where to pick up in v2.
 | v1 Guide | v1 Topic | v2 Guide(s) | Notes |
 |----------|----------|-------------|-------|
 | Doc 01 | React Fundamentals | A01, A02 | Split into React core + TypeScript |
-| Doc 02 | Project Setup | B01 | Vite 7, Tailwind 4, Node 22 |
+| Doc 02 | Project Setup | B01 | Vite 7, Tailwind 4, Node 24 |
 | Doc 03 | Components | A04 | React 19 patterns (ref as prop) |
 | Doc 04 | Design System | A06 | EWB brand colors, Tailwind 4 @theme |
 | Doc 05 | Forms | A07 | Zod 4, React Hook Form 7 |
@@ -61,7 +61,7 @@ These topics have no v1 equivalent:
 
 | Technology | v1 | v2 | Migration Notes |
 |-----------|----|----|----------------|
-| Node.js | 20/22 | 22 LTS | Update `.nvmrc` and CI configs |
+| Node.js | 20/22 | 24 LTS | Update `.nvmrc` and CI configs |
 | React | 18 | 19 | Remove manual `useMemo`/`useCallback` (React Compiler) |
 | Vite | 5/6 | 7 | Update `vite.config.ts`, check plugin compatibility |
 | Tailwind | 3 | 4 | `@theme` replaces `theme.extend`, CSS-first config |
@@ -134,7 +134,7 @@ WCAG AA verified contrast ratios.
 If you completed v1 and want to update your knowledge to v2:
 
 - [ ] Read A03 — Thinking in Compliance (BSP context, new in v2)
-- [ ] Review B01 — Project Setup (Node 22, Vite 7, Tailwind 4 changes)
+- [ ] Review B01 — Project Setup (Node 24, Vite 7, Tailwind 4 changes)
 - [ ] Review A09 — State Management (Zustand 5 changes)
 - [ ] Read A11+B04 — Authentication (complete rewrite, in-memory tokens)
 - [ ] Read A12 — Passkeys and WebAuthn (entirely new)

@@ -10,7 +10,7 @@ Production-ready React documentation for enterprise banking applications. Built 
 
 | Technology | Version | Role |
 |-----------|---------|------|
-| Node.js | 22 LTS | Runtime |
+| Node.js | 24 LTS | Runtime |
 | React | 19.x | UI Framework |
 | TypeScript | 5.9 | Type Safety |
 | Vite | 7.x | Build Tool |

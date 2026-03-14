@@ -22,7 +22,7 @@ This is the official React onboarding program for EastWest Bank developers. Over
 
 Before Day 1, make sure you have:
 
-- [ ] Node.js 22.x installed
+- [ ] Node.js 24.x installed
 - [ ] VS Code with the following extensions: ESLint, Prettier, Tailwind CSS IntelliSense
 - [ ] Git configured with your EWB credentials
 - [ ] Access to the companion repo (ask your team lead)

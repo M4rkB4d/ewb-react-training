@@ -99,7 +99,7 @@ is a critical security vulnerability and what would happen in production.
 ```dockerfile
 # Dockerfile
 # Stage 1: Build
-FROM node:22-alpine AS builder
+FROM node:24-alpine AS builder
 WORKDIR /app
 
 COPY package.json package-lock.json ./
@@ -200,7 +200,7 @@ pr:
       - main
 
 variables:
-  nodeVersion: '22'
+  nodeVersion: '24'
   azureSubscription: 'ewb-azure-service-connection'
   # Variable group 'ewb-portal-vars' contains:
   # AZURE_STORAGE_ACCOUNT_STAGING, AZURE_STORAGE_ACCOUNT_PROD,
