@@ -425,7 +425,7 @@ product page that Google should index?
   --color-secondary: #b1006f;
   --color-accent: #dba464;
   --color-success: var(--color-ewb-lime);
-  --color-warning: #d97706;
+  --color-warning: #f59e0b;
   --color-error: #dc2626;
 
   /* Typography */
