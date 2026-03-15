@@ -128,7 +128,7 @@ export function ErrorAlert({ error, onRetry }: ErrorAlertProps) {
         </p>
       )}
       {onRetry != null && (
-        <Button variant="outline" size="sm" className="mt-2" onClick={onRetry}>
+        <Button type="button" variant="outline" size="sm" className="mt-2" onClick={onRetry}>
           Try Again
         </Button>
       )}

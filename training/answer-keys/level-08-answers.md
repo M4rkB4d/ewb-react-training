@@ -285,7 +285,7 @@ export function TransferStatusTracker({ transferId }: { transferId: string }) {
       {/* Connection indicator */}
       <div className="flex items-center gap-1 text-xs text-gray-500">
         <span className={`h-2 w-2 rounded-full ${
-          INTERVALS[transfer.status] !== false ? 'bg-green-500' : 'bg-gray-300'
+          INTERVALS[transfer.status] !== false ? 'bg-ewb-lime-500' : 'bg-gray-300'
         }`} />
         {INTERVALS[transfer.status] !== false ? 'Tracking live' : 'Final status'}
       </div>

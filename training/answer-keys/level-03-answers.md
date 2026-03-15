@@ -202,7 +202,7 @@ export function BeneficiaryForm({ onSubmit }: BeneficiaryFormProps) {
           <option value="RCBC">RCBC</option>
         </select>
         {errors.bankName != null && (
-          <p className="text-sm text-red-600" role="alert">
+          <p className="text-sm text-error" role="alert">
             {errors.bankName.message}
           </p>
         )}
@@ -240,7 +240,7 @@ export function BeneficiaryForm({ onSubmit }: BeneficiaryFormProps) {
           ))}
         </div>
         {errors.relationship != null && (
-          <p className="text-sm text-red-600" role="alert">
+          <p className="text-sm text-error" role="alert">
             {errors.relationship.message}
           </p>
         )}
@@ -466,7 +466,7 @@ export function AccountSelector({
         })}
       </div>
       {error != null && (
-        <p id={errorId} className="mt-2 text-sm text-red-600" role="alert">
+        <p id={errorId} className="mt-2 text-sm text-error" role="alert">
           {error}
         </p>
       )}

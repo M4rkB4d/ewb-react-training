@@ -15,7 +15,7 @@
 ### Slide 3: Project Setup — Vite 7
 - Vite 7: fast dev server with hot module replacement
 - `npm create vite@latest ewb-portal -- --template react-ts`
-- Node.js 24 LTS required — LTS is mandatory for banking (BSP 808)
+- Node.js 24 required — LTS-only policy for banking (BSP 808)
 - TypeScript strict mode enabled from day one
 - *Speaker notes: Walk through the scaffolding command. Explain why we use Vite over Create React App (deprecated) or manual Webpack.*
 

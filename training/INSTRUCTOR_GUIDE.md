@@ -78,7 +78,7 @@ Tests start red and go green as students complete their implementations.
 - Students think TypeScript is a separate language. Clarify: it's a superset of JavaScript that adds types.
 - Students think compliance is something added later. Emphasize: compliance shapes technical decisions from day one.
 
-**Demo tip**: The currency formatter exercise is the hook — when students see `formatPHP(150_000)` render as `₱150,000.00`, they get their first "I built something real" moment. *Note*: At this stage `formatPHP` takes pesos. In B03 (Level 5), monetary values switch to integer centavos — do not reuse this exact example in Level 5+ demos or `formatPHP(150_000)` would produce `₱1,500.00`.
+**Demo tip**: The currency formatter exercise is the hook — when students see `formatPHP(150_000)` render as `₱150,000.00`, they get their first "I built something real" moment. *Note*: At this stage `formatPHP` takes pesos. In B03 (Level 5), monetary values switch to integer centavos — do not reuse this exact example in Level 5+ demos or `formatPHP(150_000)` would produce `₱1,500.00` — correct math for centavos, but a very different amount from the ₱150,000 the Level 1 demo intended.
 
 **Watch for**: Students confused by `z.infer` vs regular TypeScript interfaces. Show both side by side.
 

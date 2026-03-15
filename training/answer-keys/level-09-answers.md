@@ -213,14 +213,14 @@ export function ProductComparisonTool({ products }: { products: Product[] }) {
               <td className="p-3 text-gray-600">Min. Deposit</td>
               {selectedProducts.map((p) => (
                 <td key={p.id} className="p-3">
-                  {p.minimumDeposit != null ? `₱${(p.minimumDeposit / 100).toLocaleString()}` : 'N/A'}
+                  {p.minimumDeposit != null ? `₱${(p.minimumDeposit / 100).toLocaleString('en-PH')}` : 'N/A'}
                 </td>
               ))}
             </tr>
             <tr className="border-b">
               <td className="p-3 text-gray-600">Monthly Fee</td>
               {selectedProducts.map((p) => (
-                <td key={p.id} className="p-3">₱{(p.monthlyFee / 100).toLocaleString()}</td>
+                <td key={p.id} className="p-3">₱{(p.monthlyFee / 100).toLocaleString('en-PH')}</td>
               ))}
             </tr>
             <tr className="border-b">

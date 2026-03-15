@@ -222,11 +222,11 @@ Show the AccountCard status dot:
 
 ```tsx
 // Bad — color only
-<span className="bg-green-500 h-2 w-2 rounded-full" />
+<span className="bg-ewb-lime-500 h-2 w-2 rounded-full" />
 
 // Good — color + aria-label
 <span
-  className="bg-green-500 h-2 w-2 rounded-full"
+  className="bg-ewb-lime-500 h-2 w-2 rounded-full"
   aria-label="Active account"
 />
 ```
