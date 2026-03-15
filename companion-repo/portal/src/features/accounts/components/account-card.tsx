@@ -55,7 +55,7 @@ export function AccountCard({
           <span
             aria-hidden="true"
             className={`inline-block h-2 w-2 rounded-full ${
-              isActive ? 'bg-green-500' : 'bg-red-500'
+              isActive ? 'bg-ewb-lime-500' : 'bg-red-500'
             }`}
           />
           <span className="sr-only">{isActive ? 'Active account' : 'Inactive account'}</span>

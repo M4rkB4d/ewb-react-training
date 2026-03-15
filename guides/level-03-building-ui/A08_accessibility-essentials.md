@@ -277,7 +277,7 @@ Use ARIA when semantic HTML is not enough:
 
 // Status indicator that needs a text alternative
 <span
-  className="inline-block h-2 w-2 rounded-full bg-green-500"
+  className="inline-block h-2 w-2 rounded-full bg-ewb-lime-500"
   aria-label="Active"
 />
 
