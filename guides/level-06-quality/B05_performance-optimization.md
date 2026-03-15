@@ -125,23 +125,23 @@ const router = createBrowserRouter([
     children: [
       {
         path: 'dashboard',
-        lazy: () => import('./pages/dashboard-page'),
+        lazy: () => import('@/pages/dashboard'),
       },
       {
         path: 'accounts',
-        lazy: () => import('./pages/accounts-page'),
+        lazy: () => import('@/pages/accounts'),
       },
       {
         path: 'accounts/:id',
-        lazy: () => import('./pages/account-detail-page'),
+        lazy: () => import('@/pages/account-detail'),
       },
       {
         path: 'transfers',
-        lazy: () => import('./pages/transfer-page'),
+        lazy: () => import('@/pages/transfers'),
       },
       {
         path: 'settings',
-        lazy: () => import('./pages/settings-page'),
+        lazy: () => import('@/pages/settings'),
       },
     ],
   },

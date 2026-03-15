@@ -16,9 +16,9 @@
 
 React escapes content rendered via `{variable}` in JSX, but `dangerouslySetInnerHTML` bypasses this protection entirely. Content passed through `dangerouslySetInnerHTML` is inserted as raw HTML without escaping — this is exactly what makes it dangerous and why it requires DOMPurify sanitization.
 
-### Question 3 — C
+### Question 3 — B
 
-BSP 982 requires that access tokens are not persisted in browser storage mechanisms. In-memory JavaScript variables (e.g., a Zustand store variable) are cleared when the tab closes or the page is refreshed, providing the strongest protection against token theft via XSS. `localStorage` and `sessionStorage` are accessible to any JavaScript running on the page. Note: refresh tokens use a separate strategy (HttpOnly cookies set by the server).
+`script-src 'self'` without `'unsafe-inline'` blocks all inline `<script>` tags and `javascript:` URLs, which are the primary XSS attack vectors. `default-src 'self'` sets a fallback but can be overridden by more specific directives. `frame-ancestors 'none'` prevents clickjacking (not XSS). `connect-src 'self'` restricts fetch/XHR origins but doesn't prevent script execution.
 
 ### Question 4
 

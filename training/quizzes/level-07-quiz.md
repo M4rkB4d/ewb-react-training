@@ -31,12 +31,12 @@ React automatically escapes all content rendered in JSX, including content passe
 
 ### Question 3 (Multiple Choice)
 
-Under BSP Circular 982, where should access tokens be stored in a banking SPA?
+Which Content Security Policy directive prevents inline `<script>` tags from executing, mitigating the most common XSS attack vector?
 
-A. `localStorage` with encryption
-B. `sessionStorage` with a short TTL
-C. In-memory JavaScript variables only
-D. HTTP-only cookies set by Nginx
+A. `default-src 'self'`
+B. `script-src 'self'` (without `'unsafe-inline'`)
+C. `frame-ancestors 'none'`
+D. `connect-src 'self'`
 
 ---
 

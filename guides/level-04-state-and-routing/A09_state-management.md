@@ -293,6 +293,7 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { z } from 'zod';
 import { env } from '@/lib/env';
+import { accountKeys } from './queries';
 
 const accountSchema = z.object({
   id: z.string(),
@@ -314,7 +315,7 @@ async function fetchAccounts(): Promise<Account[]> {
 
 export function useAccounts() {
   return useQuery({
-    queryKey: ['accounts'],
+    queryKey: accountKeys.lists(),
     queryFn: fetchAccounts,
   });
 }
@@ -362,8 +363,12 @@ export function AccountList() {
 // src/features/accounts/queries.ts
 export const accountKeys = {
   all: ['accounts'] as const,
-  detail: (id: string) => ['accounts', id] as const,
-  transactions: (id: string) => ['accounts', id, 'transactions'] as const,
+  lists: () => [...accountKeys.all, 'list'] as const,
+  list: (filters: Record<string, unknown>) => [...accountKeys.lists(), filters] as const,
+  details: () => [...accountKeys.all, 'detail'] as const,
+  detail: (id: string) => [...accountKeys.details(), id] as const,
+  transactions: (id: string) => [...accountKeys.detail(id), 'transactions'] as const,
+  balance: (id: string) => [...accountKeys.detail(id), 'balance'] as const,
 };
 ```
 
@@ -434,14 +439,14 @@ export function useToggleFavorite() {
     },
 
     onMutate: async (accountId) => {
-      // Cancel any outgoing account queries
-      await queryClient.cancelQueries({ queryKey: accountKeys.all });
+      // Cancel any outgoing account list queries
+      await queryClient.cancelQueries({ queryKey: accountKeys.lists() });
 
-      // Snapshot the previous value
-      const previousAccounts = queryClient.getQueryData(accountKeys.all);
+      // Snapshot the previous value — must match the exact key the list data is stored under
+      const previousAccounts = queryClient.getQueryData(accountKeys.lists());
 
       // Optimistically toggle the favorite flag
-      queryClient.setQueryData(accountKeys.all, (old: Account[] | undefined) =>
+      queryClient.setQueryData(accountKeys.lists(), (old: Account[] | undefined) =>
         old?.map((account) =>
           account.id === accountId
             ? { ...account, isFavorite: !account.isFavorite }
@@ -455,7 +460,7 @@ export function useToggleFavorite() {
     onError: (_err, _accountId, context) => {
       // Rollback on error
       if (context?.previousAccounts != null) {
-        queryClient.setQueryData(accountKeys.all, context.previousAccounts);
+        queryClient.setQueryData(accountKeys.lists(), context.previousAccounts);
       }
     },
 

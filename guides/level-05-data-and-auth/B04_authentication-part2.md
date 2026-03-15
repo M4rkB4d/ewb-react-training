@@ -205,13 +205,20 @@ export async function logout(): Promise<void> {
 ```tsx
 // src/features/auth/hooks/use-login.ts
 import { useMutation } from '@tanstack/react-query';
-import { useNavigate } from 'react-router';
+import { useNavigate, useLocation } from 'react-router';
 import { login } from '../api/auth-api';
 import { useAuthStore } from '@/stores/auth-store';
 
 export function useLogin() {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Use getState() for actions — avoids subscribing to unrelated store changes.
+  // Actions are stable references, so this is safe outside a render subscription.
   const { setAuth, setMfaRequired, setLoading, setError } = useAuthStore.getState();
+
+  // Preserve the page the user was trying to visit before being redirected
+  const from = (location.state as { from?: string })?.from ?? '/dashboard';
 
   return useMutation({
     mutationFn: ({ username, password }: { username: string; password: string }) =>
@@ -226,7 +233,7 @@ export function useLogin() {
         setMfaRequired(data.mfaToken, data.methods);
       } else {
         setAuth(data.user, data.accessToken);
-        navigate('/dashboard');
+        navigate(from, { replace: true });
       }
     },
 
@@ -683,7 +690,7 @@ import { RoleRoute } from '@/components/auth/role-route';
 const router = createBrowserRouter([
   {
     path: '/login',
-    lazy: () => import('./pages/login-page'),
+    lazy: () => import('@/pages/login'),
   },
   {
     path: '/',
@@ -694,12 +701,12 @@ const router = createBrowserRouter([
     ),
     children: [
       {
-        path: 'dashboard',
-        lazy: () => import('./pages/dashboard-page'),
+        index: true,
+        lazy: () => import('@/pages/dashboard'),
       },
       {
         path: 'accounts',
-        lazy: () => import('./pages/accounts-page'),
+        lazy: () => import('@/pages/accounts'),
       },
       {
         path: 'admin',
@@ -711,7 +718,7 @@ const router = createBrowserRouter([
         children: [
           {
             path: 'users',
-            lazy: () => import('./pages/admin/users-page'),
+            lazy: () => import('@/pages/admin/users'),
           },
         ],
       },

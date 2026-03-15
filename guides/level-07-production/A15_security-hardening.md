@@ -646,9 +646,9 @@ users from seeing UI they should not access, and to provide clear feedback
 when access is denied.
 
 ```tsx
-// src/features/auth/components/require-role.tsx
+// src/components/auth/role-guard.tsx (companion repo uses this path)
 import { Navigate } from 'react-router';
-import { useAuth } from '../hooks/use-auth';
+import { useAuth } from '@/hooks/use-auth';
 
 interface RequireRoleProps {
   roles: readonly string[];
@@ -786,7 +786,7 @@ frontend, this means:
 - Session expiration events tracked
 
 ```tsx
-// src/lib/security-logger.ts
+// src/lib/security-logger.ts (extend error-logger.ts in companion repo)
 export function logSecurityEvent(event: {
   type: 'csp_violation' | 'auth_failure' | 'unauthorized_access' | 'session_expired';
   details: Record<string, unknown>;
@@ -952,7 +952,7 @@ further actions. Implement an activity monitor that tracks mouse, keyboard,
 and touch events.
 
 ```tsx
-// src/features/auth/hooks/use-idle-timeout.ts
+// src/hooks/use-session-timeout.ts (companion repo uses this path)
 import { useEffect, useRef } from 'react';
 
 export function useIdleTimeout(timeoutMs: number, onTimeout: () => void): void {

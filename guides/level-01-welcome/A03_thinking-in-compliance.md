@@ -233,8 +233,8 @@ authentication methods by June 2026.
 └────────────┴────────────┴────────────┴───────────────────────┘
                                               ▲
                                               │
-                                        We are here
-                                     (March 2026 — 3 months)
+                                   Deadline approaching
+                              (check your team's rollout status)
 ```
 
 **Where you learn this:** A12 (Passkeys and WebAuthn) — a dedicated guide for this

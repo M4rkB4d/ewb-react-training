@@ -93,7 +93,7 @@ export function usePolling({
   enabled = true,
 }: UsePollingOptions) {
   const [currentInterval, setCurrentInterval] = useState(interval);
-  const previousDataRef = useRef<string | undefined>(undefined);
+  const previousDataRef = useRef<number | undefined>(undefined);
 
   const query = useQuery({
     queryKey,
@@ -105,20 +105,21 @@ export function usePolling({
     refetchIntervalInBackground: !pauseWhenHidden,
   });
 
-  // Adaptive interval — slow down when data is unchanged, reset when it changes
+  // Adaptive interval — slow down when data is unchanged, reset when it changes.
+  // Use dataUpdatedAt (a timestamp) instead of JSON.stringify — avoids serialization
+  // overhead and is more reliable for deep objects.
   useEffect(() => {
     if (!adaptive || !query.isSuccess) return;
 
-    const dataHash = JSON.stringify(query.data);
-    if (previousDataRef.current === dataHash) {
+    if (previousDataRef.current === query.dataUpdatedAt) {
       // Data unchanged — slow down (max 5x base interval)
       setCurrentInterval((prev) => Math.min(prev * 1.5, interval * 5));
     } else {
       // Data changed — reset to base interval
       setCurrentInterval(interval);
     }
-    previousDataRef.current = dataHash;
-  }, [query.dataUpdatedAt, adaptive, interval, query.data, query.isSuccess]);
+    previousDataRef.current = query.dataUpdatedAt;
+  }, [query.dataUpdatedAt, adaptive, interval, query.isSuccess]);
 
   return query;
 }
