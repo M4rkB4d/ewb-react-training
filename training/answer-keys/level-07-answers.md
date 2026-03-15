@@ -205,16 +205,19 @@ export function ConsentDashboard() {
               </p>
             )}
           </div>
-          <input
-            type="checkbox"
+          <button
+            type="button"
             role="switch"
-            checked={p.required || isGranted(p.key)}
+            aria-checked={p.required || isGranted(p.key)}
             disabled={p.required || toggleConsent.isPending}
-            onChange={(e) =>
-              toggleConsent.mutate({ purpose: p.key, granted: e.target.checked })
+            onClick={() =>
+              toggleConsent.mutate({ purpose: p.key, granted: !(p.required || isGranted(p.key)) })
             }
             aria-label={`${p.label} consent toggle`}
-          />
+            className="relative h-6 w-11 rounded-full bg-gray-300 transition-colors data-[checked]:bg-ewb-purple"
+          >
+            <span className="sr-only">{p.label}</span>
+          </button>
         </div>
       ))}
     </div>

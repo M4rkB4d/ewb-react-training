@@ -26,7 +26,7 @@ export function AccountSelector({ value, onChange, label = 'Select Account' }: A
         <option value="">— Choose an account —</option>
         {accounts?.map((account: Account) => (
           <option key={account.id} value={account.id}>
-            {account.name} ({account.number}) — ₱{account.balance.toLocaleString()}
+            {account.name} ({account.number}) — ₱{(account.balance / 100).toLocaleString()}
           </option>
         ))}
       </select>

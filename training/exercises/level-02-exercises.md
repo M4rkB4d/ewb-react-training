@@ -173,7 +173,7 @@ describe('TransactionHistory', () => {
 - [ ] All 10 test cases pass with `npm run test:run`
 - [ ] Tests use `getByRole` and `getByText` queries (no `getByTestId`)
 - [ ] Tests follow the Arrange-Act-Assert pattern
-- [ ] `defaultProps` pattern is used for shared test data
+- [ ] Shared test data is defined once as a module-level constant and reused across tests
 - [ ] No implementation details tested (no CSS classes, no internal state)
 
 ---

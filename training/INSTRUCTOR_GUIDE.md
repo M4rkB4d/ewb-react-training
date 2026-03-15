@@ -78,7 +78,7 @@ Tests start red and go green as students complete their implementations.
 - Students think TypeScript is a separate language. Clarify: it's a superset of JavaScript that adds types.
 - Students think compliance is something added later. Emphasize: compliance shapes technical decisions from day one.
 
-**Demo tip**: The currency formatter exercise is the hook — when students see `formatPHP(15_000_000)` render as `₱150,000.00`, they get their first "I built something real" moment.
+**Demo tip**: The currency formatter exercise is the hook — when students see `formatPHP(150_000)` render as `₱150,000.00`, they get their first "I built something real" moment.
 
 **Watch for**: Students confused by `z.infer` vs regular TypeScript interfaces. Show both side by side.
 

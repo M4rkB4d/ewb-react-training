@@ -69,7 +69,7 @@ Static assets under `/_next/static/` are content-hashed by Next.js. Every time t
 ```tsx
 // app/products/compare/page.tsx
 import { z } from 'zod';
-import { clientEnv } from '@/lib/env';
+import { serverEnv } from '@/lib/env';
 import { ProductComparisonTool } from './comparison-tool';
 import type { Metadata } from 'next';
 
@@ -87,7 +87,7 @@ const ProductSchema = z.object({
 type Product = z.infer<typeof ProductSchema>;
 
 async function getProducts(): Promise<Product[]> {
-  const res = await fetch(`${clientEnv.NEXT_PUBLIC_API_URL}/products`, {
+  const res = await fetch(`${serverEnv.INTERNAL_API_URL}/products`, {
     next: { revalidate: 3600 },
   });
 

@@ -10,7 +10,7 @@ export function useLogin() {
   const { setAuth, setMfaRequired, setLoading, setError } = useAuthStore();
 
   // Get the page the user was trying to visit before being redirected
-  const from = (location.state as { from?: string })?.from ?? '/dashboard';
+  const from = (location.state as { from?: string })?.from ?? '/';
 
   return useMutation({
     mutationFn: ({ username, password }: { username: string; password: string }) =>
