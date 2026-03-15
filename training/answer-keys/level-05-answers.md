@@ -210,7 +210,7 @@ export function LoginForm() {
   });
 
   if (mfaState != null) {
-    return <MfaForm />;
+    return <MfaForm mfaToken={mfaState.mfaToken} methods={mfaState.methods} />;
   }
 
   const onSubmit = async (data: LoginFormData) => {
@@ -289,7 +289,12 @@ import { useState, useRef, useEffect } from 'react';
 import { useVerifyMfa } from '../hooks/use-verify-mfa';
 import { Button } from '@/components/ui/button';
 
-export function MfaForm() {
+interface MfaFormProps {
+  mfaToken: string;
+  methods: string[];
+}
+
+export function MfaForm({ mfaToken, methods }: MfaFormProps) {
   const [code, setCode] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
   const verifyMfa = useVerifyMfa();
@@ -301,7 +306,7 @@ export function MfaForm() {
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     if (code.length === 6) {
-      verifyMfa.mutate(code);
+      verifyMfa.mutate({ code, mfaToken });
     }
   };
 

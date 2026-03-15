@@ -82,8 +82,8 @@ describe('Exercise 2: Banking Domain Types', () => {
       availableBalance: 14_500_000,
       currency: 'PHP',
       status: 'active',
-      openedDate: '2024-01-15',
-      lastActivityDate: '2026-03-14',
+      openedDate: '2024-01-15T00:00:00Z',
+      lastActivityDate: '2026-03-14T00:00:00Z',
     };
 
     const result = schema.safeParse(validAccount);
@@ -103,8 +103,8 @@ describe('Exercise 2: Banking Domain Types', () => {
       availableBalance: 20_000_000, // more than balance
       currency: 'PHP',
       status: 'active',
-      openedDate: '2024-01-15',
-      lastActivityDate: '2026-03-14',
+      openedDate: '2024-01-15T00:00:00Z',
+      lastActivityDate: '2026-03-14T00:00:00Z',
     };
 
     const result = schema.safeParse(invalid);
@@ -124,8 +124,8 @@ describe('Exercise 2: Banking Domain Types', () => {
       availableBalance: 10_000_000,
       currency: 'PHP',
       status: 'active',
-      openedDate: '2024-01-15',
-      lastActivityDate: '2026-03-14',
+      openedDate: '2024-01-15T00:00:00Z',
+      lastActivityDate: '2026-03-14T00:00:00Z',
     };
 
     const result = schema.safeParse(invalid);

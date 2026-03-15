@@ -298,6 +298,7 @@ export function TransferStatusTracker({ transferId }: { transferId: string }) {
 
 ```tsx
 // src/components/ui/currency-input.tsx
+import { useState, type Ref } from 'react';
 import { z } from 'zod';
 import { useIntl } from 'react-intl';
 
@@ -305,7 +306,6 @@ const currencyInputSchema = z.object({
   amount: z.number().int().min(0).max(50_000_000_00), // centavos
   currency: z.enum(['PHP', 'USD']),
 });
-import { useState, type Ref } from 'react';
 
 interface CurrencyInputProps {
   name: string;

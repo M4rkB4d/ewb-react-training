@@ -22,15 +22,15 @@ export function ConfirmationDialog({
     const dialog = dialogRef.current;
     if (dialog == null) return;
 
-    if (isOpen) {
-      dialog.showModal(); // Native focus trap
-    } else {
+    if (isOpen && !dialog.open) {
+      dialog.showModal();
+    } else if (!isOpen && dialog.open) {
       dialog.close();
     }
   }, [isOpen]);
 
-  if (!isOpen) return null;
-
+  // Always render the dialog element so the ref is stable.
+  // The native <dialog> is hidden by default until showModal() is called.
   return (
     <dialog
       ref={dialogRef}

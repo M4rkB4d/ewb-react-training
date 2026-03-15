@@ -22,52 +22,70 @@ export function useSessionTimeout(options: SessionTimeoutOptions = {}) {
   const countdownRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const lastActivityRef = useRef(Date.now());
 
-  async function handleLogout() {
-    setShowWarning(false);
-    try {
-      await logoutApi();
-    } catch {
-      // Logout API failure should not prevent local cleanup
-    }
-    clearAuth();
-    window.location.href = '/login?reason=timeout';
-  }
+  // Store current values in refs so the effect closure always reads fresh values
+  // without needing to re-register event listeners on every render.
+  const clearAuthRef = useRef(clearAuth);
+  clearAuthRef.current = clearAuth;
 
-  function resetTimers() {
-    lastActivityRef.current = Date.now();
-    setShowWarning(false);
+  const timeoutMsRef = useRef(timeoutMs);
+  timeoutMsRef.current = timeoutMs;
 
-    if (timeoutRef.current != null) clearTimeout(timeoutRef.current);
-    if (warningRef.current != null) clearTimeout(warningRef.current);
-    if (countdownRef.current != null) clearInterval(countdownRef.current);
-
-    // Set warning timer
-    warningRef.current = setTimeout(() => {
-      setShowWarning(true);
-      setRemainingSeconds(Math.floor(warningMs / 1000));
-
-      // Start countdown
-      countdownRef.current = setInterval(() => {
-        setRemainingSeconds((prev) => {
-          if (prev <= 1) {
-            if (countdownRef.current != null) clearInterval(countdownRef.current);
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-    }, timeoutMs - warningMs);
-
-    // Set logout timer
-    timeoutRef.current = setTimeout(handleLogout, timeoutMs);
-  }
+  const warningMsRef = useRef(warningMs);
+  warningMsRef.current = warningMs;
 
   useEffect(() => {
     if (!isAuthenticated) return;
 
+    function clearAllTimers() {
+      if (timeoutRef.current != null) clearTimeout(timeoutRef.current);
+      if (warningRef.current != null) clearTimeout(warningRef.current);
+      if (countdownRef.current != null) clearInterval(countdownRef.current);
+    }
+
+    async function handleLogout() {
+      setShowWarning(false);
+      try {
+        await logoutApi();
+      } catch {
+        // Logout API failure should not prevent local cleanup
+      }
+      clearAuthRef.current();
+      window.location.href = '/login?reason=timeout';
+    }
+
+    function resetTimers() {
+      lastActivityRef.current = Date.now();
+      setShowWarning(false);
+      clearAllTimers();
+
+      const currentTimeout = timeoutMsRef.current;
+      const currentWarning = warningMsRef.current;
+
+      // Set warning timer
+      warningRef.current = setTimeout(() => {
+        setShowWarning(true);
+        setRemainingSeconds(Math.floor(currentWarning / 1000));
+
+        // Start countdown
+        countdownRef.current = setInterval(() => {
+          setRemainingSeconds((prev) => {
+            if (prev <= 1) {
+              if (countdownRef.current != null) clearInterval(countdownRef.current);
+              return 0;
+            }
+            return prev - 1;
+          });
+        }, 1000);
+      }, currentTimeout - currentWarning);
+
+      // Set logout timer
+      timeoutRef.current = setTimeout(handleLogout, currentTimeout);
+    }
+
     const events = ['mousedown', 'keydown', 'scroll', 'touchstart'];
 
     const handleActivity = () => {
+      // Throttle: only reset if last activity was >1s ago
       if (Date.now() - lastActivityRef.current > 1000) {
         resetTimers();
       }
@@ -78,16 +96,25 @@ export function useSessionTimeout(options: SessionTimeoutOptions = {}) {
 
     return () => {
       events.forEach((event) => window.removeEventListener(event, handleActivity));
-      if (timeoutRef.current != null) clearTimeout(timeoutRef.current);
-      if (warningRef.current != null) clearTimeout(warningRef.current);
-      if (countdownRef.current != null) clearInterval(countdownRef.current);
+      clearAllTimers();
     };
-  }, [isAuthenticated, resetTimers]);
+  }, [isAuthenticated]);
+
+  // Exposed for the "Extend Session" button in the warning dialog
+  function extendSession() {
+    lastActivityRef.current = Date.now();
+    setShowWarning(false);
+  }
 
   return {
     showWarning,
     remainingSeconds,
-    extendSession: resetTimers,
-    logoutNow: handleLogout,
+    extendSession,
+    logoutNow: async () => {
+      setShowWarning(false);
+      try { await logoutApi(); } catch { /* proceed with local cleanup */ }
+      clearAuth();
+      window.location.href = '/login?reason=timeout';
+    },
   };
 }
