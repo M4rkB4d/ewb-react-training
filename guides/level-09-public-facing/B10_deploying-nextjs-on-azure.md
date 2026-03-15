@@ -26,7 +26,7 @@ By the end of this guide, you will:
 |------------|-------|
 | Completed A22 — Server Components and Data Fetching | Level 9 |
 | Completed B07 — Deployment and CI/CD (Vite SPA) | Level 7 |
-| Completed A23 — Server-Side Auth and API Routes | Level 9 |
+| Completed A23 — Server-Side Auth, API Routes, and Composition | Level 9 |
 | Completed B06 — Monitoring and Observability | Level 6 |
 | Docker installed | Local setup |
 
