@@ -323,10 +323,14 @@ export default async function RatesPage() {
     <main className="mx-auto max-w-7xl px-4 py-12">
       <h1 className="text-3xl font-bold text-gray-900">Exchange Rates</h1>
       <p className="mt-2 text-sm text-gray-500">
-        Rates are indicative and updated every minute. Last update:{' '}
-        {new Date(rates[0]?.updatedAt ?? '').toLocaleString('en-PH', {
-          timeZone: 'Asia/Manila',
-        })}
+        Rates are indicative and updated every minute.
+        {rates.length > 0 && (
+          <> Last update:{' '}
+            {new Date(rates[0].updatedAt).toLocaleString('en-PH', {
+              timeZone: 'Asia/Manila',
+            })}
+          </>
+        )}
       </p>
 
       <table className="mt-8 w-full border-collapse">
@@ -479,7 +483,7 @@ export default async function ProductPage({
 
           {product.minDeposit != null && (
             <p className="mt-2 text-sm text-gray-500">
-              Minimum deposit: ₱{product.minDeposit.toLocaleString('en-PH')}
+              Minimum deposit: ₱{(product.minDeposit / 100).toLocaleString('en-PH', { minimumFractionDigits: 2 })}
             </p>
           )}
 
