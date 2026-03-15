@@ -384,9 +384,10 @@ export function ConfirmationDialog({
       ref={dialogRef}
       className="rounded-xl border border-gray-200 bg-white p-0 shadow-xl backdrop:bg-black/50"
       onClose={onCancel}
+      aria-labelledby="confirm-dialog-title"
     >
       <div className="p-6">
-        <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
+        <h2 id="confirm-dialog-title" className="text-lg font-semibold text-gray-900">{title}</h2>
         <p className="mt-2 text-sm text-gray-600">{message}</p>
         <div className="mt-6 flex justify-end gap-2">
           <button
@@ -489,7 +490,7 @@ way to communicate status:
 
 // Good — color + text + ARIA
 <span
-  className={isActive ? 'text-green-600' : 'text-red-600'}
+  className={isActive ? 'text-ewb-lime-700' : 'text-error'}
   aria-label={isActive ? 'Active' : 'Inactive'}
 >
   {isActive ? '● Active' : '● Inactive'}

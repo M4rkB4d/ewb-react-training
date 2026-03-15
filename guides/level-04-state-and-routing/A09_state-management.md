@@ -336,7 +336,7 @@ export function AccountList() {
 
   if (error != null) {
     return (
-      <div role="alert" className="text-red-600">
+      <div role="alert" className="text-error">
         Failed to load accounts. Please try again.
       </div>
     );

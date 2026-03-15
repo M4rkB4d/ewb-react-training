@@ -403,7 +403,7 @@ export function RouteErrorBoundary() {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <div className="text-center">
-          <h1 className="text-4xl font-bold text-red-600">{error.status}</h1>
+          <h1 className="text-4xl font-bold text-error">{error.status}</h1>
           <p className="mt-2 text-gray-600">{error.statusText}</p>
           <Link to="/" className="mt-4 inline-flex items-center justify-center rounded-lg bg-ewb-purple px-4 py-2 text-white hover:bg-ewb-purple-700">Go Home</Link>
         </div>
@@ -414,7 +414,7 @@ export function RouteErrorBoundary() {
   return (
     <div className="flex min-h-screen items-center justify-center">
       <div className="text-center">
-        <h1 className="text-4xl font-bold text-red-600">Something went wrong</h1>
+        <h1 className="text-4xl font-bold text-error">Something went wrong</h1>
         <p className="mt-2 text-gray-600">An unexpected error occurred.</p>
         <Link to="/" className="mt-4 inline-flex items-center justify-center rounded-lg bg-ewb-purple px-4 py-2 text-white hover:bg-ewb-purple-700">Go Home</Link>
       </div>
