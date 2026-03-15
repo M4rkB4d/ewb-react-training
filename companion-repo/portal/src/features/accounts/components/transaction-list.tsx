@@ -1,6 +1,7 @@
 // src/features/accounts/components/transaction-list.tsx
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { useRef } from 'react';
+import { formatPHP } from '@/lib/format';
 import type { Transaction } from '../types';
 
 interface TransactionRowProps {
@@ -18,7 +19,7 @@ function TransactionRow({ transaction }: TransactionRowProps) {
       </div>
       <div className="text-right">
         <p className={isDebit ? 'text-red-600' : 'text-ewb-lime-600'}>
-          {isDebit ? '-' : '+'}₱{(transaction.amount / 100).toLocaleString()}
+          {isDebit ? '-' : '+'}{formatPHP(transaction.amount)}
         </p>
         <p className="text-xs text-gray-400">{transaction.reference}</p>
       </div>

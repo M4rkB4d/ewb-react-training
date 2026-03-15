@@ -42,13 +42,13 @@ describe('AccountCard', () => {
   it('shows active status indicator', () => {
     render(<AccountCard {...defaultProps} isActive={true} />);
 
-    expect(screen.getByLabelText('Active account')).toBeInTheDocument();
+    expect(screen.getByText('Active account')).toBeInTheDocument();
   });
 
   it('shows inactive status indicator', () => {
     render(<AccountCard {...defaultProps} isActive={false} />);
 
-    expect(screen.getByLabelText('Inactive account')).toBeInTheDocument();
+    expect(screen.getByText('Inactive account')).toBeInTheDocument();
   });
 
   it('renders action buttons when active and callbacks provided', async () => {

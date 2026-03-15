@@ -36,8 +36,8 @@ export function ComplianceDashboard() {
           </tr>
         </thead>
         <tbody>
-          {bspControls.map((control, index) => (
-            <tr key={index} className="border-b">
+          {bspControls.map((control) => (
+            <tr key={`${control.circularNumber}-${control.requirement}`} className="border-b">
               <td className="p-2 font-mono">{control.circularNumber}</td>
               <td className="p-2">{control.requirement}</td>
               <td className="p-2">{control.controlDescription}</td>

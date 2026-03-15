@@ -42,7 +42,7 @@ export function TransferWizard({ accounts, onSubmit }: TransferWizardProps) {
     watch,
     formState: { errors, isSubmitting },
     trigger,
-  } = useForm({
+  } = useForm<TransferData>({
     resolver: zodResolver(transferSchema),
     mode: 'onBlur',
   });

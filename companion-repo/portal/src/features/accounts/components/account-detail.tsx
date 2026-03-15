@@ -9,8 +9,9 @@ export function AccountDetail({ accountId }: { accountId: string }) {
       {/* Connection indicator */}
       <div className="flex items-center gap-1 text-xs text-gray-500">
         <span
+          aria-hidden="true"
           className={`h-2 w-2 rounded-full ${
-            connectionState === 'connected' ? 'bg-green-500' : 'bg-gray-300'
+            connectionState === 'connected' ? 'bg-ewb-lime-500' : 'bg-gray-300'
           }`}
         />
         {connectionState === 'connected' ? 'Live' : 'Connecting...'}

@@ -1,4 +1,5 @@
 // src/features/transfers/components/transfer-success.tsx
+// Requires AppIntlProvider ancestor in the component tree (see src/app/intl-provider.tsx)
 import { useIntl } from 'react-intl';
 
 export function TransferSuccess({ amount, reference }: { amount: number; reference: string }) {

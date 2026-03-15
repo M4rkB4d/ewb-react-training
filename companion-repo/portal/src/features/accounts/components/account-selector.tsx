@@ -1,5 +1,6 @@
 // src/features/accounts/components/account-selector.tsx
 import { useAccounts } from '../hooks/use-accounts';
+import { formatPHP } from '@/lib/format';
 import type { Account } from '../types';
 
 interface AccountSelectorProps {
@@ -26,7 +27,7 @@ export function AccountSelector({ value, onChange, label = 'Select Account' }: A
         <option value="">— Choose an account —</option>
         {accounts?.map((account: Account) => (
           <option key={account.id} value={account.id}>
-            {account.name} ({account.number}) — ₱{(account.balance / 100).toLocaleString()}
+            {account.name} ({account.number}) — {formatPHP(account.balance)}
           </option>
         ))}
       </select>

@@ -27,7 +27,7 @@ export function PaymentForm() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<PaymentFormData>({
     resolver: zodResolver(paymentSchema),
     defaultValues: {
       accountId: draft.accountId,

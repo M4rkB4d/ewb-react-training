@@ -21,6 +21,6 @@ describe('formatPHP', () => {
   it('handles negative amounts', () => {
     // -50000 centavos = -₱500.00
     const result = formatPHP(-50_000);
-    expect(result).toContain('500.00');
+    expect(result).toMatch(/-.*500\.00/);
   });
 });
