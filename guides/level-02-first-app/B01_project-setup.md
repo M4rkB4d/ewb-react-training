@@ -862,6 +862,10 @@ npm run test:run
 You should see both tests pass. This is your first test — BSP Circular 808 compliance
 starts here.
 
+> **Note:** The companion repo includes its own exercise validation tests in
+> `src/test/exercises/`, so running tests there will show more files and a higher
+> count. The "both tests" above refers to the smoke test you just wrote.
+
 ### Checkpoint 8
 
 Run `npm run test:run` and verify both tests pass with zero failures.

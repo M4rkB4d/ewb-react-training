@@ -569,6 +569,26 @@ Use `FormattedRelativeTime` to show transaction dates as "2 hours ago",
 "yesterday", "3 days ago" in the transaction list. Verify the output
 in Filipino and Chinese.
 
+> **Hint:** `FormattedRelativeTime` works like the other `Formatted*`
+> components from `react-intl`. It takes a numeric `value` (offset from
+> now) and a `unit`:
+>
+> ```tsx
+> import { FormattedRelativeTime } from 'react-intl';
+>
+> // Calculate seconds between transaction time and now
+> const seconds = Math.round((txDate.getTime() - Date.now()) / 1000);
+>
+> <FormattedRelativeTime
+>   value={seconds}
+>   numeric="auto"        // "yesterday" instead of "1 day ago"
+>   updateIntervalInSeconds={60}  // Auto-refresh every minute
+> />
+> ```
+>
+> The `numeric="auto"` option produces natural phrasing ("yesterday",
+> "last week") instead of always using numbers.
+
 ### Exercise 3 — Number Input Locale
 Build a currency input that accepts locale-specific number formatting.
 In `en-US`, the user types `1,234.56`. In some locales, they might type

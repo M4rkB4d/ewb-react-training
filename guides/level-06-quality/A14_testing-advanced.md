@@ -452,6 +452,24 @@ wizard — tab through all inputs, use arrow keys for select, submit with Enter.
 Set up Playwright visual regression tests for the login page and dashboard.
 Compare screenshots across runs to catch unintended UI changes.
 
+> **Hint:** Playwright has built-in screenshot comparison. Use
+> `toHaveScreenshot()` — it saves a baseline on the first run, then
+> compares against it on subsequent runs:
+>
+> ```ts
+> import { test, expect } from '@playwright/test';
+>
+> test('login page visual', async ({ page }) => {
+>   await page.goto('/login');
+>   await expect(page).toHaveScreenshot('login.png', {
+>     maxDiffPixelRatio: 0.01, // Allow 1% pixel difference
+>   });
+> });
+> ```
+>
+> Run `npx playwright test --update-snapshots` to regenerate baselines
+> after intentional UI changes.
+
 ---
 
 ## What Comes Next

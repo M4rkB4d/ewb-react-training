@@ -913,6 +913,19 @@ backoff: 1s, 2s, 4s, max 3 retries.
 Build a `useSearchAccounts` hook that cancels the previous request when a new
 search term is typed, using `AbortController` and TanStack Query's `signal`.
 
+> **Hint:** TanStack Query passes a `signal` to your `queryFn` automatically.
+> Forward it to Axios:
+>
+> ```tsx
+> queryFn: ({ signal }) => apiClient.get('/accounts/search', {
+>   params: { q: term },
+>   signal, // Axios cancels the request if the query is invalidated
+> }),
+> ```
+>
+> When the search term changes, TanStack Query aborts the in-flight request
+> and starts a new one. No manual `AbortController` management needed.
+
 ### Exercise 3 — Offline Detection
 Build a `useNetworkStatus` hook and an `OfflineBanner` component. When the user
 is offline, show a banner and pause all queries. Resume when back online.

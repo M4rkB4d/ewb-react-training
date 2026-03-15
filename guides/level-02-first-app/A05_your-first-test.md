@@ -135,6 +135,12 @@ describe('AccountCard', () => {
 
 ### Run it
 
+> **Note:** The expected output below assumes you are writing these tests yourself
+> in a fresh project. The companion repo uses a different test architecture
+> (exercise validation tests in `src/test/exercises/`), so running `npm run test:run`
+> there will show different file names and counts. Both approaches test the same
+> concepts — the companion repo tests just verify your exercise solutions automatically.
+
 ```bash
 npm run test:run
 ```

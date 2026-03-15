@@ -406,6 +406,26 @@ Build an infinite-scroll transaction list that combines TanStack Query
 pagination with TanStack Virtual. Load the next page when the user scrolls
 near the bottom.
 
+> **Hint:** Use `useInfiniteQuery` from TanStack Query instead of `useQuery`.
+> Key differences from regular queries:
+>
+> ```tsx
+> const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+>   useInfiniteQuery({
+>     queryKey: ['transactions', 'infinite'],
+>     queryFn: ({ pageParam }) =>
+>       transactionsApi.list({ cursor: pageParam, limit: 20 }),
+>     initialPageParam: undefined as string | undefined,
+>     getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
+>   });
+>
+> // Flatten pages into a single array for TanStack Virtual
+> const allRows = data?.pages.flatMap((p) => p.items) ?? [];
+> ```
+>
+> Trigger `fetchNextPage()` when the virtualizer's last visible item
+> approaches the end of the list.
+
 ### Exercise 3 — Performance Budget
 Set up a performance budget in the Vite config that fails the build if any
 chunk exceeds 200KB. Test it by temporarily importing a large library.

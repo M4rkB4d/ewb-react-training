@@ -826,6 +826,28 @@ Build a custom `CurrencyInput` component that:
 - Shows validation errors from the Zod schema
 
 This requires `Controller` from React Hook Form for custom input components.
+Unlike `register` (which works with native `<input>` elements), `Controller`
+wraps custom components that manage their own value:
+
+```tsx
+import { Controller, useForm } from 'react-hook-form';
+
+<Controller
+  name="amount"
+  control={control}
+  render={({ field, fieldState }) => (
+    <CurrencyInput
+      value={field.value}
+      onChange={field.onChange}
+      onBlur={field.onBlur}
+      error={fieldState.error?.message}
+    />
+  )}
+/>
+```
+
+See the [React Hook Form Controller docs](https://react-hook-form.com/docs/usecontroller)
+for the full API.
 
 ---
 
