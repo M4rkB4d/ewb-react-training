@@ -8,13 +8,15 @@
 
 ## Quiz Answers
 
+> **Note:** Questions 7–9 and 11–12 cover B10 deployment content. If B10 was assigned as optional reading, facilitators may score these separately or treat them as bonus questions.
+
 ### Question 1 — D
 
 ISR with a 60-second revalidation provides the best balance. The rates page needs SEO (Google must index it), so CSR is out. SSG would serve stale rates until the next build. SSR on every request works but wastes server resources when the data only changes every few minutes. ISR serves cached pages at CDN speed and regenerates in the background after 60 seconds — fresh enough for indicative exchange rates.
 
 ### Question 2 — False
 
-The internal portal serves authenticated users only. There is no SEO requirement. Converting to Next.js SSR would add operational complexity (server runtime, Docker patching, higher Azure costs at ~3,900 PHP/month vs ~250 PHP/month) without providing any business benefit. The Vite SPA is the correct architecture for the internal portal.
+The internal portal serves authenticated users only. There is no SEO requirement. Converting to Next.js SSR would add operational complexity (server runtime, Docker patching, significantly higher Azure costs) without providing any business benefit. The Vite SPA is the correct architecture for the internal portal.
 
 ### Question 3
 

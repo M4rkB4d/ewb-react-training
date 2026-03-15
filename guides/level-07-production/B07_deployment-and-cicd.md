@@ -203,7 +203,7 @@ pr:
       - main
 
 variables:
-  nodeVersion: '24'
+  nodeVersion: '24.x'
   azureSubscription: 'ewb-azure-service-connection'
   # Variable group 'ewb-portal-vars' contains:
   # AZURE_STORAGE_ACCOUNT_STAGING, AZURE_STORAGE_ACCOUNT_PROD,
@@ -219,7 +219,7 @@ stages:
         pool:
           vmImage: 'ubuntu-latest'
         steps:
-          - task: NodeTool@0
+          - task: NodeTool@1
             inputs:
               versionSpec: $(nodeVersion)
             displayName: 'Install Node.js'
@@ -237,7 +237,7 @@ stages:
         pool:
           vmImage: 'ubuntu-latest'
         steps:
-          - task: NodeTool@0
+          - task: NodeTool@1
             inputs:
               versionSpec: $(nodeVersion)
             displayName: 'Install Node.js'
@@ -256,7 +256,7 @@ stages:
         pool:
           vmImage: 'ubuntu-latest'
         steps:
-          - task: NodeTool@0
+          - task: NodeTool@1
             inputs:
               versionSpec: $(nodeVersion)
             displayName: 'Install Node.js'
@@ -282,7 +282,7 @@ stages:
         pool:
           vmImage: 'ubuntu-latest'
         steps:
-          - task: NodeTool@0
+          - task: NodeTool@1
             inputs:
               versionSpec: $(nodeVersion)
             displayName: 'Install Node.js'

@@ -23,8 +23,8 @@ By the end of this guide, you will:
 | Requirement | Where |
 |------------|-------|
 | Completed A21 — Next.js Project Setup | Level 9 |
-| Completed B03 — Data Fetching with TanStack Query | Level 5 |
-| Completed A13 — Error Handling Patterns | Level 6 |
+| Completed B03 — API Integration | Level 5 |
+| Completed A13 — Error Handling | Level 6 |
 
 ---
 

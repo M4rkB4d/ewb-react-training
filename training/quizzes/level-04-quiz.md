@@ -94,7 +94,7 @@ In the route configuration below, what happens when a user with role `customer` 
 ```
 
 A. The admin page loads but shows empty content
-B. The user is redirected to the home page (`/`)
+B. The user is redirected to `/unauthorized`
 C. An error boundary catches the unauthorized access
 D. The request is blocked by CORS
 

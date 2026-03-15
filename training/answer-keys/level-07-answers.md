@@ -54,7 +54,7 @@ Automated compliance tests (e.g., verifying that `auth-store.ts` does not contai
 
 ### Question 12 — C
 
-The DPA data minimization principle requires displaying the minimum PII necessary. For account numbers, only the last 4 digits are shown by default (`••••••7890`). The user must explicitly click "Show" to reveal the full number. This matches the masking policy in A17.
+The DPA data minimization principle requires displaying the minimum PII necessary. For account numbers, only the last 4 digits are shown by default (`••••7890`). The user must explicitly click "Show" to reveal the full number. This matches the masking policy in A17.
 
 ---
 
@@ -66,7 +66,7 @@ The DPA data minimization principle requires displaying the minimum PII necessar
 // vite-plugin-security-headers.ts
 import type { Plugin } from 'vite';
 
-const CSP_DIRECTIVES = [
+export const CSP_DIRECTIVES = [
   "default-src 'self'",
   "script-src 'self'",
   "style-src 'self'",
@@ -234,9 +234,9 @@ export function ConsentDashboard() {
       pool:
         vmImage: 'ubuntu-latest'
       steps:
-        - task: NodeTool@0
+        - task: NodeTool@1
           inputs:
-            versionSpec: '24'
+            versionSpec: '24.x'
         - script: npm ci
           displayName: 'Install dependencies'
         - script: |

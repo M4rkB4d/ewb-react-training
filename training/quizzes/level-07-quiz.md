@@ -59,7 +59,7 @@ D. To validate API response schemas at runtime
 
 ### Question 6 (Multiple Choice)
 
-In the Azure Pipelines CI/CD configuration for EWB, which stage must complete before `DeployStaging` runs?
+In the Azure Pipelines CI/CD configuration for EWB, which stage does `DeployStaging` directly depend on (via `dependsOn`)?
 
 A. `QualityGates`
 B. `Build`

@@ -137,9 +137,9 @@ Extend the Azure Pipelines YAML from B07 to include:
       pool:
         vmImage: 'ubuntu-latest'
       steps:
-        - task: NodeTool@0
+        - task: NodeTool@1
           inputs:
-            versionSpec: '24'
+            versionSpec: '24.x'
         - script: npm ci
           displayName: 'Install dependencies'
         # TODO: Run npm audit and parse results

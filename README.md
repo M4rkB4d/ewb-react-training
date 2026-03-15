@@ -200,7 +200,7 @@ Two applications that implement every pattern from the guides:
 | App | Stack | Purpose | Directory |
 |-----|-------|---------|-----------|
 | **Banking Portal** | Vite + React 19 | Internal post-login application | `companion-repo/portal/` |
-| **Public Site** | Next.js 15 | Public-facing marketing site | `companion-repo/public-site/` |
+| **Public Site** | Next.js 16 | Public-facing marketing site | `companion-repo/public-site/` |
 
 ### Running Tests
 

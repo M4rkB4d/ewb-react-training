@@ -177,6 +177,7 @@ describe('Typed Event Bus', () => {
 // src/features/transfers/components/transfer-status-tracker.tsx
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useRef } from 'react';
+import { apiClient } from '@/lib/api-client';
 import { emitAuditEvent } from '@/compliance/audit-service';
 
 type TransferStatus = 'pending' | 'processing' | 'completed' | 'failed';
@@ -297,7 +298,13 @@ export function TransferStatusTracker({ transferId }: { transferId: string }) {
 
 ```tsx
 // src/components/ui/currency-input.tsx
+import { z } from 'zod';
 import { useIntl } from 'react-intl';
+
+const currencyInputSchema = z.object({
+  amount: z.number().int().min(0).max(50_000_000_00), // centavos
+  currency: z.enum(['PHP', 'USD']),
+});
 import { useState, type Ref } from 'react';
 
 interface CurrencyInputProps {

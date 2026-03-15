@@ -176,6 +176,114 @@ export async function login(username: string, password: string): Promise<LoginRe
   return loginResponseSchema.parse(response.data);
 }
 
+// src/features/auth/components/login-form.tsx
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { login } from '../api/auth-api';
+import { useAuthStore } from '@/stores/auth-store';
+import { MfaForm } from './mfa-form';
+import { Button } from '@/components/ui/button';
+
+const loginSchema = z.object({
+  username: z.string().min(1, 'Username is required'),
+  password: z.string().min(8, 'Password must be at least 8 characters'),
+});
+
+type LoginFormData = z.infer<typeof loginSchema>;
+
+export function LoginForm() {
+  const setAuth = useAuthStore((s) => s.setAuth);
+  const [mfaState, setMfaState] = useState<{
+    mfaToken: string;
+    methods: string[];
+  } | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+  });
+
+  if (mfaState != null) {
+    return <MfaForm />;
+  }
+
+  const onSubmit = async (data: LoginFormData) => {
+    setError(null);
+    try {
+      const result = await login(data.username, data.password);
+      if (result.mfaRequired) {
+        setMfaState({ mfaToken: result.mfaToken, methods: result.methods });
+      } else {
+        setAuth(result.user, result.accessToken);
+      }
+    } catch {
+      setError('Invalid username or password. Please try again.');
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <h2 className="text-xl font-bold">Sign In</h2>
+
+      {error != null && (
+        <div role="alert" className="rounded bg-red-50 p-3 text-sm text-red-700">
+          {error}
+        </div>
+      )}
+
+      <div>
+        <label htmlFor="username" className="block text-sm font-medium">
+          Username
+        </label>
+        <input
+          id="username"
+          type="text"
+          autoComplete="username"
+          {...register('username')}
+          className="mt-1 block w-full rounded border p-2"
+          aria-invalid={errors.username != null}
+          aria-describedby={errors.username != null ? 'username-error' : undefined}
+        />
+        {errors.username != null && (
+          <p id="username-error" className="mt-1 text-sm text-red-600" role="alert">
+            {errors.username.message}
+          </p>
+        )}
+      </div>
+
+      <div>
+        <label htmlFor="password" className="block text-sm font-medium">
+          Password
+        </label>
+        <input
+          id="password"
+          type="password"
+          autoComplete="current-password"
+          {...register('password')}
+          className="mt-1 block w-full rounded border p-2"
+          aria-invalid={errors.password != null}
+          aria-describedby={errors.password != null ? 'password-error' : undefined}
+        />
+        {errors.password != null && (
+          <p id="password-error" className="mt-1 text-sm text-red-600" role="alert">
+            {errors.password.message}
+          </p>
+        )}
+      </div>
+
+      <Button type="submit" className="w-full" disabled={isSubmitting}>
+        {isSubmitting ? 'Signing in...' : 'Sign In'}
+      </Button>
+    </form>
+  );
+}
+
 // src/features/auth/components/mfa-form.tsx
 import { useState, useRef, useEffect } from 'react';
 import { useVerifyMfa } from '../hooks/use-verify-mfa';

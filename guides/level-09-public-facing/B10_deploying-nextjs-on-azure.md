@@ -249,7 +249,7 @@ pr:
       - main
 
 variables:
-  nodeVersion: '24'
+  nodeVersion: '24.x'
   azureSubscription: 'ewb-azure-service-connection'
   imageName: 'ewb-public-site'
   # Variable group 'ewb-nextjs-vars' contains:
@@ -264,7 +264,7 @@ stages:
         pool:
           vmImage: 'ubuntu-latest'
         steps:
-          - task: NodeTool@0
+          - task: NodeTool@1
             inputs:
               versionSpec: $(nodeVersion)
             displayName: 'Install Node.js'
@@ -287,7 +287,7 @@ stages:
         pool:
           vmImage: 'ubuntu-latest'
         steps:
-          - task: NodeTool@0
+          - task: NodeTool@1
             inputs:
               versionSpec: $(nodeVersion)
             displayName: 'Install Node.js'

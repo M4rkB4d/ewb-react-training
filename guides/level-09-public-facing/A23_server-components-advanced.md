@@ -2,7 +2,7 @@
 
 > **EastWest Bank — Digital Platforms & Innovations**
 >
-> Part A (Core) · Level 9 — Public-Facing
+> Part C (Next.js) · Level 9 — Public-Facing Applications
 
 ---
 
@@ -350,7 +350,7 @@ export async function POST(request: Request) {
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Invalid request', details: error.errors },
+        { error: 'Invalid request', details: error.issues },
         { status: 400 },
       );
     }

@@ -285,8 +285,11 @@ describe('ProtectedRoute', () => {
   });
 
   it('preserves the original URL for post-login redirect', () => {
-    // Helper to display the current location state for assertions
-    function LocationDisplay() {
+    // Helper to capture and display the location state for assertions
+    let capturedState: unknown = null;
+    function LoginCapture() {
+      const location = useLocation();
+      capturedState = location.state;
       return <div>Login Page</div>;
     }
 
@@ -295,7 +298,7 @@ describe('ProtectedRoute', () => {
         <Routes>
           <Route
             path="/login"
-            element={<LocationDisplay />}
+            element={<LoginCapture />}
           />
           <Route element={<ProtectedRoute />}>
             <Route path="/accounts/:id/transactions" element={<div>Transactions</div>} />
@@ -303,8 +306,9 @@ describe('ProtectedRoute', () => {
         </Routes>
       </MemoryRouter>,
     );
-    // The login page should receive the original path in location state
     expect(screen.getByText('Login Page')).toBeInTheDocument();
+    // Verify the original path was passed via location state
+    expect(capturedState).toEqual({ from: '/accounts/ACC-001/transactions' });
   });
 });
 ```

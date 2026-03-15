@@ -22,7 +22,7 @@ Error boundaries catch errors during rendering, lifecycle methods, and construct
 
 ### Question 4 — Answer: False
 
-React Compiler is a **separate build-time tool** (not bundled with React 19) that automatically memoizes functional components, values, and callbacks at build time. When installed, developers should not add manual `useMemo` or `useCallback` for new code — the compiler handles this. Existing manual memoization can remain (the compiler skips already-optimized code). The claim that "the compiler only handles class components" is incorrect — it specifically targets **functional components and hooks**.
+React Compiler is a **separate build-time tool** (not bundled with React 19) that automatically memoizes functional components, values, and callbacks at build time. The claim that "the compiler only handles class components" is incorrect — it specifically targets **functional components and hooks**. The claim that "developers should still manually add `useMemo` and `useCallback`" is also incorrect — for new code, do not add manual memoization; the compiler handles this automatically. Existing manual memoization can remain (the compiler skips already-optimized code). Both premises in the question are false.
 
 ### Question 5 — Answer: B
 
@@ -138,6 +138,7 @@ export function ErrorAlert({ error, onRetry }: ErrorAlertProps) {
 
 // src/lib/error-logger.ts
 import { AppError } from './errors';
+import { env } from '@/lib/env';
 
 export function logError(
   error: unknown,
@@ -234,13 +235,13 @@ export function TransactionList({ transactions }: TransactionListProps) {
                   }
                 >
                   {txn.type === 'credit' ? '+' : ''}
-                  {txn.amount.toLocaleString('en-PH', {
+                  {(txn.amount / 100).toLocaleString('en-PH', {
                     style: 'currency',
                     currency: 'PHP',
                   })}
                 </p>
                 <p className="text-xs text-gray-500">
-                  Bal: {txn.balance.toLocaleString('en-PH', { style: 'currency', currency: 'PHP' })}
+                  Bal: {(txn.balance / 100).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' })}
                 </p>
               </div>
             </div>
@@ -252,6 +253,7 @@ export function TransactionList({ transactions }: TransactionListProps) {
 }
 
 // src/lib/web-vitals.ts
+import { env } from '@/lib/env';
 import { onCLS, onINP, onLCP } from 'web-vitals';
 
 export function initWebVitals(): void {
@@ -311,8 +313,8 @@ export function createAccount(overrides: Partial<Account> = {}): Account {
   accountCounter += 1;
   return {
     id: `acc-${accountCounter}`,
-    name: 'Personal Savings',
-    number: `${1000000000 + accountCounter}`,
+    accountName: 'Personal Savings',
+    accountNumber: `${1000000000 + accountCounter}`,
     type: 'savings',
     balance: 15_000_000, // centavos (₱150,000.00)
     currency: 'PHP',

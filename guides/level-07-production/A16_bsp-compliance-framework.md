@@ -792,9 +792,9 @@ Add an evidence generation step to your CI workflow:
       pool:
         vmImage: 'ubuntu-latest'
       steps:
-        - task: NodeTool@0
+        - task: NodeTool@1
           inputs:
-            versionSpec: '22'
+            versionSpec: '24.x'
           displayName: 'Install Node.js'
         - script: npm ci
           displayName: 'Install dependencies'
