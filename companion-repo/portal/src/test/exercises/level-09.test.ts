@@ -11,7 +11,7 @@ import { resolve } from 'path';
 // ─── Exercise 1: Product Comparison Page ─────────────────────────────────────
 
 describe('Exercise 1: Product Comparison', () => {
-  const publicSiteRoot = resolve(__dirname, '../../../../..', 'public-site');
+  const publicSiteRoot = resolve(__dirname, '../../../..', 'public-site');
 
   it('public-site directory exists', () => {
     expect(existsSync(publicSiteRoot)).toBe(true);
@@ -36,7 +36,7 @@ describe('Exercise 1: Product Comparison', () => {
 // ─── Exercise 2: Rates Page with Streaming ───────────────────────────────────
 
 describe('Exercise 2: Rates Page', () => {
-  const publicSiteRoot = resolve(__dirname, '../../../../..', 'public-site');
+  const publicSiteRoot = resolve(__dirname, '../../../..', 'public-site');
 
   it('rates page exists', () => {
     const ratesPage = resolve(publicSiteRoot, 'app/rates/page.tsx');
@@ -62,7 +62,7 @@ describe('Exercise 2: Rates Page', () => {
 // ─── Exercise 3: Middleware & Security ────────────────────────────────────────
 
 describe('Exercise 3: Middleware', () => {
-  const publicSiteRoot = resolve(__dirname, '../../../../..', 'public-site');
+  const publicSiteRoot = resolve(__dirname, '../../../..', 'public-site');
 
   it('middleware.ts exists', () => {
     const middleware = resolve(publicSiteRoot, 'middleware.ts');
@@ -84,7 +84,7 @@ describe('Exercise 3: Middleware', () => {
 // ─── Exercise 4: Deployment Configuration ────────────────────────────────────
 
 describe('Exercise 4: Deployment', () => {
-  const publicSiteRoot = resolve(__dirname, '../../../../..', 'public-site');
+  const publicSiteRoot = resolve(__dirname, '../../../..', 'public-site');
 
   it('Dockerfile exists', () => {
     expect(existsSync(resolve(publicSiteRoot, 'Dockerfile'))).toBe(true);

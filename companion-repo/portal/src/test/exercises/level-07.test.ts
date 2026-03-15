@@ -18,7 +18,7 @@ describe('Exercise 1: PII Masking', () => {
   it('masks account number showing last 4 digits', async () => {
     const mod = await import('@/lib/masking');
     const masked = mod.maskAccountNumber('1234567890');
-    expect(masked).toMatch(/\*+7890/);
+    expect(masked).toMatch(/[•*]+7890/);
     expect(masked).not.toContain('123456');
   });
 
@@ -91,9 +91,9 @@ describe('Exercise 3: Permissions', () => {
     expect(mod.hasPermission('admin', 'users:manage')).toBe(true);
   });
 
-  it('viewer has read-only access', async () => {
+  it('customer has read-only access', async () => {
     const mod = await import('@/lib/permissions');
-    expect(mod.hasPermission('viewer', 'accounts:read')).toBe(true);
-    expect(mod.hasPermission('viewer', 'accounts:write')).toBe(false);
+    expect(mod.hasPermission('customer', 'accounts:read')).toBe(true);
+    expect(mod.hasPermission('customer', 'accounts:write')).toBe(false);
   });
 });

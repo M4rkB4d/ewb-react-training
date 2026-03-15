@@ -74,3 +74,20 @@ export class SecurityError extends AppError {
     this.name = 'SecurityError';
   }
 }
+
+export class AuthenticationError extends AppError {
+  constructor(message = 'Authentication required', context?: Record<string, unknown>) {
+    super({
+      message,
+      code: 'AUTHENTICATION_ERROR',
+      severity: 'high',
+      userMessage: 'Your session has expired. Please sign in again.',
+      context,
+    });
+    this.name = 'AuthenticationError';
+  }
+}
+
+export function isAppError(error: unknown): error is AppError {
+  return error instanceof AppError;
+}

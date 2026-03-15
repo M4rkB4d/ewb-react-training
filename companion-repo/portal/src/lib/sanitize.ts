@@ -19,3 +19,17 @@ export const amountSchema = z
   .positive('Amount must be positive')
   .max(1_000_000, 'Amount exceeds maximum limit (₱1,000,000)')
   .transform((pesos) => Math.round(pesos * 100)); // Convert pesos → centavos (integer)
+
+/**
+ * Strip dangerous HTML: script tags, event handlers, and other XSS vectors.
+ * For display-only sanitization — not a substitute for server-side sanitization.
+ */
+export function sanitizeHtml(input: string): string {
+  return input
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+    .replace(/\s*on\w+\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]*)/gi, '')
+    .replace(/<iframe\b[^>]*>.*?<\/iframe>/gi, '')
+    .replace(/javascript\s*:/gi, '');
+}
+
+export { sanitizeHtml as sanitize };

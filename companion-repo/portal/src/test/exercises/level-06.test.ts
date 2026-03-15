@@ -15,27 +15,34 @@ describe('Exercise 1: Error Hierarchy', () => {
     expect(mod.AppError).toBeDefined();
   });
 
-  it('AppError has code and statusCode', async () => {
+  it('AppError has code and severity', async () => {
     const mod = await import('@/lib/errors');
-    const err = new mod.AppError('test', 'TEST_ERROR', 500);
+    const err = new mod.AppError({
+      message: 'test',
+      code: 'TEST_ERROR',
+      severity: 'high',
+      userMessage: 'Something went wrong',
+    });
     expect(err.message).toBe('test');
     expect(err.code).toBe('TEST_ERROR');
-    expect(err.statusCode).toBe(500);
+    expect(err.severity).toBe('high');
     expect(err instanceof Error).toBe(true);
   });
 
   it('exports NetworkError', async () => {
     const mod = await import('@/lib/errors');
     expect(mod.NetworkError).toBeDefined();
-    const err = new mod.NetworkError('Connection failed');
+    const err = new mod.NetworkError();
     expect(err instanceof mod.AppError).toBe(true);
+    expect(err.code).toBe('NETWORK_ERROR');
   });
 
   it('exports AuthenticationError', async () => {
     const mod = await import('@/lib/errors');
     expect(mod.AuthenticationError).toBeDefined();
     const err = new mod.AuthenticationError('Session expired');
-    expect(err.statusCode).toBe(401);
+    expect(err.severity).toBe('high');
+    expect(err.code).toBe('AUTHENTICATION_ERROR');
   });
 
   it('exports ValidationError', async () => {
@@ -46,7 +53,12 @@ describe('Exercise 1: Error Hierarchy', () => {
   it('exports isAppError type guard', async () => {
     const mod = await import('@/lib/errors');
     expect(mod.isAppError).toBeDefined();
-    expect(mod.isAppError(new mod.AppError('test', 'TEST', 500))).toBe(true);
+    expect(mod.isAppError(new mod.AppError({
+      message: 'test',
+      code: 'TEST',
+      severity: 'low',
+      userMessage: 'test',
+    }))).toBe(true);
     expect(mod.isAppError(new Error('test'))).toBe(false);
   });
 });

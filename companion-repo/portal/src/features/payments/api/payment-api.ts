@@ -27,7 +27,7 @@ const billerSchema = z.object({
   fields: z.array(billerFieldSchema),
 });
 
-const paymentReceiptSchema = z.object({
+export const paymentSchema = z.object({
   id: z.string(),
   reference: z.string(),
   billerId: z.string(),
@@ -58,16 +58,16 @@ export const paymentApi = {
 
   submit: async (request: PaymentRequest) => {
     const response = await apiClient.post('/payments', request);
-    return paymentReceiptSchema.parse(response.data);
+    return paymentSchema.parse(response.data);
   },
 
   getHistory: async (accountId: string) => {
     const response = await apiClient.get(`/payments/history/${accountId}`);
-    return z.array(paymentReceiptSchema).parse(response.data);
+    return z.array(paymentSchema).parse(response.data);
   },
 
   getReceipt: async (paymentId: string) => {
     const response = await apiClient.get(`/payments/${paymentId}`);
-    return paymentReceiptSchema.parse(response.data);
+    return paymentSchema.parse(response.data);
   },
 };

@@ -60,7 +60,7 @@ describe('Exercise 2: Auth Store', () => {
   it('has login and logout actions', async () => {
     const mod = await import('@/stores/auth-store');
     const state = mod.useAuthStore.getState();
-    expect(typeof state.login === 'function' || typeof state.setToken === 'function').toBe(true);
+    expect(typeof state.login === 'function' || typeof state.setToken === 'function' || typeof state.setAuth === 'function').toBe(true);
     expect(typeof state.logout === 'function' || typeof state.clearAuth === 'function').toBe(true);
   });
 });

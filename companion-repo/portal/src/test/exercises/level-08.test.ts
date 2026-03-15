@@ -108,11 +108,15 @@ describe('Exercise 4: Payment API', () => {
 
     const valid = {
       id: 'pay-001',
+      reference: 'REF-20260315-001',
       billerId: 'biller-001',
+      billerName: 'Meralco',
+      accountId: 'acc-001',
       amount: 250_000, // ₱2,500.00 in centavos
       fee: 1_500,       // ₱15.00 in centavos
       total: 251_500,
       status: 'completed',
+      paidAt: '2026-03-15T10:30:00Z',
     };
 
     const result = schema.safeParse(valid);
