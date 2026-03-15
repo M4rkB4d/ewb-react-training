@@ -224,17 +224,17 @@ export function CardContent({ className, ...props }: HTMLAttributes<HTMLDivEleme
 import { cn } from '@/lib/utils';
 import type { HTMLAttributes } from 'react';
 
-type AlertVariant = 'default' | 'success' | 'warning' | 'destructive';
+type AlertVariant = 'info' | 'success' | 'warning' | 'error';
 
 interface AlertProps extends HTMLAttributes<HTMLDivElement> {
   variant?: AlertVariant;
 }
 
 const alertStyles: Record<AlertVariant, string> = {
-  default: 'bg-ewb-purple-50 border-ewb-purple text-ewb-purple-900',
-  success: 'bg-green-50 border-green-600 text-green-900',
+  info: 'border-ewb-navy-200 bg-ewb-navy-50 text-ewb-navy-700',
+  success: 'border-ewb-lime-200 bg-ewb-lime-50 text-ewb-lime-700',
   warning: 'bg-amber-50 border-amber-600 text-amber-900',
-  destructive: 'bg-red-50 border-red-600 text-red-900',
+  error: 'bg-red-50 border-red-600 text-red-900',
 };
 
 export function Alert({ variant = 'default', className, ...props }: AlertProps) {

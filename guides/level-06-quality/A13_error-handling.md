@@ -391,7 +391,7 @@ export function ErrorAlert({ error, onRetry }: ErrorAlertProps) {
   const requestId = error instanceof AppError ? error.context?.requestId : undefined;
 
   return (
-    <Alert variant="destructive" role="alert">
+    <Alert variant="error" role="alert">
       <p>{message}</p>
       {requestId != null && (
         <p className="mt-1 text-xs opacity-75">Reference: {String(requestId)}</p>

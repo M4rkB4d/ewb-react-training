@@ -209,7 +209,7 @@ user consent.
 | **1122-9.3** Third-Party Access Auditing | Institutions shall maintain audit trails of all data access by third parties, including the data accessed, the purpose, and the timestamp. | Frontend displays third-party access history to the user (transparency). Each API call to third parties includes correlation IDs for audit. | Third-party access history UI, backend audit logs showing third-party data access, consent dashboard showing active connections. |
 | **1122-9.4** API Scope Limitations | Third-party access shall be limited to the minimum data necessary for the stated purpose. API scopes shall be granular and explicitly mapped to consented purposes. | Frontend consent UI shows exact scopes being granted. API client sends only consented scopes in authorization headers. Scope mismatch triggers error boundary. | Scope configuration documentation, consent UI screenshots showing granular scopes, test verifying scope enforcement. |
 
-### BSP Circular 1213 — Advanced Framework for Authentication and Session Assurance (AFASA)
+### BSP Circular 1213 — Anti-Financial Account Scam Act (AFASA)
 
 BSP 1213 is the newest and most prescriptive circular. It mandates
 phishing-resistant authentication methods, with a compliance deadline of

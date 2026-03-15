@@ -206,8 +206,8 @@ access, consent management, and data sharing controls.
 
 This circular deserves special attention because it has an imminent deadline.
 
-**What it requires:** The Authentication Framework for Advanced Security Approaches
-(AFASA) mandates that banks migrate away from SMS-based OTP to phishing-resistant
+**What it requires:** The Anti-Financial Account Scam Act
+(AFASA, RA 12010) mandates that banks migrate away from SMS-based OTP to phishing-resistant
 authentication methods by June 2026.
 
 **What "phishing-resistant" means:**

@@ -521,7 +521,7 @@ export function useSessionTimeout(options: SessionTimeoutOptions = {}) {
       if (warningRef.current != null) clearTimeout(warningRef.current);
       if (countdownRef.current != null) clearInterval(countdownRef.current);
     };
-  }, [isAuthenticated, resetTimers]);
+  }, [isAuthenticated]);
 
   return {
     showWarning,

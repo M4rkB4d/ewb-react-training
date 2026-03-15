@@ -241,6 +241,7 @@ interface PaymentDraft {
   step: WizardStep;
   biller: Biller | null;
   accountId: string;
+  /** User input in pesos. Convert to centavos (* 100) before sending to API. */
   amount: number;
   fields: Record<string, string>;
   notes: string;
