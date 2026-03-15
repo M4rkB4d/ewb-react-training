@@ -6,6 +6,7 @@ let appInsights: ApplicationInsights | null = null;
 
 export function initAzureInsights(): void {
   if (!import.meta.env.PROD) return;
+  if (!env.VITE_APPINSIGHTS_CONNECTION_STRING) return; // No-op without credentials
 
   appInsights = new ApplicationInsights({
     config: {
