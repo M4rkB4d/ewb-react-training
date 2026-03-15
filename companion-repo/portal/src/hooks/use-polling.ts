@@ -25,6 +25,7 @@ export function usePolling({
 }: UsePollingOptions) {
   const queryClient = useQueryClient();
   const currentInterval = useRef(interval);
+  const lastDataUpdatedAt = useRef(0);
 
   const query = useQuery({
     queryKey,
@@ -33,23 +34,20 @@ export function usePolling({
     refetchIntervalInBackground: !pauseWhenHidden,
   });
 
-  // Adaptive interval — slow down when data is unchanged
+  // Adaptive interval — use dataUpdatedAt to detect data changes
   useEffect(() => {
     if (!adaptive) return;
 
-    if (query.isSuccess && !query.isRefetching) {
-      // If data hash is the same, increase interval (max 5x base)
+    if (query.dataUpdatedAt === lastDataUpdatedAt.current) {
+      // Data unchanged — slow down (max 5x base interval)
       const maxInterval = interval * 5;
       currentInterval.current = Math.min(currentInterval.current * 1.5, maxInterval);
+    } else {
+      // Data changed — reset to base interval
+      currentInterval.current = interval;
+      lastDataUpdatedAt.current = query.dataUpdatedAt;
     }
   }, [query.dataUpdatedAt, adaptive, interval]);
-
-  // Reset interval when data actually changes
-  useEffect(() => {
-    if (adaptive) {
-      currentInterval.current = interval;
-    }
-  }, [JSON.stringify(query.data), adaptive, interval]);
 
   return query;
 }

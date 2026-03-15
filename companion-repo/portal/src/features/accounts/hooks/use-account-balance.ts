@@ -5,7 +5,7 @@ import { accountKeys } from '../queries';
 
 export function useAccountBalance(accountId: string) {
   return useQuery({
-    queryKey: accountKeys.detail(accountId),
+    queryKey: accountKeys.balance(accountId),
     queryFn: () => accountsApi.getById(accountId),
     select: (account) => account.balance,
     enabled: accountId !== '',

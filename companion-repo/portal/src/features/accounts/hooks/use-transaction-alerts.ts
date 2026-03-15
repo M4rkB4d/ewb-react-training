@@ -2,7 +2,7 @@
 import { useEventSource } from '@/hooks/use-event-source';
 import { useQueryClient } from '@tanstack/react-query';
 import { env } from '@/lib/env';
-import { accountKeys } from '../api/query-keys';
+import { accountKeys } from '../queries';
 
 interface TransactionAlert {
   type: 'credit' | 'debit';
