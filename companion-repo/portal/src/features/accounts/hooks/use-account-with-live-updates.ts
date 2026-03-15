@@ -2,7 +2,7 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { accountsApi } from '../api/accounts-api';
-import { accountKeys } from '../api/query-keys';
+import { accountKeys } from '../queries';
 import { useWebSocket } from '@/hooks/use-websocket';
 
 export function useAccountWithLiveUpdates(accountId: string) {

@@ -1,34 +1,29 @@
 // src/features/auth/components/pin-input.tsx
 import { useRef } from 'react';
 
+const PIN_LENGTH = 6;
+
 export function PinInput() {
-  const inputRefs = [
-    useRef<HTMLInputElement>(null),
-    useRef<HTMLInputElement>(null),
-    useRef<HTMLInputElement>(null),
-    useRef<HTMLInputElement>(null),
-    useRef<HTMLInputElement>(null),
-    useRef<HTMLInputElement>(null),
-  ];
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   const handleChange = (index: number, value: string) => {
-    if (value.length === 1 && index < 5) {
-      inputRefs[index + 1]?.current?.focus();
+    if (value.length === 1 && index < PIN_LENGTH - 1) {
+      inputRefs.current[index + 1]?.focus();
     }
   };
 
   const handleKeyDown = (index: number, event: React.KeyboardEvent) => {
     if (event.key === 'Backspace' && index > 0) {
-      inputRefs[index - 1]?.current?.focus();
+      inputRefs.current[index - 1]?.focus();
     }
   };
 
   return (
     <div className="flex gap-2">
-      {inputRefs.map((ref, index) => (
+      {Array.from({ length: PIN_LENGTH }, (_, index) => (
         <input
           key={index}
-          ref={ref}
+          ref={(el) => { inputRefs.current[index] = el; }}
           type="text"
           inputMode="numeric"
           maxLength={1}

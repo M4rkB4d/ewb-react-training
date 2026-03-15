@@ -8,7 +8,7 @@ interface TransactionRowProps {
 }
 
 function TransactionRow({ transaction }: TransactionRowProps) {
-  const isDebit = transaction.amount < 0;
+  const isDebit = transaction.type === 'debit';
 
   return (
     <div className="flex items-center justify-between border-b px-4 py-3">
@@ -18,7 +18,7 @@ function TransactionRow({ transaction }: TransactionRowProps) {
       </div>
       <div className="text-right">
         <p className={isDebit ? 'text-red-600' : 'text-green-600'}>
-          {isDebit ? '-' : '+'}₱{Math.abs(transaction.amount).toLocaleString()}
+          {isDebit ? '-' : '+'}₱{(transaction.amount / 100).toLocaleString()}
         </p>
         <p className="text-xs text-gray-400">{transaction.reference}</p>
       </div>

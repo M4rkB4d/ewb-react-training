@@ -1,7 +1,7 @@
 // src/features/accounts/hooks/use-live-balance.ts
 import { usePolling } from '@/hooks/use-polling';
 import { accountsApi } from '../api/accounts-api';
-import { accountKeys } from '../api/query-keys';
+import { accountKeys } from '../queries';
 
 export function useLiveBalance(accountId: string) {
   return usePolling({
