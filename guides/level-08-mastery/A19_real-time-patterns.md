@@ -131,7 +131,7 @@ export function usePolling({
 // src/features/accounts/hooks/use-live-balance.ts
 import { usePolling } from '@/hooks/use-polling';
 import { accountsApi } from '../api/accounts-api';
-import { accountKeys } from '../api/query-keys';
+import { accountKeys } from '../queries';
 
 export function useLiveBalance(accountId: string) {
   return usePolling({
@@ -250,7 +250,7 @@ export function useEventSource({
 import { useEventSource } from '@/hooks/use-event-source';
 import { useQueryClient } from '@tanstack/react-query';
 import { env } from '@/lib/env';
-import { accountKeys } from '../api/query-keys';
+import { accountKeys } from '../queries';
 import { z } from 'zod';
 
 const transactionAlertSchema = z.object({
@@ -577,7 +577,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { z } from 'zod';
 import { accountsApi } from '../api/accounts-api';
-import { accountKeys } from '../api/query-keys';
+import { accountKeys } from '../queries';
 import { useWebSocket } from '@/hooks/use-websocket';
 
 export function useAccountWithLiveUpdates(accountId: string) {

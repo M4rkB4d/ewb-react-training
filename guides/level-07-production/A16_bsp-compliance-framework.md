@@ -854,21 +854,24 @@ describe('BSP Compliance Checks', () => {
 ### ESLint rules for compliance
 
 ```tsx
-// .eslintrc.cjs (compliance rules)
-module.exports = {
-  rules: {
-    // BSP 982 — No eval for code execution
-    'no-eval': 'error',
-    'no-implied-eval': 'error',
-    'no-new-func': 'error',
+// eslint.config.js (add to your existing flat config)
+export default [
+  // ... existing config
+  {
+    rules: {
+      // BSP 982 — No eval for code execution
+      'no-eval': 'error',
+      'no-implied-eval': 'error',
+      'no-new-func': 'error',
 
-    // BSP 982 — No direct DOM manipulation (XSS risk)
-    'react/no-danger': 'error',
+      // BSP 982 — No direct DOM manipulation (XSS risk)
+      'react/no-danger': 'error',
 
-    // BSP 982 — No console.log in production (data leakage)
-    'no-console': ['warn', { allow: ['debug', 'info', 'warn', 'error'] }],
+      // BSP 982 — No console.log in production (data leakage)
+      'no-console': ['warn', { allow: ['debug', 'info', 'warn', 'error'] }],
+    },
   },
-};
+];
 ```
 
 ---

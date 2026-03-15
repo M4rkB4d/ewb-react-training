@@ -700,7 +700,9 @@ import { Button, Input, Card, CardHeader, CardBody, Badge } from '@/components/u
 
 ### Design system documentation
 
-Create a simple showcase page to document your component library:
+Create a simple showcase page to document your component library. Add it to your
+router so you can navigate to `/design-system` (the companion repo already has the
+route configured):
 
 ```tsx
 // src/pages/design-system.tsx
