@@ -218,6 +218,7 @@ interface AlertProps {
 export function Alert({ message, severity = 'info' }: AlertProps) {
   const colors = {
     info: 'bg-ewb-navy-50 text-ewb-navy-700 border-ewb-navy-200',
+    success: 'bg-green-50 text-green-700 border-green-200',
     warning: 'bg-amber-50 text-amber-700 border-amber-200',
     error: 'bg-red-50 text-red-700 border-red-200',
   };

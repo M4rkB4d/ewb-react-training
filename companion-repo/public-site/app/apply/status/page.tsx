@@ -93,8 +93,10 @@ export default async function ApplicationStatusPage() {
   );
 }
 
-function StatusBadge({ status }: { status: string }) {
-  const styles: Record<string, string> = {
+type ApplicationStatus = 'submitted' | 'under-review' | 'approved' | 'rejected';
+
+function StatusBadge({ status }: { status: ApplicationStatus }) {
+  const styles: Record<ApplicationStatus, string> = {
     submitted: 'bg-blue-100 text-blue-800',
     'under-review': 'bg-yellow-100 text-yellow-800',
     approved: 'bg-ewb-lime-200 text-ewb-lime-700',

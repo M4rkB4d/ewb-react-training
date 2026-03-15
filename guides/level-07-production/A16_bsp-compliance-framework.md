@@ -866,7 +866,7 @@ module.exports = {
     'react/no-danger': 'error',
 
     // BSP 982 — No console.log in production (data leakage)
-    'no-console': ['warn', { allow: ['warn', 'error', 'info'] }],
+    'no-console': ['warn', { allow: ['debug', 'info', 'warn', 'error'] }],
   },
 };
 ```

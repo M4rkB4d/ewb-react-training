@@ -30,7 +30,7 @@ export default tseslint.config(
       ],
 
       // Banking-specific rules
-      'no-console': ['warn', { allow: ['warn', 'error'] }],
+      'no-console': ['warn', { allow: ['debug', 'info', 'warn', 'error'] }],
       'no-debugger': 'error',
       'no-eval': 'error',
       'no-implied-eval': 'error',

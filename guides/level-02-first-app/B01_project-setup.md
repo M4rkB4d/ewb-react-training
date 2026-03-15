@@ -695,7 +695,7 @@ export default tseslint.config(
       ],
 
       // Banking-specific rules
-      'no-console': ['warn', { allow: ['warn', 'error'] }],
+      'no-console': ['warn', { allow: ['debug', 'info', 'warn', 'error'] }],
       'no-debugger': 'error',
       'no-eval': 'error',
       'no-implied-eval': 'error',
@@ -712,7 +712,7 @@ export default tseslint.config(
 
 | Rule | Why |
 |------|-----|
-| `no-console` (warn) | Production code should use structured logging, not console.log |
+| `no-console` (warn) | Production code should use the `logger` module, not `console.log` |
 | `no-eval` / `no-implied-eval` | `eval()` is an XSS attack vector (PCI-DSS, BSP 982) |
 | `no-explicit-any` | `any` disables type checking — use `unknown` instead (A02) |
 | `no-non-null-assertion` | The `!` operator hides potential null crashes |
