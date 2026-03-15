@@ -485,8 +485,8 @@ export default async function ProductPage({
 
           <h2 className="mt-8 text-xl font-semibold text-gray-900">Features</h2>
           <ul className="mt-4 space-y-2">
-            {product.features.map((feature, i) => (
-              <li key={i} className="flex items-start gap-2">
+            {product.features.map((feature) => (
+              <li key={feature} className="flex items-start gap-2">
                 <span className="mt-1 text-ewb-lime">✓</span>
                 <span className="text-gray-600">{feature}</span>
               </li>
@@ -495,8 +495,8 @@ export default async function ProductPage({
 
           <h2 className="mt-8 text-xl font-semibold text-gray-900">Requirements</h2>
           <ul className="mt-4 space-y-2">
-            {product.requirements.map((req, i) => (
-              <li key={i} className="flex items-start gap-2">
+            {product.requirements.map((req) => (
+              <li key={req} className="flex items-start gap-2">
                 <span className="mt-1 text-gray-400">•</span>
                 <span className="text-gray-600">{req}</span>
               </li>

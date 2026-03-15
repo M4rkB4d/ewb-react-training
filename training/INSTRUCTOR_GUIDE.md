@@ -185,8 +185,8 @@ Tests start red and go green as students complete their implementations.
 
 **Key concepts**: i18n, real-time patterns, architecture, capstone integration
 
-**Day 10 focus**: Internationalization, real-time hooks (WebSocket, SSE, polling)
-**Day 11 focus**: Transfer wizard, payment system, integration capstone
+- Internationalization, real-time hooks (WebSocket, SSE, polling)
+- Transfer wizard, payment system, integration capstone
 
 **Common stumbling points**:
 - i18n: students hardcode strings instead of using `<FormattedMessage>` or `intl.formatMessage()`

@@ -248,6 +248,7 @@ export function useEventSource({
 // src/features/accounts/hooks/use-transaction-alerts.ts
 import { useEventSource } from '@/hooks/use-event-source';
 import { useQueryClient } from '@tanstack/react-query';
+import { env } from '@/lib/env';
 import { accountKeys } from '../api/query-keys';
 import { z } from 'zod';
 

@@ -27,8 +27,8 @@ export function SessionWarningDialog() {
           . Would you like to continue?
         </p>
         <div className="mt-4 flex gap-3">
-          <Button onClick={extendSession}>Continue Session</Button>
-          <Button variant="outline" onClick={logoutNow}>
+          <Button type="button" onClick={extendSession}>Continue Session</Button>
+          <Button type="button" variant="outline" onClick={logoutNow}>
             Sign Out
           </Button>
         </div>

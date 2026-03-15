@@ -81,7 +81,7 @@
 - **BSP 982** — Information Security (authentication, session management, input validation)
 - **BSP 1019** — Cyber-Risk (monitoring, audit trails, incident response)
 - **BSP 1033** — E-Payment Services (accessibility, transaction logging)
-- **BSP 1213 (AFASA)** — Phishing-resistant authentication by June 2026
+- **BSP 1213 (AFASA — Anti-Financial Account Scam Act, RA 12010)** — Phishing-resistant authentication by June 2026
 - *Speaker notes: Participants do not need to memorize circular numbers. They need to know these exist and that we implement them.*
 
 ### Slide 13: Compliance Mapped to Code

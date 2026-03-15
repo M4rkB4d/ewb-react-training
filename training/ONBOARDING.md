@@ -298,7 +298,7 @@ Each level has a quiz. Complete the quiz at the end of each day before moving on
 | Level 4 Quiz | State and Routing | [quizzes/level-04-quiz.md](quizzes/level-04-quiz.md) |
 | Level 5 Quiz | Data and Auth | [quizzes/level-05-quiz.md](quizzes/level-05-quiz.md) |
 | Level 6 Quiz | Quality | [quizzes/level-06-quiz.md](quizzes/level-06-quiz.md) |
-| Level 7 Quiz | Security and Compliance | [quizzes/level-07-quiz.md](quizzes/level-07-quiz.md) |
+| Level 7 Quiz | Production | [quizzes/level-07-quiz.md](quizzes/level-07-quiz.md) |
 | Level 8 Quiz | Architecture | [quizzes/level-08-quiz.md](quizzes/level-08-quiz.md) |
 | Level 9 Quiz | Public-Facing | [quizzes/level-09-quiz.md](quizzes/level-09-quiz.md) |
 

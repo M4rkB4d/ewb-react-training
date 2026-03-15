@@ -53,12 +53,12 @@ export function AccountCard({
             {typeLabels[accountType]}
           </span>
           <span
-            role="img"
+            aria-hidden="true"
             className={`inline-block h-2 w-2 rounded-full ${
               isActive ? 'bg-green-500' : 'bg-red-500'
             }`}
-            aria-label={isActive ? 'Active account' : 'Inactive account'}
           />
+          <span className="sr-only">{isActive ? 'Active account' : 'Inactive account'}</span>
         </div>
       </div>
 

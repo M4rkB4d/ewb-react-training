@@ -303,7 +303,7 @@ import { z } from 'zod';
 import { useIntl } from 'react-intl';
 
 const currencyInputSchema = z.object({
-  amount: z.number().int().min(0).max(50_000_000), // centavos (₱500,000)
+  amount: z.number().int().min(1).max(50_000_000), // centavos (₱500,000)
   currency: z.enum(['PHP', 'USD']),
 });
 
@@ -341,7 +341,7 @@ export function CurrencyInput({ name, label, value, onChange, error, currency = 
   const intl = useIntl();
   const [displayValue, setDisplayValue] = useState(
     value != null && value > 0
-      ? intl.formatNumber(value, { style: 'currency', currency })
+      ? intl.formatNumber(value / 100, { style: 'currency', currency })
       : '',
   );
   const [isFocused, setIsFocused] = useState(false);
@@ -351,7 +351,7 @@ export function CurrencyInput({ name, label, value, onChange, error, currency = 
     setDisplayValue(raw);
 
     const parsed = parseLocaleNumber(raw, intl.locale);
-    if (parsed >= 0 && parsed <= max) {
+    if (parsed > 0 && parsed <= max) {
       onChange?.(parsed);
     }
   };
@@ -360,7 +360,7 @@ export function CurrencyInput({ name, label, value, onChange, error, currency = 
     setIsFocused(false);
     const parsed = parseLocaleNumber(displayValue, intl.locale);
     if (parsed > 0) {
-      setDisplayValue(intl.formatNumber(parsed, { style: 'currency', currency }));
+      setDisplayValue(intl.formatNumber(parsed / 100, { style: 'currency', currency }));
     }
   };
 
@@ -387,7 +387,7 @@ export function CurrencyInput({ name, label, value, onChange, error, currency = 
         onChange={handleChange}
         onBlur={handleBlur}
         onFocus={handleFocus}
-        className="mt-1 block w-full rounded-lg border px-3 py-2"
+        className={`mt-1 block w-full rounded-lg border px-3 py-2 ${isFocused ? 'border-ewb-purple ring-1 ring-ewb-purple' : ''}`}
         aria-describedby={error != null ? `${name}-error` : undefined}
         aria-invalid={error != null}
       />

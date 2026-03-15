@@ -482,6 +482,7 @@ function AccountBalance({ balance }: { balance: number }) {
           : '****'}
       </span>
       <button
+        type="button"
         onClick={() => setIsVisible(!isVisible)}
         className="text-sm text-primary underline"
       >

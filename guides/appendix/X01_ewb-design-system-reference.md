@@ -82,6 +82,10 @@
   --color-ewb-magenta: #b1006f;
   --color-ewb-gold: #dba464;
   --color-ewb-lime: #d5e04d;
+  --color-ewb-lime-50: #fafcf0;
+  --color-ewb-lime-200: #e6ed9f;
+  --color-ewb-lime-600: #7f851f;
+  --color-ewb-lime-700: #5e6316;
   --color-ewb-navy: #06357A;
 
   /* Semantic Mapping */

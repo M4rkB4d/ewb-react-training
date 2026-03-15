@@ -296,6 +296,7 @@ Replace the contents of `src/index.css` with the EWB design system:
   --color-ewb-lime-400: #c2cc3a;
   --color-ewb-lime-500: #a3ab2a;
   --color-ewb-lime-600: #7f851f;
+  --color-ewb-lime-700: #5e6316;
 
   --color-ewb-navy: #06357A;
   --color-ewb-navy-50: #f0f4fa;

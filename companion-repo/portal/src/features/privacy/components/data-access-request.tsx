@@ -26,13 +26,14 @@ export function DataAccessRequest() {
         registered email within 30 days.
       </p>
       <Button
+        type="button"
         onClick={() => requestData.mutate()}
         disabled={requestData.isPending}
       >
         {requestData.isPending ? 'Submitting...' : 'Request Data Export'}
       </Button>
       {requestData.isSuccess && (
-        <p className="text-sm text-green-600" role="status">
+        <p className="text-sm text-ewb-lime-600" role="status">
           Your request has been submitted. You will receive your data export
           within 30 days.
         </p>

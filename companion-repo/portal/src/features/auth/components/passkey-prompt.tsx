@@ -35,13 +35,14 @@ export function PasskeyPrompt({ onDismiss }: PasskeyPromptProps) {
       </p>
       <div className="mt-3 flex gap-2">
         <Button
+          type="button"
           size="sm"
           onClick={() => register.mutate()}
           disabled={register.isPending}
         >
           {register.isPending ? 'Setting up...' : 'Set Up Now'}
         </Button>
-        <Button variant="ghost" size="sm" onClick={handleDismiss}>
+        <Button type="button" variant="ghost" size="sm" onClick={handleDismiss}>
           Maybe Later
         </Button>
       </div>

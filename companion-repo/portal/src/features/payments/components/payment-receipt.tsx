@@ -14,7 +14,7 @@ export function PaymentReceipt() {
 
   return (
     <div className="space-y-4 rounded border p-6">
-      <h2 className="text-lg font-semibold text-green-700">Payment Successful</h2>
+      <h2 className="text-lg font-semibold text-ewb-lime-700">Payment Successful</h2>
 
       <dl className="grid grid-cols-2 gap-y-2 text-sm">
         <dt className="text-gray-500">Reference</dt>
@@ -36,10 +36,10 @@ export function PaymentReceipt() {
         <dd className="capitalize">{receipt.status}</dd>
 
         <dt className="text-gray-500">Date</dt>
-        <dd>{new Date(receipt.paidAt).toLocaleString()}</dd>
+        <dd>{new Date(receipt.paidAt).toLocaleString('en-PH')}</dd>
       </dl>
 
-      <Button onClick={reset} className="mt-4">
+      <Button type="button" onClick={reset} className="mt-4">
         Make Another Payment
       </Button>
     </div>

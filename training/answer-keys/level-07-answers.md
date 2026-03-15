@@ -137,7 +137,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { z } from 'zod';
 import { apiClient } from '@/lib/api-client';
 import { emitAuditEvent } from '@/compliance/audit-service';
-type ConsentPurpose = 'essential' | 'analytics' | 'marketing' | 'third-party';
+type ConsentPurpose = 'essential' | 'analytics' | 'marketing' | 'third-party' | 'biometric' | 'data-sharing' | 'location';
 
 const consentSchema = z.object({
   id: z.string(),

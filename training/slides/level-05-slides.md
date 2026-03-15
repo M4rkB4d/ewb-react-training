@@ -62,7 +62,7 @@
 - Server-side session validation — the frontend timer is UX, the backend enforces
 - *Speaker notes: Demo the timeout warning. Explain that the 15-minute limit is non-negotiable — it is a BSP requirement.*
 
-### Slide 10: The AFASA Mandate
+### Slide 10: The AFASA Mandate (Anti-Financial Account Scam Act, RA 12010)
 - BSP Circular 1213: phishing-resistant authentication by June 2026
 - Every traditional auth method can be phished (passwords, SMS OTP, TOTP, push)
 - AFASA requires at least one phishing-resistant factor for financial transactions

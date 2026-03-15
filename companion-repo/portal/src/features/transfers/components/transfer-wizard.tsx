@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardHeader, CardTitle, CardBody, CardFooter } from '@/components/ui/card';
 
 // ── Schema ──────────────────────────────────────────
+// Amount is in pesos (user input) — converted to centavos (* 100) in the submit handler
 const transferSchema = z.object({
   fromAccount: z.string().regex(/^\d{10}$/, 'Select a source account'),
   toAccount: z.string().regex(/^\d{10}$/, 'Enter a valid account number'),

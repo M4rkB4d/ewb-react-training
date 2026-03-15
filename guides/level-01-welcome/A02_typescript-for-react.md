@@ -177,7 +177,7 @@ function TransactionRow({
         </p>
       </div>
       <div className="text-right">
-        <p className={type === 'credit' ? 'text-success' : 'text-destructive'}>
+        <p className={type === 'credit' ? 'text-success' : 'text-error'}>
           {type === 'credit' ? '+' : '−'}{formattedAmount}
         </p>
         <p className="text-xs text-muted-fg capitalize">{status}</p>

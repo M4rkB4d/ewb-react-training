@@ -33,12 +33,13 @@ export function PasskeyEnrollment() {
       )}
 
       {register.isSuccess && (
-        <div role="status" className="rounded bg-green-50 p-3 text-sm text-green-700">
+        <div role="status" className="rounded bg-ewb-lime-50 p-3 text-sm text-ewb-lime-700">
           Passkey registered successfully.
         </div>
       )}
 
       <Button
+        type="button"
         onClick={() => register.mutate()}
         disabled={register.isPending}
       >

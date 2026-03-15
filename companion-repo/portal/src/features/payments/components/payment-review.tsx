@@ -62,7 +62,7 @@ export function PaymentReview() {
         >
           Back
         </Button>
-        <Button onClick={handleConfirm} disabled={isPending}>
+        <Button type="button" onClick={handleConfirm} disabled={isPending}>
           {isPending ? 'Processing...' : 'Confirm Payment'}
         </Button>
       </div>

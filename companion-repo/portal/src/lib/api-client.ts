@@ -90,4 +90,5 @@ apiClient.interceptors.response.use(
     }
     return response;
   },
+  (error) => Promise.reject(error),
 );

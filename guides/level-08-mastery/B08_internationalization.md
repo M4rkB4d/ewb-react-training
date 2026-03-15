@@ -396,7 +396,7 @@ export function CurrencyDisplay({ amount, currency = 'PHP' }: CurrencyDisplayPro
 
   return (
     <span
-      className={amount < 0 ? 'text-red-600' : 'text-green-700'}
+      className={amount < 0 ? 'text-error' : 'text-ewb-lime-700'}
       aria-label={`${formatted}`}
     >
       {formatted}

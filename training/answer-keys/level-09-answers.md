@@ -308,10 +308,12 @@ const statusColors: Record<string, string> = {
   rejected: 'bg-red-100 text-red-700',
 };
 
-async function getApplications(sessionToken: string) {
+// Session ID is passed as a Bearer token for internal service-to-service auth.
+// The API gateway validates it against the session store — not a standard JWT.
+async function getApplications(sessionId: string) {
   const res = await fetch(`${serverEnv.INTERNAL_API_URL}/applications`, {
     headers: {
-      Authorization: `Bearer ${sessionToken}`,
+      Authorization: `Bearer ${sessionId}`,
       'X-Service-Key': serverEnv.AUTH_SERVICE_KEY,
     },
     cache: 'no-store',

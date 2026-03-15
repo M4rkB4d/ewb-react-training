@@ -33,6 +33,9 @@ export function useSessionTimeout(options: SessionTimeoutOptions = {}) {
   const warningMsRef = useRef(warningMs);
   warningMsRef.current = warningMs;
 
+  // Expose resetTimers so extendSession can call it from outside the effect
+  const resetTimersRef = useRef<() => void>(() => {});
+
   useEffect(() => {
     if (!isAuthenticated) return;
 
@@ -91,6 +94,7 @@ export function useSessionTimeout(options: SessionTimeoutOptions = {}) {
       }
     };
 
+    resetTimersRef.current = resetTimers;
     events.forEach((event) => window.addEventListener(event, handleActivity));
     resetTimers();
 
@@ -100,10 +104,10 @@ export function useSessionTimeout(options: SessionTimeoutOptions = {}) {
     };
   }, [isAuthenticated]);
 
-  // Exposed for the "Extend Session" button in the warning dialog
+  // Exposed for the "Extend Session" button in the warning dialog.
+  // Resets both warning and logout timers via the ref-stored function.
   function extendSession() {
-    lastActivityRef.current = Date.now();
-    setShowWarning(false);
+    resetTimersRef.current();
   }
 
   return {

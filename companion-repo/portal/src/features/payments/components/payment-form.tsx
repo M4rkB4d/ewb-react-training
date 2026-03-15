@@ -7,6 +7,7 @@ import { maskAccountNumber } from '@/lib/masking';
 import { formatPHP } from '@/lib/format';
 import { Button } from '@/components/ui/button';
 
+// Amount is in pesos (user input) — converted to centavos in payment-review.tsx before API submission
 const paymentSchema = z.object({
   accountId: z.string().min(1, 'Please select an account'),
   amount: z.coerce
@@ -52,8 +53,11 @@ export function PaymentForm() {
       {/* Biller-specific fields */}
       {draft.biller?.fields.map((field) => (
         <div key={field.name}>
-          <label className="block text-sm font-medium">{field.label}</label>
+          <label htmlFor={`biller-field-${field.name}`} className="block text-sm font-medium">
+            {field.label}
+          </label>
           <input
+            id={`biller-field-${field.name}`}
             type={field.type}
             placeholder={field.placeholder}
             value={draft.fields[field.name] ?? ''}
