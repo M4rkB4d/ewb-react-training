@@ -171,7 +171,7 @@ export function RouteErrorBoundary() {
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center" role="alert">
-      <h1 className="text-2xl font-bold text-red-700">Something Went Wrong</h1>
+      <h1 className="text-2xl font-bold text-error">Something Went Wrong</h1>
       <p className="mt-2 text-gray-600">
         An unexpected error occurred. Please try refreshing the page.
       </p>
@@ -267,7 +267,7 @@ have no hook equivalents.
 ```tsx
 // Feature-level boundary
 <ErrorBoundary
-  fallback={<div className="p-4 text-red-600">Failed to load account details.</div>}
+  fallback={<div className="p-4 text-error">Failed to load account details.</div>}
 >
   <AccountDetails id={accountId} />
 </ErrorBoundary>
