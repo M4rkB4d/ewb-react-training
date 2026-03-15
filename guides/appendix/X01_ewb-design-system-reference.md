@@ -237,7 +237,7 @@ const alertStyles: Record<AlertVariant, string> = {
   error: 'bg-red-50 border-red-600 text-red-900',
 };
 
-export function Alert({ variant = 'default', className, ...props }: AlertProps) {
+export function Alert({ variant = 'info', className, ...props }: AlertProps) {
   return (
     <div
       role="alert"

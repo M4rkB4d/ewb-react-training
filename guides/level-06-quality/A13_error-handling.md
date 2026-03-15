@@ -228,7 +228,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
       return (
         <>
           {this.props.fallback}
-          <button onClick={this.resetError}>Try Again</button>
+          <button type="button" onClick={this.resetError}>Try Again</button>
         </>
       );
     }

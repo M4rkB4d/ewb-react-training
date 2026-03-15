@@ -391,7 +391,7 @@ function TransactionFilter() {
         Credits
       </button>
       <button
-        className={filter === 'debit' ? 'bg-destructive text-destructive-fg' : 'bg-muted'}
+        className={filter === 'debit' ? 'bg-red-600 text-white' : 'bg-muted'}
         onClick={() => setFilter('debit')}
       >
         Debits
@@ -601,7 +601,7 @@ function AccountList() {
   }, []);
 
   if (isLoading) return <p>Loading accounts...</p>;
-  if (error) return <p className="text-destructive">Error: {error}</p>;
+  if (error) return <p className="text-red-600">Error: {error}</p>;
 
   return (
     <ul className="space-y-2">

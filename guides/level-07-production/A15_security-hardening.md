@@ -979,7 +979,7 @@ export function useIdleTimeout(timeoutMs: number, onTimeout: () => void): void {
         clearTimeout(timerRef.current);
       }
     };
-  }, [isAuthenticated]);
+  }, [timeoutMs, onTimeout]);
 }
 ```
 

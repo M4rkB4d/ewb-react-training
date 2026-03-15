@@ -212,7 +212,7 @@ Use JavaScript default parameters:
 ```tsx
 interface AlertProps {
   message: string;
-  severity?: 'info' | 'warning' | 'error';
+  severity?: 'info' | 'success' | 'warning' | 'error';
 }
 
 export function Alert({ message, severity = 'info' }: AlertProps) {

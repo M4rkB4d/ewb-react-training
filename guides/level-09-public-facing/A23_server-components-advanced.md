@@ -367,7 +367,7 @@ export async function POST(request: Request) {
 Zod validates the request body before processing. Invalid requests return a
 400 with structured error details. The internal API call uses a service key
 from `serverEnv` that never reaches the browser. This is the same validation
-pattern from A12 (Zod and form validation) applied to server-side endpoints.
+pattern from A07 (Forms and Validation) applied to server-side endpoints.
 
 ### Checkpoint 2
 
