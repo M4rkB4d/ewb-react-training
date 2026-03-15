@@ -607,7 +607,7 @@ export function PaymentReceipt({ receipt }: PaymentReceiptProps) {
         <dd className="capitalize">{receipt.status}</dd>
 
         <dt className="text-gray-500">Date</dt>
-        <dd>{new Date(receipt.paidAt).toLocaleString()}</dd>
+        <dd>{new Date(receipt.paidAt).toLocaleString('en-PH')}</dd>
       </dl>
 
       <Button onClick={reset}>Make Another Payment</Button>
