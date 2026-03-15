@@ -1,6 +1,7 @@
 // src/components/error/error-boundary.tsx
 import { Component } from 'react';
 import type { ErrorInfo, ReactNode } from 'react';
+import { logger } from '@/lib/logger';
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -22,7 +23,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 
   override componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     // BSP 1019 — Log errors for monitoring
-    console.error('[ErrorBoundary]', error, errorInfo.componentStack);
+    logger.error('[ErrorBoundary]', { error: error.message, stack: errorInfo.componentStack });
     this.props.onError?.(error, errorInfo);
   }
 

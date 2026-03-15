@@ -1,5 +1,5 @@
 // src/features/kyc/components/document-upload.tsx
-import { useState, useRef } from 'react';
+import { useState, useRef, useId } from 'react';
 import { Button } from '@/components/ui/button';
 
 interface DocumentUploadProps {
@@ -12,6 +12,8 @@ interface DocumentUploadProps {
 export function DocumentUpload({ label, accept, maxSizeMB, onUpload }: DocumentUploadProps) {
   const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const inputId = useId();
+  const errorId = `${inputId}-error`;
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -36,17 +38,18 @@ export function DocumentUpload({ label, accept, maxSizeMB, onUpload }: DocumentU
 
   return (
     <div>
-      <label className="block text-sm font-medium">{label}</label>
+      <label htmlFor={inputId} className="block text-sm font-medium">{label}</label>
       <input
+        id={inputId}
         ref={inputRef}
         type="file"
         accept={accept}
         onChange={handleChange}
         className="mt-1"
-        aria-describedby={error != null ? 'upload-error' : undefined}
+        aria-describedby={error != null ? errorId : undefined}
       />
       {error != null && (
-        <p id="upload-error" className="mt-1 text-sm text-red-600" role="alert">
+        <p id={errorId} className="mt-1 text-sm text-error" role="alert">
           {error}
         </p>
       )}

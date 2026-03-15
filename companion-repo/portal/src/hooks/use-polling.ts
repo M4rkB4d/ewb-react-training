@@ -1,5 +1,5 @@
 // src/hooks/use-polling.ts
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import type { QueryKey } from '@tanstack/react-query';
 
@@ -24,13 +24,13 @@ export function usePolling({
   enabled = true,
 }: UsePollingOptions) {
   const queryClient = useQueryClient();
-  const currentInterval = useRef(interval);
+  const [currentInterval, setCurrentInterval] = useState(interval);
   const lastDataUpdatedAt = useRef(0);
 
   const query = useQuery({
     queryKey,
     queryFn,
-    refetchInterval: enabled ? currentInterval.current : false,
+    refetchInterval: enabled ? currentInterval : false,
     refetchIntervalInBackground: !pauseWhenHidden,
   });
 
@@ -41,10 +41,10 @@ export function usePolling({
     if (query.dataUpdatedAt === lastDataUpdatedAt.current) {
       // Data unchanged — slow down (max 5x base interval)
       const maxInterval = interval * 5;
-      currentInterval.current = Math.min(currentInterval.current * 1.5, maxInterval);
+      setCurrentInterval((prev) => Math.min(prev * 1.5, maxInterval));
     } else {
       // Data changed — reset to base interval
-      currentInterval.current = interval;
+      setCurrentInterval(interval);
       lastDataUpdatedAt.current = query.dataUpdatedAt;
     }
   }, [query.dataUpdatedAt, adaptive, interval]);

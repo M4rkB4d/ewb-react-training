@@ -1,6 +1,7 @@
 // src/lib/api-client.ts
 import axios, { type InternalAxiosRequestConfig } from 'axios';
 import { env } from './env';
+import { logger } from './logger';
 import { useAuthStore } from '@/stores/auth-store';
 
 interface RetryableRequestConfig extends InternalAxiosRequestConfig {
@@ -70,12 +71,12 @@ apiClient.interceptors.response.use(
 
     // 403 — Insufficient permissions
     if (status === 403) {
-      console.error('[API] Forbidden:', originalRequest?.url);
+      logger.error('[API] Forbidden', { url: originalRequest?.url });
     }
 
     // 429 — Rate limited
     if (status === 429) {
-      console.warn('[API] Rate limited:', originalRequest?.url);
+      logger.warn('[API] Rate limited', { url: originalRequest?.url });
     }
 
     return Promise.reject(error);
@@ -85,9 +86,11 @@ apiClient.interceptors.response.use(
 // BSP 1019 — Structured request/response logging
 apiClient.interceptors.response.use(
   (response) => {
-    if (import.meta.env.DEV) {
-      console.info('[API]', response.config.method?.toUpperCase(), response.config.url, response.status);
-    }
+    logger.debug('[API]', {
+      method: response.config.method?.toUpperCase(),
+      url: response.config.url,
+      status: response.status,
+    });
     return response;
   },
   (error) => Promise.reject(error),

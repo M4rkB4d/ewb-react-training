@@ -1,4 +1,5 @@
 // src/features/accounts/components/account-selector.tsx
+import { useId } from 'react';
 import { useAccounts } from '../hooks/use-accounts';
 import { formatPHP } from '@/lib/format';
 import type { Account } from '../types';
@@ -11,14 +12,15 @@ interface AccountSelectorProps {
 
 export function AccountSelector({ value, onChange, label = 'Select Account' }: AccountSelectorProps) {
   const { data: accounts, isLoading } = useAccounts();
+  const selectId = useId();
 
   return (
     <div>
-      <label htmlFor="account-selector" className="mb-1 block text-sm font-medium">
+      <label htmlFor={selectId} className="mb-1 block text-sm font-medium">
         {label}
       </label>
       <select
-        id="account-selector"
+        id={selectId}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         disabled={isLoading}

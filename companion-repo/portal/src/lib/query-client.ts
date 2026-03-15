@@ -1,17 +1,18 @@
 // src/lib/query-client.ts
 import { QueryClient, QueryCache, MutationCache } from '@tanstack/react-query';
 import { ApiError } from './api-error';
+import { logger } from './logger';
 
 export const queryClient = new QueryClient({
   queryCache: new QueryCache({
     onError: (error) => {
       // BSP 1019 — Log all API errors for monitoring
-      console.error('[QueryCache Error]', error);
+      logger.error('[QueryCache]', { error: String(error) });
     },
   }),
   mutationCache: new MutationCache({
     onError: (error) => {
-      console.error('[MutationCache Error]', error);
+      logger.error('[MutationCache]', { error: String(error) });
     },
   }),
   defaultOptions: {

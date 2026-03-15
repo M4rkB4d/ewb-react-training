@@ -1,12 +1,8 @@
 // src/components/auth/protected-route.tsx
-import { Navigate, useLocation } from 'react-router';
+import { Navigate, Outlet, useLocation } from 'react-router';
 import { useAuthStore } from '@/stores/auth-store';
 
-interface ProtectedRouteProps {
-  children: React.ReactNode;
-}
-
-export function ProtectedRoute({ children }: ProtectedRouteProps) {
+export function ProtectedRoute() {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const location = useLocation();
 
@@ -15,5 +11,5 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
     return <Navigate to="/login" state={{ from: location.pathname }} replace />;
   }
 
-  return children;
+  return <Outlet />;
 }

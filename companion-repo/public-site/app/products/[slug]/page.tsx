@@ -116,7 +116,7 @@ export default async function ProductPage({
           <ul className="mt-4 space-y-2">
             {product.features.map((feature, i) => (
               <li key={i} className="flex items-start gap-2">
-                <span className="mt-1 text-ewb-lime">✓</span>
+                <span className="mt-1 text-ewb-lime-700">✓</span>
                 <span className="text-gray-600">{feature}</span>
               </li>
             ))}
