@@ -37,6 +37,7 @@ export function AccountList() {
   return (
     <ul className="space-y-4">
       {accounts.map((account) => (
+        {/* TODO: Exercise — Replace with AccountCard component (see Level 3) */}
         <li key={account.id}>{account.name}</li>
       ))}
     </ul>

@@ -17,8 +17,9 @@ export function AccountDetail({ accountId }: { accountId: string }) {
         {connectionState === 'connected' ? 'Live' : 'Connecting...'}
       </div>
 
-      {/* Account details and transactions use standard TanStack Query hooks */}
-      {/* SSE invalidates the queries when new transactions arrive */}
+      {/* TODO: Exercise — Add account balance, recent transactions, and account info */}
+      {/* The useTransactionAlerts hook above provides SSE-based invalidation; */}
+      {/* pair it with useQuery hooks to fetch account data (see A19). */}
     </div>
   );
 }
