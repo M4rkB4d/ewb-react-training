@@ -10,7 +10,7 @@
 
 This framework exists to answer one question: **Is this training program worth the investment?**
 
-Two weeks of a developer's time costs the company roughly ₱80,000–₱150,000 in salary alone (excluding opportunity cost). If the program works, it should pay for itself within the first quarter through faster delivery, fewer bugs, and cleaner audit results.
+Thirteen working days of a developer's time costs the company roughly ₱80,000–₱150,000 in salary alone (excluding opportunity cost). If the program works, it should pay for itself within the first quarter through faster delivery, fewer bugs, and cleaner audit results.
 
 ---
 

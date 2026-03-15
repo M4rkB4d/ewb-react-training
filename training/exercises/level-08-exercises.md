@@ -149,26 +149,26 @@ interface CurrencyInputProps {
 }
 
 export function CurrencyInput({ name, label, value, onChange, error, currency = 'PHP', max = 50_000_000, ref }: CurrencyInputProps) {
-    const intl = useIntl();
-    const [displayValue, setDisplayValue] = useState(
-      value != null ? intl.formatNumber(value, { style: 'currency', currency }) : ''
-    );
+  const intl = useIntl();
+  const [displayValue, setDisplayValue] = useState(
+    value != null && value > 0 ? intl.formatNumber(value, { style: 'currency', currency }) : ''
+  );
 
-    // TODO: Implement locale-aware parsing and formatting
-    // Hint: Use Intl.NumberFormat to determine decimal/grouping separators
-    // for the active locale, then strip non-numeric characters for parsing
+  // TODO: Implement locale-aware parsing and formatting
+  // Hint: Use Intl.NumberFormat to determine decimal/grouping separators
+  // for the active locale, then strip non-numeric characters for parsing
 
-    return (
-      <div>
-        <label htmlFor={name} className="block text-sm font-medium">
-          {label}
-        </label>
-        {/* TODO: Build the input with locale-aware formatting */}
-        {error != null && (
-          <p className="mt-1 text-sm text-red-600" role="alert">{error}</p>
-        )}
-      </div>
-    );
+  return (
+    <div>
+      <label htmlFor={name} className="block text-sm font-medium">
+        {label}
+      </label>
+      {/* TODO: Build the input with locale-aware formatting */}
+      {error != null && (
+        <p className="mt-1 text-sm text-red-600" role="alert">{error}</p>
+      )}
+    </div>
+  );
 }
 ```
 

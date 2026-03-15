@@ -181,7 +181,7 @@ Tests start red and go green as students complete their implementations.
 
 ---
 
-### Level 8 — Mastery (Days 10-11)
+### Level 8 — Mastery (Day 11)
 
 **Key concepts**: i18n, real-time patterns, architecture, capstone integration
 
@@ -242,7 +242,7 @@ Tests start red and go green as students complete their implementations.
 | Quizzes | End of each level | Knowledge check (multiple choice + short answer) |
 | Exercise tests | Continuous | `npm run test:exercises:XX` — automated pass/fail |
 | Code review | Days 6, 9, 11 | Instructor reviews exercise solutions |
-| Capstone | Days 10-11 | Integration of all concepts |
+| Capstone | Day 13 | Integration of all concepts |
 | Final demo | Day 13 | Students present their public-site to the team |
 
 ### Minimum passing criteria:

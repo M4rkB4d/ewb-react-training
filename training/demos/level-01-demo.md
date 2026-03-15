@@ -200,7 +200,7 @@ Walk through the compliance checklist for a "Fund Transfer" feature:
 
 ### Highlight: AFASA Deadline
 
-**Talking point:** "BSP 1213 — passkeys by June 2026. That's three months from now. Every authentication flow we build must support passkeys. This is not a future concern — it's a current priority."
+**Talking point:** "BSP 1213 — passkeys by June 2026. The deadline is coming up fast. Every authentication flow we build must support passkeys. This is not a future concern — it's a current priority."
 
 ---
 

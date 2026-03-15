@@ -75,7 +75,7 @@
 - No more manual `React.memo`, `useMemo`, `useCallback` in most cases
 - The compiler analyzes component dependencies and memoizes at build time
 - Focus on writing correct code — the compiler handles performance
-- *Speaker notes: Show a before/after — React 18 with manual memoization vs. React 19 with the compiler. Less code, same or better performance.*
+- *Speaker notes: Show a before/after — React 18 with manual memoization vs. React 19 + React Compiler configured. Less code, same or better performance.*
 
 ### Slide 12: Code Splitting and Lazy Loading
 - Route-level code splitting: each page loads only when visited

@@ -63,7 +63,7 @@
 
 ### Slide 10: Internationalization Setup
 - `react-intl` for message formatting, pluralization, and locale-aware numbers
-- Three locales: English (en-US), Filipino (fil-PH), Chinese (zh-CN)
+- Three locales: English (en-US), Filipino (fil-PH), Chinese (zh-Hans)
 - Lazy-loaded message bundles — only the active locale is downloaded
 - Locale switcher component persists preference to user settings
 - *Speaker notes: Show the IntlProvider setup. Explain that message bundles are code-split — switching locale loads a small JSON file, not the entire app.*

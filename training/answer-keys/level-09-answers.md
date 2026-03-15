@@ -228,7 +228,7 @@ export function ProductComparisonTool({ products }: { products: Product[] }) {
               {selectedProducts.map((p) => (
                 <td key={p.id} className="p-3">
                   <ul className="list-disc pl-4 space-y-1">
-                    {p.features.map((f, i) => (
+                    {p.features.map((f) => (
                       <li key={f}>{f}</li>
                     ))}
                   </ul>
@@ -404,6 +404,7 @@ export default function StatusError({
         We could not load your application status. This may be a temporary issue.
       </p>
       <button
+        type="button"
         onClick={reset}
         className="mt-4 rounded-lg bg-ewb-purple px-4 py-2 text-sm text-white hover:bg-ewb-purple/90"
       >
@@ -412,6 +413,7 @@ export default function StatusError({
     </main>
   );
 }
+
 ```
 
 ### Exercise 3 — Next.js Azure Deployment with CDN Verification

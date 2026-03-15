@@ -338,66 +338,66 @@ function parseLocaleNumber(value: string, locale: string): number {
 }
 
 export function CurrencyInput({ name, label, value, onChange, error, currency = 'PHP', max = 50_000_000, ref }: CurrencyInputProps) {
-    const intl = useIntl();
-    const [displayValue, setDisplayValue] = useState(
-      value != null && value > 0
-        ? intl.formatNumber(value, { style: 'currency', currency })
-        : '',
-    );
-    const [isFocused, setIsFocused] = useState(false);
+  const intl = useIntl();
+  const [displayValue, setDisplayValue] = useState(
+    value != null && value > 0
+      ? intl.formatNumber(value, { style: 'currency', currency })
+      : '',
+  );
+  const [isFocused, setIsFocused] = useState(false);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const raw = e.target.value;
-      setDisplayValue(raw);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const raw = e.target.value;
+    setDisplayValue(raw);
 
-      const parsed = parseLocaleNumber(raw, intl.locale);
-      if (parsed >= 0 && parsed <= max) {
-        onChange?.(parsed);
-      }
-    };
+    const parsed = parseLocaleNumber(raw, intl.locale);
+    if (parsed >= 0 && parsed <= max) {
+      onChange?.(parsed);
+    }
+  };
 
-    const handleBlur = () => {
-      setIsFocused(false);
-      const parsed = parseLocaleNumber(displayValue, intl.locale);
-      if (parsed > 0) {
-        setDisplayValue(intl.formatNumber(parsed, { style: 'currency', currency }));
-      }
-    };
+  const handleBlur = () => {
+    setIsFocused(false);
+    const parsed = parseLocaleNumber(displayValue, intl.locale);
+    if (parsed > 0) {
+      setDisplayValue(intl.formatNumber(parsed, { style: 'currency', currency }));
+    }
+  };
 
-    const handleFocus = () => {
-      setIsFocused(true);
-      // Show raw number when focused for easier editing
-      const parsed = parseLocaleNumber(displayValue, intl.locale);
-      if (parsed > 0) {
-        setDisplayValue((parsed / 100).toString());
-      }
-    };
+  const handleFocus = () => {
+    setIsFocused(true);
+    // Show raw number when focused for easier editing
+    const parsed = parseLocaleNumber(displayValue, intl.locale);
+    if (parsed > 0) {
+      setDisplayValue((parsed / 100).toString());
+    }
+  };
 
-    return (
-      <div>
-        <label htmlFor={name} className="block text-sm font-medium">
-          {label}
-        </label>
-        <input
-          ref={ref}
-          id={name}
-          type="text"
-          inputMode="decimal"
-          value={displayValue}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          onFocus={handleFocus}
-          className="mt-1 block w-full rounded-lg border px-3 py-2"
-          aria-describedby={error != null ? `${name}-error` : undefined}
-          aria-invalid={error != null}
-        />
-        {error != null && (
-          <p id={`${name}-error`} className="mt-1 text-sm text-red-600" role="alert">
-            {error}
-          </p>
-        )}
-      </div>
-    );
+  return (
+    <div>
+      <label htmlFor={name} className="block text-sm font-medium">
+        {label}
+      </label>
+      <input
+        ref={ref}
+        id={name}
+        type="text"
+        inputMode="decimal"
+        value={displayValue}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        onFocus={handleFocus}
+        className="mt-1 block w-full rounded-lg border px-3 py-2"
+        aria-describedby={error != null ? `${name}-error` : undefined}
+        aria-invalid={error != null}
+      />
+      {error != null && (
+        <p id={`${name}-error`} className="mt-1 text-sm text-red-600" role="alert">
+          {error}
+        </p>
+      )}
+    </div>
+  );
 }
 ```
 

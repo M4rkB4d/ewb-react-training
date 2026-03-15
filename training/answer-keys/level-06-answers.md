@@ -375,7 +375,8 @@ test.describe('Fund Transfer', () => {
 });
 
 // src/lib/audit.ts
-import { logger } from './logger';
+// In a production app, replace console.log with a structured logging service
+
 import { useAuthStore } from '@/stores/auth-store';
 
 type AuditAction =
@@ -390,7 +391,7 @@ export function auditLog(action: AuditAction, details?: Record<string, unknown>)
 
   // BSP 1019 — All financial actions must be logged
   // Use internal IDs only — never raw account numbers (BSP 982, RA 10173)
-  logger.info(`AUDIT: ${action}`, {
+  console.log(`AUDIT: ${action}`, {
     action,
     userId: userId ?? 'anonymous',
     ...details,

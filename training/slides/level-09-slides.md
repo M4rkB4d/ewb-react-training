@@ -42,7 +42,7 @@
 - *Speaker notes: This mapping shows why we need both architectures. One size does not fit all — match the rendering strategy to the use case.*
 
 ### Slide 7: Next.js 16 Project Setup
-- `npx create-next-app@latest ewb-public --typescript --tailwind --app`
+- `npx create-next-app@latest ewb-public --typescript --tailwind`
 - App Router: file-based routing with `app/` directory conventions
 - Same EWB design system (Tailwind CSS 4 tokens, shared components)
 - Same TypeScript strict mode, same Zod validation patterns
