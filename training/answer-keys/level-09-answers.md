@@ -124,8 +124,8 @@ export default async function ComparePage() {
             <div key={p.id} className="rounded border p-4">
               <h2 className="font-semibold">{p.name}</h2>
               {p.interestRate != null && <p>Interest Rate: {p.interestRate}% p.a.</p>}
-              {p.minimumDeposit != null && <p>Min. Deposit: PHP {(p.minimumDeposit / 100).toLocaleString()}</p>}
-              <p>Monthly Fee: PHP {(p.monthlyFee / 100).toLocaleString()}</p>
+              {p.minimumDeposit != null && <p>Min. Deposit: PHP {(p.minimumDeposit / 100).toLocaleString('en-PH')}</p>}
+              <p>Monthly Fee: PHP {(p.monthlyFee / 100).toLocaleString('en-PH')}</p>
             </div>
           ))}
         </div>
@@ -301,7 +301,7 @@ const ApplicationSchema = z.object({
   nextSteps: z.string(),
 });
 
-const statusColors: Record<string, string> = {
+const statusColors: Record<z.infer<typeof ApplicationSchema>['status'], string> = {
   submitted: 'bg-blue-100 text-blue-700',
   'under-review': 'bg-amber-100 text-amber-700',
   approved: 'bg-green-100 text-green-700',

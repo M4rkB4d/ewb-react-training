@@ -439,7 +439,7 @@ export function PaymentForm() {
           ))}
         </select>
         {errors.accountId != null && (
-          <p className="mt-1 text-sm text-red-600">{errors.accountId.message}</p>
+          <p className="mt-1 text-sm text-error">{errors.accountId.message}</p>
         )}
       </div>
 
@@ -457,7 +457,7 @@ export function PaymentForm() {
           inputMode="decimal"
         />
         {errors.amount != null && (
-          <p className="mt-1 text-sm text-red-600">{errors.amount.message}</p>
+          <p className="mt-1 text-sm text-error">{errors.amount.message}</p>
         )}
       </div>
 
@@ -554,7 +554,7 @@ export function PaymentReview() {
         >
           Back
         </Button>
-        <Button onClick={handleConfirm} disabled={isPending}>
+        <Button type="button" onClick={handleConfirm} disabled={isPending}>
           {isPending ? 'Processing...' : 'Confirm Payment'}
         </Button>
       </div>
@@ -585,7 +585,7 @@ export function PaymentReceipt({ receipt }: PaymentReceiptProps) {
 
   return (
     <div className="space-y-4 rounded border p-6">
-      <h2 className="text-lg font-semibold text-green-700">Payment Successful</h2>
+      <h2 className="text-lg font-semibold text-ewb-lime-700">Payment Successful</h2>
 
       <dl className="grid grid-cols-2 gap-y-2 text-sm">
         <dt className="text-gray-500">Reference</dt>

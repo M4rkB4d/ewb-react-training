@@ -10,7 +10,7 @@
 
 - Open the Portal project in VS Code
 - Have the dev server running (`npm run dev`)
-- Have React DevTools and Redux DevTools (for Zustand) installed in Chrome
+- Have React DevTools and Redux DevTools (for Zustand — requires `devtools` middleware on the store) installed in Chrome
 - Browser tabs ready: portal at `localhost:5173`, devtools open
 
 ---

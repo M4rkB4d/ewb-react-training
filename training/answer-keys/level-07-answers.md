@@ -54,7 +54,7 @@ Automated compliance tests (e.g., verifying that `auth-store.ts` does not contai
 
 ### Question 12 — C
 
-The DPA data minimization principle requires displaying the minimum PII necessary. For account numbers, only the last 4 digits are shown by default (`••••7890`). The user must explicitly click "Show" to reveal the full number. This matches the masking policy in A17.
+The DPA data minimization principle requires displaying the minimum PII necessary. For 10-digit account numbers, only the last 4 digits are shown by default (`••••••7890`). The user must explicitly click "Show" to reveal the full number. This matches the masking policy in A17.
 
 ---
 
@@ -137,7 +137,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { z } from 'zod';
 import { apiClient } from '@/lib/api-client';
 import { emitAuditEvent } from '@/compliance/audit-service';
-type ConsentPurpose = 'essential' | 'analytics' | 'marketing' | 'third-party' | 'biometric' | 'data-sharing' | 'location';
+type ConsentPurpose = 'essential' | 'analytics' | 'marketing' | 'biometric' | 'data-sharing' | 'location';
 
 const consentSchema = z.object({
   id: z.string(),

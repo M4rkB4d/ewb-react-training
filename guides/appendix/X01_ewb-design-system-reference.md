@@ -116,7 +116,7 @@
 import { type ButtonHTMLAttributes } from 'react';
 import { cn } from '@/lib/utils';
 
-type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'destructive';
+type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'error';
 type ButtonSize = 'sm' | 'md' | 'lg';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -129,7 +129,7 @@ const variantStyles: Record<ButtonVariant, string> = {
   secondary: 'bg-ewb-navy text-white hover:bg-ewb-navy/90',
   outline: 'border border-ewb-purple text-ewb-purple hover:bg-ewb-purple-50',
   ghost: 'text-ewb-purple hover:bg-ewb-purple-50',
-  destructive: 'bg-red-600 text-white hover:bg-red-700',
+  error: 'bg-red-600 text-white hover:bg-red-700',
 };
 
 const sizeStyles: Record<ButtonSize, string> = {

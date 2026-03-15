@@ -354,7 +354,7 @@ export function DocumentUpload({ label, accept, maxSizeMB, onUpload }: DocumentU
         aria-describedby={error != null ? 'upload-error' : undefined}
       />
       {error != null && (
-        <p id="upload-error" className="mt-1 text-sm text-red-600" role="alert">
+        <p id="upload-error" className="mt-1 text-sm text-error" role="alert">
           {error}
         </p>
       )}
@@ -417,7 +417,7 @@ export function DataAccessRequest() {
         {requestData.isPending ? 'Submitting...' : 'Request Data Export'}
       </Button>
       {requestData.isSuccess && (
-        <p className="text-sm text-green-600" role="status">
+        <p className="text-sm text-success" role="status">
           Your request has been submitted. You will receive your data export
           within 30 days.
         </p>

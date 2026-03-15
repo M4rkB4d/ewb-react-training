@@ -195,7 +195,7 @@ Some props are not always required:
 // src/components/ui/Button.tsx
 interface ButtonProps {
   children: React.ReactNode;
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'destructive';
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'error';
   size?: 'sm' | 'md' | 'lg';
   disabled?: boolean;
   loading?: boolean;
@@ -315,11 +315,11 @@ function Input({ label, error, className, ...props }: InputProps) {
       <label className="text-sm font-medium">{label}</label>
       <input
         className={`w-full rounded-md border px-3 py-2 ${
-          error ? 'border-destructive' : 'border-input'
+          error ? 'border-error' : 'border-input'
         } ${className ?? ''}`}
         {...props}
       />
-      {error && <p className="mt-1 text-sm text-destructive">{error}</p>}
+      {error && <p className="mt-1 text-sm text-error">{error}</p>}
     </div>
   );
 }
@@ -581,7 +581,7 @@ function TransferStatus({ state }: { state: TransferState }) {
     case 'failed':
       // TypeScript knows state has error
       return (
-        <div className="text-destructive">
+        <div className="text-error">
           <p>{state.error.message}</p>
           {state.error.retryable && <button>Retry</button>}
         </div>

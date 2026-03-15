@@ -45,7 +45,7 @@ D. All JavaScript errors anywhere in the application
 
 ### Question 4 (True/False)
 
-Developers building new React components should still manually add `useMemo` and `useCallback` because React Compiler only optimizes class components.
+When the React Compiler is configured, new functional components no longer need manual `useMemo` or `useCallback` for memoization.
 
 ---
 

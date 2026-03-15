@@ -426,7 +426,7 @@ product page that Google should index?
   --color-accent: #dba464;
   --color-success: #16a34a;
   --color-warning: #d97706;
-  --color-danger: #dc2626;
+  --color-error: #dc2626;
 
   /* Typography */
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;

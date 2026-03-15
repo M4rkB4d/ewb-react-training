@@ -118,7 +118,7 @@ Add the active/inactive indicator and conditional action buttons:
   accountName="Personal Savings"
   accountNumber="1234567890"
   accountType="savings"
-  balance={150000}
+  balance={150000} {/* Level 2: amount is pesos — centavos model starts at Level 5 (B03) */}
   isActive={true}
   onTransfer={(num) => alert(`Transfer from ${num}`)}
 />

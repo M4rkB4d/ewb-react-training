@@ -257,12 +257,14 @@ export function AccountDashboard({
               <CardFooter>
                 <div className="flex gap-2">
                   <Button
+                    type="button"
                     size="sm"
                     onClick={() => onTransfer(account.id)}
                   >
                     Transfer
                   </Button>
                   <Button
+                    type="button"
                     size="sm"
                     variant="outline"
                     onClick={() => onViewDetails(account.id)}

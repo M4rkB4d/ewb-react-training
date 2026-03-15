@@ -20,9 +20,9 @@ Detailed security error messages reveal attack surface information. If the error
 
 Error boundaries catch errors during rendering, lifecycle methods, and constructors of the component tree below them. They do NOT catch errors in event handlers (use try/catch), async code (use .catch() or try/catch in async functions), server-side rendering, or errors thrown in the error boundary itself.
 
-### Question 4 — Answer: False
+### Question 4 — Answer: True
 
-React Compiler is a **separate build-time tool** (not bundled with React 19) that automatically memoizes functional components, values, and callbacks at build time. The claim that "the compiler only handles class components" is incorrect — it specifically targets **functional components and hooks**. The claim that "developers should still manually add `useMemo` and `useCallback`" is also incorrect — for new code, do not add manual memoization; the compiler handles this automatically. Existing manual memoization can remain (the compiler skips already-optimized code). Both premises in the question are false.
+React Compiler is a **separate build-time tool** (not bundled with React 19) that automatically memoizes functional components, values, and callbacks at build time. It specifically targets **functional components and hooks**. For new code, do not add manual `useMemo` or `useCallback` — the compiler handles this automatically. Existing manual memoization can remain (the compiler skips already-optimized code).
 
 ### Question 5 — Answer: B
 
@@ -391,6 +391,7 @@ export function auditLog(action: AuditAction, details?: Record<string, unknown>)
 
   // BSP 1019 — All financial actions must be logged
   // Use internal IDs only — never raw account numbers (BSP 982, RA 10173)
+  // Level 6 simplification: uses console.log. Level 7 introduces emitAuditEvent() with proper structured logging.
   console.log(`AUDIT: ${action}`, {
     action,
     userId: userId ?? 'anonymous',

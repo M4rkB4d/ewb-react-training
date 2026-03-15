@@ -90,7 +90,7 @@ in a banking application. It must be visually clear, accessible, and consistent.
 // src/components/ui/button.tsx
 import { cn } from '@/lib/utils';
 
-type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'destructive';
+type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'error';
 type ButtonSize = 'sm' | 'md' | 'lg';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -109,7 +109,7 @@ const variantStyles: Record<ButtonVariant, string> = {
     'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus-visible:ring-ewb-purple',
   ghost:
     'text-gray-700 hover:bg-gray-100 focus-visible:ring-ewb-purple',
-  destructive:
+  error:
     'bg-red-600 text-white hover:bg-red-700 focus-visible:ring-red-600',
 };
 
@@ -206,7 +206,7 @@ unpredictable results. `tailwind-merge` knows that `bg-white` should override
 <Button>Transfer Funds</Button>
 <Button variant="secondary">View Details</Button>
 <Button variant="outline">Cancel</Button>
-<Button variant="destructive">Delete Account</Button>
+<Button variant="error">Delete Account</Button>
 <Button variant="ghost" size="sm">Edit</Button>
 <Button isLoading>Processing...</Button>
 <Button disabled>Unavailable</Button>
@@ -720,7 +720,7 @@ export function DesignSystemPage() {
           <Button variant="secondary">Secondary</Button>
           <Button variant="outline">Outline</Button>
           <Button variant="ghost">Ghost</Button>
-          <Button variant="destructive">Destructive</Button>
+          <Button variant="error">Error</Button>
           <Button isLoading>Loading</Button>
           <Button disabled>Disabled</Button>
         </div>

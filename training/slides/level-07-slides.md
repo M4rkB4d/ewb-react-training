@@ -58,7 +58,7 @@
 - Every financial operation logged: user, timestamp, action, amount, reference ID, IP
 - Structured logging format for machine readability
 - Logs forwarded to Azure Application Insights for centralized analysis
-- Audit log retention: 5 years minimum (BSP requirement)
+- Audit log retention: 5 years minimum (AMLA — RA 9160)
 - *Speaker notes: Show a sample audit log entry for a fund transfer. This is what compliance officers and auditors review during examinations.*
 
 ### Slide 10: Data Privacy Act (RA 10173)

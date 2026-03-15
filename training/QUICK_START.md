@@ -12,6 +12,8 @@ You already know React and TypeScript. You have built production applications be
 
 What you *do* need is EWB-specific context: our design system, compliance requirements, authentication patterns, deployment infrastructure, and the regulatory constraints that shape every technical decision at a Philippine bank.
 
+**Prerequisites:** Node.js 24.x, Git, VS Code with recommended extensions (see B01 for full setup).
+
 **This track gets you production-ready in 3 days instead of 2 weeks.**
 
 ---

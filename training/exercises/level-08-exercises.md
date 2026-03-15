@@ -151,7 +151,7 @@ interface CurrencyInputProps {
 export function CurrencyInput({ name, label, value, onChange, error, currency = 'PHP', max = 50_000_000, ref }: CurrencyInputProps) {
   const intl = useIntl();
   const [displayValue, setDisplayValue] = useState(
-    value != null && value > 0 ? intl.formatNumber(value, { style: 'currency', currency }) : ''
+    value != null && value > 0 ? intl.formatNumber(value / 100, { style: 'currency', currency }) : ''
   );
 
   // TODO: Implement locale-aware parsing and formatting

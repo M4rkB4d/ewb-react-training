@@ -142,7 +142,7 @@ idle → loading → mfa-required → authenticated
 
 The migration timeline:
 - **Phase 1 (now):** Staff enrollment, passkey as optional second factor
-- **Phase 2 (April):** Customer prompts after login, passkey as primary
+- **Phase 2 (pre-June):** Customer prompts after login, passkey as primary
 - **Phase 3 (June):** Required for new accounts, password fallback for existing
 
 "The passkey button is above the login form. This trains users to reach for it first."

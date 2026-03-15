@@ -588,7 +588,7 @@ export function PasskeySettings() {
                 </p>
               </div>
               <Button
-                variant="destructive"
+                variant="error"
                 size="sm"
                 onClick={() => {
                   if (window.confirm('Remove this passkey? You will not be able to sign in with it.')) {
