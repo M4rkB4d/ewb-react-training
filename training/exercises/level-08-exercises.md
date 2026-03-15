@@ -165,7 +165,7 @@ export function CurrencyInput({ name, label, value, onChange, error, currency = 
       </label>
       {/* TODO: Build the input with locale-aware formatting */}
       {error != null && (
-        <p className="mt-1 text-sm text-red-600" role="alert">{error}</p>
+        <p className="mt-1 text-sm text-error" role="alert">{error}</p>
       )}
     </div>
   );

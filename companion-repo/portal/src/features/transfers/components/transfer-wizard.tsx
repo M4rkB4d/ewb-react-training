@@ -97,7 +97,7 @@ export function TransferWizard({ accounts, onSubmit }: TransferWizardProps) {
                 ))}
               </select>
               {errors.fromAccount != null && (
-                <p className="text-sm text-red-600">{errors.fromAccount.message}</p>
+                <p className="text-sm text-error">{errors.fromAccount.message}</p>
               )}
             </div>
 

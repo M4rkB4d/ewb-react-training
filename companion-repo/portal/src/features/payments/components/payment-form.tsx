@@ -86,7 +86,7 @@ export function PaymentForm() {
           ))}
         </select>
         {errors.accountId != null && (
-          <p className="mt-1 text-sm text-red-600">{errors.accountId.message}</p>
+          <p className="mt-1 text-sm text-error">{errors.accountId.message}</p>
         )}
       </div>
 
@@ -104,7 +104,7 @@ export function PaymentForm() {
           inputMode="decimal"
         />
         {errors.amount != null && (
-          <p className="mt-1 text-sm text-red-600">{errors.amount.message}</p>
+          <p className="mt-1 text-sm text-error">{errors.amount.message}</p>
         )}
       </div>
 

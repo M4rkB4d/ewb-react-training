@@ -232,7 +232,7 @@ export function LoginForm() {
       <h2 className="text-xl font-bold">Sign In</h2>
 
       {error != null && (
-        <div role="alert" className="rounded bg-red-50 p-3 text-sm text-red-700">
+        <div role="alert" className="rounded bg-error/10 p-3 text-sm text-error">
           {error}
         </div>
       )}
@@ -251,7 +251,7 @@ export function LoginForm() {
           aria-describedby={errors.username != null ? 'username-error' : undefined}
         />
         {errors.username != null && (
-          <p id="username-error" className="mt-1 text-sm text-red-600" role="alert">
+          <p id="username-error" className="mt-1 text-sm text-error" role="alert">
             {errors.username.message}
           </p>
         )}
@@ -271,7 +271,7 @@ export function LoginForm() {
           aria-describedby={errors.password != null ? 'password-error' : undefined}
         />
         {errors.password != null && (
-          <p id="password-error" className="mt-1 text-sm text-red-600" role="alert">
+          <p id="password-error" className="mt-1 text-sm text-error" role="alert">
             {errors.password.message}
           </p>
         )}
@@ -320,7 +320,7 @@ export function MfaForm({ mfaToken, methods: _methods }: MfaFormProps) {
       </p>
 
       {verifyMfa.isError && (
-        <div role="alert" className="rounded bg-red-50 p-3 text-sm text-red-700">
+        <div role="alert" className="rounded bg-error/10 p-3 text-sm text-error">
           Invalid code. Please try again.
         </div>
       )}

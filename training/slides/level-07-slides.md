@@ -84,7 +84,7 @@
 
 ### Slide 13: Production Build and Deployment
 - `npm run build` → Vite produces minified, tree-shaken, content-hashed output
-- Docker image with Nginx for SPA routing and security headers
+- Deployed to Azure Blob Storage + CDN — no server runtime required
 - Azure Pipelines CI/CD: build → test → security scan → deploy
 - Blue-green deployment for zero-downtime releases
 - *Speaker notes: Show the pipeline YAML. Emphasize that tests run before deployment — broken code never reaches production.*

@@ -39,7 +39,7 @@ export function LoginForm() {
       <h1 className="text-2xl font-bold text-ewb-purple">Sign In</h1>
 
       {loginMutation.isError && (
-        <div role="alert" className="rounded bg-red-50 p-3 text-sm text-red-700">
+        <div role="alert" className="rounded bg-error/10 p-3 text-sm text-error">
           Invalid username or password. Please try again.
         </div>
       )}

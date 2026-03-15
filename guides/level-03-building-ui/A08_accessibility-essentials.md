@@ -284,7 +284,7 @@ Use ARIA when semantic HTML is not enough:
 // Custom component that has no native semantic
 <div
   role="alert"
-  className="rounded-lg border border-red-200 bg-red-50 p-4"
+  className="rounded-lg border border-error/20 bg-error/10 p-4"
 >
   Transaction failed. Please try again.
 </div>

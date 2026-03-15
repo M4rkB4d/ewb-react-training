@@ -305,7 +305,7 @@ const statusColors: Record<z.infer<typeof ApplicationSchema>['status'], string> 
   submitted: 'bg-blue-100 text-blue-700',
   'under-review': 'bg-amber-100 text-amber-700',
   approved: 'bg-ewb-lime-200 text-ewb-lime-700',
-  rejected: 'bg-red-100 text-red-700',
+  rejected: 'bg-error/10 text-error',
 };
 
 // Session ID is passed as a Bearer token for internal service-to-service auth.

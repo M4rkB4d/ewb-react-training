@@ -120,10 +120,10 @@ export function ErrorAlert({ error, onRetry }: ErrorAlertProps) {
     error instanceof AppError ? error.context?.requestId : undefined;
 
   return (
-    <div role="alert" className="rounded border border-red-200 bg-red-50 p-4">
-      <p className="text-sm text-red-700">{message}</p>
+    <div role="alert" className="rounded border border-error/20 bg-error/10 p-4">
+      <p className="text-sm text-error">{message}</p>
       {requestId != null && (
-        <p className="mt-1 text-xs text-red-500">
+        <p className="mt-1 text-xs text-error/70">
           Reference: {String(requestId)}
         </p>
       )}
@@ -164,7 +164,7 @@ export function logError(
 // Usage — feature-level boundary
 <ErrorBoundary
   fallback={
-    <div className="p-4 text-red-600">
+    <div className="p-4 text-error">
       Failed to load transaction history. Please refresh the page.
     </div>
   }

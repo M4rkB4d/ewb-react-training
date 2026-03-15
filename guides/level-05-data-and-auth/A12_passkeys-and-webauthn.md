@@ -491,7 +491,7 @@ export function PasskeyEnrollment() {
       </div>
 
       {register.isError && (
-        <div role="alert" className="rounded bg-red-50 p-3 text-sm text-red-700">
+        <div role="alert" className="rounded bg-error/10 p-3 text-sm text-error">
           {register.error instanceof DOMException &&
            register.error.name === 'NotAllowedError'
             ? 'Passkey setup was cancelled. You can try again when ready.'

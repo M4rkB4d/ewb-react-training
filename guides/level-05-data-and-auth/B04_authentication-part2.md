@@ -322,7 +322,7 @@ export function LoginForm() {
       <h1 className="text-2xl font-bold text-ewb-purple">Sign In</h1>
 
       {loginMutation.isError && (
-        <div role="alert" className="rounded bg-red-50 p-3 text-sm text-red-700">
+        <div role="alert" className="rounded bg-error/10 p-3 text-sm text-error">
           Invalid username or password. Please try again.
         </div>
       )}
@@ -387,7 +387,7 @@ export function MfaForm() {
       </p>
 
       {verifyMfa.isError && (
-        <div role="alert" className="rounded bg-red-50 p-3 text-sm text-red-700">
+        <div role="alert" className="rounded bg-error/10 p-3 text-sm text-error">
           Invalid code. Please try again.
         </div>
       )}
@@ -565,7 +565,7 @@ export function SessionWarningDialog() {
       </h2>
       <p id="session-desc" className="mt-2 text-gray-600">
         Your session will expire in{' '}
-        <span className="font-mono font-bold text-red-600">
+        <span className="font-mono font-bold text-error">
           {Math.floor(remainingSeconds / 60)}:{String(remainingSeconds % 60).padStart(2, '0')}
         </span>
         . Would you like to continue?

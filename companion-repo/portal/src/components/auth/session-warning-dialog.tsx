@@ -21,7 +21,7 @@ export function SessionWarningDialog() {
         </h2>
         <p id="session-desc" className="mt-2 text-gray-600">
           Your session will expire in{' '}
-          <span className="font-mono font-bold text-red-600">
+          <span className="font-mono font-bold text-error">
             {Math.floor(remainingSeconds / 60)}:{String(remainingSeconds % 60).padStart(2, '0')}
           </span>
           . Would you like to continue?

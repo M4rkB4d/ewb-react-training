@@ -138,7 +138,7 @@ function StatusBadge({ status }: { status: string }) {
     submitted: 'bg-blue-100 text-blue-800',
     'under-review': 'bg-yellow-100 text-yellow-800',
     approved: 'bg-ewb-lime-200 text-ewb-lime-700',
-    rejected: 'bg-red-100 text-red-800',
+    rejected: 'bg-error/10 text-error',
   };
 
   return (
