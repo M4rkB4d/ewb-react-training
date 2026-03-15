@@ -1,7 +1,7 @@
 // src/components/ui/button.tsx
 import { cn } from '@/lib/utils';
 
-type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'destructive';
+type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'error';
 type ButtonSize = 'sm' | 'md' | 'lg';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -20,7 +20,7 @@ const variantStyles: Record<ButtonVariant, string> = {
     'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus-visible:ring-ewb-purple',
   ghost:
     'text-gray-700 hover:bg-gray-100 focus-visible:ring-ewb-purple',
-  destructive:
+  error:
     'bg-red-600 text-white hover:bg-red-700 focus-visible:ring-red-600',
 };
 

@@ -34,7 +34,7 @@ export default function App() {
         <Button variant="primary">Transfer</Button>
         <Button variant="secondary">View Details</Button>
         <Button variant="outline">Cancel</Button>
-        <Button variant="destructive">Delete</Button>
+        <Button variant="error">Delete</Button>
         <Button variant="ghost">Edit</Button>
         <Button isLoading>Processing...</Button>
         <Button disabled>Unavailable</Button>

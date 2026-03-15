@@ -20,7 +20,7 @@
 - *Speaker notes: Show the Tailwind theme config with EWB tokens. Changing one value updates every component.*
 
 ### Slide 4: Building the Component Library
-- `Button` — primary, secondary, outline, ghost, destructive variants
+- `Button` — primary, secondary, outline, ghost, error variants
 - `Input` — text, password (with toggle), currency, masked account number
 - `Card` — container for account summaries, transaction details
 - `Badge` — status indicators (active, dormant, frozen, pending)

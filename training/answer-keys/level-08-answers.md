@@ -256,7 +256,7 @@ export function TransferStatusTracker({ transferId }: { transferId: string }) {
                 index <= activeStep
                   ? transfer.status === 'failed' && index === activeStep
                     ? 'bg-red-100 text-red-700'
-                    : 'bg-green-100 text-green-700'
+                    : 'bg-ewb-lime-200 text-ewb-lime-700'
                   : 'bg-gray-100 text-gray-500'
               }`}
               aria-current={index === activeStep ? 'step' : undefined}

@@ -588,9 +588,9 @@ export function ComplianceDashboard() {
       <h1 className="text-2xl font-bold">BSP Compliance Status</h1>
 
       <div className="grid grid-cols-3 gap-4">
-        <div className="rounded bg-green-50 p-4">
-          <p className="text-3xl font-bold text-green-700">{implemented.length}</p>
-          <p className="text-sm text-green-600">Implemented</p>
+        <div className="rounded bg-ewb-lime-50 p-4">
+          <p className="text-3xl font-bold text-ewb-lime-700">{implemented.length}</p>
+          <p className="text-sm text-ewb-lime-600">Implemented</p>
         </div>
         <div className="rounded bg-amber-50 p-4">
           <p className="text-3xl font-bold text-amber-700">{inProgress.length}</p>
@@ -621,7 +621,7 @@ export function ComplianceDashboard() {
               <td className="p-2">
                 <span className={`inline-block rounded px-2 py-0.5 text-xs ${
                   control.status === 'implemented'
-                    ? 'bg-green-100 text-green-700'
+                    ? 'bg-ewb-lime-200 text-ewb-lime-700'
                     : control.status === 'in-progress'
                       ? 'bg-amber-100 text-amber-700'
                       : 'bg-gray-100 text-gray-700'

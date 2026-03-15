@@ -17,7 +17,7 @@ function TransactionRow({ transaction }: TransactionRowProps) {
         <p className="text-sm text-gray-500">{transaction.date} · {transaction.channel}</p>
       </div>
       <div className="text-right">
-        <p className={isDebit ? 'text-red-600' : 'text-green-600'}>
+        <p className={isDebit ? 'text-red-600' : 'text-ewb-lime-600'}>
           {isDebit ? '-' : '+'}₱{(transaction.amount / 100).toLocaleString()}
         </p>
         <p className="text-xs text-gray-400">{transaction.reference}</p>

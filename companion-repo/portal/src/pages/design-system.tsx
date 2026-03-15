@@ -15,7 +15,7 @@ export function DesignSystemPage() {
           <Button variant="secondary">Secondary</Button>
           <Button variant="outline">Outline</Button>
           <Button variant="ghost">Ghost</Button>
-          <Button variant="destructive">Destructive</Button>
+          <Button variant="error">Error</Button>
           <Button isLoading>Loading</Button>
           <Button disabled>Disabled</Button>
         </div>

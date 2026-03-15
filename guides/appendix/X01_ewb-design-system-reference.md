@@ -92,6 +92,9 @@
   --color-primary: var(--color-ewb-purple);
   --color-primary-hover: var(--color-ewb-purple-700);
   --color-primary-active: var(--color-ewb-purple-800);
+  --color-success: var(--color-ewb-lime);
+  --color-error: #dc2626;
+  --color-warning: #f59e0b;
 
   /* Typography */
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;

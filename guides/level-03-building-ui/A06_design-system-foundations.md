@@ -64,7 +64,7 @@ ewb-navy: #06357A          →     secondary, info
 ewb-gold: #dba464           →     accent
 ewb-lime: #d5e04d           →     success
 ewb-magenta: #b1006f        →     (decorative accent)
-red-600: #dc2626             →     error, destructive
+red-600: #dc2626             →     error
 amber-500: #f59e0b           →     warning
 ```
 

@@ -231,7 +231,7 @@ export function TransactionList({ transactions }: TransactionListProps) {
               <div className="text-right">
                 <p
                   className={
-                    txn.type === 'credit' ? 'font-semibold text-green-700' : 'text-gray-900'
+                    txn.type === 'credit' ? 'font-semibold text-ewb-lime-700' : 'text-gray-900'
                   }
                 >
                   {txn.type === 'credit' ? '+' : ''}
