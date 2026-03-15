@@ -307,7 +307,7 @@ export function AccountDetail({ accountId }: { accountId: string }) {
       <div className="flex items-center gap-1 text-xs text-gray-500">
         <span
           className={`h-2 w-2 rounded-full ${
-            connectionState === 'connected' ? 'bg-ewb-lime-500' : 'bg-gray-300'
+            connectionState === 'connected' ? 'bg-emerald-500' : 'bg-gray-300'
           }`}
         />
         {connectionState === 'connected' ? 'Live' : 'Connecting...'}

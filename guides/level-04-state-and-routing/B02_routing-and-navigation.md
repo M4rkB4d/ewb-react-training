@@ -129,25 +129,48 @@ export function ProtectedRoute() {
 
 ### Role-based access control
 
+EastWest Bank uses a hierarchical role model: `customer < teller < manager < admin`. A user with a higher role automatically has access to everything a lower role can see. This avoids maintaining explicit role arrays at every guard point.
+
 ```tsx
-// src/components/auth/role-guard.tsx
-import { Navigate, Outlet } from 'react-router';
-import { useAuthStore } from '@/stores/auth-store';
+// src/lib/permissions.ts
+import type { Role } from '@/types/auth';
 
-interface RoleGuardProps {
-  allowedRoles: Array<'customer' | 'teller' | 'manager' | 'admin'>;
-}
+const roleHierarchy: Record<Role, number> = {
+  customer: 0,
+  teller: 1,
+  manager: 2,
+  admin: 3,
+};
 
-export function RoleGuard({ allowedRoles }: RoleGuardProps) {
-  const user = useAuthStore((s) => s.user);
-
-  if (user == null || !allowedRoles.includes(user.role)) {
-    return <Navigate to="/" replace />;
-  }
-
-  return <Outlet />;
+export function hasMinimumRole(userRole: Role, requiredRole: Role): boolean {
+  return roleHierarchy[userRole] >= roleHierarchy[requiredRole];
 }
 ```
+
+```tsx
+// src/components/auth/role-guard.tsx
+import { useAuthStore } from '@/stores/auth-store';
+import { hasMinimumRole } from '@/lib/permissions';
+import type { Role } from '@/types/auth';
+
+interface RoleGuardProps {
+  requiredRole: Role;
+  children: React.ReactNode;
+  fallback?: React.ReactNode;
+}
+
+export function RoleGuard({ requiredRole, children, fallback = null }: RoleGuardProps) {
+  const user = useAuthStore((state) => state.user);
+
+  if (user == null || !hasMinimumRole(user.role, requiredRole)) {
+    return fallback;
+  }
+
+  return children;
+}
+```
+
+Unlike `ProtectedRoute` (which uses `<Outlet />` for nested routing), `RoleGuard` wraps its children directly. This makes it composable inside any component — not just inside the router.
 
 ### Using guards in the router
 
@@ -162,19 +185,30 @@ export const router = createBrowserRouter([
         children: [
           { index: true, lazy: () => import('@/pages/dashboard') },
           { path: 'accounts', lazy: () => import('@/pages/accounts') },
-          // Admin-only routes
-          {
-            element: <RoleGuard allowedRoles={['admin', 'manager']} />,
-            children: [
-              { path: 'admin', lazy: () => import('@/pages/admin') },
-            ],
-          },
+          { path: 'admin', lazy: () => import('@/pages/admin') },
         ],
       },
     ],
   },
   { path: '/login', lazy: () => import('@/pages/login') },
 ]);
+```
+
+And inside the admin page itself:
+
+```tsx
+// src/pages/admin.tsx
+import { RoleGuard } from '@/components/auth/role-guard';
+import { Navigate } from 'react-router';
+
+export function Component() {
+  return (
+    <RoleGuard requiredRole="manager" fallback={<Navigate to="/" replace />}>
+      <h1>Admin Panel</h1>
+      {/* Admin content here */}
+    </RoleGuard>
+  );
+}
 ```
 
 > **BSP 982 Note:** Route guards are a frontend access control mechanism. They
@@ -218,8 +252,8 @@ export function SidebarNav() {
               className={({ isActive }) =>
                 `flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                   isActive
-                    ? 'bg-ewb-purple-100 text-ewb-purple-700'
-                    : 'text-gray-700 hover:bg-gray-100'
+                    ? 'bg-ewb-purple-700 text-ewb-gold-300'
+                    : 'text-ewb-purple-100 hover:bg-ewb-purple-800 hover:text-white'
                 }`
               }
             >

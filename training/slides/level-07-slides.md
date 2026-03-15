@@ -55,7 +55,7 @@
 - *Speaker notes: Show the full circular-to-control mapping table. Each row is an audit artifact — this is what BSP examiners review.*
 
 ### Slide 9: Audit Trail System
-- Every financial operation logged: user, timestamp, action, amount, reference ID, IP
+- Every financial operation logged: user, timestamp, action, amount, reference ID (IP captured server-side)
 - Structured logging format for machine readability
 - Logs forwarded to Azure Application Insights for centralized analysis
 - Audit log retention: 5 years minimum (AMLA — RA 9160)

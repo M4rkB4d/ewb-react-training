@@ -111,7 +111,7 @@ describe('AccountCard', () => {
         accountName="Personal Savings"
         accountNumber="1234567890"
         accountType="savings"
-        balance={150000}
+        balance={15_000_000}
         isActive={true}
       />,
     );
@@ -258,7 +258,7 @@ const defaultProps = {
   accountName: 'Personal Savings',
   accountNumber: '1234567890',
   accountType: 'savings' as const,
-  balance: 150000,
+  balance: 15_000_000, // centavos — ₱150,000.00
   isActive: true,
 };
 
@@ -285,17 +285,18 @@ describe('AccountCard', () => {
 
   it('formats the balance as Philippine Peso', () => {
     render(<AccountCard {...defaultProps} />);
-    // Intl.NumberFormat with PHP produces ₱150,000.00
+    // 15_000_000 centavos ÷ 100 = ₱150,000.00
     expect(screen.getByText('₱150,000.00')).toBeInTheDocument();
   });
 
   it('displays balance with centavos', () => {
-    render(<AccountCard {...defaultProps} balance={42500.5} />);
+    render(<AccountCard {...defaultProps} balance={4_250_050} />);
+    // 4_250_050 centavos ÷ 100 = ₱42,500.50
     expect(screen.getByText('₱42,500.50')).toBeInTheDocument();
   });
 ```
 
-> **Money handling note:** These test examples use pesos as a plain number for simplicity. Starting in B03 (API Integration), all monetary values use integer centavos with `formatPeso()` — one peso = 100 centavos, so ₱1,500.00 is stored as `150000`. This avoids IEEE 754 floating-point errors.
+> **Money handling note:** All monetary values in this codebase are stored as **integer centavos** — one peso = 100 centavos, so ₱150,000.00 is stored as `15_000_000`. The component divides by 100 for display. This avoids IEEE 754 floating-point errors that occur with decimal arithmetic. You will build the `formatPHP()` utility in B03 (API Integration).
 
 ```tsx
   // ── Conditional Rendering ──────────────────────────
@@ -762,7 +763,7 @@ const defaultProps = {
   accountName: 'Personal Savings',
   accountNumber: '1234567890',
   accountType: 'savings' as const,
-  balance: 150000,
+  balance: 15_000_000, // centavos — ₱150,000.00
   isActive: true,
 };
 

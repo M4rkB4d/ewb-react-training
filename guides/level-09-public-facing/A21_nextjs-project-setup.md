@@ -424,7 +424,7 @@ product page that Google should index?
   --color-primary: #500778;
   --color-secondary: #b1006f;
   --color-accent: #dba464;
-  --color-success: var(--color-ewb-lime);
+  --color-success: #059669; /* emerald-600 — lime fails WCAG on white */
   --color-warning: #f59e0b;
   --color-error: #dc2626;
 

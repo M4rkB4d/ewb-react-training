@@ -139,7 +139,7 @@ function StatusBadge({ status }: { status: ApplicationStatus }) {
   const styles: Record<ApplicationStatus, string> = {
     submitted: 'bg-blue-100 text-blue-800',
     'under-review': 'bg-yellow-100 text-yellow-800',
-    approved: 'bg-ewb-lime-200 text-ewb-lime-700',
+    approved: 'bg-emerald-200 text-emerald-700',
     rejected: 'bg-error/10 text-error',
   };
 

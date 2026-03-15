@@ -183,7 +183,7 @@ const billerSchema = z.object({
   fields: z.array(billerFieldSchema),
 });
 
-const paymentReceiptSchema = z.object({
+const paymentSchema = z.object({
   id: z.string(),
   reference: z.string(),
   billerId: z.string(),
@@ -207,19 +207,19 @@ export const paymentApi = {
     return billerSchema.parse(response.data);
   },
 
-  submitPayment: async (request: PaymentRequest) => {
+  submit: async (request: PaymentRequest) => {
     const response = await apiClient.post('/payments', request);
-    return paymentReceiptSchema.parse(response.data);
+    return paymentSchema.parse(response.data);
   },
 
   getHistory: async (accountId: string) => {
     const response = await apiClient.get(`/payments/history/${accountId}`);
-    return z.array(paymentReceiptSchema).parse(response.data);
+    return z.array(paymentSchema).parse(response.data);
   },
 
   getReceipt: async (paymentId: string) => {
     const response = await apiClient.get(`/payments/${paymentId}`);
-    return paymentReceiptSchema.parse(response.data);
+    return paymentSchema.parse(response.data);
   },
 };
 ```
@@ -498,7 +498,7 @@ import { ErrorAlert } from '@/components/error/error-alert';
 
 export function PaymentReview() {
   const draft = usePaymentDraftStore();
-  const { submitPayment, isPending, error } = usePayment();
+  const { submit, isPending, error } = usePayment();
 
   const fee = 1_500; // ₱15 processing fee in centavos
   // draft.amount is raw user input in pesos — multiply by 100 to convert to centavos
@@ -507,7 +507,7 @@ export function PaymentReview() {
 
   const handleConfirm = () => {
     if (draft.biller == null) return;
-    submitPayment({
+    submit({
       billerId: draft.biller.id,
       accountId: draft.accountId,
       amount: amountCentavos, // Converted from pesos input
@@ -585,7 +585,7 @@ export function PaymentReceipt({ receipt }: PaymentReceiptProps) {
 
   return (
     <div className="space-y-4 rounded border p-6">
-      <h2 className="text-lg font-semibold text-ewb-lime-700">Payment Successful</h2>
+      <h2 className="text-lg font-semibold text-emerald-700">Payment Successful</h2>
 
       <dl className="grid grid-cols-2 gap-y-2 text-sm">
         <dt className="text-gray-500">Reference</dt>
@@ -690,7 +690,7 @@ export function usePayment() {
   const setStep = usePaymentDraftStore((s) => s.setStep);
 
   const mutation = useMutation({
-    mutationFn: (request: PaymentRequest) => paymentApi.submitPayment(request),
+    mutationFn: (request: PaymentRequest) => paymentApi.submit(request),
     onSuccess: (receipt: PaymentReceipt) => {
       // 1. Move wizard to receipt step
       setStep('receipt');
@@ -720,7 +720,7 @@ export function usePayment() {
   });
 
   return {
-    submitPayment: mutation.mutate,
+    submit: mutation.mutate,
     isPending: mutation.isPending,
     error: mutation.error,
     receipt: mutation.data,

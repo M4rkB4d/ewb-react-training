@@ -500,7 +500,7 @@ export function PasskeyEnrollment() {
       )}
 
       {register.isSuccess && (
-        <div role="status" className="rounded bg-ewb-lime-50 p-3 text-sm text-ewb-lime-700">
+        <div role="status" className="rounded bg-emerald-50 p-3 text-sm text-emerald-700">
           Passkey registered successfully.
         </div>
       )}

@@ -163,21 +163,23 @@ Tests start red and go green as students complete their implementations.
 
 ---
 
-### Level 7 — Production (Days 8-9)
+### Level 7 — Production (Days 8-10)
 
 **Key concepts**: Security hardening, BSP compliance, data privacy, CI/CD
 
-**Day 8 focus**: Security (CSP, XSS prevention, PII masking, permissions)
-**Day 9 focus**: BSP compliance framework, DPA consent, CI/CD pipeline
+**Day 8 focus**: Security hardening (A15) — CSP, XSS prevention, PII masking, role-based permissions
+**Day 9 focus**: BSP compliance framework (A16) — audit trail, evidence collection, compliance dashboard
+**Day 10 focus**: Data privacy and consent (A17) + deployment pipeline (B07) — DPA consent manager, Docker containerization, Azure Pipelines CI/CD
 
 **Common stumbling points**:
 - CSP: students try to use inline scripts/styles after adding CSP headers
 - PII masking: students mask data in components instead of using a reusable utility
 - Azure Pipelines YAML: indentation errors are the number one issue
+- ConsentManager: students forget the `data-sharing` and `location` purposes required by BSP 1122
 
 **Demo tip**: Show a real BSP audit checklist. Walk through what evidence each compliance control produces. Make it tangible — not abstract regulation.
 
-**Critical teaching moment**: The `azure-pipelines.yml` is real and deployable. Walk through each stage: lint → test → build → containerize → deploy.
+**Critical teaching moment**: The `azure-pipelines.yml` is real and deployable. Walk through each stage: lint → test → build → containerize → deploy. Security hardening (Day 8) must come BEFORE deployment (Day 10) — you cannot deploy securely if headers and permissions are not in place first.
 
 ---
 

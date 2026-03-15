@@ -304,7 +304,7 @@ const ApplicationSchema = z.object({
 const statusColors: Record<z.infer<typeof ApplicationSchema>['status'], string> = {
   submitted: 'bg-blue-100 text-blue-700',
   'under-review': 'bg-amber-100 text-amber-700',
-  approved: 'bg-ewb-lime-200 text-ewb-lime-700',
+  approved: 'bg-emerald-200 text-emerald-700',
   rejected: 'bg-error/10 text-error',
 };
 

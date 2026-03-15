@@ -312,7 +312,7 @@ Replace the contents of `src/index.css` with the EWB design system:
   --color-primary: var(--color-ewb-purple);
   --color-secondary: var(--color-ewb-navy);
   --color-accent: var(--color-ewb-gold);
-  --color-success: var(--color-ewb-lime);
+  --color-success: #059669; /* emerald-600 — lime fails WCAG on white */
   --color-error: #dc2626;
   --color-warning: #f59e0b;
   --color-info: var(--color-ewb-navy);

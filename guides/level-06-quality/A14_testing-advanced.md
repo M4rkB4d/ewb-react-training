@@ -187,7 +187,7 @@ it('shows the correct greeting', () => {
 it('displays account balance', () => {
   const account = createAccount({ balance: 5_000_000 }); // centavos — ₱50,000.00
   render(<AccountCard {...account} />);
-  expect(screen.getByText('₱50,000.00')).toBeInTheDocument(); // formatPeso(5_000_000) → ₱50,000.00
+  expect(screen.getByText('₱50,000.00')).toBeInTheDocument(); // formatPHP(5_000_000) → ₱50,000.00
 });
 ```
 

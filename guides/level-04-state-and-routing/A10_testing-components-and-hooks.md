@@ -358,31 +358,34 @@ Write a test that verifies the ProtectedRoute redirects unauthenticated users to
 
 ```tsx
 // src/features/auth/components/login-form.test.tsx
-import { render, screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
+import { renderWithProviders } from '@/test/test-utils';
 import { LoginForm } from './login-form';
+
+// LoginForm uses useLogin() internally — no onSubmit prop.
+// We test through the UI and let MSW handle the API.
 
 describe('LoginForm', () => {
   it('submits with valid credentials', async () => {
     const user = userEvent.setup();
-    const handleSubmit = vi.fn().mockResolvedValue(undefined);
 
-    render(<LoginForm onSubmit={handleSubmit} />);
+    renderWithProviders(<LoginForm />);
 
     await user.type(screen.getByLabelText('Username'), 'juan.santos');
     await user.type(screen.getByLabelText('Password'), 'SecureP@ss123');
     await user.click(screen.getByRole('button', { name: 'Sign In' }));
 
-    expect(handleSubmit).toHaveBeenCalledWith(
-      { username: 'juan.santos', password: 'SecureP@ss123' },
-      expect.anything(),
-    );
+    // MSW handler returns success — component navigates away
+    await waitFor(() => {
+      expect(screen.queryByRole('button', { name: 'Sign In' })).not.toBeInTheDocument();
+    });
   });
 
   it('shows validation errors for empty fields', async () => {
     const user = userEvent.setup();
-    render(<LoginForm onSubmit={vi.fn()} />);
+    renderWithProviders(<LoginForm />);
 
     await user.click(screen.getByRole('button', { name: 'Sign In' }));
 
@@ -392,17 +395,15 @@ describe('LoginForm', () => {
 
   it('disables submit button while submitting', async () => {
     const user = userEvent.setup();
-    const handleSubmit = vi.fn().mockImplementation(
-      () => new Promise((resolve) => setTimeout(resolve, 1000)),
-    );
 
-    render(<LoginForm onSubmit={handleSubmit} />);
+    renderWithProviders(<LoginForm />);
 
-    await user.type(screen.getByLabelText('Username'), 'juan');
+    await user.type(screen.getByLabelText('Username'), 'juan.santos');
     await user.type(screen.getByLabelText('Password'), 'SecureP@ss123');
     await user.click(screen.getByRole('button', { name: 'Sign In' }));
 
-    expect(screen.getByRole('button', { name: /processing/i })).toBeDisabled();
+    // Button text changes to "Signing in..." while mutation is pending
+    expect(screen.getByRole('button', { name: /signing in/i })).toBeDisabled();
   });
 });
 ```

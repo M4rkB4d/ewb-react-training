@@ -828,7 +828,7 @@ export function AccountCard({
 }
 ```
 
-> **Note:** This example uses pesos as a plain number for simplicity. Starting in B03 (API Integration), all monetary values use integer centavos with `formatPeso()` — one peso = 100 centavos, so ₱1,500.00 is stored as `150000`. This avoids IEEE 754 floating-point errors (e.g., `0.1 + 0.2 !== 0.3`). The `Centavos` branded type is introduced in B01 Phase 6.
+> **Note:** This example uses pesos as a plain number for simplicity. Starting in B03 (API Integration), all monetary values use integer centavos with `formatPHP()` — one peso = 100 centavos, so ₱1,500.00 is stored as `150000`. This avoids IEEE 754 floating-point errors (e.g., `0.1 + 0.2 !== 0.3`). The `Centavos` branded type is introduced in B01 Phase 6.
 
 **What this component demonstrates:**
 

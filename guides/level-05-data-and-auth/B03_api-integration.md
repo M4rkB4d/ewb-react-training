@@ -360,15 +360,15 @@ a rounding error of even one centavo across thousands of transactions is unaccep
 The frontend converts to display format only at the presentation layer:
 
 ```tsx
-// src/lib/format-currency.ts
-export function formatPeso(centavos: number): string {
+// src/lib/format.ts
+export function formatPHP(centavos: number): string {
   return new Intl.NumberFormat('en-PH', {
     style: 'currency',
     currency: 'PHP',
   }).format(centavos / 100);
 }
 
-// Usage: formatPeso(10050) → "₱100.50"
+// Usage: formatPHP(10050) → "₱100.50"
 ```
 
 This is a standard practice across all financial APIs. Never store or transmit money

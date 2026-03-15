@@ -357,7 +357,7 @@ export function TransferSuccess({ amount, reference }: { amount: number; referen
 
 ```tsx
 // src/lib/format.ts
-// centavos → formatted peso string (replaces formatPeso from B03 with locale support)
+// centavos → formatted peso string (locale-aware version from B03)
 export function formatPHP(centavos: number, locale: string = 'en-PH'): string {
   return new Intl.NumberFormat(locale, {
     style: 'currency',
@@ -396,7 +396,7 @@ export function CurrencyDisplay({ amount, currency = 'PHP' }: CurrencyDisplayPro
 
   return (
     <span
-      className={amount < 0 ? 'text-error' : 'text-ewb-lime-700'}
+      className={amount < 0 ? 'text-error' : 'text-emerald-700'}
       aria-label={`${formatted}`}
     >
       {formatted}

@@ -289,14 +289,9 @@ import { useState, useRef, useEffect } from 'react';
 import { useVerifyMfa } from '../hooks/use-verify-mfa';
 import { Button } from '@/components/ui/button';
 
-interface MfaFormProps {
-  mfaToken: string;
-  methods: string[];
-}
-
-export function MfaForm({ mfaToken, methods: _methods }: MfaFormProps) {
-  // _methods available for a future method-selection UI (SMS vs authenticator).
-  // For now the exercise only requires the 6-digit code flow.
+// MfaForm takes no props — it reads mfaToken from the auth store internally.
+// This matches B04's useVerifyMfa which accepts only `code: string`.
+export function MfaForm() {
   const [code, setCode] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
   const verifyMfa = useVerifyMfa();
@@ -308,7 +303,7 @@ export function MfaForm({ mfaToken, methods: _methods }: MfaFormProps) {
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     if (code.length === 6) {
-      verifyMfa.mutate({ code, mfaToken });
+      verifyMfa.mutate(code);
     }
   };
 

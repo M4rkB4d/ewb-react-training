@@ -277,7 +277,7 @@ Use ARIA when semantic HTML is not enough:
 
 // Status indicator that needs a text alternative
 <span
-  className="inline-block h-2 w-2 rounded-full bg-ewb-lime-500"
+  className="inline-block h-2 w-2 rounded-full bg-emerald-500"
   aria-label="Active"
 />
 
@@ -370,21 +370,20 @@ export function ConfirmationDialog({
     const dialog = dialogRef.current;
     if (dialog == null) return;
 
-    if (isOpen) {
+    if (isOpen && !dialog.open) {
       dialog.showModal(); // Native focus trap
-    } else {
+    } else if (!isOpen && dialog.open) {
       dialog.close();
     }
   }, [isOpen]);
 
-  if (!isOpen) return null;
-
+  // Always render the dialog element so the ref is stable.
+  // The native <dialog> is hidden by default until showModal() is called.
   return (
     <dialog
       ref={dialogRef}
       className="rounded-xl border border-gray-200 bg-white p-0 shadow-xl backdrop:bg-black/50"
       onClose={onCancel}
-      aria-labelledby="confirm-dialog-title"
     >
       <div className="p-6">
         <h2 id="confirm-dialog-title" className="text-lg font-semibold text-gray-900">{title}</h2>
@@ -490,7 +489,7 @@ way to communicate status:
 
 // Good — color + text + ARIA
 <span
-  className={isActive ? 'text-ewb-lime-700' : 'text-error'}
+  className={isActive ? 'text-emerald-700' : 'text-error'}
   aria-label={isActive ? 'Active' : 'Inactive'}
 >
   {isActive ? '● Active' : '● Inactive'}

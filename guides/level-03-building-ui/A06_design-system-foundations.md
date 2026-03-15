@@ -62,7 +62,7 @@ Brand Tokens (fixed)              Semantic Tokens (contextual)
 ewb-purple: #500778        →     primary
 ewb-navy: #06357A          →     secondary, info
 ewb-gold: #dba464           →     accent
-ewb-lime: #d5e04d           →     success
+emerald-600: #059669         →     success (WCAG AA compliant on white)
 ewb-magenta: #b1006f        →     (decorative accent)
 red-600: #dc2626             →     error
 amber-500: #f59e0b           →     warning
@@ -401,7 +401,7 @@ interface CardTitleProps {
 
 export function CardTitle({ children, className, as: Tag = 'h3' }: CardTitleProps) {
   return (
-    <Tag className={cn('text-lg font-semibold text-gray-900', className)}>
+    <Tag className={cn('text-lg font-semibold text-ewb-navy', className)}>
       {children}
     </Tag>
   );
@@ -494,7 +494,7 @@ interface BadgeProps {
 
 const badgeStyles: Record<BadgeVariant, string> = {
   default: 'bg-gray-100 text-gray-700',
-  success: 'bg-ewb-lime-100 text-ewb-lime-700',
+  success: 'bg-emerald-50 text-emerald-700',
   warning: 'bg-amber-100 text-amber-700',
   error: 'bg-red-100 text-red-700',
   info: 'bg-ewb-navy-100 text-ewb-navy-700',
@@ -532,7 +532,7 @@ interface AlertProps {
 
 const alertStyles: Record<AlertVariant, string> = {
   info: 'border-ewb-navy-200 bg-ewb-navy-50 text-ewb-navy-700',
-  success: 'border-ewb-lime-200 bg-ewb-lime-50 text-ewb-lime-700',
+  success: 'border-emerald-200 bg-emerald-50 text-emerald-700',
   warning: 'border-amber-200 bg-amber-50 text-amber-700',
   error: 'border-red-200 bg-red-50 text-red-700',
 };

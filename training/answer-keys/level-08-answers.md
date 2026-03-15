@@ -232,7 +232,7 @@ export function TransferStatusTracker({ transferId }: { transferId: string }) {
       (transfer.status === 'completed' || transfer.status === 'failed')
     ) {
       emitAuditEvent(
-        transfer.status === 'completed' ? 'TRANSFER_CONFIRM' : 'TRANSFER_FAILURE',
+        transfer.status === 'completed' ? 'CONFIRM_TRANSFER' : 'CANCEL_TRANSFER',
         { transferId, status: transfer.status, reference: transfer.referenceNumber },
       );
     }
@@ -256,7 +256,7 @@ export function TransferStatusTracker({ transferId }: { transferId: string }) {
                 index <= activeStep
                   ? transfer.status === 'failed' && index === activeStep
                     ? 'bg-error/10 text-error'
-                    : 'bg-ewb-lime-200 text-ewb-lime-700'
+                    : 'bg-emerald-200 text-emerald-700'
                   : 'bg-gray-100 text-gray-500'
               }`}
               aria-current={index === activeStep ? 'step' : undefined}
@@ -285,7 +285,7 @@ export function TransferStatusTracker({ transferId }: { transferId: string }) {
       {/* Connection indicator */}
       <div className="flex items-center gap-1 text-xs text-gray-500">
         <span className={`h-2 w-2 rounded-full ${
-          INTERVALS[transfer.status] !== false ? 'bg-ewb-lime-500' : 'bg-gray-300'
+          INTERVALS[transfer.status] !== false ? 'bg-emerald-500' : 'bg-gray-300'
         }`} />
         {INTERVALS[transfer.status] !== false ? 'Tracking live' : 'Final status'}
       </div>

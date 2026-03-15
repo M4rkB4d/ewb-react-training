@@ -15,7 +15,7 @@
 | `ewb-purple` | `#500778` | Primary brand, buttons, headers |
 | `ewb-magenta` | `#b1006f` | Secondary accent, hover states |
 | `ewb-gold` | `#dba464` | Accent, highlights, badges |
-| `ewb-lime` | `#d5e04d` | Success states, positive indicators |
+| `ewb-lime` | `#d5e04d` | Brand accent (defined but not used for success — see note) |
 | `ewb-navy` | `#06357A` | Info states, links, secondary text |
 
 ### Purple Scale
@@ -50,7 +50,7 @@
 | `primary` | `ewb-purple` | `ewb-purple-400` | Primary actions |
 | `secondary` | `ewb-navy` | `ewb-navy-300` | Secondary actions |
 | `accent` | `ewb-gold` | `ewb-gold-300` | Highlights |
-| `success` | `ewb-lime-700` | `ewb-lime-400` | Success states |
+| `success` | `emerald-600` | `emerald-400` | Success states (ewb-lime fails WCAG AA on white) |
 | `error` | `red-600` | `red-400` | Error states |
 | `warning` | `amber-600` | `amber-400` | Warning states |
 | `surface` | `white` | `gray-900` | Card backgrounds |
@@ -92,7 +92,7 @@
   --color-primary: var(--color-ewb-purple);
   --color-primary-hover: var(--color-ewb-purple-700);
   --color-primary-active: var(--color-ewb-purple-800);
-  --color-success: var(--color-ewb-lime);
+  --color-success: #059669; /* emerald-600 — lime fails WCAG on white */
   --color-error: #dc2626;
   --color-warning: #f59e0b;
 
@@ -239,7 +239,7 @@ interface AlertProps extends HTMLAttributes<HTMLDivElement> {
 
 const alertStyles: Record<AlertVariant, string> = {
   info: 'border-ewb-navy-200 bg-ewb-navy-50 text-ewb-navy-700',
-  success: 'border-ewb-lime-200 bg-ewb-lime-50 text-ewb-lime-700',
+  success: 'border-emerald-200 bg-emerald-50 text-emerald-700',
   warning: 'bg-amber-50 border-amber-600 text-amber-900',
   error: 'bg-red-50 border-red-600 text-red-900',
 };

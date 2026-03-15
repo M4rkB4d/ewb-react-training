@@ -192,9 +192,7 @@ import type { ErrorInfo, ReactNode } from 'react';
 
 interface ErrorBoundaryProps {
   children: ReactNode;
-  /** Pass a function to receive the error and a reset callback.
-   *  A plain ReactNode fallback gets a generic "Try Again" button appended. */
-  fallback: ReactNode | ((error: Error, reset: () => void) => ReactNode);
+  fallback: ReactNode | ((error: Error) => ReactNode);
   onError?: (error: Error, errorInfo: ErrorInfo) => void;
 }
 
@@ -204,33 +202,24 @@ interface ErrorBoundaryState {
 }
 
 export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  state: ErrorBoundaryState = { hasError: false, error: null };
+  override state: ErrorBoundaryState = { hasError: false, error: null };
 
   static getDerivedStateFromError(error: Error): ErrorBoundaryState {
     return { hasError: true, error };
   }
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
+  override componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     // BSP 1019 — Log errors for monitoring
-    console.error('[ErrorBoundary]', error, errorInfo.componentStack);
+    logger.error('[ErrorBoundary]', { error: error.message, stack: errorInfo.componentStack });
     this.props.onError?.(error, errorInfo);
   }
 
-  resetError = (): void => {
-    this.setState({ hasError: false, error: null });
-  };
-
-  render(): ReactNode {
+  override render(): ReactNode {
     if (this.state.hasError && this.state.error != null) {
       if (typeof this.props.fallback === 'function') {
-        return this.props.fallback(this.state.error, this.resetError);
+        return this.props.fallback(this.state.error);
       }
-      return (
-        <>
-          {this.props.fallback}
-          <button type="button" onClick={this.resetError}>Try Again</button>
-        </>
-      );
+      return this.props.fallback;
     }
     return this.props.children;
   }
