@@ -156,7 +156,7 @@ Error handling patterns, performance optimization, advanced testing strategies, 
 
 ---
 
-### Days 8–10: Level 7 — Security and Compliance
+### Days 8–10: Level 7 — Production
 
 The most critical level for banking. Security hardening, BSP compliance framework, and data privacy (RA 10173). Everything here directly affects audit readiness. Split across **three days** because these topics demand focus — a misunderstood security control is worse than no control at all.
 

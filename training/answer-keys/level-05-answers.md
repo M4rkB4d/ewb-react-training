@@ -294,7 +294,9 @@ interface MfaFormProps {
   methods: string[];
 }
 
-export function MfaForm({ mfaToken, methods }: MfaFormProps) {
+export function MfaForm({ mfaToken, methods: _methods }: MfaFormProps) {
+  // _methods available for a future method-selection UI (SMS vs authenticator).
+  // For now the exercise only requires the 6-digit code flow.
   const [code, setCode] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
   const verifyMfa = useVerifyMfa();

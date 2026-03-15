@@ -124,8 +124,8 @@ export default async function ComparePage() {
             <div key={p.id} className="rounded border p-4">
               <h2 className="font-semibold">{p.name}</h2>
               {p.interestRate != null && <p>Interest Rate: {p.interestRate}% p.a.</p>}
-              {p.minimumDeposit != null && <p>Min. Deposit: PHP {p.minimumDeposit.toLocaleString()}</p>}
-              <p>Monthly Fee: PHP {p.monthlyFee}</p>
+              {p.minimumDeposit != null && <p>Min. Deposit: PHP {(p.minimumDeposit / 100).toLocaleString()}</p>}
+              <p>Monthly Fee: PHP {(p.monthlyFee / 100).toLocaleString()}</p>
             </div>
           ))}
         </div>
@@ -213,14 +213,14 @@ export function ProductComparisonTool({ products }: { products: Product[] }) {
               <td className="p-3 text-gray-600">Min. Deposit</td>
               {selectedProducts.map((p) => (
                 <td key={p.id} className="p-3">
-                  {p.minimumDeposit != null ? `₱${p.minimumDeposit.toLocaleString()}` : 'N/A'}
+                  {p.minimumDeposit != null ? `₱${(p.minimumDeposit / 100).toLocaleString()}` : 'N/A'}
                 </td>
               ))}
             </tr>
             <tr className="border-b">
               <td className="p-3 text-gray-600">Monthly Fee</td>
               {selectedProducts.map((p) => (
-                <td key={p.id} className="p-3">₱{p.monthlyFee}</td>
+                <td key={p.id} className="p-3">₱{(p.monthlyFee / 100).toLocaleString()}</td>
               ))}
             </tr>
             <tr className="border-b">
@@ -229,7 +229,7 @@ export function ProductComparisonTool({ products }: { products: Product[] }) {
                 <td key={p.id} className="p-3">
                   <ul className="list-disc pl-4 space-y-1">
                     {p.features.map((f, i) => (
-                      <li key={i}>{f}</li>
+                      <li key={f}>{f}</li>
                     ))}
                   </ul>
                 </td>

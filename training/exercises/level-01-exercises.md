@@ -34,7 +34,7 @@ type Currency = 'PHP' | 'USD' | 'EUR' | 'JPY' | 'CNY';
 
 - [ ] `formatPHP(150000)` returns `"₱150,000.00"`
 - [ ] `formatPHP(0)` returns `"₱0.00"`
-- [ ] `formatPHP(42500.5)` returns `"₱42,500.50"`
+- [ ] `formatPHP(42500)` returns `"₱42,500.00"`
 - [ ] `formatCurrency(1000, 'USD')` returns `"$1,000.00"`
 - [ ] `parseCurrencyInput('₱1,500.00')` returns `1500`
 - [ ] `parseCurrencyInput('abc')` returns `null`

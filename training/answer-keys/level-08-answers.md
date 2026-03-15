@@ -237,7 +237,7 @@ export function TransferStatusTracker({ transferId }: { transferId: string }) {
       );
     }
     previousStatus.current = transfer.status;
-  }, [transfer?.status]);
+  }, [transfer?.status, transferId, transfer?.referenceNumber]);
 
   if (isLoading) return <p>Loading transfer status...</p>;
   if (!transfer) return <p>Transfer not found.</p>;
@@ -303,7 +303,7 @@ import { z } from 'zod';
 import { useIntl } from 'react-intl';
 
 const currencyInputSchema = z.object({
-  amount: z.number().int().min(0).max(50_000_000_00), // centavos
+  amount: z.number().int().min(0).max(50_000_000), // centavos (₱500,000)
   currency: z.enum(['PHP', 'USD']),
 });
 
@@ -369,7 +369,7 @@ export function CurrencyInput({ name, label, value, onChange, error, currency = 
       // Show raw number when focused for easier editing
       const parsed = parseLocaleNumber(displayValue, intl.locale);
       if (parsed > 0) {
-        setDisplayValue(parsed.toString());
+        setDisplayValue((parsed / 100).toString());
       }
     };
 

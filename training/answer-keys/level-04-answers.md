@@ -237,7 +237,7 @@ export function RoleGuard({ allowedRoles }: RoleGuardProps) {
 
 // Test file: src/components/auth/protected-route.test.tsx
 import { render, screen } from '@testing-library/react';
-import { MemoryRouter, Route, Routes } from 'react-router';
+import { MemoryRouter, Route, Routes, useLocation } from 'react-router';
 import { describe, it, expect, beforeEach } from 'vitest';
 import { useAuthStore } from '@/stores/auth-store';
 import { ProtectedRoute } from './protected-route';
