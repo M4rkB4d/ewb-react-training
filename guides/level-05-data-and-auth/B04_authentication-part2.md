@@ -621,6 +621,8 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
 
 ### Role-based route guard
 
+B02 introduced `RoleGuard` with `allowedRoles.includes()` — a simple exact-match check suitable for flat layouts. Here we replace it with `RoleRoute`, which uses `hasMinimumRole()` (from A11) to enforce a **hierarchical** permission model. An `admin` automatically passes a `manager` check, a `manager` passes a `teller` check, and so on. Prefer `RoleRoute` for all new route guards; keep `RoleGuard` only if you genuinely need exact-match semantics (rare).
+
 ```tsx
 // src/components/auth/role-route.tsx
 import { Navigate } from 'react-router';

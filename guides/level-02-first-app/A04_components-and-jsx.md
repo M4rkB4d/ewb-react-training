@@ -434,6 +434,8 @@ the main content without nesting.
 
 ### Rendering lists
 
+> **Teaching simplification:** The `Transaction` type below uses a signed `amount` (positive = credit, negative = debit) to keep this early example focused on list rendering and conditional styling. The production API (B03) uses unsigned centavos with a separate `type: 'credit' | 'debit'` field — you will see that pattern when you reach Level 5.
+
 ```tsx
 interface Transaction {
   id: string;

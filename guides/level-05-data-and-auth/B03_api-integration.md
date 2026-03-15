@@ -245,6 +245,9 @@ apiClient.interceptors.response.use(
         originalRequest.headers.Authorization = `Bearer ${newToken}`;
         return apiClient(originalRequest);
       } catch {
+        // If multiple requests 401 simultaneously, each enters this catch
+        // after the single refresh attempt fails. clearAuth() and the redirect
+        // are idempotent — calling them more than once is harmless.
         useAuthStore.getState().clearAuth();
         window.location.href = '/login';
         return Promise.reject(error);
