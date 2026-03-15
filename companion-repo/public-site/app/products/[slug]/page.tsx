@@ -108,7 +108,7 @@ export default async function ProductPage({
 
           {product.minDeposit != null && (
             <p className="mt-2 text-sm text-gray-500">
-              Minimum deposit: ₱{product.minDeposit.toLocaleString('en-PH')}
+              Minimum deposit: ₱{(product.minDeposit / 100).toLocaleString('en-PH', { minimumFractionDigits: 2 })}
             </p>
           )}
 

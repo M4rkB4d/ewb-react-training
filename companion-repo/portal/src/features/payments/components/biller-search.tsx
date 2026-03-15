@@ -3,16 +3,18 @@ import { useQuery } from '@tanstack/react-query';
 import { paymentApi } from '../api/payment-api';
 import { paymentKeys } from '../api/query-keys';
 import { usePaymentDraftStore } from '../stores/payment-draft-store';
+import { useDebounce } from '@/hooks/use-debounce';
 import type { Biller } from '../types';
 
 export function BillerSearch() {
   const [query, setQuery] = useState('');
+  const debouncedQuery = useDebounce(query, 300);
   const setBiller = usePaymentDraftStore((s) => s.setBiller);
 
   const { data: billers, isLoading } = useQuery({
-    queryKey: paymentKeys.billerSearch(query),
-    queryFn: () => paymentApi.searchBillers(query),
-    enabled: query.length >= 2,
+    queryKey: paymentKeys.billerSearch(debouncedQuery),
+    queryFn: () => paymentApi.searchBillers(debouncedQuery),
+    enabled: debouncedQuery.length >= 2,
   });
 
   const handleSelect = (biller: Biller) => {

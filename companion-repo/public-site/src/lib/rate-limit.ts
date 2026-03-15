@@ -1,4 +1,5 @@
 // src/lib/rate-limit.ts
+import crypto from 'node:crypto';
 import { redis } from './redis';
 
 interface RateLimitResult {
