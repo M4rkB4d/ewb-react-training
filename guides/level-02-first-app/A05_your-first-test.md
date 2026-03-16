@@ -302,7 +302,7 @@ describe('AccountCard', () => {
   });
 ```
 
-> **Money handling note:** All monetary values in this codebase are stored as **integer centavos** — one peso = 100 centavos, so ₱150,000.00 is stored as `15_000_000`. The component divides by 100 for display. This avoids IEEE 754 floating-point errors that occur with decimal arithmetic. You will build the `formatPHP()` utility in B03 (API Integration).
+> **Money handling note:** All monetary values in this codebase are stored as **integer centavos** — one peso = 100 centavos, so ₱150,000.00 is stored as `15_000_000`. The component divides by 100 for display. This avoids IEEE 754 floating-point errors that occur with decimal arithmetic. You will build the `formatPHP()` utility in A07 (Forms and Validation).
 
 ```tsx
   // ── Conditional Rendering ──────────────────────────

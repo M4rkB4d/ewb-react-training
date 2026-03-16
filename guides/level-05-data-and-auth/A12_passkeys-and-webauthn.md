@@ -303,6 +303,7 @@ User            Frontend               Backend             Authenticator
 // src/features/auth/api/passkey-api.ts (continued)
 import axios from 'axios';
 import { env } from '@/lib/env';
+import { bufferToBase64url } from '@/lib/webauthn-utils';
 
 const authOptionsSchema = z.object({
   challenge: z.string(),

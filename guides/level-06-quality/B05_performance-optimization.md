@@ -378,8 +378,9 @@ import debounce from 'lodash-es/debounce';
 
 ## Key Takeaways
 
-1. **React Compiler** auto-memoizes in React 19. Stop writing `useMemo` and
-   `useCallback` — just write clean code.
+1. **React Compiler** auto-memoizes in React 19. Avoid adding new `useMemo` and
+   `useCallback` for performance — let the compiler handle it. Existing ones are
+   harmless and can stay.
 
 2. **Code splitting** at route level is mandatory. Each page should be a separate
    chunk loaded on demand.

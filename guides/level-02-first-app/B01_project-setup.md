@@ -928,9 +928,9 @@ Here is what each group does and where you will learn to build it:
 | `pages/dashboard.tsx` | Main dashboard page | B02 (L4) |
 | `pages/accounts.tsx` | Accounts listing page | B03 (L5) |
 | `pages/settings.tsx` | User settings page | B04 (L5) |
-| `components/layout/app-layout.tsx` | Shared layout with sidebar | A08 (L3) |
-| `components/layout/sidebar-nav.tsx` | Navigation sidebar | A08 (L3) |
-| `components/layout/breadcrumbs.tsx` | Breadcrumb navigation | A08 (L3) |
+| `components/layout/app-layout.tsx` | Shared layout with sidebar | B02 (L4) |
+| `components/layout/sidebar-nav.tsx` | Navigation sidebar | B02 (L4) |
+| `components/layout/breadcrumbs.tsx` | Breadcrumb navigation | B02 (L4) |
 | `components/layout/skip-link.tsx` | Accessibility skip link | A08 (L3) |
 
 ### Error handling

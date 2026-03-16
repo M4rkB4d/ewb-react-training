@@ -361,7 +361,7 @@ import { z } from 'zod';
 import { usePaymentDraftStore } from '../stores/payment-draft-store';
 import { useAccounts } from '@/features/accounts';
 import { maskAccountNumber } from '@/lib/masking';
-import { formatPHP } from '@/lib/format'; // B08 upgraded formatPeso → formatPHP with locale support
+import { formatPHP } from '@/lib/format'; // locale-aware version from B08
 import { Button } from '@/components/ui/button';
 
 // User enters pesos; converted to centavos (* 100) before API call
@@ -1089,7 +1089,7 @@ saving previous state and `onSettled` for guaranteed invalidation:
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createTransfer } from '../api/transfers-api';
 import type { TransferRequest } from '../api/transfers-api';
-import { accountKeys } from '@/features/accounts/queries';
+import { accountKeys } from '@/features/accounts';
 
 export function useCreateTransfer() {
   const queryClient = useQueryClient();

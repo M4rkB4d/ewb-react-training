@@ -301,7 +301,7 @@ export { PaymentReceipt } from './components/payment-receipt';
 export { BillerSearch } from './components/biller-search';
 
 // -- Type facade --
-export type { PaymentRequest, Biller, PaymentReceiptData } from './types';
+export type { PaymentRequest, Biller, PaymentReceipt } from './types';
 ```
 
 Consumers import only from the facade:

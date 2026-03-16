@@ -483,10 +483,12 @@ The frontend converts to display format only at the presentation layer:
 
 ```tsx
 // src/lib/format.ts
-export function formatPHP(centavos: number): string {
-  return new Intl.NumberFormat('en-PH', {
+export function formatPHP(centavos: number, locale: string = 'en-PH'): string {
+  return new Intl.NumberFormat(locale, {
     style: 'currency',
     currency: 'PHP',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
   }).format(centavos / 100);
 }
 
@@ -1473,6 +1475,9 @@ export { AccountSelector } from './components/account-selector';
 export { useAccounts } from './hooks/use-accounts';
 export { useAccountBalance } from './hooks/use-account-balance';
 
+// Query keys (for cross-feature cache invalidation)
+export { accountKeys } from './queries';
+
 // Types
 export type { Account, AccountType, Transaction } from './types';
 ```
@@ -1483,8 +1488,8 @@ This barrel enforces feature encapsulation. Other features import from
 internal structure (rename files, split components, reorganize folders) without
 breaking any imports outside the feature boundary.
 
-The `query-keys.ts` file in `api/` re-exports from the root `queries.ts` for
-backwards compatibility:
+The `query-keys.ts` file in `api/` re-exports from the root `queries.ts` as
+a convenience alias (some teams prefer importing query keys from the `api/` directory):
 
 ```tsx
 // src/features/accounts/api/query-keys.ts
