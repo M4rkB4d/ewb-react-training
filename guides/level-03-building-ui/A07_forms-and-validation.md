@@ -14,6 +14,8 @@ By the end of this guide, you will:
 - Validate form data with Zod schemas
 - Connect Zod schemas to React Hook Form with @hookform/resolvers
 - Implement banking-specific validation (account numbers, amounts, Philippine phone numbers)
+- Build a currency formatting utility and debounce hook for search inputs
+- Build a beneficiary registration form with Zod-only validation
 - Build a multi-step fund transfer wizard
 - Mask sensitive data in form fields (DPA compliance)
 - Handle form submission states (idle, submitting, success, error)
@@ -269,6 +271,64 @@ const dateSchema = z.coerce
 // `new Date()` at validation time, so it is always current.
 ```
 
+### Currency formatting utility
+
+Before building forms that display monetary values, create a formatting utility.
+All amounts in this application are stored as **integer centavos** to avoid
+floating-point errors. This function handles the conversion and formatting:
+
+```tsx
+// src/lib/format.ts
+// Input is centavos (integer). ₱100.50 = 10050.
+export function formatPHP(centavos: number, locale: string = 'en-PH'): string {
+  return new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency: 'PHP',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(centavos / 100);
+}
+```
+
+Using native `Intl.NumberFormat` instead of string concatenation means the function
+automatically handles thousand separators (`₱150,000.00`) and locale differences.
+You will use `formatPHP()` in form summaries, transaction lists, and receipt screens
+throughout the curriculum.
+
+### Debounce hook
+
+Search inputs and filter fields fire on every keystroke. Sending an API request for
+every character is wasteful and slow. The `useDebounce` hook delays updates until the
+user stops typing:
+
+```tsx
+// src/hooks/use-debounce.ts
+import { useState, useEffect } from 'react';
+
+export function useDebounce<T>(value: T, delay: number): T {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedValue(value), delay);
+    return () => clearTimeout(timer);
+  }, [value, delay]);
+
+  return debouncedValue;
+}
+```
+
+Usage in a search form:
+
+```tsx
+const [query, setQuery] = useState('');
+const debouncedQuery = useDebounce(query, 300); // Wait 300ms after last keystroke
+
+// Only fires API call when debouncedQuery changes, not on every keystroke
+useEffect(() => {
+  if (debouncedQuery.length >= 2) searchBillers(debouncedQuery);
+}, [debouncedQuery]);
+```
+
 ### Checkpoint 3
 
 Create a Zod schema for a "New Beneficiary" form with:
@@ -277,6 +337,160 @@ Create a Zod schema for a "New Beneficiary" form with:
 - Bank name (required)
 - Philippine mobile number
 - Email (optional, but valid if provided)
+
+File: `src/schemas/beneficiary.ts`
+
+Then build the full `BeneficiaryForm` component that uses this schema. The form
+should validate on submit, show field-level errors, and call an `onSubmit` callback
+with the validated data:
+
+```tsx
+// src/features/beneficiaries/components/beneficiary-form.tsx
+import { useState } from 'react';
+import { BeneficiarySchema, type Beneficiary } from '@/schemas/beneficiary';
+import type { ZodIssue } from 'zod';
+
+interface BeneficiaryFormProps {
+  onSubmit: (data: Beneficiary) => void;
+}
+
+export function BeneficiaryForm({ onSubmit }: BeneficiaryFormProps) {
+  const [errors, setErrors] = useState<ZodIssue[]>([]);
+  const [form, setForm] = useState({
+    fullName: '',
+    accountNumber: '',
+    bankName: '',
+    mobileNumber: '',
+    email: '',
+    relationship: 'family' as const,
+  });
+
+  const handleChange = (field: string, value: string) => {
+    setForm((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrors([]);
+
+    const result = BeneficiarySchema.safeParse(form);
+    if (result.success) {
+      onSubmit(result.data);
+    } else {
+      setErrors(result.error.issues);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} noValidate>
+      <div className="space-y-4">
+        <div>
+          <label htmlFor="fullName" className="block text-sm font-medium">
+            Full Name
+          </label>
+          <input
+            id="fullName"
+            type="text"
+            value={form.fullName}
+            onChange={(e) => handleChange('fullName', e.target.value)}
+            className="mt-1 block w-full rounded border px-3 py-2"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="accountNumber" className="block text-sm font-medium">
+            Account Number
+          </label>
+          <input
+            id="accountNumber"
+            type="text"
+            value={form.accountNumber}
+            onChange={(e) => handleChange('accountNumber', e.target.value)}
+            className="mt-1 block w-full rounded border px-3 py-2"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="bankName" className="block text-sm font-medium">
+            Bank Name
+          </label>
+          <input
+            id="bankName"
+            type="text"
+            value={form.bankName}
+            onChange={(e) => handleChange('bankName', e.target.value)}
+            className="mt-1 block w-full rounded border px-3 py-2"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="mobileNumber" className="block text-sm font-medium">
+            Mobile Number
+          </label>
+          <input
+            id="mobileNumber"
+            type="tel"
+            value={form.mobileNumber}
+            onChange={(e) => handleChange('mobileNumber', e.target.value)}
+            className="mt-1 block w-full rounded border px-3 py-2"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="email" className="block text-sm font-medium">
+            Email (optional)
+          </label>
+          <input
+            id="email"
+            type="email"
+            value={form.email}
+            onChange={(e) => handleChange('email', e.target.value)}
+            className="mt-1 block w-full rounded border px-3 py-2"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="relationship" className="block text-sm font-medium">
+            Relationship
+          </label>
+          <select
+            id="relationship"
+            value={form.relationship}
+            onChange={(e) => handleChange('relationship', e.target.value)}
+            className="mt-1 block w-full rounded border px-3 py-2"
+          >
+            <option value="family">Family</option>
+            <option value="friend">Friend</option>
+            <option value="business">Business</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+      </div>
+
+      {errors.length > 0 && (
+        <div className="mt-4 space-y-1">
+          {errors.map((err, i) => (
+            <p key={i} role="alert" className="text-sm text-red-600">
+              {err.message}
+            </p>
+          ))}
+        </div>
+      )}
+
+      <button
+        type="submit"
+        className="mt-6 rounded bg-ewb-purple px-4 py-2 text-white hover:bg-ewb-purple-700"
+      >
+        Register Beneficiary
+      </button>
+    </form>
+  );
+}
+```
+
+This form demonstrates **Zod validation without React Hook Form**. You use
+`safeParse()` directly in the submit handler and manage errors in state. In Phase 4,
+you will see how React Hook Form eliminates this boilerplate with `zodResolver`.
 
 ---
 

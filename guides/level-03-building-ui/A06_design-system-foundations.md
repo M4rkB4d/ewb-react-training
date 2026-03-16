@@ -11,9 +11,10 @@
 By the end of this guide, you will:
 
 - Build a complete component library with the EWB brand
-- Create Button, Input, Card, and Badge variants using Tailwind CSS 4
+- Create Button, Input, Card, Badge, and Alert variants using Tailwind CSS 4
 - Use the `cn()` utility for conditional class merging
 - Implement component variants with a consistent pattern
+- Build banking-specific display components: CurrencyDisplay, LocaleDate, DataTable
 - Build a dark mode that works with Tailwind 4
 - Understand design tokens and why they matter for banking UIs
 - Create components that are accessible by default
@@ -584,7 +585,185 @@ warnings or errors related to the transaction.
 
 ---
 
-## Phase 6 — Dark Mode
+## Phase 6 — Banking Utility Components
+
+The components above (Button, Input, Card, Badge, Alert) are general-purpose.
+Banking UIs also need specialized display components for currency, dates, and
+tabular data. These three components will appear throughout the application from
+this level forward.
+
+### Currency display
+
+Monetary amounts in this application are stored as **integer centavos** (₱100.50 = `10050`).
+Every display of money must divide by 100 and format with the peso sign. Doing this
+inline in every component is error-prone — a single `CurrencyDisplay` component
+ensures consistency.
+
+The component uses `react-intl` (already installed in your project) for locale-aware
+number formatting. You will learn `react-intl` in depth in B08 — Internationalization.
+For now, just know that `intl.formatNumber()` handles thousand separators and
+currency symbols based on the user's locale.
+
+```tsx
+// src/components/ui/currency-display.tsx
+import { useIntl } from 'react-intl';
+
+interface CurrencyDisplayProps {
+  amount: number;
+  currency?: string;
+}
+
+export function CurrencyDisplay({ amount, currency = 'PHP' }: CurrencyDisplayProps) {
+  const intl = useIntl();
+
+  // Amount is in centavos — divide by 100 for display
+  const formatted = intl.formatNumber(amount / 100, {
+    style: 'currency',
+    currency,
+  });
+
+  return (
+    <span className={amount < 0 ? 'text-red-600' : 'text-emerald-700'}>
+      {formatted}
+    </span>
+  );
+}
+```
+
+Negative amounts render in red (overdraft, fees), positive in green (balances,
+credits). This convention is universal in banking UIs.
+
+### Locale-aware date display
+
+Dates have the same problem as currency — formatting them differently across
+components creates inconsistency. The `LocaleDate` component uses `react-intl`'s
+`FormattedDate` to render dates in the user's locale:
+
+```tsx
+// src/components/ui/locale-date.tsx
+import { FormattedDate } from 'react-intl';
+
+interface LocaleDateProps {
+  value: string | Date;
+  format?: 'short' | 'long';
+}
+
+export function LocaleDate({ value, format = 'short' }: LocaleDateProps) {
+  if (format === 'short') {
+    return (
+      <FormattedDate value={value} year="numeric" month="short" day="numeric" />
+    );
+  }
+
+  return (
+    <FormattedDate
+      value={value}
+      year="numeric"
+      month="long"
+      day="numeric"
+      weekday="long"
+    />
+  );
+}
+```
+
+In the Philippines, "Mar 15, 2026" (`short`) is preferred for tables and lists,
+while "Saturday, March 15, 2026" (`long`) works for transaction receipts.
+
+### Data table
+
+Banking dashboards show a lot of tabular data — transactions, accounts, exchange
+rates. The `DataTable` component provides a consistent, accessible table structure:
+
+```tsx
+// src/components/ui/data-table.tsx
+interface Column {
+  key: string;
+  header: string;
+}
+
+interface DataTableProps {
+  columns: Column[];
+  data: Record<string, string | number>[];
+  caption?: string;
+}
+
+export function DataTable({ columns, data, caption }: DataTableProps) {
+  return (
+    <table role="table" className="w-full border-collapse text-sm">
+      {caption && (
+        <caption className="mb-2 text-left text-base font-semibold">{caption}</caption>
+      )}
+      <thead>
+        <tr>
+          {columns.map((col) => (
+            <th
+              key={col.key}
+              scope="col"
+              className="border-b px-4 py-2 text-left font-medium text-gray-600"
+            >
+              {col.header}
+            </th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {data.map((row, idx) => (
+          <tr key={idx} className="hover:bg-gray-50">
+            {columns.map((col) => (
+              <td key={col.key} className="border-b px-4 py-2">
+                {row[col.key]}
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}
+```
+
+Key accessibility features:
+- `<caption>` — Screen readers announce the table purpose before reading cells
+- `scope="col"` — Tells screen readers that `<th>` cells are column headers
+- `role="table"` — Explicit role for assistive technology
+
+### Usage
+
+```tsx
+<CurrencyDisplay amount={15000000} />   {/* ₱150,000.00 */}
+<CurrencyDisplay amount={-1500} />      {/* -₱15.00 in red */}
+<LocaleDate value="2026-03-15" />       {/* Mar 15, 2026 */}
+<LocaleDate value="2026-03-15" format="long" /> {/* Saturday, March 15, 2026 */}
+
+<DataTable
+  caption="Recent Transactions"
+  columns={[
+    { key: 'date', header: 'Date' },
+    { key: 'description', header: 'Description' },
+    { key: 'amount', header: 'Amount' },
+  ]}
+  data={[
+    { date: 'Mar 15', description: 'Meralco Payment', amount: '₱2,500.00' },
+    { date: 'Mar 14', description: 'Transfer to Juan Santos', amount: '₱10,000.00' },
+  ]}
+/>
+```
+
+### Checkpoint 6
+
+Add all three components to your design system page and verify:
+1. `CurrencyDisplay` formats centavos correctly (10050 → ₱100.50)
+2. Negative amounts appear in red
+3. `LocaleDate` formats dates in short and long forms
+4. `DataTable` renders with proper headers and hover states
+
+---
+
+## Phase 7 — Dark Mode
+
+> **Note:** Phase numbering shifted — Phase 6 (Banking Utility Components) was
+> inserted above. Previous Phases 6 and 7 are now Phases 7 and 8.
 
 ### Why dark mode for banking?
 
@@ -667,7 +846,7 @@ Update the Card component to support dark mode:
 'rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800'
 ```
 
-### Checkpoint 6
+### Checkpoint 7
 
 Add the theme toggle to your app header and verify:
 1. Light mode uses EWB purple on white
@@ -677,7 +856,7 @@ Add the theme toggle to your app header and verify:
 
 ---
 
-## Phase 7 — Component Barrel Exports
+## Phase 8 — Component Barrel Exports
 
 ### Organize your component library
 
@@ -690,6 +869,9 @@ export { Input } from './input';
 export { Card, CardHeader, CardTitle, CardDescription, CardBody, CardFooter } from './card';
 export { Badge } from './badge';
 export { Alert } from './alert';
+export { CurrencyDisplay } from './currency-display';
+export { LocaleDate } from './locale-date';
+export { DataTable } from './data-table';
 ```
 
 Now any component can import from one place:
