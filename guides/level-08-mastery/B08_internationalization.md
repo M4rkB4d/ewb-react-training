@@ -42,6 +42,7 @@ npm install react-intl
 ```tsx
 // src/app/intl-provider.tsx
 import { IntlProvider } from 'react-intl';
+import { useState, useEffect } from 'react';
 import { useLocaleStore } from '@/stores/locale-store';
 import type { ReactNode } from 'react';
 
@@ -51,8 +52,6 @@ const messageLoaders: Record<string, () => Promise<Record<string, string>>> = {
   'fil-PH': () => import('../i18n/messages/fil-PH.json').then((m) => m.default),
   'zh-Hans': () => import('../i18n/messages/zh-Hans.json').then((m) => m.default),
 };
-
-import { useState, useEffect } from 'react';
 
 export function AppIntlProvider({ children }: { children: ReactNode }) {
   const locale = useLocaleStore((state) => state.locale);

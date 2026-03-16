@@ -426,7 +426,7 @@ export const accountKeys = {
   details: () => [...accountKeys.all, 'detail'] as const,
   detail: (id: string) => [...accountKeys.details(), id] as const,
   transactions: (id: string, filters?: Record<string, unknown>) =>
-    [...accountKeys.detail(id), 'transactions', ...(filters ? [filters] : [])] as const,
+    [...accountKeys.detail(id), 'transactions', ...(filters != null ? [filters] : [])] as const,
   balance: (id: string) => [...accountKeys.detail(id), 'balance'] as const,
 };
 ```

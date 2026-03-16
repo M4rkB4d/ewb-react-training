@@ -509,7 +509,7 @@ const transactionSchema = z.object({
   id: z.string(),
   date: z.string().datetime(),
   description: z.string(),
-  amount: z.number().int(), // Centavos
+  amount: z.number().int().nonnegative(), // Centavos (unsigned — type field carries direction)
   type: z.enum(['credit', 'debit']),
   balance: z.number().int().nonnegative(), // Centavos
   reference: z.string(),
@@ -979,7 +979,7 @@ export const handlers = [
           id: 'txn-1',
           date: '2026-03-10T08:30:00Z',
           description: 'POS Purchase — SM Megamall',
-          amount: -250_000, // centavos — -₱2,500.00
+          amount: 250_000, // centavos — ₱2,500.00
           type: 'debit',
           balance: 14_750_000, // centavos — ₱147,500.00
           reference: 'REF-001',

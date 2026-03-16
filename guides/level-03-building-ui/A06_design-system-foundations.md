@@ -750,8 +750,8 @@ Key accessibility features:
 
 Add all three components to your design system page and verify:
 1. `CurrencyDisplay` formats centavos correctly (10050 → ₱100.50)
-3. `LocaleDate` formats dates in short and long forms
-4. `DataTable` renders with proper headers and hover states
+2. `LocaleDate` formats dates in short and long forms
+3. `DataTable` renders with proper headers and hover states
 
 ---
 

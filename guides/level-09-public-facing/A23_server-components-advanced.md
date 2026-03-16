@@ -536,7 +536,7 @@ Build a complete rate alert signup flow:
    server errors (show retry option), and success (show confirmation).
 
 This exercises Zod validation on both client and server — the shared schema
-pattern from A12 applied to the Next.js architecture.
+pattern from A07 applied to the Next.js architecture.
 
 ### Exercise 2 — Protected Dashboard
 

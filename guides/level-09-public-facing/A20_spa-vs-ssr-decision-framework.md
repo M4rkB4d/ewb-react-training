@@ -210,7 +210,7 @@ a running server for the regeneration process.
 | SEO | Poor | Excellent | Excellent | Excellent |
 | Data freshness | Real-time (API calls) | Real-time | Stale until rebuild | Configurable staleness |
 | Server required | No | Yes | No (build only) | Yes (for regeneration) |
-| Cost | Very low (~₱250/mo) | Medium (~₱2,800/mo) | Very low | Medium |
+| Cost | Very low (~₱280/mo) | Medium (~₱2,800/mo) | Very low | Medium |
 | Complexity | Low | High | Low | Medium |
 | Best for | Authenticated apps | Personalized pages | Stable content | Frequently updated content |
 
@@ -365,7 +365,7 @@ Converting the internal portal to Next.js SSR would be over-engineering:
 
 - **No SEO benefit** — the portal is not indexed by search engines
 - **Added complexity** — server and client rendering models to maintain
-- **Higher cost** — Azure App Service (~₱2,800/mo) vs Blob Storage (~₱250/mo)
+- **Higher cost** — Azure App Service (~₱2,800/mo) vs Blob Storage (~₱280/mo)
 - **Slower development** — every component decision requires "server or client?"
 - **No security improvement** — the portal is already behind authentication
 
