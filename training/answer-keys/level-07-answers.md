@@ -137,11 +137,12 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { z } from 'zod';
 import { apiClient } from '@/lib/api-client';
 import { emitAuditEvent } from '@/compliance/audit-service';
-type ConsentPurpose = 'essential' | 'analytics' | 'marketing' | 'biometric' | 'data-sharing' | 'location';
+const consentPurposes = ['essential', 'analytics', 'marketing', 'biometric', 'data-sharing', 'location'] as const;
+type ConsentPurpose = (typeof consentPurposes)[number];
 
 const consentSchema = z.object({
   id: z.string(),
-  purpose: z.string(),
+  purpose: z.enum(consentPurposes),
   granted: z.boolean(),
   grantedAt: z.string().nullable(),
   revokedAt: z.string().nullable(),

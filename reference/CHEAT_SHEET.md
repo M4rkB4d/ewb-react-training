@@ -12,8 +12,7 @@ function AccountCard({ name, balance }: { name: string; balance: number }) {
   return (
     <div>
       <h3>{name}</h3>
-      <p>{formatPeso(balance)}</p> {/* balance is in centavos */}
-      {/* B03 calls this formatPeso; B08 renames to formatPHP for i18n locale support */}
+      <p>{formatPHP(balance)}</p> {/* balance is in centavos */}
     </div>
   );
 }
@@ -215,7 +214,7 @@ apiClient.interceptors.response.use(
 ```tsx
 // Unit test (Vitest)
 it('formats peso from centavos', () => {
-  expect(formatPeso(123_456)).toBe('₱1,234.56'); // 123456 centavos = ₱1,234.56
+  expect(formatPHP(123_456)).toBe('₱1,234.56'); // 123456 centavos = ₱1,234.56
 });
 
 // Component test (RTL)
