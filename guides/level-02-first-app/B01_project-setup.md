@@ -900,6 +900,88 @@ Run `npm run test:run` and verify both tests pass with zero failures.
 
 ---
 
+## Scaffold Tour — What Is Already in Place
+
+When you look at the `level-02-complete` branch, you will see many more files
+than the ones created above. These are **pre-built scaffold files** that later
+guides will teach in depth. You do not need to write them now — they exist so
+that later levels can focus on concepts rather than boilerplate setup.
+
+Here is what each group does and where you will learn to build it:
+
+### Authentication system
+| File | Purpose | Taught in |
+|------|---------|-----------|
+| `components/auth/protected-route.tsx` | Redirects unauthenticated users | A11 (L5) |
+| `components/auth/role-guard.tsx` | Restricts routes by role | B04 (L5) |
+| `components/auth/role-route.tsx` | Route-level role wrapper | B04 (L5) |
+| `components/auth/session-warning-dialog.tsx` | Session timeout warning | B04 (L5) |
+| `features/auth/api/auth-api.ts` | Login, refresh, logout API | A11 (L5) |
+| `features/auth/api/passkey-api.ts` | WebAuthn passkey API | A12 (L5) |
+| `features/auth/components/login-form.tsx` | Login UI with MFA | B04 (L5) |
+| `features/auth/hooks/use-login.ts` | Login mutation hook | B04 (L5) |
+| `hooks/use-session-timeout.ts` | Idle session detection | B04 (L5) |
+
+### Routing and pages
+| File | Purpose | Taught in |
+|------|---------|-----------|
+| `pages/dashboard.tsx` | Main dashboard page | B02 (L4) |
+| `pages/accounts.tsx` | Accounts listing page | B03 (L5) |
+| `pages/settings.tsx` | User settings page | B04 (L5) |
+| `components/layout/app-layout.tsx` | Shared layout with sidebar | A08 (L3) |
+| `components/layout/sidebar-nav.tsx` | Navigation sidebar | A08 (L3) |
+| `components/layout/breadcrumbs.tsx` | Breadcrumb navigation | A08 (L3) |
+| `components/layout/skip-link.tsx` | Accessibility skip link | A08 (L3) |
+
+### Error handling
+| File | Purpose | Taught in |
+|------|---------|-----------|
+| `components/error/route-error-boundary.tsx` | Route-level error UI | A13 (L6) |
+| `lib/errors.ts` | Custom error classes | A13 (L6) |
+| `lib/error-logger.ts` | Structured error logging | A13 (L6) |
+| `lib/global-error-handlers.ts` | Window error listeners | A13 (L6) |
+
+### API client and data
+| File | Purpose | Taught in |
+|------|---------|-----------|
+| `lib/api-client.ts` | Axios instance with interceptors | B03 (L5) |
+| `lib/query-client.ts` | TanStack Query configuration | B03 (L5) |
+| `test/mocks/handlers.ts` | MSW mock handlers | A10 (L4) |
+
+### UI components
+| File | Purpose | Taught in |
+|------|---------|-----------|
+| `components/ui/confirmation-dialog.tsx` | Modal confirmation | A06 (L3) |
+| `components/ui/currency-display.tsx` | Formatted currency | A06 (L3) |
+| `components/ui/data-table.tsx` | Accessible data table | A06 (L3) |
+| `components/ui/locale-date.tsx` | Localized date display | A06 (L3) |
+
+### Utilities
+| File | Purpose | Taught in |
+|------|---------|-----------|
+| `lib/format.ts` | Currency formatting | A07 (L3) |
+| `lib/env.ts` | Environment variable validation | B01b (L2) |
+| `hooks/use-debounce.ts` | Input debouncing | A07 (L3) |
+| `lib/logger.ts` | Structured logging | B06 (L6) |
+| `lib/currency.ts` | Currency utilities | A06 (L3) |
+
+### Feature scaffolds
+| File | Purpose | Taught in |
+|------|---------|-----------|
+| `features/accounts/` | Account feature module | B03 (L5) |
+| `features/beneficiaries/` | Beneficiary management | A07 (L3) |
+| `features/transfers/` | Fund transfers | B09 (L8) |
+| `features/compliance/` | BSP compliance | A16 (L7) |
+| `features/kyc/` | KYC verification | A17 (L7) |
+| `schemas/account.ts` | Account Zod schema | B03 (L5) |
+| `types/compliance.ts` | Compliance types | A16 (L7) |
+
+Do not modify these scaffold files. Each guide will walk you through building
+or understanding them when the time comes. If you are curious about a file,
+the "Taught in" column tells you exactly which guide explains it.
+
+---
+
 ## Exercises
 
 ### Exercise 1 — Add a Footer Component

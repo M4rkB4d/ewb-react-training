@@ -112,6 +112,21 @@ dev server. Unlike Vite, the Next.js dev server also handles server-side
 rendering during development, so you see the same behavior locally as in
 production.
 
+### Brand assets
+
+Place the EWB logo and favicon in the `public/` directory:
+
+```
+public/
+  ewb-logo.svg      ← Full EWB logo for header and footer
+  icon.svg           ← Favicon (Next.js 16 uses app/icon.tsx for dynamic favicons,
+                        but a static SVG fallback is good practice)
+```
+
+These assets are served at the root path (`/ewb-logo.svg`) without any import
+or bundling. For the logo, use it in components with a standard `<img>` tag or
+Next.js `<Image>` — both work for SVGs in the public directory.
+
 ### Checkpoint 2
 
 After running `create-next-app`, the project starts on port 3000. The Vite SPA

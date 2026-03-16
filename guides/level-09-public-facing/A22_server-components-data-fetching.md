@@ -199,6 +199,61 @@ async function getProducts(): Promise<Product[]> {
 }
 ```
 
+### Mock data for local development
+
+During development, the API may not be available. Create a mock data file that
+the fetch functions can fall back to when the API is unreachable:
+
+```tsx
+// src/lib/mock-data.ts
+// Fallback data for local development when API endpoints are unavailable.
+// In production, all data comes from the real API.
+
+export const mockProducts = [
+  {
+    id: 'prod-1',
+    slug: 'easy-savings',
+    name: 'EasySave Account',
+    summary: 'Start saving with as little as ₱100. Earn competitive interest.',
+    category: 'savings' as const,
+    interestRate: 2.5,
+    features: [
+      'No maintaining balance',
+      'Free online banking access',
+      'ATM card included',
+      'PDIC insured up to ₱500,000',
+    ],
+    requirements: [
+      'Valid government-issued ID',
+      'Minimum initial deposit of ₱100',
+      'Tax Identification Number (TIN)',
+    ],
+    minDeposit: 10000, // ₱100.00 in centavos
+  },
+  // ... additional products (personal-loan, credit-card, etc.)
+];
+```
+
+In the companion repo, fetch functions wrap their API call in `try/catch` and
+fall back to mock data when the response fails. This lets you run `npm run dev`
+and `next build` without a running backend:
+
+```tsx
+// Pattern used in the companion repo
+async function getProducts(): Promise<Product[]> {
+  try {
+    const res = await fetch(`${clientEnv.NEXT_PUBLIC_API_URL}/products`, {
+      next: { revalidate: 3600 },
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return ProductListSchema.parse(await res.json());
+  } catch {
+    // Fallback to mock data in development
+    return mockProducts;
+  }
+}
+```
+
 > **Guide vs. Companion Repo:** The guide shows `throw new Error(...)` because that is the correct production pattern — errors bubble up to Next.js error boundaries where users see a proper error page. The companion repo wraps fetches in `try/catch` and falls back to mock data so you can run `npm run dev` and `next build` without a live API. Both patterns are valid; choose based on whether your environment has a running backend.
 
 ```tsx
