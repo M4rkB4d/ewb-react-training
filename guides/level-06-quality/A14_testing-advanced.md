@@ -417,6 +417,42 @@ The `onUnhandledRequest: 'error'` option catches any API call that does not
 have a matching MSW handler — this prevents tests from accidentally hitting
 real APIs.
 
+### Testing pure utility functions
+
+Pure functions (no side effects, no dependencies) are the easiest to test.
+The `formatPHP` utility from A07/B03 is a good example:
+
+```tsx
+// src/lib/format.test.ts
+import { formatPHP } from './format';
+
+describe('formatPHP', () => {
+  it('formats centavos as PHP currency', () => {
+    const result = formatPHP(150_000); // 150000 centavos = ₱1,500.00
+    expect(result).toContain('1,500.00');
+  });
+
+  it('formats zero', () => {
+    expect(formatPHP(0)).toContain('0.00');
+  });
+
+  it('formats large amounts', () => {
+    expect(formatPHP(5_000_000)).toContain('50,000.00');
+  });
+
+  it('handles negative amounts', () => {
+    expect(formatPHP(-50_000)).toMatch(/-.*500\.00/);
+  });
+});
+```
+
+Notice the test uses `.toContain()` and `.toMatch()` instead of exact string
+equality. This is intentional — the exact output depends on the runtime's
+`Intl.NumberFormat` implementation, which varies slightly between Node.js
+versions and browsers (e.g., `₱1,500.00` vs `PHP 1,500.00`). Testing the
+numeric content rather than the exact string makes the test resilient across
+environments.
+
 ---
 
 ## Key Takeaways

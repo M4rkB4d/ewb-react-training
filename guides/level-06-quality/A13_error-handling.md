@@ -17,6 +17,7 @@ By the end of this guide, you will:
 - Handle async errors in hooks and event handlers
 - Build user-facing error messages that are helpful without leaking details
 - Design fallback UIs for critical failures
+- Guard against accidental navigation with unsaved changes
 
 ---
 
@@ -397,6 +398,79 @@ export function ErrorAlert({ error, onRetry }: ErrorAlertProps) {
 
 ---
 
+## Phase 5 — Navigation Guards
+
+Error handling is not just about catching exceptions — it also means preventing
+data loss when users navigate away from unsaved work. The `useUnsavedChanges`
+hook combines React Router's `useBlocker` with the browser's `beforeunload`
+event to cover both SPA navigation and full page exits:
+
+```tsx
+// src/hooks/use-unsaved-changes.ts
+import { useEffect } from 'react';
+import { useBlocker } from 'react-router';
+
+export function useUnsavedChanges(hasUnsavedChanges: boolean) {
+  // Block navigation within the SPA
+  const blocker = useBlocker(hasUnsavedChanges);
+
+  // Block browser close/refresh
+  useEffect(() => {
+    if (!hasUnsavedChanges) return;
+
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [hasUnsavedChanges]);
+
+  return blocker;
+}
+```
+
+Two separate mechanisms are needed because they cover different exit paths:
+
+- **`useBlocker`** intercepts client-side navigation (clicking a link, calling
+  `navigate()`). It gives you a `blocker` object with `proceed()` and `reset()`
+  methods to show a confirmation dialog within the app.
+- **`beforeunload`** intercepts browser-level exits (closing the tab, refreshing,
+  typing a new URL). The browser shows its own generic confirmation dialog — you
+  cannot customize the message.
+
+### Using the hook in a form
+
+```tsx
+// In any form component with unsaved state
+const [isDirty, setIsDirty] = useState(false);
+const blocker = useUnsavedChanges(isDirty);
+
+// Show confirmation dialog when blocker is active
+{blocker.state === 'blocked' && (
+  <ConfirmationDialog
+    title="Unsaved Changes"
+    message="You have unsaved changes. Are you sure you want to leave?"
+    onConfirm={() => blocker.proceed()}
+    onCancel={() => blocker.reset()}
+  />
+)}
+```
+
+In banking applications, this is particularly important for multi-step processes
+like transfers or beneficiary registration. Accidentally navigating away could
+mean losing a partially filled form — frustrating for the user and a potential
+session security concern if sensitive data was entered.
+
+### Checkpoint 5
+
+Why does the `beforeunload` handler only call `e.preventDefault()` without
+setting `e.returnValue`? Check the MDN docs — modern browsers no longer support
+custom messages in the `beforeunload` dialog. What security problem did custom
+messages create?
+
+---
+
 ## Key Takeaways
 
 1. **Classify errors by type** — validation, network, auth, business logic,
@@ -416,6 +490,9 @@ export function ErrorAlert({ error, onRetry }: ErrorAlertProps) {
 
 6. **`navigator.sendBeacon`** ensures error reports are sent even during page
    unload.
+
+7. **Navigation guards** prevent data loss — `useBlocker` for SPA navigation,
+   `beforeunload` for browser exits. Both are needed to cover all exit paths.
 
 ---
 
