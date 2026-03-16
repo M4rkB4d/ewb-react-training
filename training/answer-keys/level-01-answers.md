@@ -1,247 +1,92 @@
-# Level 1 — Welcome: Answer Key
+# Level 1 Answer Key — Welcome
 
 > **EastWest Bank — Digital Platforms & Innovations**
 >
-> Quiz Answers + Exercise Solutions
+> React Training Program · Level 1 Instructor Reference
 
 ---
 
 ## Quiz Answers
 
-### Question 1: B
+### Question 1 — Answer: B
 
-React lets you describe what the UI should look like for any given data, and handles DOM updates automatically. This is the core of declarative programming — you describe the result, React handles the how.
+React lets you describe what the UI should look like for any given data and handles DOM updates automatically. This is declarative programming — you describe the result, React handles the how. Options A, C, and D mischaracterize what React does.
 
-### Question 2: False
+### Question 2 — Answer: True
 
-Component names must start with a capital letter. React uses the casing to distinguish between HTML elements (lowercase) and custom components (uppercase). `accountCard` would be interpreted as an HTML element, not a component.
+Component names must start with a capital letter. React uses casing to distinguish between HTML elements (lowercase) and custom components (uppercase) — `accountCard` would be interpreted as an HTML element, not a component.
 
-### Question 3 (Short Answer)
+### Question 3 — Answer: B
 
-`UI = f(state)` means the user interface is a function of the application's state. Given the same state, you always get the same UI. For a banking dashboard, the state includes account balances, user info, and loading flags. When the balance changes (state update), React re-runs the component function and updates the DOM automatically — you never manually change the balance text on screen.
+`UI = f(state)` means the user interface is a function of the application's state. When state changes, React re-runs the component functions and updates the DOM. Options A, C, and D all misinterpret the equation.
 
-### Question 4: B
+### Question 4 — Answer: B
 
-`useState` triggers a re-render when updated via its setter function. `useRef` stores a value that persists across renders but does not cause a re-render when changed. Use `useState` for data the user should see (balance, form values). Use `useRef` for DOM references and values you need to track silently (timers, previous values).
+`useState` triggers a re-render when updated via its setter function. `useRef` stores a value that persists across renders without causing re-renders. Use `useState` for data the user should see, and `useRef` for DOM references or values you need to track silently.
 
-### Question 5: B
+### Question 5 — Answer: True
 
-The convention is: use `interface` for component props (makes prop definitions immediately recognizable) and `type` for unions, computed types, and primitives.
+Calling `setCount` tells React the value changed and triggers a re-render. Direct assignment (`count = count + 1`) would mutate a local variable that React never sees, so the UI would not update.
 
-### Question 6: False
+### Question 6 — Answer: C
 
-TypeScript catches type errors at compile time (when the code is being built), not at runtime. This is precisely its value for banking applications — bugs are caught before the code ever runs in production. For runtime validation, we use Zod.
+Without a dependency array, the effect runs after every single render. This is almost always a bug because it can cause infinite loops (if the effect updates state, which triggers another render, which runs the effect again). An empty array `[]` runs the effect only once on mount.
 
-### Question 7 (Short Answer)
+### Question 7 — Answer: B
 
-`z.parse()` throws a `ZodError` if validation fails. `z.safeParse()` never throws — it returns `{ success: true, data }` or `{ success: false, error }`. In a banking application, use `safeParse()` for API responses where you want to handle invalid data gracefully (show an error message, log the issue). Use `parse()` for environment variable validation at startup where you want the application to crash immediately if configuration is invalid.
+Without cleanup, intervals and event listeners keep running after the component is removed from the page, causing memory leaks. The cleanup function (returned from the effect) clears these when the component unmounts or before the effect re-runs.
 
-### Question 8: C
+### Question 8 — Answer: True
 
-`Partial<Account>` makes all properties of `Account` optional. `Pick` selects specific properties, `Omit` excludes specific properties, and `Required` makes all properties required.
+React 19 accepts `ref` as a regular prop on custom components. The `forwardRef` wrapper that was required in React 18 and earlier is no longer needed.
 
-### Question 9: B
+### Question 9 — Answer: B
 
-BSP Circular 1213 (AFASA) requires banks to migrate from SMS-based OTP to phishing-resistant authentication methods (passkeys/FIDO2/WebAuthn) by June 2026. SMS OTP is vulnerable to SIM swapping and social engineering attacks.
+The convention is: use `interface` for component props (making prop definitions immediately recognizable) and `type` for unions, computed types, and primitives. Options A, C, and D do not match the documented convention.
 
-### Question 10: True
+### Question 10 — Answer: C
 
-Under the Data Privacy Act (RA 10173), an IP address is considered personal information because it can directly or indirectly identify a person. This applies to any data that can be linked to an individual.
+`any` disables TypeScript's type checking entirely, allowing bugs to slip through. The type-safe alternative is `unknown`, which forces you to validate or narrow the type before using the data. In banking code, a type error can mean a customer loses money.
 
-### Question 11 (Short Answer)
+### Question 11 — Answer: True
 
-1. **Bangko Sentral ng Pilipinas (BSP)** — The central bank; issues circulars that govern banking operations, IT risk management, authentication, and digital channels.
-2. **National Privacy Commission (NPC)** — Enforces the Data Privacy Act (RA 10173); governs collection, storage, and processing of personal information.
-3. **Anti-Money Laundering Council (AMLC)** — Enforces AMLA (RA 9160); governs KYC requirements, transaction monitoring, and suspicious transaction reporting.
+TypeScript catches type errors at compile time (when the code is being built), not at runtime. This is its core value for banking applications — bugs are caught before code ever runs in production. For runtime validation, we use Zod.
 
-### Question 12: B
+### Question 12 — Answer: B
 
-This violates the Data Privacy Act (RA 10173). Account numbers are personal information that must be masked when displayed. The standard pattern is to show only the last 4 digits (e.g., "••••7890") to prevent shoulder surfing and screenshot-based data theft.
+The guides teach defining Zod schemas first, then extracting TypeScript types with `z.infer<typeof schema>`. This keeps runtime validation and compile-time types permanently in sync. Option A gets the order backwards, and options C and D misrepresent Zod's purpose.
 
----
+### Question 13 — Answer: B
 
-## Exercise Solutions
+`z.parse()` throws a ZodError if validation fails, crashing the application unless caught. `z.safeParse()` never throws — it returns `{ success: true, data }` or `{ success: false, error }`, letting you handle invalid data gracefully. Use `safeParse()` for API responses and `parse()` for startup configuration where failure should be fatal.
 
-### Exercise 1: Currency Formatter Utility
+### Question 14 — Answer: True
 
-```typescript
-// src/lib/currency.ts
+Under the DPA (RA 10173), an IP address is considered personal information because it can directly or indirectly identify a person. The DPA's definition of personal information is broad and includes any data that can be linked to an individual.
 
-type Currency = 'PHP' | 'USD' | 'EUR' | 'JPY' | 'CNY';
+### Question 15 — Answer: B
 
-/**
- * Format a number as Philippine Peso.
- * NOTE: At this stage, `amount` is in pesos (not centavos). Starting in B03,
- * monetary values switch to integer centavos and this function will divide by 100.
- */
-export function formatPHP(amount: number): string {
-  return new Intl.NumberFormat('en-PH', {
-    style: 'currency',
-    currency: 'PHP',
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(amount);
-}
+BSP Circular 1213 (AFASA) requires banks to migrate from SMS-based OTP to phishing-resistant authentication methods such as passkeys (FIDO2/WebAuthn) by June 2026. SMS OTP is vulnerable to SIM swapping, SS7 attacks, and social engineering.
 
-/**
- * Format a number in any supported currency.
- */
-export function formatCurrency(amount: number, currency: Currency): string {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency,
-    minimumFractionDigits: currency === 'JPY' ? 0 : 2,
-    maximumFractionDigits: currency === 'JPY' ? 0 : 2,
-  }).format(amount);
-}
+### Question 16 — Answer: B
 
-/**
- * Parse a currency string into a number.
- * Returns null for invalid input.
- */
-export function parseCurrencyInput(input: string): number | null {
-  // Remove currency symbols, commas, and whitespace
-  const cleaned = input.replace(/[₱$€¥,\s]/g, '');
+The three regulators are: BSP (Bangko Sentral ng Pilipinas — banking operations), NPC (National Privacy Commission — data privacy), and AMLC (Anti-Money Laundering Council — financial crime). Each governs a different aspect of how digital banking applications must be built.
 
-  if (cleaned === '') return null;
+### Question 17 — Answer: False
 
-  const parsed = Number(cleaned);
-  return Number.isNaN(parsed) ? null : parsed;
-}
-```
+Under the DPA, consent is purpose-limited. Data collected for account opening cannot be used for marketing without separate, explicit consent. The UI must enforce this boundary with distinct consent checkboxes for each purpose.
 
-**Key points:**
-- `Intl.NumberFormat` handles locale-specific formatting automatically
-- JPY has no decimal places — the conditional handles this
-- `parseCurrencyInput` strips all currency symbols before parsing
-- Return type is `number | null`, not `any`
+### Question 18 — Answer: B
 
-### Exercise 2: Banking Domain Type System
+This violates the Data Privacy Act (RA 10173). Account numbers are personal information that must be masked when displayed. The standard pattern shows only the last 4 digits (e.g., "------7890") to prevent shoulder surfing and screenshot-based data theft.
 
-```typescript
-// src/types/account.ts
+### Question 19 — Answer: B
 
-export type AccountType = 'savings' | 'checking' | 'time-deposit' | 'current';
-export type AccountStatus = 'active' | 'dormant' | 'frozen' | 'closed';
-export type Currency = 'PHP' | 'USD' | 'EUR' | 'JPY' | 'CNY';
+Using payment processor iframes (hosted fields) means card numbers never touch the application — they go directly from the iframe to the payment processor. This reduces PCI-DSS scope to SAQ A (the smallest scope), saving months of audit work. Options A, C, and D are factually incorrect.
 
-export interface Account {
-  id: string;
-  accountNumber: string;
-  accountName: string;
-  type: AccountType;
-  balance: number;
-  availableBalance: number;
-  currency: Currency;
-  status: AccountStatus;
-  openedDate: string;
-  lastActivityDate: string;
-}
+### Question 20 — Answer: True
 
-export type AccountPreview = Pick<Account, 'id' | 'accountName' | 'balance'>;
-
-export type AccountCreateInput = Omit<
-  Account,
-  'id' | 'status' | 'openedDate' | 'lastActivityDate'
->;
-```
-
-```typescript
-// src/schemas/account.ts
-import { z } from 'zod';
-
-export const accountSchema = z
-  .object({
-    id: z.string().min(1),
-    accountNumber: z.string().regex(/^\d{10}$/, 'Account number must be 10 digits'),
-    accountName: z.string().min(1).max(100),
-    type: z.enum(['savings', 'checking', 'time-deposit', 'current']),
-    balance: z.number().int().nonnegative('Balance cannot be negative'), // pesos (integer at this stage — centavos model starts in B03)
-    availableBalance: z.number().int().nonnegative('Available balance cannot be negative'), // pesos (integer at this stage)
-    currency: z.enum(['PHP', 'USD', 'EUR', 'JPY', 'CNY']),
-    status: z.enum(['active', 'dormant', 'frozen', 'closed']),
-    openedDate: z.string().datetime(),
-    lastActivityDate: z.string().datetime(),
-  })
-  .refine((data) => data.availableBalance <= data.balance, {
-    message: 'Available balance cannot exceed total balance',
-    path: ['availableBalance'],
-  });
-
-export type Account = z.infer<typeof accountSchema>;
-```
-
-**Key points:**
-- The Zod schema is defined first, TypeScript type extracted from it
-- `refine()` enforces the cross-field constraint
-- `path: ['availableBalance']` attaches the error to the correct field
-
-### Exercise 3: Compliance Checklist Builder
-
-```typescript
-// src/types/compliance.ts
-
-export type ComplianceArea =
-  | 'data-masking'
-  | 'authentication'
-  | 'accessibility'
-  | 'error-monitoring'
-  | 'test-coverage'
-  | 'transaction-limits'
-  | 'consent-management'
-  | 'card-security';
-
-export type ComplianceCheck =
-  | { status: 'not-started'; area: ComplianceArea }
-  | { status: 'in-progress'; area: ComplianceArea; assignee: string }
-  | { status: 'passed'; area: ComplianceArea; verifiedBy: string; verifiedAt: string }
-  | { status: 'failed'; area: ComplianceArea; reason: string; regulation: string };
-
-const regulationMap: Record<ComplianceArea, string> = {
-  'data-masking': 'DPA (RA 10173)',
-  authentication: 'BSP Circular 982 / 1213',
-  accessibility: 'BSP Circular 1033',
-  'error-monitoring': 'BSP Circular 1019',
-  'test-coverage': 'BSP Circular 808',
-  'transaction-limits': 'AMLA (RA 9160)',
-  'consent-management': 'DPA (RA 10173) / BSP Circular 1122',
-  'card-security': 'PCI-DSS',
-};
-
-export function getRegulationForArea(area: ComplianceArea): string {
-  return regulationMap[area];
-}
-
-export function summarizeChecklist(
-  checks: ComplianceCheck[],
-): { passed: number; failed: number; pending: number } {
-  let passed = 0;
-  let failed = 0;
-  let pending = 0;
-
-  for (const check of checks) {
-    switch (check.status) {
-      case 'passed':
-        passed++;
-        break;
-      case 'failed':
-        failed++;
-        break;
-      case 'not-started':
-      case 'in-progress':
-        pending++;
-        break;
-    }
-  }
-
-  return { passed, failed, pending };
-}
-```
-
-**Key points:**
-- Discriminated union allows TypeScript to narrow types in the `switch` statement
-- `Record<ComplianceArea, string>` ensures every area has a regulation mapped
-- The `summarizeChecklist` function groups both `not-started` and `in-progress` as "pending"
+The DPA carries criminal penalties including imprisonment of one to six years, plus fines. This makes it one of the stricter data privacy laws in the region. Privacy violations are not just a corporate liability — they can result in personal criminal liability.
 
 ---
 

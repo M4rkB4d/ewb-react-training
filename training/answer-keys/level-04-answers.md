@@ -16,9 +16,9 @@ TanStack Query is the correct tool for server state (data from APIs). Account ba
 
 Zustand selectors ensure a component only re-renders when the specific slice it subscribes to changes. `useUIStore((state) => state.theme)` will not trigger a re-render when `sidebarOpen` changes. This is a key advantage over React Context, which re-renders all consumers on any change.
 
-### Question 3 — Answer
+### Question 3 — Answer: C
 
-Storing the access token in localStorage creates an XSS (Cross-Site Scripting) vulnerability. If an attacker injects JavaScript into the page, they can read `localStorage.getItem('accessToken')` and exfiltrate the token to an external server. In-memory storage (Zustand) is not accessible to injected scripts after a page reload. BSP 982 Section 5.4 requires protection of session tokens from unauthorized access, including XSS.
+Storing the access token in localStorage creates an XSS vulnerability. If an attacker injects JavaScript, they can call `localStorage.getItem('accessToken')` and exfiltrate the token. In-memory storage (Zustand without persist) is not accessible to injected scripts after a page reload. BSP 982 Section 5.4 requires protection of session tokens from unauthorized access.
 
 ### Question 4 — Answer: B
 
@@ -26,293 +26,67 @@ Storing the access token in localStorage creates an XSS (Cross-Site Scripting) v
 
 ### Question 5 — Answer: C
 
-`onSettled` fires after both success and failure, ensuring the cache is refreshed regardless of outcome. This is critical because the optimistic update is an approximation — the server might apply fees, rounding, or timing differences. Even if `onSuccess` runs, the optimistic balance might differ from the actual server balance. `onSettled` guarantees reconciliation.
+`onSettled` fires after both success and failure, ensuring the cache is refreshed regardless of outcome. The optimistic update is an approximation — the server might apply changes the client did not predict. Even if `onSuccess` runs, the optimistic state might differ from the actual server state. `onSettled` guarantees reconciliation.
 
 ### Question 6 — Answer: True
 
-The `lazy` property on route definitions uses dynamic `import()` to split each page into a separate JavaScript chunk. The browser only downloads a page's code when the user navigates to it. This reduces the initial bundle size significantly.
+The `lazy` property on route definitions uses dynamic `import()` to split each page into a separate JavaScript chunk. The browser only downloads a page's code when the user navigates to it, reducing the initial bundle size.
 
-### Question 7 — Answer
+### Question 7 — Answer: C
 
-Frontend route guards are a UX convenience, not a security mechanism. A determined user can bypass any frontend check by modifying JavaScript in the browser's DevTools. The backend must independently verify authentication and authorization on every API request. BSP 808 requires server-side access control as the authoritative enforcement point. A user who bypasses the `ProtectedRoute` must still be rejected by the API with a 401 or 403.
+The EWB role hierarchy is `customer < teller < manager < admin`. Customer has the lowest access level (value 0), with each subsequent role inheriting all permissions of the lower roles plus additional ones.
 
 ### Question 8 — Answer: B
 
-TanStack Query hooks require a `QueryClientProvider` context. `renderHook` with a wrapper function that provides this context is the correct approach. Calling the hook directly (A) violates the Rules of Hooks. Mocking the entire module (C) tests nothing meaningful. Rendering a dummy component (D) works but is more boilerplate than `renderHook`.
+TanStack Query hooks require a `QueryClientProvider` context. `renderHook` with a wrapper function that provides this context is the correct approach. Calling the hook directly (A) violates the Rules of Hooks. Mocking the entire module (C) tests nothing meaningful.
 
-### Question 9 — Answer: B
+### Question 9 — Answer: False
 
-The `RoleGuard` component checks the user's role against `allowedRoles`. Since `customer` is not in `['admin', 'manager']`, the guard renders `<Navigate to="/unauthorized" replace />`, redirecting the user to the unauthorized page.
+Frontend route guards are a UX convenience, not a security mechanism. A user can bypass any frontend check using browser DevTools or by calling the API directly. BSP 982 requires the backend to independently verify authentication and authorization on every request.
 
-### Question 10 — Answer
+### Question 10 — Answer: B
 
-Zustand stores are singletons — they persist across tests. Without resetting in `beforeEach`, a test that calls `setAuth()` leaves the store in an authenticated state, which leaks into the next test. This causes test pollution: tests pass individually but fail when run together, or their order affects results. Reset with `useAuthStore.setState({ ... })` to ensure each test starts from a known state.
+`partialize` controls which state fields are persisted to localStorage. For example, in the UI store, `partialize: (state) => ({ theme: state.theme })` persists only the theme preference while excluding transient state like `sidebarOpen`, which should reset on page reload.
 
 ### Question 11 — Answer: C
 
-MSW intercepts HTTP requests at the network level. It uses a Service Worker (in browsers) or Node.js request interception (in tests) to return mock responses. This is superior to module mocking because it tests the actual HTTP client code (Axios config, interceptors, error handling) — only the network layer is faked.
+MSW intercepts HTTP requests at the network level using request interception in Node.js (for tests). This is superior to module mocking because it tests the actual HTTP client code (Axios config, interceptors, error handling) — only the network layer is faked.
 
-### Question 12 — Answer
+### Question 12 — Answer: True
 
-`useBlocker` handles navigation within the SPA — when the user clicks a React Router `Link` or calls `navigate()`. The `beforeunload` event listener handles browser-level navigation — when the user refreshes the page, closes the tab, or types a new URL. Both are needed because `useBlocker` cannot prevent browser-level actions, and `beforeunload` cannot intercept client-side routing.
+Zustand stores are singletons that persist across tests. Without resetting in `beforeEach`, a test that calls `setAuth()` leaves the store in an authenticated state that leaks into subsequent tests, causing test pollution and non-deterministic failures.
 
----
+### Question 13 — Answer: B
 
-## Exercise Solutions
+`useBlocker` intercepts client-side navigation (clicking React Router links, calling `navigate()`). `beforeunload` intercepts browser-level exits (refreshing, closing the tab, typing a new URL). Both are needed because `useBlocker` cannot prevent browser-level actions, and `beforeunload` cannot intercept client-side routing.
 
-### Exercise 1 — Transaction Filter Store
+### Question 14 — Answer: C
 
-```tsx
-// src/features/accounts/stores/transaction-filter-store.ts
-import { create } from 'zustand';
+BSP 982 Section 5.4 requires tokens to be protected from XSS. In-memory storage (a JavaScript variable in a Zustand store) is the safest frontend option. localStorage (A) and sessionStorage (D) are readable by any script on the page. HttpOnly cookies (B) are for the refresh token, managed by the backend.
 
-type TransactionType = 'all' | 'credit' | 'debit';
-type SortOrder = 'newest' | 'oldest' | 'amount-high' | 'amount-low';
+### Question 15 — Answer: True
 
-interface DateRange {
-  start: string | null;
-  end: string | null;
-}
+The `end` prop on `NavLink` for the root route (`/`) ensures it only shows as active when the URL is exactly `/`. Without `end`, the root NavLink would match all routes (since every route starts with `/`), making it always appear active.
 
-interface TransactionFilterState {
-  transactionType: TransactionType;
-  dateRange: DateRange;
-  sortOrder: SortOrder;
-  setTransactionType: (type: TransactionType) => void;
-  setDateRange: (range: DateRange) => void;
-  setSortOrder: (order: SortOrder) => void;
-  resetFilters: () => void;
-  hasActiveFilters: () => boolean;
-}
+### Question 16 — Answer: B
 
-const defaults = {
-  transactionType: 'all' as TransactionType,
-  dateRange: { start: null, end: null } as DateRange,
-  sortOrder: 'newest' as SortOrder,
-};
+`onMutate` runs before the mutation request is sent. It saves a snapshot of the current cache data (for rollback) and immediately applies the optimistic change to the cache so the UI updates instantly, before the server responds.
 
-export const useTransactionFilterStore = create<TransactionFilterState>((set, get) => ({
-  ...defaults,
-  setTransactionType: (transactionType) => set({ transactionType }),
-  setDateRange: (dateRange) => set({ dateRange }),
-  setSortOrder: (sortOrder) => set({ sortOrder }),
-  resetFilters: () => set({ ...defaults }),
-  hasActiveFilters: () => {
-    const state = get();
-    return (
-      state.transactionType !== 'all' ||
-      state.dateRange.start !== null ||
-      state.dateRange.end !== null ||
-      state.sortOrder !== 'newest'
-    );
-  },
-}));
-```
+### Question 17 — Answer: C
 
-**Key points:**
-- Defaults are extracted to a constant for reuse in `resetFilters`
-- `hasActiveFilters` uses `get()` to read current state without subscribing
-- TypeScript union types enforce valid values at compile time
+`useMatches` returns all matched route objects for the current URL, including their `handle` property. Breadcrumbs are built by attaching a `breadcrumb` field to route handles and iterating over the matched routes.
 
-### Exercise 2 — Account Detail with Query Key Factory
+### Question 18 — Answer: False
 
-```tsx
-// src/features/accounts/queries.ts
-export const accountKeys = {
-  all: ['accounts'] as const,
-  details: () => [...accountKeys.all, 'detail'] as const,
-  detail: (id: string) => [...accountKeys.details(), id] as const,
-  transactions: (id: string) => [...accountKeys.detail(id), 'transactions'] as const,
-};
+Optimistic updates must never be used for financial mutations (transfers, payments, balance changes). Showing a transfer as successful before the server confirms it is a compliance incident under BSP 1033. Financial operations must use the server-confirmed mutation pattern.
 
-// src/features/accounts/hooks/use-account-detail.ts
-import { useQuery } from '@tanstack/react-query';
-import { z } from 'zod';
-import { apiClient } from '@/lib/api-client';
-import { accountKeys } from '../queries';
+### Question 19 — Answer: B
 
-const accountSchema = z.object({
-  id: z.string(),
-  name: z.string(),
-  number: z.string(),
-  type: z.enum(['savings', 'checking', 'time-deposit']),
-  balance: z.number().int().nonnegative(), // centavos
-  currency: z.string().default('PHP'),
-  isActive: z.boolean(),
-});
+Components using React Router hooks (`Link`, `useNavigate`, `NavLink`) require a router context. `MemoryRouter` provides this in tests without a real browser. For apps using `createBrowserRouter`, use `createMemoryRouter` with `RouterProvider` to support data router hooks.
 
-export function useAccountDetail(id: string) {
-  return useQuery({
-    queryKey: accountKeys.detail(id),
-    queryFn: async () => {
-      const response = await apiClient.get(`/accounts/${id}`);
-      return accountSchema.parse(response.data);
-    },
-    enabled: id !== '',
-  });
-}
+### Question 20 — Answer: B
 
-// src/features/accounts/hooks/use-account-transactions.ts
-import { useQuery, keepPreviousData } from '@tanstack/react-query';
-import { z } from 'zod';
-import { apiClient } from '@/lib/api-client';
-import { accountKeys } from '../queries';
-
-const transactionSchema = z.object({
-  id: z.string(),
-  date: z.string(),
-  description: z.string(),
-  amount: z.number().int(), // centavos (can be negative for debits)
-  type: z.enum(['credit', 'debit']),
-  balance: z.number().int().nonnegative(), // centavos
-  reference: z.string(),
-  channel: z.string(),
-});
-
-const paginatedSchema = z.object({
-  data: z.array(transactionSchema),
-  meta: z.object({
-    page: z.number(),
-    pageSize: z.number(),
-    totalPages: z.number(),
-    totalItems: z.number(),
-  }),
-});
-
-export function useAccountTransactions(id: string, page = 1, pageSize = 20) {
-  return useQuery({
-    queryKey: [...accountKeys.transactions(id), { page, pageSize }],
-    queryFn: async () => {
-      const response = await apiClient.get(`/accounts/${id}/transactions`, {
-        params: { page, pageSize },
-      });
-      return paginatedSchema.parse(response.data);
-    },
-    enabled: id !== '',
-    placeholderData: keepPreviousData,
-  });
-}
-```
-
-**Key points:**
-- Query keys are hierarchical: invalidating `accountKeys.all` cascades to detail and transactions
-- `keepPreviousData` prevents a blank screen when changing pages
-- Zod validates all API responses per BSP 1122
-
-### Exercise 3 — Protected Route with Post-Login Redirect
-
-```tsx
-// src/components/auth/protected-route.tsx
-import { Navigate, Outlet, useLocation } from 'react-router';
-import { useAuthStore } from '@/stores/auth-store';
-
-export function ProtectedRoute() {
-  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
-  const location = useLocation();
-
-  if (!isAuthenticated) {
-    return <Navigate to="/login" state={{ from: location.pathname }} replace />;
-  }
-
-  // BSP 808: Frontend guard is for UX only. Backend must verify independently.
-  return <Outlet />;
-}
-
-// src/components/auth/role-guard.tsx
-import { Navigate, Outlet } from 'react-router';
-import { useAuthStore } from '@/stores/auth-store';
-
-interface RoleGuardProps {
-  allowedRoles: Array<'customer' | 'teller' | 'manager' | 'admin'>;
-}
-
-export function RoleGuard({ allowedRoles }: RoleGuardProps) {
-  const user = useAuthStore((s) => s.user);
-
-  if (user == null || !allowedRoles.includes(user.role)) {
-    return <Navigate to="/unauthorized" replace />;
-  }
-
-  return <Outlet />;
-}
-
-// Test file: src/components/auth/protected-route.test.tsx
-import { render, screen } from '@testing-library/react';
-import { MemoryRouter, Route, Routes, useLocation } from 'react-router';
-import { describe, it, expect, beforeEach } from 'vitest';
-import { useAuthStore } from '@/stores/auth-store';
-import { ProtectedRoute } from './protected-route';
-
-describe('ProtectedRoute', () => {
-  beforeEach(() => {
-    useAuthStore.setState({
-      user: null,
-      accessToken: null,
-      isAuthenticated: false,
-    });
-  });
-
-  it('redirects unauthenticated users to /login', () => {
-    render(
-      <MemoryRouter initialEntries={['/dashboard']}>
-        <Routes>
-          <Route path="/login" element={<div>Login Page</div>} />
-          <Route element={<ProtectedRoute />}>
-            <Route path="/dashboard" element={<div>Dashboard</div>} />
-          </Route>
-        </Routes>
-      </MemoryRouter>,
-    );
-    expect(screen.getByText('Login Page')).toBeInTheDocument();
-  });
-
-  it('renders children when authenticated', () => {
-    useAuthStore.setState({
-      user: { id: '1', name: 'Juan', email: 'juan@ewb.com', role: 'customer' },
-      accessToken: 'token',
-      isAuthenticated: true,
-    });
-
-    render(
-      <MemoryRouter initialEntries={['/dashboard']}>
-        <Routes>
-          <Route element={<ProtectedRoute />}>
-            <Route path="/dashboard" element={<div>Dashboard</div>} />
-          </Route>
-        </Routes>
-      </MemoryRouter>,
-    );
-    expect(screen.getByText('Dashboard')).toBeInTheDocument();
-  });
-
-  it('preserves the original URL for post-login redirect', () => {
-    // Helper to capture and display the location state for assertions
-    let capturedState: unknown = null;
-    function LoginCapture() {
-      const location = useLocation();
-      capturedState = location.state;
-      return <div>Login Page</div>;
-    }
-
-    render(
-      <MemoryRouter initialEntries={['/accounts/ACC-001/transactions']}>
-        <Routes>
-          <Route
-            path="/login"
-            element={<LoginCapture />}
-          />
-          <Route element={<ProtectedRoute />}>
-            <Route path="/accounts/:id/transactions" element={<div>Transactions</div>} />
-          </Route>
-        </Routes>
-      </MemoryRouter>,
-    );
-    expect(screen.getByText('Login Page')).toBeInTheDocument();
-    // Verify the original path was passed via location state
-    expect(capturedState).toEqual({ from: '/accounts/ACC-001/transactions' });
-  });
-});
-```
+`accountKeys.all` is `['accounts']` — the root of the hierarchical key structure. When you call `queryClient.invalidateQueries({ queryKey: accountKeys.all })`, TanStack Query invalidates all queries whose keys start with `['accounts']`, including lists, details, and transactions. This enables cascading cache invalidation.
 
 ---
 

@@ -11,3 +11,7 @@ Thumbs.db
 *.swp
 *.swo
 PROJECT_CONTEXT.md
+
+# Dependencies / build cache
+node_modules/
+.vite/

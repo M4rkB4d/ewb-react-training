@@ -1,405 +1,92 @@
-# Level 8 — Mastery: Answer Key
+# Level 8 Answer Key — Mastery
 
 > **EastWest Bank — Digital Platforms & Innovations**
 >
-> Quiz Answers + Exercise Solutions
+> React Training Program · Level 8 Instructor Reference
 
 ---
 
 ## Quiz Answers
 
-### Question 1 — B
+### Question 1 — Answer: B
 
-Features should only import from other features through their public API — the `index.ts` file (facade). This ensures loose coupling. If the accounts feature restructures its internal files, transfers is unaffected because the public API contract remains the same. Importing from internal files like `accounts/api/accounts-api.ts` violates the dependency rules.
+Features should only import from other features through their public API — the `index.ts` file (facade). This ensures loose coupling. If the accounts feature restructures its internal files, transfers is unaffected because the public API contract remains the same.
 
-### Question 2 — False
+### Question 2 — Answer: False
 
-Value objects are compared by value (their properties), not by identity. A `Money` object with `{ amount: 5000, currency: 'PHP' }` is equal to another `Money` object with the same amount and currency. Entities (like an Account with `id: 'acc-123'`) are compared by identity.
+Value objects are compared by value (their properties), not by identity. A `Money` object with `{ amount: 5000, currency: 'PHP' }` is equal to another `Money` with the same values. Entities (like Account with a unique ID) are compared by identity.
 
-### Question 3
+### Question 3 — Answer: B
 
-An event bus provides loose coupling — features do not need to know about each other. The `transfers` feature emits `transfer:completed` without knowing that `accounts` subscribes to it. This makes features independently deployable and testable. The tradeoff is reduced traceability: you cannot "Go to Definition" on an event string to find all consumers. Typed event catalogs and documentation mitigate this.
+An event bus provides loose coupling — the `transfers` feature emits `transfer:completed` without knowing that `accounts` subscribes to it. This makes features independently testable and deployable. The tradeoff is reduced traceability, which typed event catalogs mitigate.
 
-### Question 4 — C
+### Question 4 — Answer: C
 
-Transaction alerts flow one way — from the server to the client. SSE is designed for this pattern, auto-reconnects on failure, and works through most corporate proxies. WebSocket is overkill because the client does not need to send data on this channel. Polling at 500ms would waste bandwidth when no transactions are occurring.
+Transaction alerts flow one way (server to client). SSE is designed for this pattern, auto-reconnects on failure, and works through most corporate proxies. WebSocket is overkill since the client does not need to send data on this channel. Polling at 500ms wastes bandwidth when no transactions are occurring.
 
-### Question 5 — B
+### Question 5 — Answer: B
 
-The adaptive option increases the polling interval (up to 5x the base) when data has not changed between fetches. When data does change, the interval resets to the base value. This saves bandwidth during quiet periods (e.g., no transactions happening) while remaining responsive when activity resumes.
+The adaptive option increases the polling interval (up to 5x the base) when data has not changed between fetches. When data changes, the interval resets to the base value. This saves bandwidth during quiet periods while remaining responsive when activity resumes.
 
-### Question 6
+### Question 6 — Answer: False
 
-The hook uses `new EventSource(url, { withCredentials: true })` to send the HttpOnly refresh cookie automatically. This avoids passing tokens as query parameters, which would expose them in server access logs, browser history, and Referer headers (a BSP 808 violation). The cookie-based approach keeps the token confidential — the JavaScript code never reads or handles the token directly. On reconnection, the browser re-sends the cookie automatically, so the SSE stream resumes without custom token management.
+Native `EventSource` does not support custom HTTP headers. The `useEventSource` hook authenticates using `withCredentials: true`, which sends HttpOnly cookies automatically. Putting tokens in query parameters would expose them in server logs, browser history, and Referer headers.
 
-### Question 7 — B
+### Question 7 — Answer: B
 
-Each locale file can be 20-50KB. Including all three locales (English, Filipino, Chinese) would add 60-150KB to the initial bundle that most users never need — the majority of EWB users operate in English. Lazy loading via dynamic `import()` means only the active locale is downloaded, reducing initial bundle size.
+Each locale file can be 20-50KB. Including all three locales (English, Filipino, Chinese) would add 60-150KB to the initial bundle that most users never need. Lazy loading via dynamic `import()` means only the active locale is downloaded, reducing initial bundle size.
 
-### Question 8 — False
+### Question 8 — Answer: False
 
-`Intl.NumberFormat` handles locale-specific formatting automatically: thousands separators, decimal separators, currency symbol positioning, negative number formatting, and proper rounding. Manual string concatenation (`"₱" + amount.toFixed(2)`) will break across locales and does not handle edge cases like large numbers or negative values correctly.
+`Intl.NumberFormat` handles locale-specific formatting automatically: thousands separators, decimal separators, currency symbol positioning, negative number formatting, and proper rounding. Manual string concatenation breaks across locales and does not handle edge cases correctly.
 
-### Question 9 — B
+### Question 9 — Answer: B
 
-The `usePayment` hook emits a domain event via the event bus (`payment:completed`) and logs an audit event via `emitAuditEvent('PAYMENT_SUBMITTED', ...)`. It does NOT directly update the accounts store or call the accounts API. The accounts feature independently subscribes to the `payment:completed` event and refreshes its own data. This follows the loose coupling principle from A18.
+The `usePayment` hook emits a domain event via the event bus (`payment:completed`) and logs an audit event via `emitAuditEvent('PAYMENT_SUBMITTED', ...)`. It does not directly update the accounts store or call the accounts API. The accounts feature independently subscribes to the event and refreshes its own data.
 
-### Question 10
+### Question 10 — Answer: B
 
-The payment wizard spans multiple steps, and the draft data (selected biller, amount, account, fields) must persist across step transitions. React Hook Form manages individual form step validation but does not persist across unmounted components (each wizard step unmounts when you move to the next). URL state would expose sensitive payment details in the browser address bar. Zustand keeps the draft in memory across steps without persisting to the URL or storage.
+Invalidation triggers a proper fetch through the existing API layer, which includes Zod validation and error handling. Directly setting query data from WebSocket messages skips validation and can cause inconsistencies if the message format differs from the API response format.
 
-### Question 11 — B
+### Question 11 — Answer: B
 
-Invalidation triggers a proper fetch through the existing API layer, which includes Zod validation and error handling. Directly setting query data from WebSocket messages (`setQueryData`) skips validation and can introduce inconsistencies if the WebSocket message format differs from the API response format. Invalidation ensures data consistency by always going through the established fetch-and-validate pipeline.
+ICU MessageFormat syntax uses `{count, plural, one {# account} other {# accounts}}` for pluralization. The `#` symbol is replaced with the count value. Options A, C, and D use JavaScript syntax that does not work in message catalogs and cannot be translated by localizers.
 
-### Question 12 — B
+### Question 12 — Answer: False
 
-ICU MessageFormat syntax uses `{count, plural, one {# account} other {# accounts}}` for pluralization. The `#` symbol is replaced with the count value. Options A, C, and D use JavaScript string interpolation or ternary operators, which do not work in message catalogs and cannot be translated by localizers.
+Shared code (`components`, `hooks`, `lib`) must never import from features. If a shared component needs feature data, it accepts props instead. The dependency rule is one-way: `app` imports from `features`, features import from shared code, but never the reverse.
 
----
+### Question 13 — Answer: B
 
-## Exercise Solutions
+The payment draft store intentionally omits `persist` because it holds sensitive data (account IDs, amounts, biller details). Writing this to localStorage would mean payment data survives after the browser tab closes, the session ends, or the user logs out — creating a data exposure risk. The `reset()` method clears in-memory state when the wizard completes or is cancelled. This follows the same principle from Level 4 where the auth store avoids persisting access tokens to localStorage.
 
-### Exercise 1 — Typed Event Catalog
+### Question 14 — Answer: C
 
-```tsx
-// src/lib/event-catalog.ts
+The WebSocket reconnection uses exponential backoff with the formula `reconnectInterval * 2^attempts`, capped at 30 seconds. The delays are 3s, 6s, 12s, 24s, then 30s (max) for subsequent attempts, preventing server overload during outages while reconnecting quickly for brief issues.
 
-export interface EventCatalog {
-  'transfer:completed': {
-    fromAccount: string;
-    toAccount: string;
-    amount: number;
-    currency: 'PHP' | 'USD';
-    referenceNumber: string;
-  };
-  'transfer:failed': {
-    fromAccount: string;
-    toAccount: string;
-    amount: number;
-    error: string;
-  };
-  'payment:completed': {
-    accountId: string;
-    billerId: string;
-    amount: number;
-    referenceNumber: string;
-  };
-  'payment:failed': {
-    billerId: string;
-    error: string;
-  };
-  'auth:login': {
-    userId: string;
-    method: 'password' | 'passkey';
-  };
-  'auth:logout': {
-    userId: string;
-    reason: 'user' | 'timeout' | 'forced';
-  };
-  'auth:session-timeout': {
-    userId: string;
-    sessionDuration: number;
-  };
-  'consent:changed': {
-    purpose: string;
-    granted: boolean;
-  };
-}
-
-// Type-safe event bus
-type EventHandler<T> = (payload: T) => void;
-
-const handlers = new Map<string, Set<EventHandler<unknown>>>();
-
-export function on<K extends keyof EventCatalog>(
-  event: K,
-  handler: EventHandler<EventCatalog[K]>,
-): () => void {
-  if (!handlers.has(event)) {
-    handlers.set(event, new Set());
-  }
-  handlers.get(event)!.add(handler as EventHandler<unknown>);
-
-  return () => {
-    handlers.get(event)?.delete(handler as EventHandler<unknown>);
-  };
-}
-
-export function emit<K extends keyof EventCatalog>(
-  event: K,
-  payload: EventCatalog[K],
-): void {
-  handlers.get(event)?.forEach((handler) => handler(payload));
-}
-```
-
-Test:
-
-```tsx
-import { describe, it, expect, vi } from 'vitest';
-import { emit, on } from './event-catalog';
-
-describe('Typed Event Bus', () => {
-  it('delivers typed payloads to subscribers', () => {
-    const handler = vi.fn();
-    const unsubscribe = on('transfer:completed', handler);
-
-    emit('transfer:completed', {
-      fromAccount: 'acc-1',
-      toAccount: 'acc-2',
-      amount: 5000,
-      currency: 'PHP',
-      referenceNumber: 'EWB-001',
-    });
-
-    expect(handler).toHaveBeenCalledWith(
-      expect.objectContaining({ amount: 5000, currency: 'PHP' }),
-    );
-
-    unsubscribe();
-  });
-
-  it('unsubscribes correctly', () => {
-    const handler = vi.fn();
-    const unsubscribe = on('auth:logout', handler);
-    unsubscribe();
-
-    emit('auth:logout', { userId: 'user-1', reason: 'user' });
-    expect(handler).not.toHaveBeenCalled();
-  });
-});
-```
-
-### Exercise 2 — Live Transfer Status Tracker
-
-```tsx
-// src/features/transfers/components/transfer-status-tracker.tsx
-import { useQuery } from '@tanstack/react-query';
-import { useEffect, useRef } from 'react';
-import { apiClient } from '@/lib/api-client';
-import { emitAuditEvent } from '@/compliance/audit-service';
-
-type TransferStatus = 'pending' | 'processing' | 'completed' | 'failed';
-
-interface Transfer {
-  id: string;
-  status: TransferStatus;
-  estimatedCompletion: string | null;
-  referenceNumber: string;
-}
-
-const INTERVALS: Record<TransferStatus, number | false> = {
-  pending: 5_000,
-  processing: 15_000,
-  completed: false,
-  failed: false,
-};
-
-const STEPS = ['Initiated', 'Processing', 'Completed'] as const;
-
-function getActiveStep(status: TransferStatus): number {
-  switch (status) {
-    case 'pending': return 0;
-    case 'processing': return 1;
-    case 'completed': return 2;
-    case 'failed': return 1; // Failed during processing
-  }
-}
-
-export function TransferStatusTracker({ transferId }: { transferId: string }) {
-  const previousStatus = useRef<TransferStatus | null>(null);
-
-  const { data: transfer, isLoading } = useQuery<Transfer>({
-    queryKey: ['transfers', transferId, 'status'],
-    queryFn: async () => {
-      const res = await apiClient.get(`/transfers/${transferId}/status`);
-      return res.data;
-    },
-    refetchInterval: (query) => {
-      const status = query.state.data?.status;
-      if (!status) return 5_000;
-      return INTERVALS[status];
-    },
-    refetchIntervalInBackground: false,
-  });
-
-  // Emit audit event when reaching a final state
-  useEffect(() => {
-    if (!transfer) return;
-    if (
-      previousStatus.current !== transfer.status &&
-      (transfer.status === 'completed' || transfer.status === 'failed')
-    ) {
-      emitAuditEvent(
-        transfer.status === 'completed' ? 'CONFIRM_TRANSFER' : 'CANCEL_TRANSFER',
-        { transferId, status: transfer.status, reference: transfer.referenceNumber },
-      );
-    }
-    previousStatus.current = transfer.status;
-  }, [transfer?.status, transferId, transfer?.referenceNumber]);
-
-  if (isLoading) return <p>Loading transfer status...</p>;
-  if (!transfer) return <p>Transfer not found.</p>;
-
-  const activeStep = getActiveStep(transfer.status);
-
-  return (
-    <div className="space-y-6">
-      {/* Progress stepper */}
-      <nav aria-label="Transfer progress">
-        <ol className="flex gap-4">
-          {STEPS.map((step, index) => (
-            <li
-              key={step}
-              className={`flex-1 rounded px-3 py-2 text-center text-sm ${
-                index <= activeStep
-                  ? transfer.status === 'failed' && index === activeStep
-                    ? 'bg-error/10 text-error'
-                    : 'bg-emerald-200 text-emerald-700'
-                  : 'bg-gray-100 text-gray-500'
-              }`}
-              aria-current={index === activeStep ? 'step' : undefined}
-            >
-              {step}
-            </li>
-          ))}
-        </ol>
-      </nav>
-
-      {/* Status details */}
-      <div className="rounded border p-4">
-        <p className="text-sm text-gray-600">
-          Reference: <span className="font-mono">{transfer.referenceNumber}</span>
-        </p>
-        <p className="mt-1 text-sm">
-          Status: <span className="font-medium">{transfer.status}</span>
-        </p>
-        {transfer.estimatedCompletion && transfer.status !== 'completed' && (
-          <p className="mt-1 text-xs text-gray-500">
-            Estimated completion: {new Date(transfer.estimatedCompletion).toLocaleString('en-PH')}
-          </p>
-        )}
-      </div>
-
-      {/* Connection indicator */}
-      <div className="flex items-center gap-1 text-xs text-gray-500">
-        <span className={`h-2 w-2 rounded-full ${
-          INTERVALS[transfer.status] !== false ? 'bg-emerald-500' : 'bg-gray-300'
-        }`} />
-        {INTERVALS[transfer.status] !== false ? 'Tracking live' : 'Final status'}
-      </div>
-    </div>
-  );
-}
-```
-
-### Exercise 3 — Multi-Locale Currency Input
-
-```tsx
-// src/components/ui/currency-input.tsx
-import { useState, type Ref } from 'react';
-import { z } from 'zod';
-import { useIntl } from 'react-intl';
-
-const currencyInputSchema = z.object({
-  amount: z.number().int().min(1).max(50_000_000), // centavos (₱500,000)
-  currency: z.enum(['PHP', 'USD']),
-});
-
-interface CurrencyInputProps {
-  name: string;
-  label: string;
-  value?: number;
-  onChange?: (value: number) => void;
-  error?: string;
-  currency?: string;
-  max?: number;
-  ref?: Ref<HTMLInputElement>;
-}
-
-function parseLocaleNumber(value: string, locale: string): number {
-  // Get the locale's decimal separator
-  const formatter = new Intl.NumberFormat(locale);
-  const parts = formatter.formatToParts(1234.5);
-  const decimalSeparator = parts.find((p) => p.type === 'decimal')?.value ?? '.';
-  const groupSeparator = parts.find((p) => p.type === 'group')?.value ?? ',';
-
-  // Strip grouping separators, replace locale decimal with standard decimal
-  const normalized = value
-    .replace(new RegExp(`\\${groupSeparator}`, 'g'), '')
-    .replace(new RegExp(`\\${decimalSeparator}`), '.');
-
-  // Remove currency symbol and whitespace
-  const cleaned = normalized.replace(/[^0-9.\-]/g, '');
-
-  const parsed = parseFloat(cleaned);
-  return isNaN(parsed) ? 0 : Math.round(parsed * 100); // Returns integer centavos
-}
-
-export function CurrencyInput({ name, label, value, onChange, error, currency = 'PHP', max = 50_000_000, ref }: CurrencyInputProps) {
-  const intl = useIntl();
-  const [displayValue, setDisplayValue] = useState(
-    value != null && value > 0
-      ? intl.formatNumber(value / 100, { style: 'currency', currency })
-      : '',
-  );
-  const [isFocused, setIsFocused] = useState(false);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const raw = e.target.value;
-    setDisplayValue(raw);
-
-    const parsed = parseLocaleNumber(raw, intl.locale);
-    if (parsed > 0 && parsed <= max) {
-      onChange?.(parsed);
-    }
-  };
-
-  const handleBlur = () => {
-    setIsFocused(false);
-    const parsed = parseLocaleNumber(displayValue, intl.locale);
-    if (parsed > 0) {
-      setDisplayValue(intl.formatNumber(parsed / 100, { style: 'currency', currency }));
-    }
-  };
-
-  const handleFocus = () => {
-    setIsFocused(true);
-    // Show raw number when focused for easier editing
-    const parsed = parseLocaleNumber(displayValue, intl.locale);
-    if (parsed > 0) {
-      setDisplayValue((parsed / 100).toString());
-    }
-  };
-
-  return (
-    <div>
-      <label htmlFor={name} className="block text-sm font-medium">
-        {label}
-      </label>
-      <input
-        ref={ref}
-        id={name}
-        type="text"
-        inputMode="decimal"
-        value={displayValue}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        onFocus={handleFocus}
-        className={`mt-1 block w-full rounded-lg border px-3 py-2 ${isFocused ? 'border-ewb-purple ring-1 ring-ewb-purple' : ''}`}
-        aria-describedby={error != null ? `${name}-error` : undefined}
-        aria-invalid={error != null}
-      />
-      {error != null && (
-        <p id={`${name}-error`} className="mt-1 text-sm text-error" role="alert">
-          {error}
-        </p>
-      )}
-    </div>
-  );
-}
-```
+### Question 15 — Answer: True
+
+`useSyncExternalStore` is the React 18+ way to subscribe to external data sources like browser APIs. It ensures the component re-renders synchronously when the online/offline status changes, preventing stale reads (tearing) during concurrent rendering that `useState` + `useEffect` cannot guarantee.
+
+### Question 16 — Answer: B
+
+The EWB internationalization setup supports `en-US` (English, primary), `fil-PH` (Filipino), and `zh-Hans` (Simplified Chinese), matching the EWB customer base. These are defined in the locale store and message loader configuration.
+
+### Question 17 — Answer: B
+
+Floating-point arithmetic in JavaScript causes rounding errors (e.g., `0.1 + 0.2 = 0.30000000000000004`) that are unacceptable for financial calculations. Storing amounts as integer centavos eliminates these errors entirely. The `createMoney` function throws an error if a non-integer value is passed.
+
+### Question 18 — Answer: False
+
+PCI DSS requires that card data never touches your JavaScript. The correct approach is to use processor-hosted iframes where the payment processor collects card data directly, tokenizes it, and returns a token to your application. This eliminates the application from PCI scope for card data handling.
+
+### Question 19 — Answer: B
+
+Converting at input time would cause the form to display centavo values (e.g., 250000 instead of 2500.00) while the user expects to enter pesos. Keeping the form in user-facing units (pesos) and converting to API units (centavos) only at the submission boundary keeps the UX clear and the API contract correct.
+
+### Question 20 — Answer: C
+
+Features never import from other features' internal files — only from the public API (`index.ts`). This ensures loose coupling: if a feature restructures its internals, no external code breaks. The `app/` layer is the only layer that composes features together via route definitions.
 
 ---
 

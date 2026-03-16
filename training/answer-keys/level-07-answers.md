@@ -1,303 +1,92 @@
-# Level 7 — Production: Answer Key
+# Level 7 Answer Key — Production
 
 > **EastWest Bank — Digital Platforms & Innovations**
 >
-> Quiz Answers + Exercise Solutions
+> React Training Program · Level 7 Instructor Reference
 
 ---
 
 ## Quiz Answers
 
-### Question 1 — B
+### Question 1 — Answer: B
 
-`frame-ancestors 'none'` prevents any site from embedding your application in an iframe, which blocks clickjacking attacks. `X-Frame-Options: DENY` does the same thing but is the older mechanism. The CSP `frame-ancestors` directive is the modern replacement.
+`frame-ancestors 'none'` prevents any site from embedding your application in an iframe, blocking clickjacking attacks. `script-src` controls script execution, `connect-src` controls fetch/XHR destinations, and `default-src` is a fallback that can be overridden by more specific directives.
 
-### Question 2 — False
+### Question 2 — Answer: False
 
-React escapes content rendered via `{variable}` in JSX, but `dangerouslySetInnerHTML` bypasses this protection entirely. Content passed through `dangerouslySetInnerHTML` is inserted as raw HTML without escaping — this is exactly what makes it dangerous and why it requires DOMPurify sanitization.
+React escapes content rendered via `{variable}` in JSX, but `dangerouslySetInnerHTML` bypasses this protection entirely, inserting raw HTML without escaping. Content passed through it requires DOMPurify sanitization to be safe.
 
-### Question 3 — B
+### Question 3 — Answer: B
 
-`script-src 'self'` without `'unsafe-inline'` blocks all inline `<script>` tags and `javascript:` URLs, which are the primary XSS attack vectors. `default-src 'self'` sets a fallback but can be overridden by more specific directives. `frame-ancestors 'none'` prevents clickjacking (not XSS). `connect-src 'self'` restricts fetch/XHR origins but doesn't prevent script execution.
+`script-src 'self'` without `'unsafe-inline'` blocks all inline `<script>` tags and `javascript:` URLs, which are the primary XSS attack vectors. The other directives control different resource types (default fallback, iframe embedding, and network connections respectively).
 
-### Question 4
+### Question 4 — Answer: C
 
-Vite embeds all `VITE_*` variables directly into the JavaScript bundle at build time. Anyone inspecting the page source or the JavaScript files can read the database connection string, including the username, password, host, and database name. This exposes the internal database to the internet. Secrets must never use the `VITE_` prefix — they belong on the backend only.
+Vite embeds all `VITE_*` variables directly into the JavaScript bundle at build time. Anyone inspecting the page source or JavaScript files can read the database connection string, including the username, password, host, and database name. Secrets must never use the `VITE_` prefix.
 
-### Question 5 — B
+### Question 5 — Answer: B
 
-SRI computes a cryptographic hash of a file and compares it against the `integrity` attribute. If a CDN is compromised and serves a modified script, the hash will not match and the browser will block execution. This protects against supply-chain attacks on third-party dependencies.
+SRI computes a cryptographic hash of a file and compares it against the `integrity` attribute. If a CDN is compromised and serves a modified script, the hash will not match and the browser will block execution, protecting against supply-chain attacks.
 
-### Question 6 — B
+### Question 6 — Answer: B
 
-The `DeployStaging` stage has `dependsOn: Build`, meaning the Build stage must complete successfully first. The Build stage itself depends on `QualityGates`. So the full sequence is: QualityGates → Build → DeployStaging.
+The `DeployStaging` stage has `dependsOn: Build`, meaning the Build stage must complete successfully first. The Build stage itself depends on `QualityGates`, so the full sequence is QualityGates, then Build, then DeployStaging.
 
-### Question 7 — False
+### Question 7 — Answer: False
 
-AMLA (RA 9160) requires banks to retain customer identification records and transaction data for at least 5 years after account closure. The bank must explain this to the customer and can only delete data that is not subject to legal retention requirements. Full erasure is not possible for banking customers.
+AMLA (RA 9160) requires banks to retain customer identification records and transaction data for at least 5 years after account closure. The bank must explain this to the customer and can only delete data not subject to legal retention requirements.
 
-### Question 8
+### Question 8 — Answer: C
 
-`navigator.sendBeacon()` sends data asynchronously and is guaranteed to complete even if the page is unloading (e.g., the user closes the tab or navigates away). A standard `fetch()` call might be cancelled by the browser during page unload, which would mean audit events are lost. For BSP 1019 compliance, every audit event must be persisted — `sendBeacon` ensures this.
+BSP 982 Section 5.4 requires that authentication tokens not be stored in persistent browser storage accessible to client-side scripts. Tokens must be held in JavaScript memory only (e.g., a Zustand store without persist middleware). `localStorage` and `sessionStorage` are both accessible to any script on the page, making them vulnerable to XSS exfiltration.
 
-### Question 9 — C
+### Question 9 — Answer: C
 
-Azure Blob Storage with Azure CDN and Front Door is the recommended deployment for Vite SPAs. There is no server runtime to manage, no containers to patch, and no Nginx to configure. Azure handles HTTPS, caching, and global distribution. The WAF on Front Door satisfies BSP 808 requirements for internet-facing applications.
+Azure Blob Storage with Azure CDN and Front Door is recommended for Vite SPAs. No server runtime to manage means no runtime vulnerabilities to patch. The WAF on Front Door satisfies BSP 808 requirements for internet-facing applications.
 
-### Question 10
+### Question 10 — Answer: True
 
-AMLA requires a minimum of 5 years of retention after account closure. This means the frontend cannot offer a "Delete All My Data" button that removes everything. The data erasure feature must explain which data is subject to legal retention and only delete data not covered by AMLA requirements. The UI should clearly communicate this to the customer per DPA transparency requirements.
+BSP Circular 1105 Section 8.1 requires that digital banking sessions have an absolute maximum duration of 8 hours. Upon reaching this limit, the session must be terminated and the user must re-authenticate, regardless of activity.
 
-### Question 11 — B
+### Question 11 — Answer: B
 
-Automated compliance tests (e.g., verifying that `auth-store.ts` does not contain `localStorage` or `persist(`) run on every build. If a developer accidentally introduces a non-compliant pattern, the test fails and the build is blocked. This provides continuous verification rather than relying solely on manual review.
+Automated compliance tests (e.g., verifying that auth-store does not contain `localStorage` or `persist`) run on every build. If a developer accidentally introduces a non-compliant pattern, the test fails and the build is blocked, providing continuous verification.
 
-### Question 12 — C
+### Question 12 — Answer: C
 
-The DPA data minimization principle requires displaying the minimum PII necessary. For 10-digit account numbers, only the last 4 digits are shown by default (`••••••7890`). The user must explicitly click "Show" to reveal the full number. This matches the masking policy in A17.
+The DPA data minimization principle requires displaying the minimum PII necessary. For account numbers, only the last 4 digits are shown by default (`••••••7890`). The `maskAccountNumber` function in A17 shows the last 4 characters, and users must explicitly click "Show" to reveal the full number.
 
----
+### Question 13 — Answer: True
 
-## Exercise Solutions
+`navigator.sendBeacon()` sends data asynchronously and is guaranteed to complete even during page unload. Standard `fetch()` calls may be cancelled by the browser when the user closes a tab or navigates away, which would cause audit events to be lost — unacceptable for BSP 1019 compliance.
 
-### Exercise 1 — Security Headers Middleware
+### Question 14 — Answer: B
 
-```tsx
-// vite-plugin-security-headers.ts
-import type { Plugin } from 'vite';
+BSP 1033 Section 7.3 requires a two-step confirmation flow where users see a clear summary of transaction details — including amount, recipient, fees, and total — before a separate confirm action. No single-click transfers are permitted.
 
-export const CSP_DIRECTIVES = [
-  "default-src 'self'",
-  "script-src 'self'",
-  "style-src 'self'",
-  "img-src 'self' data: https://cdn.ewbanking.com",
-  "connect-src 'self' https://api.ewbanking.com https://*.sentry.io",
-  "font-src 'self'",
-  "frame-src 'none'",
-  "frame-ancestors 'none'",
-  "form-action 'self'",
-  "base-uri 'self'",
-  'upgrade-insecure-requests',
-].join('; ');
+### Question 15 — Answer: B
 
-export function securityHeaders(): Plugin {
-  return {
-    name: 'security-headers',
-    configureServer(server) {
-      server.middlewares.use((_req, res, next) => {
-        res.setHeader('Content-Security-Policy', CSP_DIRECTIVES);
-        res.setHeader('X-Frame-Options', 'DENY');
-        res.setHeader('X-Content-Type-Options', 'nosniff');
-        res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
-        res.setHeader(
-          'Permissions-Policy',
-          'camera=(), microphone=(), geolocation=()',
-        );
-        next();
-      });
-    },
-  };
-}
-```
+`try_files` attempts to serve the requested file, then the directory, and falls back to `index.html` if neither exists. This enables client-side routing because all route paths (e.g., `/transfers`, `/accounts/123`) serve the SPA entry point, allowing React Router to handle them.
 
-Register in `vite.config.ts`:
+### Question 16 — Answer: False
 
-```tsx
-import { securityHeaders } from './vite-plugin-security-headers';
+Tailwind CSS 4 compiles all utility classes to standard CSS files at build time — no inline styles are injected at runtime. Therefore, `style-src` does not need `'unsafe-inline'`. Adding it would weaken the CSP for no benefit.
 
-export default defineConfig({
-  plugins: [react(), securityHeaders()],
-});
-```
+### Question 17 — Answer: B
 
-Test:
+`X-Request-ID` enables full request correlation across the frontend and backend during incident investigation. When a security event occurs, the operations team can trace the complete request path using this identifier, as required by BSP 1019 Section 6.3.
 
-```tsx
-// vite-plugin-security-headers.test.ts
-import { describe, it, expect } from 'vitest';
+### Question 18 — Answer: C
 
-// This would use a test server or verify the plugin output
-describe('Security Headers Plugin', () => {
-  it('includes CSP with frame-ancestors none', () => {
-    const csp = CSP_DIRECTIVES;
-    expect(csp).toContain("frame-ancestors 'none'");
-    expect(csp).toContain("script-src 'self'");
-    expect(csp).not.toContain("script-src 'self' 'unsafe-inline'");
-  });
-});
-```
+AMLA (RA 9160) requires a minimum of 5 years of retention for customer identification records after account closure. This means the frontend cannot offer complete data erasure — it must explain which data is subject to legal retention.
 
-### Exercise 2 — Consent Management Dashboard
+### Question 19 — Answer: True
 
-Key implementation points:
+In the blue-green deployment strategy, Azure Front Door switches the backend origin between Blue (current) and Green (new) storage accounts. If issues are detected, Front Door switches the origin back to Blue instantly, providing immediate rollback.
 
-```tsx
-// src/features/consent/components/consent-dashboard.tsx
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { z } from 'zod';
-import { apiClient } from '@/lib/api-client';
-import { emitAuditEvent } from '@/compliance/audit-service';
-const consentPurposes = ['essential', 'analytics', 'marketing', 'biometric', 'data-sharing', 'location'] as const;
-type ConsentPurpose = (typeof consentPurposes)[number];
+### Question 20 — Answer: B
 
-const consentSchema = z.object({
-  id: z.string(),
-  purpose: z.enum(consentPurposes),
-  granted: z.boolean(),
-  grantedAt: z.string().nullable(),
-  revokedAt: z.string().nullable(),
-});
-
-const purposes = [
-  { key: 'essential' as const, label: 'Essential Banking Services', required: true },
-  { key: 'analytics' as const, label: 'Usage Analytics', required: false },
-  { key: 'marketing' as const, label: 'Marketing Communications', required: false },
-  { key: 'biometric' as const, label: 'Biometric Authentication', required: false },
-  { key: 'data-sharing' as const, label: 'Data Sharing — Open Finance', required: false },
-  { key: 'location' as const, label: 'Location Services', required: false },
-];
-
-export function ConsentDashboard() {
-  const queryClient = useQueryClient();
-
-  const { data: consents, isLoading, error } = useQuery({
-    queryKey: ['consents'],
-    queryFn: async () => {
-      const res = await apiClient.get('/user/consents');
-      return z.array(consentSchema).parse(res.data);
-    },
-  });
-
-  const toggleConsent = useMutation({
-    mutationFn: async ({ purpose, granted }: { purpose: ConsentPurpose; granted: boolean }) => {
-      await apiClient.post('/user/consents', { purpose, granted });
-    },
-    onSuccess: (_data, variables) => {
-      queryClient.invalidateQueries({ queryKey: ['consents'] });
-      emitAuditEvent(
-        variables.granted ? 'CONSENT_GRANTED' : 'CONSENT_REVOKED',
-        { purpose: variables.purpose },
-      );
-    },
-  });
-
-  const isGranted = (purpose: string) =>
-    consents?.some((c) => c.purpose === purpose && c.granted) ?? false;
-
-  const getTimestamp = (purpose: string) => {
-    const consent = consents?.find((c) => c.purpose === purpose);
-    if (!consent) return null;
-    return consent.granted ? consent.grantedAt : consent.revokedAt;
-  };
-
-  if (isLoading) return <p>Loading preferences...</p>;
-  if (error) return <p>Failed to load consent preferences.</p>;
-
-  return (
-    <div className="space-y-6">
-      <h2 className="text-xl font-bold">Privacy Preferences</h2>
-      {purposes.map((p) => (
-        <div key={p.key} className="flex items-center justify-between border-b pb-4">
-          <div>
-            <h3 className="font-medium">{p.label}</h3>
-            {getTimestamp(p.key) && (
-              <p className="text-xs text-gray-500">
-                Last updated: {new Date(getTimestamp(p.key)!).toLocaleDateString('en-PH')}
-              </p>
-            )}
-          </div>
-          <button
-            type="button"
-            role="switch"
-            aria-checked={p.required || isGranted(p.key)}
-            disabled={p.required || toggleConsent.isPending}
-            onClick={() =>
-              toggleConsent.mutate({ purpose: p.key, granted: !(p.required || isGranted(p.key)) })
-            }
-            aria-label={`${p.label} consent toggle`}
-            data-checked={p.required || isGranted(p.key) || undefined}
-            className="relative h-6 w-11 rounded-full bg-gray-300 transition-colors data-[checked]:bg-ewb-purple"
-          >
-          </button>
-        </div>
-      ))}
-    </div>
-  );
-}
-```
-
-### Exercise 3 — CI/CD Pipeline with Security Scanning
-
-```yaml
-- stage: SecurityAudit
-  displayName: 'Security Audit'
-  dependsOn: QualityGates
-  jobs:
-    - job: DependencyAudit
-      displayName: 'Dependency Vulnerability Scan'
-      pool:
-        vmImage: 'ubuntu-latest'
-      steps:
-        - task: NodeTool@1
-          inputs:
-            versionSpec: '24.x'
-        - script: npm ci
-          displayName: 'Install dependencies'
-        - script: |
-            AUDIT_RESULT=$(npm audit --json 2>/dev/null || true)
-            CRITICAL=$(echo "$AUDIT_RESULT" | node -e "
-              const data = require('fs').readFileSync('/dev/stdin','utf8');
-              const parsed = JSON.parse(data);
-              const vuln = parsed.metadata?.vulnerabilities || {};
-              console.log(vuln.critical || 0);
-            ")
-            HIGH=$(echo "$AUDIT_RESULT" | node -e "
-              const data = require('fs').readFileSync('/dev/stdin','utf8');
-              const parsed = JSON.parse(data);
-              const vuln = parsed.metadata?.vulnerabilities || {};
-              console.log(vuln.high || 0);
-            ")
-            echo "Critical: $CRITICAL, High: $HIGH"
-            if [ "$CRITICAL" -gt 0 ] || [ "$HIGH" -gt 0 ]; then
-              echo "##vso[task.logissue type=error]Found $CRITICAL critical and $HIGH high vulnerabilities"
-              exit 1
-            fi
-          displayName: 'Check for critical/high vulnerabilities'
-
-- stage: VerifyHeaders
-  displayName: 'Verify Security Headers'
-  dependsOn: DeployStaging
-  jobs:
-    - job: HeaderCheck
-      pool:
-        vmImage: 'ubuntu-latest'
-      steps:
-        - script: |
-            STAGING_URL="https://ewb-portal-staging.azurewebsites.net"
-            HEADERS=$(curl -sI "$STAGING_URL")
-            FAILED=0
-
-            check_header() {
-              if echo "$HEADERS" | grep -qi "$1"; then
-                echo "PASS: $1"
-              else
-                echo "FAIL: $1 not found"
-                FAILED=1
-              fi
-            }
-
-            check_header "X-Frame-Options: DENY"
-            check_header "X-Content-Type-Options: nosniff"
-            check_header "Content-Security-Policy"
-            check_header "Referrer-Policy"
-            check_header "Permissions-Policy"
-
-            if [ "$FAILED" -eq 1 ]; then
-              echo "##vso[task.logissue type=error]Missing security headers"
-              exit 1
-            fi
-          displayName: 'Verify all security headers present'
-```
+When receiving `postMessage` events, you must validate `event.origin` against a trusted origins list before processing the message. Without this check, any page can send messages to your application, potentially injecting malicious data. After origin validation, the message payload should also be validated with Zod.
 
 ---
 

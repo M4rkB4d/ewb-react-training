@@ -1,16 +1,16 @@
-# Level 9 — Public-Facing Applications: Quiz
+# Level 9 Quiz — Public-Facing Applications
 
 > **EastWest Bank — Digital Platforms & Innovations**
 >
-> Covers: A20 (SPA vs SSR Decision Framework), A21 (Next.js Setup), A22 (Server Components & Data Fetching), A23 (Public Pages), B10 (Deploying Next.js on Azure)
->
-> **Note:** Questions 7-9 and 11-12 cover B10 deployment content. If B10 was assigned as optional reading, facilitators may score these separately or treat them as bonus questions.
+> React Training Program · Level 9 Assessment
 
 ---
 
 ## Instructions
 
-Answer all 12 questions. For multiple choice, select the single best answer. For short answer, keep responses to 2-3 sentences.
+- Answer all 20 questions.
+- For multiple choice, select the single best answer (A/B/C/D).
+- For true/false, write True or False.
 
 ---
 
@@ -31,9 +31,14 @@ The internal banking portal at `portal.ewbanking.com` should be converted from a
 
 ---
 
-### Question 3 (Short Answer)
+### Question 3 (Multiple Choice)
 
-Explain why BSP Circular 1033 (fee disclosures) favors server-side rendering over client-side rendering for the public website. Consider what search engines and regulators see.
+Why does BSP Circular 1033 favor server-side rendering over client-side rendering for the public website?
+
+A. Server-side rendering is required by Philippine law for all banking websites
+B. Fee disclosures rendered by JavaScript may not be reliably indexed by search engines or visible in page source to regulators
+C. Client-side rendering cannot display Philippine Peso currency symbols correctly
+D. Server-side rendering eliminates the need for Content Security Policy headers
 
 ---
 
@@ -59,9 +64,9 @@ D. They are available only during development, not in production
 
 ---
 
-### Question 6 (Short Answer)
+### Question 6 (True/False)
 
-A Server Component in Next.js fetches product data using `async/await`. Explain why this component cannot use `useState` or `useEffect`, and what a developer must do if interactivity is needed.
+In Next.js, every component in the `app/` directory is a Client Component by default and must be explicitly marked as a Server Component.
 
 ---
 
@@ -93,9 +98,14 @@ In the Next.js CI/CD pipeline for EWB, production deployments use Azure App Serv
 
 ---
 
-### Question 10 (Short Answer)
+### Question 10 (Multiple Choice)
 
-The product detail page calls `getProduct(slug)` in both `generateMetadata` and the page component body. Does this result in two separate API calls? Explain how Next.js handles this.
+The product detail page calls `getProduct(slug)` in both `generateMetadata` and the page component body. How does Next.js handle this?
+
+A. It makes two separate API calls, which is a performance issue that must be fixed manually
+B. It automatically deduplicates `fetch` calls with the same URL, making only one actual HTTP request
+C. It caches the result in `localStorage` for the second call
+D. It throws an error because duplicate fetch calls are not allowed in Server Components
 
 ---
 
@@ -118,6 +128,79 @@ A. Next.js automatically purges the CDN cache on every deployment
 B. Static assets are content-hashed — new deployments produce new filenames
 C. Azure Front Door detects file changes and invalidates stale entries
 D. The App Service sends `Cache-Control: must-revalidate` headers
+
+---
+
+### Question 13 (True/False)
+
+In Next.js, `error.tsx` files must include `'use client'` because they use React's error boundary mechanism, which requires client-side state management.
+
+---
+
+### Question 14 (Multiple Choice)
+
+A component needs to use `useState` for interactive form inputs and `onClick` event handlers. What must you do in Next.js?
+
+A. Nothing — all components support `useState` and event handlers by default
+B. Add `'use client'` as the first line of the file to make it a Client Component
+C. Import `useState` from `'react/client'` instead of `'react'`
+D. Wrap the component in a `<ClientBoundary>` component
+
+---
+
+### Question 15 (Multiple Choice)
+
+Which fetch caching option in Next.js ensures a page is re-rendered on every request with fresh data?
+
+A. `{ cache: 'force-cache' }`
+B. `{ next: { revalidate: 3600 } }`
+C. `{ cache: 'no-store' }`
+D. `{ next: { revalidate: 0 } }`
+
+---
+
+### Question 16 (True/False)
+
+For the EWB public site, Azure Blob Storage is recommended over Azure App Service because it is cheaper and handles SSR natively.
+
+---
+
+### Question 17 (Multiple Choice)
+
+How does server-side authentication in Next.js prevent the "flash of protected content" that can occur in a Vite SPA?
+
+A. It uses CSS to hide content until JavaScript loads
+B. The server reads the session cookie and redirects unauthenticated users before any HTML is sent
+C. It pre-renders a loading spinner on all protected routes
+D. It uses service workers to intercept the initial page request
+
+---
+
+### Question 18 (Multiple Choice)
+
+What is the session timeout duration required by BSP 982 for the Redis-backed session management?
+
+A. 5 minutes
+B. 15 minutes
+C. 30 minutes
+D. 1 hour
+
+---
+
+### Question 19 (True/False)
+
+In Next.js, the `generateStaticParams` function runs at build time and pre-renders pages for each set of returned parameters. New slugs not in the build list are rendered on demand via SSR and cached automatically.
+
+---
+
+### Question 20 (Multiple Choice)
+
+Next.js middleware runs at the edge before the page component executes. What is the recommended scope of authentication checks in middleware versus the page component?
+
+A. Middleware performs full session verification including database lookups; the page component does not check auth
+B. Middleware checks for session cookie existence (lightweight); the page component performs full session verification with the server runtime
+C. Both middleware and the page component perform identical full session verification for defense in depth
+D. Middleware handles all authentication; the page component never reads cookies
 
 ---
 

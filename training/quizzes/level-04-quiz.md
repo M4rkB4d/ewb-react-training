@@ -8,10 +8,9 @@
 
 ## Instructions
 
-- Answer all 12 questions.
+- Answer all 20 questions.
 - For multiple choice, select the single best answer (A/B/C/D).
-- For short answer, keep responses to 2-3 sentences.
-
+- For true/false, write True or False.
 
 ---
 
@@ -32,9 +31,14 @@ Zustand selectors (e.g., `useUIStore((state) => state.theme)`) prevent the compo
 
 ---
 
-### Question 3 (Short Answer)
+### Question 3 (Multiple Choice)
 
-Explain why the EWB auth store does NOT use Zustand's `persist` middleware to save the access token to localStorage. Reference the specific security vulnerability this prevents.
+Why does the EWB auth store NOT use Zustand's `persist` middleware to save the access token to localStorage?
+
+A. `persist` middleware does not work with TypeScript
+B. localStorage has a 1KB size limit that tokens exceed
+C. Persisting the token to localStorage creates an XSS vulnerability where injected scripts can steal it
+D. The access token changes too frequently for localStorage to keep up
 
 ---
 
@@ -51,7 +55,7 @@ D. `staleTime` applies to queries; `gcTime` applies to mutations
 
 ### Question 5 (Multiple Choice)
 
-When implementing optimistic updates for a fund transfer, what is the purpose of the `onSettled` callback?
+When implementing optimistic updates for a "favorite account" toggle, what is the purpose of the `onSettled` callback?
 
 A. To display a success toast notification
 B. To log the transaction for BSP compliance
@@ -66,9 +70,14 @@ React Router 7's `lazy` property on route definitions enables route-level code s
 
 ---
 
-### Question 7 (Short Answer)
+### Question 7 (Multiple Choice)
 
-A developer implements a `ProtectedRoute` component that redirects unauthenticated users to `/login`. They argue this is sufficient access control. What critical security principle are they missing, and what BSP circular addresses it?
+In the EWB role hierarchy, which role has the LOWEST access level?
+
+A. `teller`
+B. `admin`
+C. `customer`
+D. `manager`
 
 ---
 
@@ -79,30 +88,24 @@ Which approach correctly tests a custom hook that uses TanStack Query?
 A. Import the hook function and call it directly in the test
 B. Use `renderHook` with a wrapper that provides `QueryClientProvider`
 C. Mock the entire TanStack Query module with `vi.mock`
-D. Render a dummy component that uses the hook
+D. Use `vi.fn()` to replace the hook
 
 ---
 
-### Question 9 (Multiple Choice)
+### Question 9 (True/False)
 
-In the route configuration below, what happens when a user with role `customer` navigates to `/admin`?
-
-```tsx
-<Route element={<RoleGuard allowedRoles={['admin', 'manager']} />}>
-  <Route path="admin" lazy={() => import('@/pages/admin')} />
-</Route>
-```
-
-A. The admin page loads but shows empty content
-B. The user is redirected to `/unauthorized`
-C. An error boundary catches the unauthorized access
-D. The request is blocked by CORS
+Frontend route guards using `ProtectedRoute` are sufficient to prevent unauthorized API access, and no additional backend authorization checks are needed.
 
 ---
 
-### Question 10 (Short Answer)
+### Question 10 (Multiple Choice)
 
-Explain why Zustand stores must be reset in `beforeEach` during tests. What problem occurs if you skip this step?
+What does the `partialize` option in Zustand's `persist` middleware do?
+
+A. It compresses the state before saving to localStorage
+B. It controls which state fields are persisted and which are excluded
+C. It enables partial updates to the store without overwriting other fields
+D. It splits the store into multiple localStorage keys
 
 ---
 
@@ -117,9 +120,87 @@ D. Browser DOM events
 
 ---
 
-### Question 12 (Short Answer)
+### Question 12 (True/False)
 
-The `useUnsavedChanges` hook uses both `useBlocker` and a `beforeunload` event listener. Why are both needed? What scenario does each one handle?
+Zustand stores are singletons, so state can leak between tests if you do not reset the store in `beforeEach`.
+
+---
+
+### Question 13 (Multiple Choice)
+
+The `useUnsavedChanges` hook uses both `useBlocker` and a `beforeunload` event listener. Why are both mechanisms needed?
+
+A. `useBlocker` handles form validation; `beforeunload` handles navigation
+B. `useBlocker` handles SPA navigation (clicking links); `beforeunload` handles browser-level exits (closing the tab, refreshing)
+C. `useBlocker` works on mobile; `beforeunload` works on desktop
+D. They are redundant — either one alone would be sufficient
+
+---
+
+### Question 14 (Multiple Choice)
+
+According to BSP 982, how should the access token be stored in a banking SPA?
+
+A. In localStorage for persistence across tabs
+B. In a secure HttpOnly cookie
+C. In-memory only (e.g., a JavaScript variable in a Zustand store)
+D. In sessionStorage because it clears when the tab closes
+
+---
+
+### Question 15 (True/False)
+
+The `end` prop on a `NavLink` component prevents the root route (`/`) from always appearing active when navigating to child routes like `/accounts`.
+
+---
+
+### Question 16 (Multiple Choice)
+
+In the optimistic update pattern for TanStack Query, what does the `onMutate` callback do?
+
+A. Sends the mutation request to the server
+B. Saves a snapshot of the current cache and applies the optimistic update to the UI
+C. Validates the mutation payload before sending
+D. Logs the mutation for BSP audit compliance
+
+---
+
+### Question 17 (Multiple Choice)
+
+Which React Router 7 hook provides breadcrumb data by exposing route handle metadata for all matched routes?
+
+A. `useLocation`
+B. `useParams`
+C. `useMatches`
+D. `useNavigate`
+
+---
+
+### Question 18 (True/False)
+
+Optimistic updates should be used for financial mutations like fund transfers to improve perceived performance in banking applications.
+
+---
+
+### Question 19 (Multiple Choice)
+
+When testing a component that uses `Link` or `useNavigate` from React Router, what must you wrap the component with in tests?
+
+A. `QueryClientProvider`
+B. `MemoryRouter` or `createMemoryRouter` with `RouterProvider`
+C. `ErrorBoundary`
+D. `Suspense`
+
+---
+
+### Question 20 (Multiple Choice)
+
+In the query key factory pattern, what does `accountKeys.all` represent and why is it useful?
+
+A. It fetches all accounts from the API in a single request
+B. It is the top-level key that, when invalidated, cascades invalidation to all account-related queries (lists, details, transactions)
+C. It stores all account data in the Zustand store
+D. It is an alias for `queryClient.clear()` that removes all cached data
 
 ---
 
