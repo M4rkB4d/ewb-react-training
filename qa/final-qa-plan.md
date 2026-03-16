@@ -34,6 +34,9 @@ or validating the student learning path. This plan covers all of that.
 | Public site branches (Next.js) | 3 (L09-start, L09-complete, master) | Tiers 1-3, 7 |
 | Exercise test files | 9 (level-01 through level-09) | Tier 1.4 |
 | Unit/component test files | ~11 (progressive from L06+) | Tier 1.5 |
+| Training materials (master) | 30 files (answer keys, exercises, demos, instructor docs) | Pass 4 |
+| Reference materials (master) | 3 files (cheat sheet, glossary, index) | Pass 4 |
+| Build scripts & manifest (master) | level-manifest.json + level templates | Pass 4 |
 
 ### Branch Testing Strategy
 
@@ -75,7 +78,11 @@ instead of 18 full runs.
 > "Does the teaching work?"
 > Semi-automated. All 9 level pairs. ~2 hours.
 
-**Total estimated effort: 5-6 hours across 2 sessions.**
+### Pass 4: Training Materials Verification
+> "Is the trainer equipped?"
+> Agent-assisted review. 30+ training files on master. ~2 hours.
+
+**Total estimated effort: 7-8 hours across 2-3 sessions.**
 
 ---
 
@@ -490,9 +497,159 @@ incomprehensible without later material.
 
 ---
 
+## Pass 4: Training Materials Verification
+
+> The `training/`, `reference/`, and `scripts/` directories on master contain
+> the materials the trainer will use in the classroom. These have NEVER been
+> audited against the guides or companion code. If they're wrong, the trainer
+> looks incompetent or students get conflicting information.
+
+### Tier 4.1 — Answer Keys ↔ Guides
+
+**What:** Verify all 9 answer key files match what the guides actually teach.
+**Why:** The answer keys contain quiz answers with detailed technical explanations.
+If we changed a pattern in the guides (e.g., `mfaResponseSchema` → `authSuccessSchema`,
+centavos convention, cookie vs token auth), the answer keys may still reference the
+old pattern. An instructor reading the wrong answer aloud destroys credibility.
+**Files:** `training/answer-keys/level-01-answers.md` through `level-09-answers.md`
+
+**Checks per file:**
+- Function/variable names match guide (e.g., `formatPHP` not `formatPeso`, `submit` not `submitPayment`)
+- Schema names match (`authSuccessSchema`, not `mfaResponseSchema`)
+- Security patterns match (cookie auth for real-time, not token-in-URL)
+- BSP regulation references are accurate
+- Code snippets in answers compile-compatible with companion code
+- Centavos convention is consistent
+
+**Pass:** All technical claims in answer keys match current guide content and code.
+**Ship-blocking:** YES — wrong answers are worse than no answers.
+
+### Tier 4.2 — Exercise Instructions ↔ Exercise Tests ↔ Code
+
+**What:** Verify the 9 exercise files describe tasks that, when completed correctly,
+produce code matching the `-complete` branch AND passing the exercise tests.
+**Why:** Three things must agree: what the exercise TELLS the student to build, what
+the TEST checks, and what the SOLUTION code looks like. If any of these diverge,
+the student either builds the wrong thing, passes tests with wrong code, or fails
+tests with correct code.
+**Files:** `training/exercises/level-01-exercises.md` through `level-09-exercises.md`
+
+**Checks per file:**
+- Each exercise requirement maps to a testable behavior in the exercise test
+- File paths in exercise instructions match actual paths on `-complete` branch
+- Import paths and module names are current (e.g., `@/stores/auth-store` not `@/store/auth`)
+- API patterns match (e.g., `accountsApi.getAll` not `getAccounts()`)
+- Component prop signatures match current code
+
+**Pass:** Exercise → test → code alignment verified for all 9 levels.
+**Ship-blocking:** YES — misaligned exercises are the #1 cause of student frustration.
+
+### Tier 4.3 — Demo Scripts ↔ Working App
+
+**What:** Verify the 9 demo scripts reference features, routes, and UI elements
+that actually exist and work in the running app.
+**Why:** The trainer will follow these scripts LIVE in front of the class. If a demo
+says "open the Network tab and show the X-Request-ID header" but the app doesn't
+send that header, the trainer is caught improvising. If a demo says "navigate to
+/payments" but that route doesn't exist on the branch being demoed, it's a dead end.
+**Files:** `training/demos/level-01-demo.md` through `level-09-demo.md`
+
+**Checks per file:**
+- Every route referenced exists on the corresponding `-complete` branch
+- Every component/feature mentioned is implemented and functional
+- Every "Type Live" code snippet compiles in context
+- File paths match actual source file locations
+- MSW mock data supports the demo flow (e.g., demo shows 3 accounts → handler returns 3 accounts)
+- Timing estimates are reasonable for the content
+
+**Pass:** All demo scripts are executable against the running app.
+**Ship-blocking:** YES for demos that reference non-existent features. NO for minor
+timing/phrasing issues.
+
+### Tier 4.4 — Instructor Guide & Onboarding
+
+**What:** Verify the master instructor guide and student onboarding document are
+accurate and complete.
+**Why:** These are the first documents the trainer and student read. Wrong commands,
+wrong branch names, or wrong prerequisites mean Day 1 is wasted on debugging.
+**Files:** `training/INSTRUCTOR_GUIDE.md`, `training/ONBOARDING.md`
+
+**Checks:**
+- Git commands work exactly as shown (`git clone`, `git checkout`, `npm install`, `npm run dev`)
+- Branch names match actual branches (all 18)
+- `npm run test:exercises:XX` scripts exist and work
+- Daily schedule aligns with guide count per level
+- Prerequisites list is complete (Node 24, VS Code extensions, Git)
+- `scripts/verify-setup.sh` exists and works (if referenced)
+- The "How Students Transition Between Levels" workflow actually works
+
+**Pass:** A new trainer could follow the instructor guide cold and run Day 1.
+**Ship-blocking:** YES
+
+### Tier 4.5 — Measurement Framework
+
+**What:** Verify the measurement framework references metrics and tools that are
+applicable to EWB's environment.
+**Why:** This document justifies the training investment to management. If it
+references tools EWB doesn't use or metrics that can't be measured, it undermines
+the program's credibility.
+**File:** `training/MEASUREMENT_FRAMEWORK.md`
+
+**Checks:**
+- References to Azure DevOps / GitHub match EWB's actual tooling
+- Metric definitions are measurable with available data
+- Cost estimates are reasonable for Philippine market
+- BSP regulation references are accurate
+
+**Pass:** Framework is actionable — a manager could implement it.
+**Ship-blocking:** NO — important but not a Day 1 blocker.
+
+### Tier 4.6 — Reference Materials
+
+**What:** Verify the cheat sheet, glossary, and index are accurate.
+**Why:** Students will use the cheat sheet daily. Wrong code snippets in a cheat
+sheet are worse than no cheat sheet — students will copy-paste broken code and
+blame themselves when it doesn't work.
+**Files:** `reference/CHEAT_SHEET.md`, `reference/GLOSSARY.md`, `reference/INDEX.md`
+
+**Checks:**
+- Cheat sheet code snippets use current function/variable names
+  (e.g., `formatPHP` not `formatPeso`, `useAuthStore.getState()` not `useAuthStore()`)
+- Cheat sheet import paths are correct
+- Glossary definitions match what guides teach
+- Index links/references point to correct guide files
+- BSP circular numbers are accurate
+
+**Known issue already spotted:** Cheat sheet uses `formatPeso(balance)` — needs
+to be verified against current guide convention (`formatPHP` from `@/lib/format`).
+
+**Pass:** All reference content is accurate against current guides and code.
+**Ship-blocking:** YES for cheat sheet code. NO for glossary minor wording.
+
+### Tier 4.7 — Level Manifest & Build Scripts
+
+**What:** Verify `scripts/level-manifest.json` accurately maps every file to the
+level where it's first introduced, and that level templates match actual branch content.
+**Why:** The manifest is used by `rebuild-level-branches.sh` to generate branches.
+If the manifest is wrong, regenerating branches would produce broken results.
+We've already found one discrepancy: the manifest maps `types/auth.ts` to level 5,
+but we added it to level 2 branches during alignment fixes.
+**Files:** `scripts/level-manifest.json`, `scripts/level-templates/`
+
+**Checks:**
+- Every file on `level-XX-complete` is listed in the manifest at level ≤ XX
+- No file appears on a branch BEFORE its manifest level
+- Level templates match the actual scaffold files on `-start` branches
+- The manifest reflects fixes made during alignment (e.g., `types/auth.ts` now at level 2)
+
+**Pass:** Manifest matches reality across all 18 branches.
+**Ship-blocking:** YES — a wrong manifest means branch regeneration breaks everything.
+
+---
+
 ## Ship Readiness Checklist
 
-Run once after all three passes complete.
+Run once after all four passes complete.
 
 | # | Check | Method | Blocker? |
 |---|-------|--------|----------|
@@ -516,6 +673,8 @@ Run once after all three passes complete.
 - Pass 1 Tier 1.7: No AI traces, no security issues
 - Pass 2 Tiers 2.1-2.4: App boots, auth works, core flows work, currency correct
 - Pass 3 Tier 3.1: No undocumented dependencies in start→complete diffs
+- Pass 4 Tiers 4.1-4.4: Answer keys, exercises, demos, instructor guide all accurate
+- Pass 4 Tier 4.7: Level manifest matches actual branches
 - Ship Readiness Checklist items 1-7: All clear
 
 ### NO-GO (fix first):
@@ -526,6 +685,10 @@ Run once after all three passes complete.
 - Currency amounts display incorrectly
 - AI traces found anywhere
 - Undocumented files in start→complete diffs (student gets stuck)
+- Answer keys contain wrong technical answers
+- Exercise instructions don't match exercise tests
+- Demo scripts reference non-existent features
+- Level manifest doesn't match actual branch content
 
 ### CONDITIONAL GO (ship with known issues):
 - ESLint warnings (not errors)
@@ -533,6 +696,8 @@ Run once after all three passes complete.
 - Responsive layout minor issues
 - Accessibility findings (document for future fix)
 - Guide prerequisite minor forward references
+- Measurement framework minor inaccuracies
+- Glossary wording nitpicks
 
 ---
 
@@ -548,16 +713,20 @@ Run once after all three passes complete.
 | Lock file generated with different npm version | LOW | HIGH | Regenerate with Node 22 npm, commit |
 | Dynamic imports in exercise tests fail | MEDIUM | HIGH | Check vitest.config.ts path alias, fix resolver |
 | AI traces in older commits | MEDIUM | CRITICAL | Rewrite history if needed (last resort) or ensure only clean commits push |
+| Answer keys reference old patterns (pre-audit) | HIGH | HIGH | Alignment audit changed ~45 patterns — answer keys likely stale |
+| Cheat sheet code snippets outdated | HIGH | HIGH | Already spotted `formatPeso` — likely more |
+| Level manifest out of sync after fixes | CONFIRMED | HIGH | `types/auth.ts` mapped to L5 but now exists on L2 |
+| Demo scripts reference features not on target branch | MEDIUM | HIGH | Demo says "show X" but X only exists 2 levels later |
 
 ---
 
 ## Execution Order
 
-1. **Pass 1 first** — if the code doesn't compile, Passes 2 and 3 are moot
+1. **Pass 1 first** — if the code doesn't compile, Passes 2-4 are moot
 2. **Within Pass 1**: Tier 1.1 (deps) → 1.2 (tsc) → 1.3 (build) → 1.4 (exercise tests) → 1.5 (unit tests) → 1.6 (eslint) → 1.7 (security) → 1.8 (consistency)
 3. **Pass 2 after Pass 1 is green** — can't test in browser if it doesn't build
-4. **Pass 3 can run in parallel with Pass 2** — it's mostly diff analysis and guide reading
-5. **Ship Readiness Checklist after all passes complete**
+4. **Pass 3 and Pass 4 can run in parallel with Pass 2** — they're diff analysis, guide reading, and document review
+5. **Ship Readiness Checklist after all four passes complete**
 
 ---
 
@@ -571,6 +740,7 @@ After QA completes, the following artifacts will exist in `qa/`:
 | `final-qa-results.md` | Pass/fail results for every tier on every branch |
 | `screenshots/` | Browser screenshots from Pass 2 |
 | `exercise-test-matrix.md` | Actual test results per branch (pass/fail/skip) |
+| `training-materials-audit.md` | Pass 4 findings and fixes for training/ and reference/ |
 
 These artifacts serve as proof of testing for Mark's stakeholders and as a baseline
 for future regression testing.
