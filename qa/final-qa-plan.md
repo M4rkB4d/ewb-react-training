@@ -27,12 +27,37 @@ or validating the student learning path. This plan covers all of that.
 | Asset | Count | QA Coverage |
 |-------|-------|-------------|
 | Guide text files | 30 guides across 9 levels | Already audited — 4 rounds, converged |
-| Companion repo branches | 18 (L01-start through L09-complete) | Full coverage in this plan |
-| Buildable branches (portal) | 15 (L02-complete through L09-complete) | Tiers 1-6 |
-| Scaffold-only branches | 3 (L01-start, L01-complete, L02-start) | Tier 8 only |
+| Companion repo branches | 18 (L01-start through L09-complete) | Coverage below |
+| `-complete` branches | 9 (L01-complete through L09-complete) | **Full test** — all tiers |
+| `-start` branches | 9 (L01-start through L09-start) | **Compile check** — tsc + import chain only |
+| Scaffold-only branches | 3 (L01-start, L01-complete, L02-start) | No build infra — Tier 1.8 only |
 | Public site branches (Next.js) | 3 (L09-start, L09-complete, master) | Tiers 1-3, 7 |
-| Exercise test files | 9 (level-01 through level-09) | Tier 4 |
-| Unit/component test files | ~11 (progressive from L06+) | Tier 5 |
+| Exercise test files | 9 (level-01 through level-09) | Tier 1.4 |
+| Unit/component test files | ~11 (progressive from L06+) | Tier 1.5 |
+
+### Branch Testing Strategy
+
+**`-complete` branches are the priority.** They contain the full solution code —
+every feature, every test, every component. If a -complete branch breaks, the
+curriculum is wrong. These get the FULL test suite: deps, tsc, build, vitest,
+eslint, browser testing.
+
+**`-start` branches are derivative.** Each `-start` is essentially the previous
+level's `-complete` plus some empty scaffolding. If `level-04-complete` passes all
+tests, `level-05-start` should too — it's the same code with stub files added.
+
+**What `-start` branches need:**
+- `tsc --noEmit` — verify the scaffolding doesn't break compilation
+- Import chain validation — verify no imports reference files that don't exist yet
+- `level-01-start` gets extra attention as the FIRST thing a student touches
+
+**What `-start` branches DON'T need:**
+- Full vitest run (redundant with previous -complete)
+- Browser functional testing (same app state as previous -complete)
+- ESLint (same code as previous -complete plus stubs)
+
+This cuts Pass 1 effort significantly — 9 full test runs + 9 compile checks
+instead of 18 full runs.
 
 ---
 
@@ -40,7 +65,7 @@ or validating the student learning path. This plan covers all of that.
 
 ### Pass 1: Code Quality & Build Verification
 > "Does the code work?"
-> Automated. All 15 buildable branches. ~2 hours.
+> Automated. 9 `-complete` branches (full), 6 `-start` branches (compile-only). ~2 hours.
 
 ### Pass 2: Browser Functional Testing
 > "Does the app work?"
@@ -60,7 +85,9 @@ or validating the student learning path. This plan covers all of that.
 
 **What:** `npm ci` on every buildable branch.
 **Why:** If dependencies can't install, nothing else matters.
-**Branches:** 15 portal + 3 public-site
+**Branches:** 9 `-complete` branches (full). Since `package.json` and lock file are
+identical across all branches, one successful `npm ci` validates them all. Run once,
+reuse `node_modules` by switching branches without reinstalling.
 **Command:**
 ```bash
 cd companion-repo/portal && npm ci
@@ -76,7 +103,9 @@ cd companion-repo/public-site && npm ci  # L09+ only
 **Why:** Catches missing imports, type mismatches, broken references. This is where
 alignment fixes get validated — missing `types/auth.ts`, `permissions.ts`, wrong
 function signatures all surface here.
-**Branches:** 15 portal + 3 public-site
+**Branches:** 9 `-complete` branches (full) + 6 buildable `-start` branches (compile-only).
+This is the ONE tier where `-start` branches get full treatment — compilation proves
+the student's starting point isn't broken.
 **Command:**
 ```bash
 cd companion-repo/portal && npx tsc --noEmit -p tsconfig.app.json
@@ -93,7 +122,9 @@ dozens of files. Likely to surface issues.
 **What:** `npm run build` (runs `tsc -b && vite build`) on every buildable branch.
 **Why:** Catches issues `tsc` alone misses — CSS imports, path alias resolution,
 asset references, dynamic imports, tree-shaking problems.
-**Branches:** 15 portal. `next build` for 3 public-site branches.
+**Branches:** 9 `-complete` branches (portal). `next build` for L09-complete (public-site).
+`-start` branches skip this — if tsc passes (Tier 1.2) and the previous -complete
+builds, the -start will too.
 **Command:**
 ```bash
 cd companion-repo/portal && npm run build
@@ -111,12 +142,13 @@ Acceptable — these are server-only and fail gracefully without credentials.
 **What:** Run exercise tests per-branch and verify the learning contract.
 **Why:** THE core feedback loop for students. If exercise tests are broken, the
 entire curriculum fails regardless of how the code looks.
-**Branches:** All branches from L02-complete onward (where test infrastructure exists).
+**Branches:** 9 `-complete` branches (L02-complete onward). `-start` branches skip
+this tier — they don't introduce new test files, and their existing tests are the
+same as the previous -complete branch.
 
 **The contract:**
 - On `-complete` branches: ALL available exercise tests PASS
-- On `-start` branches: ALL available exercise tests PASS (tests for the current
-  level don't exist yet on -start branches — they're introduced at -complete)
+- Test for level N appears first on `level-N-complete`
 
 **Command:**
 ```bash
@@ -124,24 +156,17 @@ cd companion-repo/portal
 npx vitest run src/test/exercises/  # run all available exercise tests
 ```
 
-**Full matrix (what files exist on each branch):**
+**Test matrix (`-complete` branches only):**
 
 | Branch | Test Files Present | Expected Result |
 |--------|-------------------|-----------------|
 | level-02-complete | L01, L02 | ALL PASS |
-| level-03-start | L01, L02 | ALL PASS |
 | level-03-complete | L01, L02, L03 | ALL PASS |
-| level-04-start | L01, L02, L03 | ALL PASS |
 | level-04-complete | L01-L04 | ALL PASS |
-| level-05-start | L01-L04 | ALL PASS |
 | level-05-complete | L01-L05 | ALL PASS |
-| level-06-start | L01-L05 | ALL PASS |
 | level-06-complete | L01-L06 | ALL PASS |
-| level-07-start | L01-L06 | ALL PASS |
 | level-07-complete | L01-L07 | ALL PASS |
-| level-08-start | L01-L07 | ALL PASS |
 | level-08-complete | L01-L08 | ALL PASS |
-| level-09-start | L01-L08 | ALL PASS |
 | level-09-complete | L01-L09 | ALL PASS |
 
 **Pass:** Every test on every branch passes.
@@ -157,8 +182,9 @@ may fail. Centavos/pesos mismatches are likely.
 **What:** `vitest run` (all tests) on branches that have inline test files.
 **Why:** Validates component rendering, utility functions, accessibility assertions,
 MSW integration in test environment.
-**Branches:** L06-complete onward (where component/unit tests appear). L09-complete
-is the comprehensive test, since it has all test files.
+**Branches:** `-complete` branches from L06-complete onward (where component/unit
+tests appear). L09-complete is the comprehensive run since it has all test files.
+`-start` branches skip this — same test files as previous -complete.
 **Command:**
 ```bash
 cd companion-repo/portal && npx vitest run
@@ -175,7 +201,8 @@ cascading failures if handler paths are wrong — fix handlers first.
 **Why:** Code quality gate. This is teaching material — every line teaches a pattern.
 Sloppy code teaches sloppy habits. Banking-specific rules (no eval, no any, strict
 boolean expressions) enforce security discipline.
-**Branches:** L09-complete first (most comprehensive). If clean, spot-check 2-3 others.
+**Branches:** L09-complete first (most comprehensive `-complete` branch). If clean,
+spot-check L05-complete and L03-complete. `-start` branches skip — same code.
 **Command:**
 ```bash
 cd companion-repo/portal && npx eslint .
