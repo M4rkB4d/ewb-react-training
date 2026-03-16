@@ -273,7 +273,7 @@ Notice:
 Components compose. A parent component renders child components, passing data down through props.
 
 ```tsx
-// src/pages/DashboardPage.tsx
+// src/pages/dashboard-page.tsx
 function DashboardPage() {
   return (
     <div className="space-y-4 p-6">

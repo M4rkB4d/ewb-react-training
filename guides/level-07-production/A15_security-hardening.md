@@ -878,7 +878,7 @@ frontend, this means:
 - Session expiration events tracked
 
 ```tsx
-// src/lib/security-logger.ts (extend error-logger.ts in companion repo)
+// src/lib/error-logger.ts (extend with security event logging)
 export function logSecurityEvent(event: {
   type: 'csp_violation' | 'auth_failure' | 'unauthorized_access' | 'session_expired';
   details: Record<string, unknown>;

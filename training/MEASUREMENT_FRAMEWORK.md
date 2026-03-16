@@ -39,6 +39,49 @@ Before the first cohort starts, record these numbers. Without a baseline, improv
 
 ---
 
+## Pre-Training Assessment (Pretest)
+
+Administer the [pretest](quizzes/pretest.md) on Day 1 morning, before any instruction. This 20-question diagnostic (multiple choice + true/false) samples all 9 levels and establishes each trainee's baseline.
+
+### Pretest Scoring
+
+| Score Range | Interpretation | Recommended Action |
+|-------------|---------------|--------------------|
+| 0–5 (0–25%) | Beginner — limited React/web security knowledge | Standard 13-day track. Extra attention on Levels 1–3. |
+| 6–10 (30–50%) | Intermediate — solid web fundamentals, gaps in React or banking security | Standard track. May move faster through Levels 1–2. |
+| 11–15 (55–75%) | Advanced — strong foundation | Consider pairing with beginners as peer mentor. Focus on Levels 5–9. |
+| 16–20 (80–100%) | Expert — already knows most material | Offer the [3-day fast-track](QUICK_START.md) instead. |
+
+### Pretest-to-Quiz Learning Gain
+
+The primary value of the pretest is measuring learning gain. After each level quiz, compare scores:
+
+| Metric | How to Calculate | Target |
+|--------|-----------------|--------|
+| **Per-level gain** | Level quiz score % minus pretest score % | ≥ 20 percentage points |
+| **Overall gain** | Average of all 9 quiz scores minus pretest score % | ≥ 30 percentage points |
+| **Cohort average gain** | Average overall gain across all trainees | ≥ 25 percentage points |
+
+### Pretest Level Mapping
+
+Each pretest question maps to a specific level, enabling per-topic baseline measurement:
+
+| Pretest Questions | Level | Topic |
+|-------------------|-------|-------|
+| 1–3 | Level 1 | React fundamentals, TypeScript, state model |
+| 4–5 | Level 2 | JSX compilation, test co-location |
+| 6–8 | Level 3 | Design system, accessibility (WCAG), form validation |
+| 9–10 | Level 4 | Client vs server state, protected routes |
+| 11–12 | Level 5 | JWT security, token storage |
+| 13–14 | Level 6 | Error boundaries, React Compiler |
+| 15–16 | Level 7 | Security headers, CI/CD |
+| 17 | Level 8 | Architecture dependency rules |
+| 18–20 | Level 9 | SPA vs SSR, Next.js defaults, compliance rendering |
+
+Use the level mapping to identify which levels each trainee already understands and which need the most attention.
+
+---
+
 ## During Training: Track These
 
 ### Per-Learner Scorecard
@@ -47,6 +90,7 @@ Track for every participant across all 13 days:
 
 | Indicator | Target | Red Flag |
 |-----------|--------|----------|
+| Pretest score | Record as baseline | Score ≥ 16 → consider fast-track instead |
 | Quiz average (9 quizzes) | ≥ 70% | Below 50% on any single quiz |
 | Exercise completion rate | 100% of required, 70% of recommended | Skipping required exercises |
 | Capstone score | ≥ 70% overall, no criterion below 50% | Fails capstone on first attempt |
@@ -149,7 +193,8 @@ To build your ROI case:
 Before the first cohort, make sure you have:
 
 - [ ] Baseline metrics captured (see "Baseline" section above)
-- [ ] Quiz scoring spreadsheet set up (9 quizzes × N learners)
+- [ ] Pretest printed or ready to distribute on Day 1 morning
+- [ ] Quiz scoring spreadsheet set up (pretest + 9 level quizzes × N learners)
 - [ ] Capstone grading rubric printed for team leads
 - [ ] Azure DevOps query saved for PR rejection rate
 - [ ] Incident tracker tagged for "frontend" category
@@ -162,11 +207,12 @@ Before the first cohort, make sure you have:
 
 After each cohort:
 
-1. **Review quiz score distribution** — which questions did everyone get wrong? Fix the guide or the question.
-2. **Review exercise time accuracy** — update estimates based on actual data.
-3. **Collect 3 specific improvement suggestions** from each learner.
-4. **Update guides** if tech stack changes (React version, library updates, new BSP circulars).
-5. **Archive cohort data** — you need multi-cohort trends to show sustained impact.
+1. **Compare pretest vs quiz scores** — calculate per-trainee learning gain. If gain is below 20 points for a specific level, that level's guides may need improvement.
+2. **Review quiz score distribution** — which questions did everyone get wrong? Fix the guide or the question.
+3. **Review exercise time accuracy** — update estimates based on actual data.
+4. **Collect 3 specific improvement suggestions** from each learner.
+5. **Update guides** if tech stack changes (React version, library updates, new BSP circulars).
+6. **Archive cohort data** — you need multi-cohort trends to show sustained impact.
 
 ---
 

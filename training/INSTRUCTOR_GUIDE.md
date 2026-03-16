@@ -68,6 +68,32 @@ Tests start red and go green as students complete their implementations.
 
 ---
 
+## Pre-Training Assessment
+
+Administer the [pretest](quizzes/pretest.md) on Day 1 morning **before any instruction begins**. This is a 20-question diagnostic assessment (multiple choice + true/false) that samples all 9 levels.
+
+**Purpose**: Establish a baseline measurement of each trainee's knowledge. Compare pretest scores against level quiz scores to quantify learning gain.
+
+**How to administer**:
+1. Distribute the pretest at the start of Day 1, before any guides are read
+2. Allow 20–30 minutes. Students should answer based on what they currently know — no looking up answers
+3. Collect and score using the [pretest answer key](answer-keys/pretest-answers.md)
+4. Do NOT share scores publicly or use for pass/fail decisions — this is purely diagnostic
+5. Record scores in your tracking spreadsheet for pre/post comparison
+
+**Scoring guide**:
+
+| Score | Interpretation |
+|-------|---------------|
+| 0–5 | Beginner — limited React/web security knowledge. Will benefit most from Levels 1–3. |
+| 6–10 | Intermediate — solid web fundamentals, gaps in React patterns or banking-specific security. |
+| 11–15 | Advanced — strong foundation. Focus training time on Levels 5–9 (auth, quality, production, architecture). |
+| 16–20 | Expert — already knows most of the material. Consider the [3-day fast-track](QUICK_START.md) instead. Can serve as a peer mentor during exercises. |
+
+**Learning gain calculation**: After the program, compare each trainee's pretest score against their average level quiz score. A meaningful gain is 20+ percentage points.
+
+---
+
 ## Per-Level Teaching Notes
 
 ### Level 1 — Welcome (Day 1)
@@ -241,11 +267,12 @@ Tests start red and go green as students complete their implementations.
 
 | Method | Frequency | Purpose |
 |--------|-----------|---------|
-| Quizzes | End of each level | Knowledge check (multiple choice + short answer) |
+| Quizzes | End of each level | Knowledge check (20 questions — multiple choice + true/false) |
 | Exercise tests | Continuous | `npm run test:exercises:XX` — automated pass/fail |
 | Code review | Days 6, 9, 11 | Instructor reviews exercise solutions |
 | Capstone | Day 13 | Integration of all concepts |
 | Final demo | Day 13 | Students present their public-site to the team |
+| Pre-training assessment | Day 1 (before instruction) | Baseline measurement — diagnostic only, not graded |
 
 ### Minimum passing criteria:
 - All 9 quizzes completed (answers reviewed in class)
@@ -266,6 +293,8 @@ Before Day 1, verify:
 - [ ] You have run through at least Levels 1-3 demos yourself
 - [ ] Screen sharing is set up for live demos
 - [ ] Quiz answer keys are NOT shared with students (keep in your materials only)
+- [ ] Pretest printed or ready to distribute on Day 1 morning (before any instruction)
+- [ ] Pretest answer key on hand for scoring (do NOT share with students)
 
 ---
 

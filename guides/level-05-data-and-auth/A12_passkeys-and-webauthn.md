@@ -616,7 +616,7 @@ export function PasskeySettings() {
 ### Combined login form
 
 ```tsx
-// src/pages/login-page.tsx
+// src/pages/login.tsx
 import { LoginForm } from '@/features/auth/components/login-form';
 import { usePasskeyLogin } from '@/features/auth/hooks/use-passkey-login';
 import { usePasskeySupport } from '@/features/auth/hooks/use-passkey-support';

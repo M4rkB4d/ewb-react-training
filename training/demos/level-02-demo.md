@@ -10,7 +10,7 @@
 
 ## Setup Before the Demo
 
-- Have the EWB banking project scaffolded and running (`npm run dev` at `http://localhost:5173`)
+- Have the EWB banking project scaffolded and running (`npm run dev` at `http://localhost:3000`)
 - Have VS Code open to the project root
 - Have a terminal split: one for the dev server, one for running tests
 - Clear `src/App.tsx` to a minimal starting point
@@ -255,7 +255,7 @@ Show the Tailwind theme in `index.css` briefly. Point out the EWB purple value `
 
 ### Pre-Demo Checklist
 
-- [ ] Dev server running at `http://localhost:5173` and showing content in the browser
+- [ ] Dev server running at `http://localhost:3000` and showing content in the browser
 - [ ] Test runner works: `npm run test:run` completes without config errors
 - [ ] `@testing-library/react` and `@testing-library/user-event` installed
 - [ ] VS Code split terminal ready: one for dev server, one for tests

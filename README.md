@@ -21,7 +21,7 @@ cd companion-repo/portal
 npm install
 npm run dev
 
-# 3. Open your browser at http://localhost:5173
+# 3. Open your browser at http://localhost:3000
 ```
 
 Access your guides on Notion (or from the `guides/` directory on the `main` branch). Work through each level sequentially.
@@ -182,7 +182,8 @@ npm run dev
 | Quick Start (Experienced Devs) | [`training/QUICK_START.md`](training/QUICK_START.md) | 3-day fast-track path |
 | Instructor Guide | [`training/INSTRUCTOR_GUIDE.md`](training/INSTRUCTOR_GUIDE.md) | Classroom pacing and teaching tips |
 | Exercises | [`training/exercises/`](training/exercises/) | Hands-on coding tasks per level |
-| Quizzes | [`training/quizzes/`](training/quizzes/) | Knowledge checks per level |
+| Pre-Training Assessment | [`training/quizzes/pretest.md`](training/quizzes/pretest.md) | Baseline diagnostic (Day 1, before instruction) |
+| Quizzes | [`training/quizzes/`](training/quizzes/) | Knowledge checks per level (20 questions each) |
 | Answer Keys | [`training/answer-keys/`](training/answer-keys/) | Solutions for exercises and quizzes |
 | Demos | [`training/demos/`](training/demos/) | Live demo scripts per level |
 | Slides | [`training/slides/`](training/slides/) | Presentation outlines per level |

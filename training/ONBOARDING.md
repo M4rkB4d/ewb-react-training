@@ -46,7 +46,8 @@ Get oriented. Understand what React is, learn TypeScript basics, and develop the
 
 | Session | Content |
 |---------|---------|
-| **Morning** | [A01 — What Is React](../guides/level-01-welcome/A01_what-is-react.md) |
+| **Morning** | [Pre-Training Assessment](quizzes/pretest.md) *(20 min, before any instruction — diagnostic only)* |
+| | [A01 — What Is React](../guides/level-01-welcome/A01_what-is-react.md) |
 | | [A02 — TypeScript for React](../guides/level-01-welcome/A02_typescript-for-react.md) |
 | **Afternoon** | [A03 — Thinking in Compliance](../guides/level-01-welcome/A03_thinking-in-compliance.md) |
 | | [Level 1 Quiz](quizzes/level-01-quiz.md) |
@@ -286,9 +287,13 @@ companion-repo/
 
 ## Assessment and Progress Tracking
 
+### Pre-Training Assessment
+
+Before any instruction on Day 1, you will take a 20-question [pretest](quizzes/pretest.md). This is a diagnostic assessment — it is not graded and does not affect your standing. Answer honestly based on what you currently know. The purpose is to measure your starting point so we can track your growth throughout the program.
+
 ### Quizzes
 
-Each level has a quiz. Complete the quiz at the end of each day before moving on.
+Each level has a quiz (20 questions each — multiple choice and true/false). Complete the quiz at the end of each day before moving on.
 
 | Quiz | Level | Location |
 |------|-------|----------|

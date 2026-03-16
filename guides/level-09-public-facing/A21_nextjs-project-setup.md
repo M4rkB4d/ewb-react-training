@@ -129,10 +129,10 @@ Next.js `<Image>` — both work for SVGs in the public directory.
 
 ### Checkpoint 2
 
-After running `create-next-app`, the project starts on port 3000. The Vite SPA
-dev server from B01 runs on port 5173 by default. If both need to run
-simultaneously during development (the internal portal and the public site),
-what configuration change ensures they do not conflict?
+After running `create-next-app`, the project defaults to port 3000 — the same
+port our Vite SPA portal uses. The portal's `vite.config.ts` sets `server.port: 3000`
+and the public site runs on port 3001 (`next dev --port 3001`). If both need to
+run simultaneously, confirm these ports do not conflict in your environment.
 
 ---
 
@@ -245,7 +245,7 @@ export default nextConfig;
 | Concern | Vite (`vite.config.ts`) | Next.js (`next.config.ts`) |
 |---------|------------------------|---------------------------|
 | Bundler | Rollup (via Vite) | Turbopack (dev) / Webpack (prod) |
-| Dev server | Vite dev server (port 5173) | Next.js dev server (port 3000) |
+| Dev server | Vite dev server (port 3000) | Next.js dev server (port 3001) |
 | Security headers | Nginx config / Azure CDN rules | `headers()` function in config |
 | Image optimization | Manual (via plugins) | Built-in `next/image` |
 | Environment variables | `VITE_` prefix in `import.meta.env` | `NEXT_PUBLIC_` prefix in `process.env` |

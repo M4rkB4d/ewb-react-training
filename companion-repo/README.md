@@ -33,7 +33,7 @@ Single-page application built with the Vite + React stack. Covers Levels 1–8 i
 ```bash
 cd portal
 npm install
-npm run dev        # http://localhost:5173
+npm run dev        # http://localhost:3000
 npm run build      # Production build → dist/
 npm run lint       # ESLint
 ```
@@ -58,7 +58,7 @@ Server-rendered public-facing website built with Next.js 16 App Router. Covers L
 ```bash
 cd public-site
 npm install
-npm run dev        # http://localhost:3000
+npm run dev        # http://localhost:3001
 npm run build      # Production build → .next/
 npm run type-check # TypeScript verification
 ```

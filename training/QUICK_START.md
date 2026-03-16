@@ -58,6 +58,7 @@ The most important day. Everything at EWB is built on compliance. You need to in
 
 ### Day 1 Exercises
 
+- [ ] Take the [Pre-Training Assessment](quizzes/pretest.md) before starting *(20 min, diagnostic only)*
 - [ ] Set up the portal project following B01 (skim mode — focus on EWB theme config)
 - [ ] Build 3 components from the EWB design system (Button, Input, Card) using the patterns from A06
 - [ ] [Level 3 Exercises](exercises/level-03-exercises.md) — complete exercises 1 and 2

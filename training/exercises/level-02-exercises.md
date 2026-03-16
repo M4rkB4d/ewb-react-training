@@ -53,7 +53,7 @@ interface TransactionHistoryProps {
 
 ### Acceptance Criteria
 
-- [ ] Component renders with sample data visible at `http://localhost:5173`
+- [ ] Component renders with sample data visible at `http://localhost:3000`
 - [ ] Empty array shows the empty state message
 - [ ] Credits are green, debits are red
 - [ ] Dates are formatted correctly
