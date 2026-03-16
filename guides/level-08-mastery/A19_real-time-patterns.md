@@ -625,64 +625,16 @@ error handling.
 ## Phase 7 — Online Status Detection
 
 Before implementing any real-time pattern, you need to know if the user is
-connected at all. The `useOnlineStatus` hook uses `useSyncExternalStore`
-to subscribe to the browser's connectivity events:
+connected at all. The `useOnlineStatus` hook (built in Phase 5 above) uses
+`useSyncExternalStore` — the React 18+ way to subscribe to external data
+sources like browser APIs. It ensures the component re-renders synchronously
+when the online/offline status changes, preventing stale reads during
+concurrent rendering.
 
-```tsx
-// src/hooks/use-online-status.ts
-import { useSyncExternalStore } from 'react';
-
-function subscribe(callback: () => void): () => void {
-  window.addEventListener('online', callback);
-  window.addEventListener('offline', callback);
-  return () => {
-    window.removeEventListener('online', callback);
-    window.removeEventListener('offline', callback);
-  };
-}
-
-function getSnapshot(): boolean {
-  return navigator.onLine;
-}
-
-export function useOnlineStatus(): boolean {
-  return useSyncExternalStore(subscribe, getSnapshot);
-}
-```
-
-`useSyncExternalStore` is the React 18+ way to subscribe to external data
-sources (browser APIs, third-party libraries, global state outside React).
-It ensures the component re-renders synchronously when the online/offline
-status changes — no stale reads during concurrent rendering.
-
-### Offline banner
-
-Wrap the hook in a banner component that displays when connectivity is lost:
-
-```tsx
-// src/components/offline-banner.tsx
-import { useOnlineStatus } from '@/hooks/use-online-status';
-
-export function OfflineBanner() {
-  const isOnline = useOnlineStatus();
-
-  if (isOnline) return null;
-
-  return (
-    <div
-      className="bg-yellow-100 px-4 py-2 text-center text-sm text-yellow-800"
-      role="alert"
-    >
-      You are offline. Some features may be unavailable. Data will sync when
-      your connection is restored.
-    </div>
-  );
-}
-```
-
-Place `<OfflineBanner />` in your app layout, above the main content area.
-For banking applications, the offline banner should also pause mutation
-operations — a user should never attempt a transfer while offline.
+The `<OfflineBanner />` component (also from Phase 5) should be placed in
+your app layout, above the main content area. For banking applications,
+the offline banner should also pause mutation operations — a user should
+never attempt a transfer while offline.
 
 ### Checkpoint 7
 

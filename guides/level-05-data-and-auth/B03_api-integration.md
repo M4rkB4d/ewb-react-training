@@ -461,7 +461,17 @@ export async function getAccount(id: string): Promise<Account> {
   const response = await apiClient.get(`/accounts/${id}`);
   return accountSchema.parse(response.data);
 }
+
+// Object-style API for hooks that prefer method syntax
+export const accountsApi = {
+  getAll: getAccounts,
+  getById: getAccount,
+};
 ```
+
+The object-style `accountsApi` export gives hooks a cleaner import — `accountsApi.getById`
+reads better inside a `queryFn` than a bare `getAccount`. Both forms are available;
+standalone functions work fine for one-off calls.
 
 ### Why centavos, not pesos?
 

@@ -961,7 +961,7 @@ export function TransferWizard({ accounts, onSubmit }: TransferWizardProps) {
     formState: { errors, isSubmitting },
     trigger,
   } = useForm<TransferData>({
-    resolver: zodResolver(transferSchema) as any,
+    resolver: zodResolver(transferSchema),
     mode: 'onBlur',
   });
 
