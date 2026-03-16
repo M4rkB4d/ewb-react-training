@@ -244,14 +244,64 @@ export const useUIStore = create<UIState>()(
 Devtools middleware enables the Redux DevTools browser extension to inspect Zustand
 state changes — useful for debugging.
 
-### Checkpoint 3
+### Checkpoint 3 — Transaction filter store
 
-Create a `useFilterStore` that tracks:
-- Selected account type filter (`'all' | 'savings' | 'checking'`)
-- Date range (start and end dates)
-- Sort order (`'newest' | 'oldest' | 'amount-high' | 'amount-low'`)
+Create a transaction filter store for the accounts feature. This store lives inside
+the feature directory because it manages state specific to transaction filtering, not
+global app state:
 
-Should any of these be persisted? Why or why not?
+```tsx
+// src/features/accounts/stores/transaction-filter-store.ts
+import { create } from 'zustand';
+
+interface DateRange {
+  start: string | null;
+  end: string | null;
+}
+
+interface TransactionFilterState {
+  transactionType: 'all' | 'credit' | 'debit';
+  dateRange: DateRange;
+  sortOrder: 'newest' | 'oldest' | 'amount-high' | 'amount-low';
+  setTransactionType: (type: TransactionFilterState['transactionType']) => void;
+  setDateRange: (range: DateRange) => void;
+  setSortOrder: (order: TransactionFilterState['sortOrder']) => void;
+  resetFilters: () => void;
+  hasActiveFilters: () => boolean;
+}
+
+const DEFAULTS = {
+  transactionType: 'all' as const,
+  dateRange: { start: null, end: null } as DateRange,
+  sortOrder: 'newest' as const,
+};
+
+export const useTransactionFilterStore = create<TransactionFilterState>((set, get) => ({
+  ...DEFAULTS,
+  setTransactionType: (transactionType) => set({ transactionType }),
+  setDateRange: (dateRange) => set({ dateRange }),
+  setSortOrder: (sortOrder) => set({ sortOrder }),
+  resetFilters: () => set({ ...DEFAULTS }),
+  hasActiveFilters: () => {
+    const state = get();
+    return (
+      state.transactionType !== 'all' ||
+      state.dateRange.start !== null ||
+      state.dateRange.end !== null ||
+      state.sortOrder !== 'newest'
+    );
+  },
+}));
+```
+
+Notice the `hasActiveFilters` computed function uses `get()` — Zustand's way to
+read current state inside an action. This is useful for derived state that depends
+on multiple fields.
+
+Should any of these filters be persisted to localStorage? Generally no — filter
+preferences are ephemeral. A user navigating away and coming back expects a fresh
+view. The exception would be if user research shows people consistently use the
+same filters, in which case you would add the `persist` middleware.
 
 ---
 
