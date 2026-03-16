@@ -735,6 +735,7 @@ interface AccountCardProps {
   accountName: string;
   accountNumber: string;
   accountType: 'savings' | 'checking' | 'time-deposit';
+  /** Balance in centavos (integer). ₱1,500.00 = 150000. */
   balance: number;
   currency?: string;
   isActive: boolean;
@@ -755,12 +756,12 @@ export function AccountCard({
   // DPA compliance: mask account number (show last 4 only)
   const maskedNumber = `••••${accountNumber.slice(-4)}`;
 
-  // Format currency
+  // Format currency — balance is in centavos, divide by 100 for display
   const formattedBalance = new Intl.NumberFormat('en-PH', {
     style: 'currency',
     currency,
     minimumFractionDigits: 2,
-  }).format(balance);
+  }).format(balance / 100);
 
   // Account type display
   const typeLabels: Record<AccountCardProps['accountType'], string> = {
@@ -828,7 +829,7 @@ export function AccountCard({
 }
 ```
 
-> **Note:** This example uses pesos as a plain number for simplicity. Starting in B03 (API Integration), all monetary values use integer centavos with `formatPHP()` — one peso = 100 centavos, so ₱1,500.00 is stored as `150000`. This avoids IEEE 754 floating-point errors (e.g., `0.1 + 0.2 !== 0.3`). The `Centavos` branded type is introduced in B01 Phase 6.
+> **Money handling:** All monetary values in this codebase are stored as **integer centavos** — one peso = 100 centavos, so ₱1,500.00 is stored as `150000`. The component divides by 100 for display. This avoids IEEE 754 floating-point errors (e.g., `0.1 + 0.2 !== 0.3`). In B03 (API Integration), you will extract this formatting into a reusable `formatPHP()` utility.
 
 **What this component demonstrates:**
 
@@ -868,7 +869,7 @@ export default function App() {
             accountName="Personal Savings"
             accountNumber="1234567890"
             accountType="savings"
-            balance={150000}
+            balance={15_000_000}
             isActive={true}
             onTransfer={handleTransfer}
             onViewDetails={() => {}}
@@ -877,7 +878,7 @@ export default function App() {
             accountName="Payroll Checking"
             accountNumber="0987654321"
             accountType="checking"
-            balance={42500.50}
+            balance={4_250_050}
             isActive={true}
             onTransfer={handleTransfer}
           />
@@ -885,7 +886,7 @@ export default function App() {
             accountName="Time Deposit"
             accountNumber="5555666677"
             accountType="time-deposit"
-            balance={500000}
+            balance={50_000_000}
             isActive={false}
           />
         </div>

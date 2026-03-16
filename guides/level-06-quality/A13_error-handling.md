@@ -210,8 +210,8 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   }
 
   override componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
-    // BSP 1019 — Log errors for monitoring
-    logger.error('[ErrorBoundary]', { error: error.message, stack: errorInfo.componentStack });
+    // BSP 1019 — Log errors for monitoring (see error-logger section below)
+    console.error('[ErrorBoundary]', error.message, errorInfo.componentStack);
     this.props.onError?.(error, errorInfo);
   }
 

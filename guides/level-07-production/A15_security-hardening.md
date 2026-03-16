@@ -648,7 +648,7 @@ when access is denied.
 ```tsx
 // src/components/auth/role-guard.tsx (companion repo uses this path)
 import { Navigate } from 'react-router';
-import { useAuth } from '@/hooks/use-auth';
+import { useAuthStore } from '@/stores/auth-store';
 
 interface RequireRoleProps {
   roles: readonly string[];
@@ -656,7 +656,7 @@ interface RequireRoleProps {
 }
 
 export function RequireRole({ roles, children }: RequireRoleProps) {
-  const { user } = useAuth();
+  const user = useAuthStore((s) => s.user);
 
   if (!user) {
     return <Navigate to="/login" replace />;

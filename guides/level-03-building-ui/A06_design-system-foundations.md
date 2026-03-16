@@ -599,28 +599,27 @@ Every display of money must divide by 100 and format with the peso sign. Doing t
 inline in every component is error-prone — a single `CurrencyDisplay` component
 ensures consistency.
 
-The component uses `react-intl` (already installed in your project) for locale-aware
-number formatting. You will learn `react-intl` in depth in B08 — Internationalization.
-For now, just know that `intl.formatNumber()` handles thousand separators and
-currency symbols based on the user's locale.
+The component uses the built-in `Intl.NumberFormat` API — no external dependencies
+needed. In B08 (Internationalization), you will learn `react-intl` for more advanced
+locale switching. For now, `Intl.NumberFormat` handles thousand separators and
+currency symbols correctly for Philippine peso formatting.
 
 ```tsx
 // src/components/ui/currency-display.tsx
-import { useIntl } from 'react-intl';
-
 interface CurrencyDisplayProps {
+  /** Amount in centavos (integer). */
   amount: number;
   currency?: string;
 }
 
 export function CurrencyDisplay({ amount, currency = 'PHP' }: CurrencyDisplayProps) {
-  const intl = useIntl();
-
   // Amount is in centavos — divide by 100 for display
-  const formatted = intl.formatNumber(amount / 100, {
+  const formatted = new Intl.NumberFormat('en-PH', {
     style: 'currency',
     currency,
-  });
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(amount / 100);
 
   return (
     <span className={amount < 0 ? 'text-red-600' : 'text-emerald-700'}>
@@ -636,34 +635,26 @@ credits). This convention is universal in banking UIs.
 ### Locale-aware date display
 
 Dates have the same problem as currency — formatting them differently across
-components creates inconsistency. The `LocaleDate` component uses `react-intl`'s
-`FormattedDate` to render dates in the user's locale:
+components creates inconsistency. The `LocaleDate` component uses the built-in
+`Intl.DateTimeFormat` API for locale-aware rendering:
 
 ```tsx
 // src/components/ui/locale-date.tsx
-import { FormattedDate } from 'react-intl';
-
 interface LocaleDateProps {
   value: string | Date;
   format?: 'short' | 'long';
 }
 
-export function LocaleDate({ value, format = 'short' }: LocaleDateProps) {
-  if (format === 'short') {
-    return (
-      <FormattedDate value={value} year="numeric" month="short" day="numeric" />
-    );
-  }
+const formatOptions: Record<string, Intl.DateTimeFormatOptions> = {
+  short: { year: 'numeric', month: 'short', day: 'numeric' },
+  long: { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' },
+};
 
-  return (
-    <FormattedDate
-      value={value}
-      year="numeric"
-      month="long"
-      day="numeric"
-      weekday="long"
-    />
-  );
+export function LocaleDate({ value, format = 'short' }: LocaleDateProps) {
+  const date = typeof value === 'string' ? new Date(value) : value;
+  const formatted = new Intl.DateTimeFormat('en-PH', formatOptions[format]).format(date);
+
+  return <time dateTime={date.toISOString()}>{formatted}</time>;
 }
 ```
 

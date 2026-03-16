@@ -652,22 +652,51 @@ const clientSchema = z.object({
 });
 
 // Server env — only import this in server-side code
-export const serverEnv = serverSchema.parse(process.env);
+// Lazy validation: parsed on first access, not at module load time.
+// This allows `next build` to succeed without all env vars set (they are
+// injected by Azure App Service at runtime, not at build time).
+let _serverEnv: z.infer<typeof serverSchema> | null = null;
+function getServerEnv() {
+  if (_serverEnv == null) {
+    _serverEnv = serverSchema.parse(process.env);
+  }
+  return _serverEnv;
+}
+export const serverEnv = new Proxy({} as z.infer<typeof serverSchema>, {
+  get(_target, prop: string) {
+    return getServerEnv()[prop as keyof z.infer<typeof serverSchema>];
+  },
+});
 
 // Client env — safe to use anywhere
-export const clientEnv = clientSchema.parse({
-  NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
-  NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
-  NEXT_PUBLIC_SENTRY_DSN: process.env.NEXT_PUBLIC_SENTRY_DSN,
-  NEXT_PUBLIC_APPINSIGHTS_CONNECTION_STRING:
-    process.env.NEXT_PUBLIC_APPINSIGHTS_CONNECTION_STRING,
+let _clientEnv: z.infer<typeof clientSchema> | null = null;
+function getClientEnv() {
+  if (_clientEnv == null) {
+    _clientEnv = clientSchema.parse({
+      NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+      NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
+      NEXT_PUBLIC_SENTRY_DSN: process.env.NEXT_PUBLIC_SENTRY_DSN,
+      NEXT_PUBLIC_APPINSIGHTS_CONNECTION_STRING:
+        process.env.NEXT_PUBLIC_APPINSIGHTS_CONNECTION_STRING,
+    });
+  }
+  return _clientEnv;
+}
+export const clientEnv = new Proxy({} as z.infer<typeof clientSchema>, {
+  get(_target, prop: string) {
+    return getClientEnv()[prop as keyof z.infer<typeof clientSchema>];
+  },
 });
 ```
 
-This pattern reuses the Zod validation approach from B07's `src/lib/env.ts` but
-adds the server/client split. If a developer accidentally imports `serverEnv`
-in a Client Component, the build will fail because `process.env.API_SECRET_KEY`
-is `undefined` in the browser — Zod's validation catches the error at runtime.
+Why lazy validation? In Azure App Service deployments, environment variables are
+injected at runtime, not at build time. Eager parsing (`serverSchema.parse(process.env)`
+at module load) would fail during `next build` because server-only variables like
+`API_SECRET_KEY` do not exist in the CI/CD environment. The `Proxy` wrapper defers
+validation until the first property access — which only happens at runtime when the
+server is running and all variables are available. If a developer accidentally imports
+`serverEnv` in a Client Component, Zod's validation catches the error at runtime
+because `process.env.API_SECRET_KEY` is `undefined` in the browser.
 
 ### Azure Key Vault integration
 

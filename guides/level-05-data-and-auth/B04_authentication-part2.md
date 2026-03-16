@@ -218,7 +218,7 @@ export function useLogin() {
   const { setAuth, setMfaRequired, setLoading, setError } = useAuthStore.getState();
 
   // Preserve the page the user was trying to visit before being redirected
-  const from = (location.state as { from?: string })?.from ?? '/dashboard';
+  const from = (location.state as { from?: string })?.from ?? '/';
 
   return useMutation({
     mutationFn: ({ username, password }: { username: string; password: string }) =>
@@ -268,7 +268,7 @@ export function useVerifyMfa() {
 
     onSuccess: (data) => {
       setAuth(data.user, data.accessToken);
-      navigate('/dashboard');
+      navigate('/');
     },
   });
 }
@@ -716,7 +716,7 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
 
 ### Role-based route guard
 
-B02 introduced `RoleGuard` with `allowedRoles.includes()` — a simple exact-match check suitable for flat layouts. Here we replace it with `RoleRoute`, which uses `hasMinimumRole()` (from A11) to enforce a **hierarchical** permission model. An `admin` automatically passes a `manager` check, a `manager` passes a `teller` check, and so on. Prefer `RoleRoute` for all new route guards; keep `RoleGuard` only if you genuinely need exact-match semantics (rare).
+B02 introduced `RoleGuard` which wraps its children and renders a fallback when the role check fails. Here we add `RoleRoute`, which serves a different purpose: it redirects to `/unauthorized` instead of rendering inline, making it suitable for route-level protection in the router config. Both use `hasMinimumRole()` for hierarchical permission checks — an `admin` automatically passes a `manager` check, a `manager` passes a `teller` check, and so on.
 
 ```tsx
 // src/components/auth/role-route.tsx
@@ -752,7 +752,7 @@ export function useLogin() {
   const location = useLocation();
 
   // Get the page the user was trying to visit before being redirected
-  const from = (location.state as { from?: string })?.from ?? '/dashboard';
+  const from = (location.state as { from?: string })?.from ?? '/';
 
   return useMutation({
     // ... same as before
