@@ -16,6 +16,8 @@ By the end of this guide, you will:
 - Connect authentication, compliance, error handling, and testing
 - Build a multi-step wizard with full validation
 - Implement the complete test pyramid for one feature
+- Build a multi-step fund transfer wizard with Money value objects
+- Implement PCI DSS compliant card input using processor-hosted iframes
 
 ---
 
@@ -857,6 +859,310 @@ test.describe('Bill Payment', () => {
 
 ---
 
+## Phase 7 — Transfers Feature
+
+The payments feature above handles bill payments. The transfers feature handles
+money movement between accounts — a separate domain with its own API, types,
+and multi-step wizard. The architecture mirrors the payments feature but with
+banking-specific constraints around fund availability and server confirmation.
+
+### Money value object
+
+Financial amounts should never be raw numbers. A value object pairs the amount
+with its currency, enforces integer centavos, and prevents accidental mixing of
+currencies:
+
+```tsx
+// src/features/transfers/types.ts
+
+/**
+ * Money is a value object — always paired with currency.
+ * Amount is stored as integer centavos to avoid floating-point errors.
+ * Never pass raw numbers for financial amounts.
+ */
+export interface Money {
+  /** Amount in centavos (integer). ₱1,500.00 = 150000. */
+  readonly amount: number;
+  readonly currency: 'PHP' | 'USD';
+}
+
+export function createMoney(centavos: number, currency: 'PHP' | 'USD' = 'PHP'): Money {
+  if (!Number.isInteger(centavos)) {
+    throw new Error(`Centavo amount must be an integer, got ${centavos}`);
+  }
+  return Object.freeze({ amount: centavos, currency });
+}
+
+export function addMoney(a: Money, b: Money): Money {
+  if (a.currency !== b.currency) {
+    throw new Error(`Cannot add ${a.currency} and ${b.currency}`);
+  }
+  return createMoney(a.amount + b.amount, a.currency);
+}
+
+export function formatMoney(money: Money): string {
+  return new Intl.NumberFormat('en-PH', {
+    style: 'currency',
+    currency: money.currency,
+  }).format(money.amount / 100);
+}
+```
+
+`Object.freeze` makes the Money object immutable — you cannot accidentally
+mutate an amount after creation. This is a fundamental pattern from
+domain-driven design (A18): value objects are immutable and compared by value,
+not reference.
+
+### Transfer wizard
+
+The transfer wizard walks users through a three-step process: details →
+amount → review. Each step validates its own fields before advancing.
+The form uses `react-hook-form` with Zod resolver for validation:
+
+```tsx
+// src/features/transfers/components/transfer-wizard.tsx
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Card, CardHeader, CardTitle, CardBody, CardFooter } from '@/components/ui/card';
+
+const transferSchema = z.object({
+  fromAccount: z.string().regex(/^\d{10}$/, 'Select a source account'),
+  toAccount: z.string().regex(/^\d{10}$/, 'Enter a valid account number'),
+  recipientName: z.string().min(2, 'Recipient name is required'),
+  amount: z.coerce
+    .number()
+    .positive('Amount must be greater than zero')
+    .max(1_000_000, 'Maximum transfer is ₱1,000,000'),
+  notes: z.string().max(100, 'Notes cannot exceed 100 characters').optional(),
+}).refine(
+  (data) => data.fromAccount !== data.toAccount,
+  { message: 'Cannot transfer to the same account', path: ['toAccount'] },
+);
+
+type TransferData = z.infer<typeof transferSchema>;
+type Step = 'details' | 'amount' | 'review';
+
+interface TransferWizardProps {
+  accounts: Array<{ number: string; name: string; balance: number }>;
+  onSubmit: (data: TransferData) => Promise<void>;
+}
+
+export function TransferWizard({ accounts, onSubmit }: TransferWizardProps) {
+  const [step, setStep] = useState<Step>('details');
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors, isSubmitting },
+    trigger,
+  } = useForm<TransferData>({
+    resolver: zodResolver(transferSchema) as any,
+    mode: 'onBlur',
+  });
+
+  const formValues = watch();
+
+  const goToNextStep = async () => {
+    let fieldsToValidate: (keyof TransferData)[] = [];
+    if (step === 'details') fieldsToValidate = ['fromAccount', 'toAccount', 'recipientName'];
+    else if (step === 'amount') fieldsToValidate = ['amount'];
+
+    const isValid = await trigger(fieldsToValidate);
+    if (isValid) {
+      if (step === 'details') setStep('amount');
+      else if (step === 'amount') setStep('review');
+    }
+  };
+
+  const goToPreviousStep = () => {
+    if (step === 'amount') setStep('details');
+    else if (step === 'review') setStep('amount');
+  };
+
+  if (step === 'details') {
+    return (
+      <Card>
+        <CardHeader><CardTitle>Step 1: Transfer Details</CardTitle></CardHeader>
+        <CardBody>
+          <div className="space-y-4">
+            <div className="space-y-1.5">
+              <label htmlFor="fromAccount" className="block text-sm font-medium text-gray-700">
+                From Account
+              </label>
+              <select id="fromAccount" {...register('fromAccount')} className="block w-full rounded-lg border border-gray-300 px-4 py-2">
+                <option value="">Select an account</option>
+                {accounts.map((acc) => (
+                  <option key={acc.number} value={acc.number}>
+                    {acc.name} (••••{acc.number.slice(-4)}) — ₱{(acc.balance / 100).toLocaleString('en-PH', { minimumFractionDigits: 2 })}
+                  </option>
+                ))}
+              </select>
+              {errors.fromAccount != null && (
+                <p className="text-sm text-error">{errors.fromAccount.message}</p>
+              )}
+            </div>
+            <Input label="Recipient Account Number" {...register('toAccount')} error={errors.toAccount?.message} inputMode="numeric" />
+            <Input label="Recipient Name" {...register('recipientName')} error={errors.recipientName?.message} />
+          </div>
+        </CardBody>
+        <CardFooter><Button type="button" onClick={goToNextStep}>Continue</Button></CardFooter>
+      </Card>
+    );
+  }
+
+  if (step === 'amount') {
+    return (
+      <Card>
+        <CardHeader><CardTitle>Step 2: Amount</CardTitle></CardHeader>
+        <CardBody>
+          <div className="space-y-4">
+            <Input label="Transfer Amount (₱)" type="number" {...register('amount', { valueAsNumber: true })} error={errors.amount?.message} step="0.01" min="0" />
+            <Input label="Notes (optional)" {...register('notes')} error={errors.notes?.message} />
+          </div>
+        </CardBody>
+        <CardFooter>
+          <div className="flex gap-2">
+            <Button type="button" variant="outline" onClick={goToPreviousStep}>Back</Button>
+            <Button type="button" onClick={goToNextStep}>Review</Button>
+          </div>
+        </CardFooter>
+      </Card>
+    );
+  }
+
+  // Step 3: Review — converts amount from pesos to centavos on submit
+  return (
+    <form onSubmit={handleSubmit((data) => onSubmit({ ...data, amount: Math.round(data.amount * 100) }))}>
+      <Card>
+        <CardHeader><CardTitle>Step 3: Review Transfer</CardTitle></CardHeader>
+        <CardBody>
+          <dl className="space-y-3">
+            <div className="flex justify-between">
+              <dt className="text-sm text-gray-500">From</dt>
+              <dd className="text-sm font-medium">••••{formValues.fromAccount?.slice(-4)}</dd>
+            </div>
+            <div className="flex justify-between">
+              <dt className="text-sm text-gray-500">To</dt>
+              <dd className="text-sm font-medium">{formValues.recipientName} (••••{formValues.toAccount?.slice(-4)})</dd>
+            </div>
+            <div className="flex justify-between border-t pt-3">
+              <dt className="text-sm text-gray-500">Amount</dt>
+              <dd className="text-lg font-bold">₱{Number(formValues.amount).toLocaleString('en-PH', { minimumFractionDigits: 2 })}</dd>
+            </div>
+          </dl>
+        </CardBody>
+        <CardFooter>
+          <div className="flex gap-2">
+            <Button type="button" variant="outline" onClick={goToPreviousStep}>Back</Button>
+            <Button type="submit" isLoading={isSubmitting}>Confirm Transfer</Button>
+          </div>
+        </CardFooter>
+      </Card>
+    </form>
+  );
+}
+```
+
+Key patterns in the wizard:
+
+- **Step validation with `trigger()`** — only the fields for the current step are
+  validated before advancing. This prevents showing errors for future steps.
+- **Peso → centavo conversion** — the user enters amounts in pesos. On submit,
+  `Math.round(data.amount * 100)` converts to centavos. The rounding handles any
+  floating-point artifact from the form's `valueAsNumber`.
+- **DPA masking in review** — account numbers are masked even in the confirmation
+  step. The full number was already validated in step 1.
+
+### Transfer mutation hook
+
+The `useCreateTransfer` hook wraps the transfer API with cache management.
+Note the difference from the B03 version — this one adds `onMutate` for
+saving previous state and `onSettled` for guaranteed invalidation:
+
+```tsx
+// src/features/transfers/hooks/use-create-transfer.ts
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { createTransfer } from '../api/transfers-api';
+import type { TransferRequest } from '../api/transfers-api';
+import { accountKeys } from '@/features/accounts/queries';
+
+export function useCreateTransfer() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (payload: TransferRequest) => createTransfer(payload),
+
+    onMutate: async () => {
+      // Cancel in-flight account queries to avoid stale data
+      await queryClient.cancelQueries({ queryKey: accountKeys.all });
+      const previousAccounts = queryClient.getQueryData(accountKeys.lists());
+      return { previousAccounts };
+    },
+
+    onError: (_error, _payload, context) => {
+      // Restore previous data on failure
+      if (context?.previousAccounts != null) {
+        queryClient.setQueryData(accountKeys.lists(), context.previousAccounts);
+      }
+    },
+
+    onSettled: () => {
+      // Always refetch after mutation (success or failure)
+      queryClient.invalidateQueries({ queryKey: accountKeys.all });
+    },
+  });
+}
+```
+
+This uses `onSettled` (fires on both success and error) instead of `onSuccess`
+alone. The pattern ensures account data is always fresh after a transfer attempt —
+even if the transfer fails, the balances might have changed due to concurrent
+activity.
+
+### Secure card input
+
+For payment card entry, card data must never touch your JavaScript — PCI DSS
+requires that sensitive card data flows directly to a payment processor via an
+iframe. The `CardInput` component renders the processor's hosted input:
+
+```tsx
+// src/features/payments/components/card-input.tsx
+export function CardInput() {
+  return (
+    <div>
+      <label htmlFor="card-frame">Card Number</label>
+      <iframe
+        id="card-frame"
+        src="https://tokenizer.payment-processor.com/card-input"
+        title="Secure card input"
+        className="h-12 w-full rounded border"
+      />
+      <p className="text-xs text-gray-500">
+        Card data is handled securely by our payment processor.
+      </p>
+    </div>
+  );
+}
+```
+
+The iframe approach is standard PCI DSS compliance: the payment processor hosts
+the input field, tokenizes the card data, and returns a token to your application.
+Your JavaScript never sees the raw card number — this eliminates the application
+from PCI scope for card data handling.
+
+### Checkpoint 7
+
+Why does the `TransferWizard` convert pesos to centavos only in the submit
+handler, not at input time? What would happen if you stored centavos in the
+form state while the user sees pesos in the input?
+
+---
+
 ## Key Takeaways
 
 1. **Feature-slice architecture works.** The payments feature is self-contained
@@ -873,6 +1179,15 @@ test.describe('Bill Payment', () => {
 
 5. **The test pyramid in practice**: store unit tests (fast, many), form
    integration tests (medium), and one E2E test for the critical path.
+
+6. **Money value objects** prevent currency mismatches and enforce integer
+   centavos. Never pass raw numbers for financial amounts.
+
+7. **Multi-step wizards** validate per-step with `trigger()`, convert units
+   at the boundary (pesos → centavos on submit), and mask data in review.
+
+8. **PCI DSS card input** uses processor-hosted iframes. Card data never
+   touches your JavaScript — this eliminates your app from PCI scope.
 
 ---
 

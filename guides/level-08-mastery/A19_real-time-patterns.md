@@ -16,6 +16,8 @@ By the end of this guide, you will:
 - Build smart polling with adaptive intervals
 - Integrate real-time data with TanStack Query
 - Handle connection state and offline recovery
+- Detect online/offline status with `useSyncExternalStore`
+- Build an offline banner to prevent user actions during connectivity loss
 
 ---
 
@@ -620,6 +622,76 @@ error handling.
 
 ---
 
+## Phase 7 — Online Status Detection
+
+Before implementing any real-time pattern, you need to know if the user is
+connected at all. The `useOnlineStatus` hook uses `useSyncExternalStore`
+to subscribe to the browser's connectivity events:
+
+```tsx
+// src/hooks/use-online-status.ts
+import { useSyncExternalStore } from 'react';
+
+function subscribe(callback: () => void): () => void {
+  window.addEventListener('online', callback);
+  window.addEventListener('offline', callback);
+  return () => {
+    window.removeEventListener('online', callback);
+    window.removeEventListener('offline', callback);
+  };
+}
+
+function getSnapshot(): boolean {
+  return navigator.onLine;
+}
+
+export function useOnlineStatus(): boolean {
+  return useSyncExternalStore(subscribe, getSnapshot);
+}
+```
+
+`useSyncExternalStore` is the React 18+ way to subscribe to external data
+sources (browser APIs, third-party libraries, global state outside React).
+It ensures the component re-renders synchronously when the online/offline
+status changes — no stale reads during concurrent rendering.
+
+### Offline banner
+
+Wrap the hook in a banner component that displays when connectivity is lost:
+
+```tsx
+// src/components/offline-banner.tsx
+import { useOnlineStatus } from '@/hooks/use-online-status';
+
+export function OfflineBanner() {
+  const isOnline = useOnlineStatus();
+
+  if (isOnline) return null;
+
+  return (
+    <div
+      className="bg-yellow-100 px-4 py-2 text-center text-sm text-yellow-800"
+      role="alert"
+    >
+      You are offline. Some features may be unavailable. Data will sync when
+      your connection is restored.
+    </div>
+  );
+}
+```
+
+Place `<OfflineBanner />` in your app layout, above the main content area.
+For banking applications, the offline banner should also pause mutation
+operations — a user should never attempt a transfer while offline.
+
+### Checkpoint 7
+
+Why does `useOnlineStatus` use `useSyncExternalStore` instead of a simpler
+`useState` + `useEffect` pattern? What could go wrong with `useState` +
+`useEffect` during concurrent rendering?
+
+---
+
 ## Key Takeaways
 
 1. **Start with polling** — it is simple, reliable, and sufficient for most
@@ -637,6 +709,9 @@ error handling.
 5. **Integrate with TanStack Query via invalidation** — real-time channels
    trigger cache invalidation, not direct data updates. This preserves the
    existing data flow and validation.
+
+6. **`useSyncExternalStore`** is the correct way to subscribe to browser APIs
+   like online/offline status. It prevents tearing during concurrent rendering.
 
 ---
 
