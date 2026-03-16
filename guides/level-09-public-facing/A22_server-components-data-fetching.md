@@ -197,7 +197,11 @@ async function getProducts(): Promise<Product[]> {
   const data = await res.json();
   return ProductListSchema.parse(data);
 }
+```
 
+> **Guide vs. Companion Repo:** The guide shows `throw new Error(...)` because that is the correct production pattern — errors bubble up to Next.js error boundaries where users see a proper error page. The companion repo wraps fetches in `try/catch` and falls back to mock data so you can run `npm run dev` and `next build` without a live API. Both patterns are valid; choose based on whether your environment has a running backend.
+
+```tsx
 export const metadata = {
   title: 'Banking Products | EastWest Bank',
   description: 'Explore savings accounts, personal loans, credit cards, and investment products from EastWest Bank.',
