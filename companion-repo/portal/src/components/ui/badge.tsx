@@ -11,7 +11,7 @@ interface BadgeProps {
 
 const badgeStyles: Record<BadgeVariant, string> = {
   default: 'bg-gray-100 text-gray-700',
-  success: 'bg-ewb-lime-100 text-ewb-lime-700',
+  success: 'bg-emerald-50 text-emerald-700',
   warning: 'bg-amber-100 text-amber-700',
   error: 'bg-red-100 text-red-700',
   info: 'bg-ewb-navy-100 text-ewb-navy-700',

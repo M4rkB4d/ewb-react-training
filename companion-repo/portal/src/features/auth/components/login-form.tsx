@@ -2,43 +2,43 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useLogin } from '../hooks/use-login';
-import { useAuthStore } from '@/stores/auth-store';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { MfaForm } from './mfa-form';
 
 const loginSchema = z.object({
-  username: z.string().min(1, 'Username is required'),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
+  username: z
+    .string()
+    .min(1, 'Username is required')
+    .max(50, 'Username is too long'),
+  password: z
+    .string()
+    .min(8, 'Password must be at least 8 characters')
+    .max(128, 'Password is too long'),
 });
 
 type LoginFormData = z.infer<typeof loginSchema>;
 
-export function LoginForm() {
-  const status = useAuthStore((state) => state.status);
-  const loginMutation = useLogin();
+interface LoginFormProps {
+  onSubmit: (data: LoginFormData) => Promise<void>;
+  isError?: boolean;
+}
+
+export function LoginForm({ onSubmit, isError }: LoginFormProps) {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = (data: LoginFormData) => {
-    loginMutation.mutate(data);
-  };
-
-  if (status === 'mfa-required') {
-    return <MfaForm />;
-  }
-
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
-      <h1 className="text-2xl font-bold text-ewb-purple">Sign In</h1>
-
-      {loginMutation.isError && (
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="space-y-4"
+      noValidate
+    >
+      {isError && (
         <div role="alert" className="rounded bg-error/10 p-3 text-sm text-error">
           Invalid username or password. Please try again.
         </div>
@@ -49,7 +49,6 @@ export function LoginForm() {
         {...register('username')}
         error={errors.username?.message}
         autoComplete="username"
-        autoFocus
       />
 
       <Input
@@ -60,8 +59,8 @@ export function LoginForm() {
         autoComplete="current-password"
       />
 
-      <Button type="submit" className="w-full" disabled={loginMutation.isPending}>
-        {loginMutation.isPending ? 'Signing in...' : 'Sign In'}
+      <Button type="submit" isLoading={isSubmitting} className="w-full">
+        Sign In
       </Button>
     </form>
   );

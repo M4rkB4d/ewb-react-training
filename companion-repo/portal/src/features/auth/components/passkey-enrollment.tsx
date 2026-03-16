@@ -28,19 +28,21 @@ export function PasskeyEnrollment() {
 
       {register.isError && (
         <div role="alert" className="rounded bg-error/10 p-3 text-sm text-error">
-          Failed to register passkey. Please try again.
+          {register.error instanceof DOMException &&
+           register.error.name === 'NotAllowedError'
+            ? 'Passkey setup was cancelled. You can try again when ready.'
+            : 'Failed to register passkey. Please try again.'}
         </div>
       )}
 
       {register.isSuccess && (
-        <div role="status" className="rounded bg-ewb-lime-50 p-3 text-sm text-ewb-lime-700">
+        <div role="status" className="rounded bg-emerald-50 p-3 text-sm text-emerald-700">
           Passkey registered successfully.
         </div>
       )}
 
       <Button
-        type="button"
-        onClick={() => register.mutate()}
+        onClick={() => { register.mutate(); }}
         disabled={register.isPending}
       >
         {register.isPending ? 'Setting up...' : 'Add Passkey'}

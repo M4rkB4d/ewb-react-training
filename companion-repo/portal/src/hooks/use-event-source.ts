@@ -19,7 +19,7 @@ export function useEventSource({
 }: UseEventSourceOptions) {
   const [connectionState, setConnectionState] = useState<ConnectionState>('disconnected');
   const eventSourceRef = useRef<EventSource | null>(null);
-  const token = useAuthStore((s) => s.accessToken);
+  const isAuthenticated = useAuthStore((s) => s.status === 'authenticated');
 
   // Use refs for callbacks to avoid reconnecting when handlers change
   const onMessageRef = useRef(onMessage);
@@ -28,14 +28,13 @@ export function useEventSource({
   onErrorRef.current = onError;
 
   useEffect(() => {
-    if (!enabled || token == null) return;
-
-    // SSE does not support custom headers — pass token as query parameter
-    // The backend should validate this token the same way it validates Bearer tokens
-    const sseUrl = `${url}?token=${encodeURIComponent(token)}`;
+    if (!enabled || !isAuthenticated) return;
 
     setConnectionState('connecting');
-    const es = new EventSource(sseUrl);
+    // Cookie-based auth: withCredentials sends HttpOnly cookies automatically.
+    // NEVER pass tokens as query parameters — they appear in server logs, browser
+    // history, and Referer headers. BSP 808 requires token confidentiality.
+    const es = new EventSource(url, { withCredentials: true });
     eventSourceRef.current = es;
 
     es.onopen = () => {
@@ -57,7 +56,7 @@ export function useEventSource({
       eventSourceRef.current = null;
       setConnectionState('disconnected');
     };
-  }, [url, token, enabled]);
+  }, [url, isAuthenticated, enabled]);
 
   return { connectionState };
 }

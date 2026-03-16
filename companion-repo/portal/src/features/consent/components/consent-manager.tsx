@@ -1,16 +1,15 @@
-// src/features/consent/components/consent-manager.tsx
 import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { z } from 'zod';
 import { apiClient } from '@/lib/api-client';
 import { Button } from '@/components/ui/button';
-import type { ConsentPurpose } from '../types';
+import { consentPurposes, type ConsentPurpose } from '../types';
 
 // BSP 1122 — Validate all API responses with Zod
 const consentRecordSchema = z.object({
   id: z.string(),
   userId: z.string(),
-  purpose: z.string(),
+  purpose: z.enum(consentPurposes),
   granted: z.boolean(),
   grantedAt: z.string().nullable(),
   revokedAt: z.string().nullable(),

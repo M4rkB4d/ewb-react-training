@@ -114,7 +114,7 @@ Which data masking pattern is correct for displaying a Philippine bank account n
 
 A. `1234567890` (show full number)
 B. `123•••7890` (show first 3 and last 4)
-C. `••••7890` (show only last 4)
+C. `••••••7890` (show only last 4)
 D. `••••••••••` (fully masked)
 
 ---

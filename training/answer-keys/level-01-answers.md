@@ -87,7 +87,7 @@ export function formatPHP(amount: number): string {
  * Format a number in any supported currency.
  */
 export function formatCurrency(amount: number, currency: Currency): string {
-  return new Intl.NumberFormat('en-PH', {
+  return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency,
     minimumFractionDigits: currency === 'JPY' ? 0 : 2,

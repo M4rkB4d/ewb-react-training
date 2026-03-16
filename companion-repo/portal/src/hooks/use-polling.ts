@@ -3,9 +3,11 @@ import { useEffect, useRef, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import type { QueryKey } from '@tanstack/react-query';
 
-interface UsePollingOptions {
+interface UsePollingOptions<TData = unknown, TSelected = TData> {
   queryKey: QueryKey;
-  queryFn: () => Promise<unknown>;
+  queryFn: () => Promise<TData>;
+  /** Transform/select data from the query result */
+  select?: (data: TData) => TSelected;
   /** Base interval in milliseconds */
   interval: number;
   /** Only poll when the tab is visible */
@@ -15,14 +17,15 @@ interface UsePollingOptions {
   enabled?: boolean;
 }
 
-export function usePolling({
+export function usePolling<TData = unknown, TSelected = TData>({
   queryKey,
   queryFn,
+  select,
   interval,
   pauseWhenHidden = true,
   adaptive = false,
   enabled = true,
-}: UsePollingOptions) {
+}: UsePollingOptions<TData, TSelected>) {
   const queryClient = useQueryClient();
   const [currentInterval, setCurrentInterval] = useState(interval);
   const lastDataUpdatedAt = useRef(0);
@@ -30,6 +33,7 @@ export function usePolling({
   const query = useQuery({
     queryKey,
     queryFn,
+    select,
     refetchInterval: enabled ? currentInterval : false,
     refetchIntervalInBackground: !pauseWhenHidden,
   });

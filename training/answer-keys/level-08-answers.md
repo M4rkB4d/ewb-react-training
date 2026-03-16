@@ -30,7 +30,7 @@ The adaptive option increases the polling interval (up to 5x the base) when data
 
 ### Question 6
 
-The hook passes the auth token as a URL query parameter: `${url}?token=${encodeURIComponent(token)}`. The security implication is that the token appears in server access logs, browser history, and potentially in referrer headers. Mitigations include using short-lived tokens specific to the SSE connection, ensuring the SSE endpoint returns only non-sensitive notification data, and rotating the token on reconnection.
+The hook uses `new EventSource(url, { withCredentials: true })` to send the HttpOnly refresh cookie automatically. This avoids passing tokens as query parameters, which would expose them in server access logs, browser history, and Referer headers (a BSP 808 violation). The cookie-based approach keeps the token confidential — the JavaScript code never reads or handles the token directly. On reconnection, the browser re-sends the cookie automatically, so the SSE stream resumes without custom token management.
 
 ### Question 7 — B
 

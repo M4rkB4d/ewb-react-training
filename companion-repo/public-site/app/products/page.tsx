@@ -1,8 +1,8 @@
 // app/products/page.tsx
 import { z } from 'zod';
-import Image from 'next/image';
 import Link from 'next/link';
 import { clientEnv } from '@/lib/env';
+import { mockProducts } from '@/lib/mock-data';
 
 const ProductSchema = z.object({
   id: z.string(),
@@ -20,20 +20,20 @@ type Product = z.infer<typeof ProductSchema>;
 async function getProducts(): Promise<Product[]> {
   try {
     const res = await fetch(`${clientEnv.NEXT_PUBLIC_API_URL}/products`, {
-      next: { revalidate: 3600 }, // Revalidate every hour (ISR)
+      next: { revalidate: 3600 },
+      signal: AbortSignal.timeout(5000),
     });
 
     if (!res.ok) {
       console.error(`Failed to fetch products: ${res.status}`);
-      return [];
+      return mockProducts;
     }
 
     const data = await res.json();
     return ProductListSchema.parse(data);
-  } catch (error) {
-    // API may be unavailable during build or deployment — return empty list
-    console.error('Products API unavailable:', error);
-    return [];
+  } catch {
+    // API unavailable — use mock data for local development
+    return mockProducts;
   }
 }
 
@@ -56,13 +56,9 @@ export default async function ProductsPage() {
         {products.map((product) => (
           <Link key={product.id} href={`/products/${product.slug}`}>
             <div className="overflow-hidden rounded-xl border border-gray-200 transition-shadow hover:shadow-md">
-              <Image
-                src={`https://cdn.ewbanking.com/products/${product.slug}.jpg`}
-                alt={product.name}
-                width={400}
-                height={240}
-                className="h-48 w-full object-cover"
-              />
+              <div className="flex h-48 w-full items-center justify-center bg-gradient-to-br from-ewb-purple/10 to-ewb-navy/10">
+                <span className="text-2xl font-bold text-ewb-purple/30">{product.name}</span>
+              </div>
               <div className="p-4">
                 <h2 className="font-semibold text-gray-900">{product.name}</h2>
                 <p className="mt-1 text-sm text-gray-600">{product.summary}</p>

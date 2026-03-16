@@ -14,14 +14,14 @@ export function AccountActions({
     <div className="flex gap-2">
       <button
         type="button"
-        onClick={() => onTransfer(accountId)}
+        onClick={() => { onTransfer(accountId); }}
         className="rounded-lg bg-ewb-purple px-4 py-2 text-sm text-white hover:bg-ewb-purple-700"
       >
         Transfer
       </button>
       <button
         type="button"
-        onClick={() => onViewHistory(accountId)}
+        onClick={() => { onViewHistory(accountId); }}
         className="rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
       >
         History

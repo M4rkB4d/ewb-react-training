@@ -28,7 +28,8 @@ export function PaymentForm() {
     handleSubmit,
     formState: { errors },
   } = useForm<PaymentFormData>({
-    resolver: zodResolver(paymentSchema),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- z.coerce widens input type; safe at runtime
+    resolver: zodResolver(paymentSchema) as any,
     defaultValues: {
       accountId: draft.accountId,
       amount: draft.amount || undefined,
@@ -61,7 +62,7 @@ export function PaymentForm() {
             type={field.type}
             placeholder={field.placeholder}
             value={draft.fields[field.name] ?? ''}
-            onChange={(e) => draft.setField(field.name, e.target.value)}
+            onChange={(e) => { draft.setField(field.name, e.target.value); }}
             className="mt-1 w-full rounded border px-3 py-2"
             required={field.required}
           />
@@ -122,7 +123,7 @@ export function PaymentForm() {
       </div>
 
       <div className="flex gap-2">
-        <Button type="button" variant="outline" onClick={() => draft.setStep('biller')}>
+        <Button type="button" variant="outline" onClick={() => { draft.setStep('biller'); }}>
           Back
         </Button>
         <Button type="submit">Review Payment</Button>

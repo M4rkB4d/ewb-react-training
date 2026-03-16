@@ -6,7 +6,7 @@ import {
 export function DesignSystemPage() {
   return (
     <div className="mx-auto max-w-4xl space-y-12 p-8">
-      <h1 className="text-3xl font-bold">EWB Design System</h1>
+      <h1 className="text-3xl font-bold text-ewb-navy">EWB Design System</h1>
 
       <section>
         <h2 className="mb-4 text-xl font-semibold">Buttons</h2>

@@ -7,4 +7,4 @@ export { Alert } from './alert';
 export { ConfirmationDialog } from './confirmation-dialog';
 export { CurrencyDisplay } from './currency-display';
 export { LocaleDate } from './locale-date';
-export { MaskedValue } from './masked-value';
+export { DataTable } from './data-table';

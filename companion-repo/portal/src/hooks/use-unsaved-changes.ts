@@ -15,7 +15,7 @@ export function useUnsavedChanges(hasUnsavedChanges: boolean) {
     };
 
     window.addEventListener('beforeunload', handleBeforeUnload);
-    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+    return () => { window.removeEventListener('beforeunload', handleBeforeUnload); };
   }, [hasUnsavedChanges]);
 
   return blocker;

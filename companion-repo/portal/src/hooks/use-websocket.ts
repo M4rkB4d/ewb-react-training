@@ -8,16 +8,16 @@ type ConnectionState = 'connecting' | 'connected' | 'disconnected';
 export function useWebSocket(url: string) {
   const [state, setState] = useState<ConnectionState>('disconnected');
   const wsRef = useRef<ReturnType<typeof createWebSocket> | null>(null);
-  const token = useAuthStore((s) => s.accessToken);
+  const isAuthenticated = useAuthStore((s) => s.status === 'authenticated');
 
   useEffect(() => {
-    if (token == null) return;
+    if (!isAuthenticated) return;
 
+    // Cookie-based auth — no token passed; HttpOnly cookies sent on upgrade request
     const ws = createWebSocket({
       url,
-      token,
-      onOpen: () => setState('connected'),
-      onClose: () => setState('disconnected'),
+      onOpen: () => { setState('connected'); },
+      onClose: () => { setState('disconnected'); },
     });
 
     wsRef.current = ws;
@@ -28,7 +28,7 @@ export function useWebSocket(url: string) {
       wsRef.current = null;
       setState('disconnected');
     };
-  }, [url, token]);
+  }, [url, isAuthenticated]);
 
   const subscribe = (channel: string, handler: (data: unknown) => void) => {
     return wsRef.current?.subscribe(channel, handler) ?? (() => {});

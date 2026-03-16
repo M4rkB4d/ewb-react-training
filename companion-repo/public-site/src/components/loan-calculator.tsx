@@ -8,8 +8,10 @@ export function LoanCalculator() {
   const [rate, setRate] = useState(8.5);
   const [term, setTerm] = useState(12);
 
-  const monthly = (principal * (rate / 100 / 12)) /
-    (1 - Math.pow(1 + rate / 100 / 12, -term));
+  const monthly = rate === 0
+    ? principal / term
+    : (principal * (rate / 100 / 12)) /
+      (1 - Math.pow(1 + rate / 100 / 12, -term));
 
   return (
     <div className="rounded-xl border border-gray-200 p-6">

@@ -20,7 +20,7 @@ export function HeroSection() {
             Explore Products
           </Link>
           <Link
-            href="/apply"
+            href="/apply/status"
             className="rounded-lg border border-white/30 px-6 py-3 font-semibold text-white hover:bg-white/10"
           >
             Apply Now

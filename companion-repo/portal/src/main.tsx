@@ -14,11 +14,19 @@ initMonitoring();
 initAzureInsights();
 initWebVitals();
 
+async function enableMocking() {
+  if (!import.meta.env.DEV) return;
+  const { worker } = await import('./test/mocks/browser');
+  await worker.start({ onUnhandledRequest: 'bypass' });
+}
+
 const root = document.getElementById('root');
 if (root == null) throw new Error('Root element not found');
 
-createRoot(root).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-);
+enableMocking().then(() => {
+  createRoot(root).render(
+    <StrictMode>
+      <App />
+    </StrictMode>,
+  );
+});

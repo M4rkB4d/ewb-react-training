@@ -19,7 +19,7 @@ export function AppIntlProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     setIsLoading(true);
-    const loader = messageLoaders[locale] ?? messageLoaders['en-US'];
+    const loader = messageLoaders[locale] ?? messageLoaders['en-US']!;
     loader().then((loaded) => {
       setMessages(loaded);
       setIsLoading(false);

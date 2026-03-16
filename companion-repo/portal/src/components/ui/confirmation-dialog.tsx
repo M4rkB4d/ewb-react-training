@@ -34,11 +34,12 @@ export function ConfirmationDialog({
   return (
     <dialog
       ref={dialogRef}
+      aria-labelledby="confirm-dialog-title"
       className="rounded-xl border border-gray-200 bg-white p-0 shadow-xl backdrop:bg-black/50"
       onClose={onCancel}
     >
       <div className="p-6">
-        <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
+        <h2 id="confirm-dialog-title" className="text-lg font-semibold text-gray-900">{title}</h2>
         <p className="mt-2 text-sm text-gray-600">{message}</p>
         <div className="mt-6 flex justify-end gap-2">
           <button

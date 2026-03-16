@@ -33,16 +33,17 @@ describe('searchQuerySchema', () => {
 });
 
 describe('amountSchema', () => {
-  it('converts pesos to centavos', () => {
-    // User enters ₱1,000 → schema returns 100000 centavos
-    expect(amountSchema.parse(1000)).toBe(100_000);
+  it('accepts valid centavo amounts', () => {
+    // Input is already in centavos — ₱1,000.00 = 100000 centavos
+    expect(amountSchema.parse(100_000)).toBe(100_000);
+    expect(amountSchema.parse(1)).toBe(1); // ₱0.01
+    expect(amountSchema.parse(100_000_000)).toBe(100_000_000); // ₱1,000,000.00 (max)
   });
 
-  it('rounds fractional centavos to nearest integer', () => {
-    // ₱99.999 → 9999.9 → rounds to 10000 centavos
-    expect(amountSchema.parse(99.999)).toBe(10_000);
-    // ₱50.555 → 5055.5 → rounds to 5056 centavos
-    expect(amountSchema.parse(50.555)).toBe(5056);
+  it('rejects non-integer centavo values', () => {
+    // Centavos must be integers — no fractional centavos
+    expect(() => amountSchema.parse(99.5)).toThrow();
+    expect(() => amountSchema.parse(50.555)).toThrow();
   });
 
   it('rejects zero and negative amounts', () => {
@@ -50,7 +51,7 @@ describe('amountSchema', () => {
     expect(() => amountSchema.parse(-100)).toThrow();
   });
 
-  it('rejects amounts over ₱1,000,000', () => {
-    expect(() => amountSchema.parse(1_000_001)).toThrow();
+  it('rejects amounts over ₱1,000,000 (100,000,000 centavos)', () => {
+    expect(() => amountSchema.parse(100_000_001)).toThrow();
   });
 });

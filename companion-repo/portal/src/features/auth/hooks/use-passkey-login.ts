@@ -41,7 +41,7 @@ export function usePasskeyLogin() {
 
     onSuccess: (data) => {
       setAuth(data.user, data.accessToken);
-      navigate('/dashboard');
+      navigate('/');
     },
   });
 }

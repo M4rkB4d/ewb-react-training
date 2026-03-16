@@ -6,7 +6,7 @@ import { ErrorAlert } from '@/components/error/error-alert';
 
 export function PaymentReview() {
   const draft = usePaymentDraftStore();
-  const { submitPayment, isPending, error } = usePayment();
+  const { submit, isPending, error } = usePayment();
 
   const fee = 1_500; // ₱15 processing fee in centavos
   // draft.amount is raw user input in pesos — multiply by 100 to convert to centavos
@@ -15,7 +15,7 @@ export function PaymentReview() {
 
   const handleConfirm = () => {
     if (draft.biller == null) return;
-    submitPayment({
+    submit({
       billerId: draft.biller.id,
       accountId: draft.accountId,
       amount: amountCentavos, // Converted from pesos input
@@ -57,7 +57,7 @@ export function PaymentReview() {
         <Button
           type="button"
           variant="outline"
-          onClick={() => draft.setStep('details')}
+          onClick={() => { draft.setStep('details'); }}
           disabled={isPending}
         >
           Back

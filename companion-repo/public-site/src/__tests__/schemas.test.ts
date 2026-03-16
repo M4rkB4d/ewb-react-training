@@ -65,17 +65,20 @@ describe('Product Schema', () => {
 });
 
 describe('Rate Alert Schema', () => {
+  // Must match app/api/rate-alerts/route.ts
   const RateAlertSchema = z.object({
     email: z.string().email(),
-    productId: z.string().min(1),
-    threshold: z.number().positive(),
+    currency: z.string().length(3),
+    targetRate: z.number().positive(),
+    direction: z.enum(['above', 'below']),
   });
 
   it('validates a rate alert subscription', () => {
     const result = RateAlertSchema.safeParse({
       email: 'user@example.com',
-      productId: 'prod-001',
-      threshold: 5.0,
+      currency: 'USD',
+      targetRate: 56.50,
+      direction: 'above',
     });
 
     expect(result.success).toBe(true);
@@ -84,8 +87,20 @@ describe('Rate Alert Schema', () => {
   it('rejects invalid email', () => {
     const result = RateAlertSchema.safeParse({
       email: 'not-an-email',
-      productId: 'prod-001',
-      threshold: 5.0,
+      currency: 'USD',
+      targetRate: 56.50,
+      direction: 'above',
+    });
+
+    expect(result.success).toBe(false);
+  });
+
+  it('rejects invalid direction', () => {
+    const result = RateAlertSchema.safeParse({
+      email: 'user@example.com',
+      currency: 'USD',
+      targetRate: 56.50,
+      direction: 'sideways',
     });
 
     expect(result.success).toBe(false);

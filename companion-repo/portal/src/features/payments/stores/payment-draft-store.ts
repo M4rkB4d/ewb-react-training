@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { Biller } from '../types';
+import type { Biller, PaymentReceipt } from '../types';
 
 type WizardStep = 'biller' | 'details' | 'review' | 'receipt';
 
@@ -11,6 +11,7 @@ interface PaymentDraft {
   amount: number;
   fields: Record<string, string>;
   notes: string;
+  receipt: PaymentReceipt | null;
 }
 
 interface PaymentDraftState extends PaymentDraft {
@@ -20,6 +21,7 @@ interface PaymentDraftState extends PaymentDraft {
   setAmount: (amount: number) => void;
   setField: (name: string, value: string) => void;
   setNotes: (notes: string) => void;
+  setReceipt: (receipt: PaymentReceipt) => void;
   reset: () => void;
 }
 
@@ -30,6 +32,7 @@ const initialState: PaymentDraft = {
   amount: 0,
   fields: {},
   notes: '',
+  receipt: null,
 };
 
 export const usePaymentDraftStore = create<PaymentDraftState>()((set) => ({
@@ -41,5 +44,6 @@ export const usePaymentDraftStore = create<PaymentDraftState>()((set) => ({
   setField: (name, value) =>
     set((state) => ({ fields: { ...state.fields, [name]: value } })),
   setNotes: (notes) => set({ notes }),
+  setReceipt: (receipt) => set({ receipt }),
   reset: () => set(initialState),
 }));

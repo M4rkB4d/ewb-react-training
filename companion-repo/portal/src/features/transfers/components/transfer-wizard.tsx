@@ -43,7 +43,8 @@ export function TransferWizard({ accounts, onSubmit }: TransferWizardProps) {
     formState: { errors, isSubmitting },
     trigger,
   } = useForm<TransferData>({
-    resolver: zodResolver(transferSchema),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- z.coerce widens input type; safe at runtime
+    resolver: zodResolver(transferSchema) as any,
     mode: 'onBlur',
   });
 

@@ -37,7 +37,7 @@ export function PasskeyPrompt({ onDismiss }: PasskeyPromptProps) {
         <Button
           type="button"
           size="sm"
-          onClick={() => register.mutate()}
+          onClick={() => { register.mutate(); }}
           disabled={register.isPending}
         >
           {register.isPending ? 'Setting up...' : 'Set Up Now'}

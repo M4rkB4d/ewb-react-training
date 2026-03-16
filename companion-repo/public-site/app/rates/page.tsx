@@ -1,6 +1,7 @@
 // app/rates/page.tsx
 import { z } from 'zod';
 import { clientEnv } from '@/lib/env';
+import { mockRates } from '@/lib/mock-data';
 
 const RateSchema = z.object({
   currency: z.string(),
@@ -15,18 +16,19 @@ const RateListSchema = z.array(RateSchema);
 async function getRates() {
   try {
     const res = await fetch(`${clientEnv.NEXT_PUBLIC_API_URL}/rates/forex`, {
-      next: { revalidate: 60 }, // Refresh every 60 seconds
+      next: { revalidate: 60 },
+      signal: AbortSignal.timeout(5000),
     });
 
     if (!res.ok) {
       console.error(`Failed to fetch rates: ${res.status}`);
-      return [];
+      return mockRates;
     }
 
     return RateListSchema.parse(await res.json());
   } catch (error) {
     console.error('Rates API unavailable:', error);
-    return [];
+    return mockRates;
   }
 }
 

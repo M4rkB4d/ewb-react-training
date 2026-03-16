@@ -1,4 +1,3 @@
-// src/components/error/error-alert.tsx
 import { Alert } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { AppError } from '@/lib/errors';

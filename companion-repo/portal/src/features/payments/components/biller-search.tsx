@@ -28,7 +28,7 @@ export function BillerSearch() {
         type="search"
         placeholder="Search billers (e.g., Meralco, PLDT, Globe)"
         value={query}
-        onChange={(e) => setQuery(e.target.value)}
+        onChange={(e) => { setQuery(e.target.value); }}
         className="w-full rounded border px-3 py-2"
         aria-label="Search billers"
       />
@@ -36,12 +36,14 @@ export function BillerSearch() {
       {isLoading && <p className="text-sm text-gray-500">Searching...</p>}
 
       {billers != null && billers.length > 0 && (
-        <ul className="space-y-2" aria-label="Search results">
+        <ul className="space-y-2" role="listbox" aria-label="Search results">
           {billers.map((biller) => (
             <li key={biller.id}>
               <button
                 type="button"
-                onClick={() => handleSelect(biller)}
+                role="option"
+                aria-selected={false}
+                onClick={() => { handleSelect(biller); }}
                 className="flex w-full items-center gap-3 rounded border p-3 text-left hover:bg-gray-50"
               >
                 <span className="font-medium">{biller.name}</span>

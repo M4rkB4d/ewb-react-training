@@ -22,7 +22,7 @@ export function AccountSelector({ value, onChange, label = 'Select Account' }: A
       <select
         id={selectId}
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => { onChange(e.target.value); }}
         disabled={isLoading}
         className="w-full rounded border px-3 py-2"
       >

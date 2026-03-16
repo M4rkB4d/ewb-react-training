@@ -1,5 +1,5 @@
 // src/lib/session.ts
-import { redis } from './redis';
+import { getRedis } from './redis';
 import { z } from 'zod';
 import crypto from 'node:crypto';
 
@@ -25,7 +25,7 @@ export async function createSession(data: Omit<Session, 'createdAt' | 'lastActiv
     lastActivity: now,
   };
 
-  await redis.setex(
+  await getRedis().setex(
     `session:${sessionId}`,
     SESSION_TTL,
     JSON.stringify(session),
@@ -35,17 +35,17 @@ export async function createSession(data: Omit<Session, 'createdAt' | 'lastActiv
 }
 
 export async function getSession(sessionId: string): Promise<Session | null> {
-  const data = await redis.get(`session:${sessionId}`);
+  const data = await getRedis().get(`session:${sessionId}`);
   if (!data) return null;
 
   const session = SessionSchema.parse(JSON.parse(data));
 
   // Refresh TTL on activity (sliding expiration)
-  await redis.expire(`session:${sessionId}`, SESSION_TTL);
+  await getRedis().expire(`session:${sessionId}`, SESSION_TTL);
 
   // Update last activity
   session.lastActivity = new Date().toISOString();
-  await redis.setex(
+  await getRedis().setex(
     `session:${sessionId}`,
     SESSION_TTL,
     JSON.stringify(session),
@@ -55,5 +55,5 @@ export async function getSession(sessionId: string): Promise<Session | null> {
 }
 
 export async function destroySession(sessionId: string): Promise<void> {
-  await redis.del(`session:${sessionId}`);
+  await getRedis().del(`session:${sessionId}`);
 }

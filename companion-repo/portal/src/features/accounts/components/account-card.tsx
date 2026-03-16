@@ -55,7 +55,7 @@ export function AccountCard({
           <span
             aria-hidden="true"
             className={`inline-block h-2 w-2 rounded-full ${
-              isActive ? 'bg-ewb-lime-500' : 'bg-red-500'
+              isActive ? 'bg-emerald-500' : 'bg-red-500'
             }`}
           />
           <span className="sr-only">{isActive ? 'Active account' : 'Inactive account'}</span>
@@ -76,7 +76,7 @@ export function AccountCard({
           {onTransfer != null && (
             <button
               type="button"
-              onClick={() => onTransfer(accountNumber)}
+              onClick={() => { onTransfer(accountNumber); }}
               className="rounded-lg bg-ewb-purple px-4 py-2 text-sm text-white hover:bg-ewb-purple-700"
             >
               Transfer
@@ -85,7 +85,7 @@ export function AccountCard({
           {onViewDetails != null && (
             <button
               type="button"
-              onClick={() => onViewDetails(accountNumber)}
+              onClick={() => { onViewDetails(accountNumber); }}
               className="rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
             >
               View Details

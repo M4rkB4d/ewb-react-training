@@ -14,9 +14,9 @@ interface AccountFilterState {
 export const useAccountFilterStore = create<AccountFilterState>((set, get) => ({
   accountType: 'all',
   searchQuery: '',
-  setAccountType: (accountType) => set({ accountType }),
-  setSearchQuery: (searchQuery) => set({ searchQuery }),
-  reset: () => set({ accountType: 'all', searchQuery: '' }),
+  setAccountType: (accountType) => { set({ accountType }); },
+  setSearchQuery: (searchQuery) => { set({ searchQuery }); },
+  reset: () => { set({ accountType: 'all', searchQuery: '' }); },
   hasActiveFilters: () => {
     const state = get();
     return state.accountType !== 'all' || state.searchQuery !== '';

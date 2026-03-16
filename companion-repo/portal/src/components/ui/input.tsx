@@ -1,4 +1,5 @@
 // src/components/ui/input.tsx
+import { useId } from 'react';
 import { cn } from '@/lib/utils';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -17,7 +18,8 @@ export function Input({
   ref,
   ...props
 }: InputProps) {
-  const inputId = id ?? label.toLowerCase().replace(/\s+/g, '-');
+  const generatedId = useId();
+  const inputId = id ?? generatedId;
   const errorId = error != null ? `${inputId}-error` : undefined;
   const hintId = hint != null ? `${inputId}-hint` : undefined;
 

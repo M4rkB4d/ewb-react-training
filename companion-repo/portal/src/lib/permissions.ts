@@ -32,8 +32,8 @@ const rolePermissions: Record<Role, Set<Permission>> = {
   admin: new Set(['accounts:read', 'accounts:write', 'transfers:create', 'transfers:approve', 'users:manage', 'reports:view', 'settings:manage']),
 };
 
-export function hasPermission(role: Role | string, permission: Permission | string): boolean {
-  const perms = rolePermissions[role as Role];
+export function hasPermission(role: Role, permission: Permission): boolean {
+  const perms = rolePermissions[role];
   if (!perms) return false;
-  return perms.has(permission as Permission);
+  return perms.has(permission);
 }

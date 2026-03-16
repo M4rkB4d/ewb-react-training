@@ -195,10 +195,7 @@ type LoginFormData = z.infer<typeof loginSchema>;
 
 export function LoginForm() {
   const setAuth = useAuthStore((s) => s.setAuth);
-  const [mfaState, setMfaState] = useState<{
-    mfaToken: string;
-    methods: string[];
-  } | null>(null);
+  const [mfaPending, setMfaPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const {
@@ -209,8 +206,8 @@ export function LoginForm() {
     resolver: zodResolver(loginSchema),
   });
 
-  if (mfaState != null) {
-    return <MfaForm mfaToken={mfaState.mfaToken} methods={mfaState.methods} />;
+  if (mfaPending) {
+    return <MfaForm />;
   }
 
   const onSubmit = async (data: LoginFormData) => {
@@ -218,7 +215,9 @@ export function LoginForm() {
     try {
       const result = await login(data.username, data.password);
       if (result.mfaRequired) {
-        setMfaState({ mfaToken: result.mfaToken, methods: result.methods });
+        // Store MFA token in auth store; MfaForm reads it from there
+        useAuthStore.getState().setMfaRequired(result.mfaToken, result.methods);
+        setMfaPending(true);
       } else {
         setAuth(result.user, result.accessToken);
       }

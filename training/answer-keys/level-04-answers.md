@@ -120,7 +120,8 @@ export const useTransactionFilterStore = create<TransactionFilterState>((set, ge
 // src/features/accounts/queries.ts
 export const accountKeys = {
   all: ['accounts'] as const,
-  detail: (id: string) => [...accountKeys.all, id] as const,
+  details: () => [...accountKeys.all, 'detail'] as const,
+  detail: (id: string) => [...accountKeys.details(), id] as const,
   transactions: (id: string) => [...accountKeys.detail(id), 'transactions'] as const,
 };
 

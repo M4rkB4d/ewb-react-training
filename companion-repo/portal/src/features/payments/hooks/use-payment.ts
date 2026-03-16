@@ -9,11 +9,13 @@ import type { PaymentRequest, PaymentReceipt } from '../types';
 export function usePayment() {
   const queryClient = useQueryClient();
   const setStep = usePaymentDraftStore((s) => s.setStep);
+  const setReceipt = usePaymentDraftStore((s) => s.setReceipt);
 
   const mutation = useMutation({
     mutationFn: (request: PaymentRequest) => paymentApi.submit(request),
     onSuccess: (receipt: PaymentReceipt) => {
-      // 1. Move wizard to receipt step
+      // 1. Store receipt in shared state and move wizard to receipt step
+      setReceipt(receipt);
       setStep('receipt');
 
       // 2. Invalidate related queries
@@ -41,7 +43,7 @@ export function usePayment() {
   });
 
   return {
-    submitPayment: mutation.mutate,
+    submit: mutation.mutate,
     isPending: mutation.isPending,
     error: mutation.error,
     receipt: mutation.data,

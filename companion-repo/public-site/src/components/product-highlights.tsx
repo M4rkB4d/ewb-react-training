@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { z } from 'zod';
 import { clientEnv } from '@/lib/env';
+import { mockProducts } from '@/lib/mock-data';
 
 const ProductSchema = z.object({
   id: z.string(),
@@ -15,14 +16,15 @@ async function getFeaturedProducts() {
   try {
     const res = await fetch(`${clientEnv.NEXT_PUBLIC_API_URL}/products`, {
       next: { revalidate: 3600 },
+      signal: AbortSignal.timeout(5000),
     });
 
-    if (!res.ok) return [];
+    if (!res.ok) return mockProducts.slice(0, 3);
 
     const data = await res.json();
     return z.array(ProductSchema).parse(data).slice(0, 3);
   } catch {
-    return [];
+    return mockProducts.slice(0, 3);
   }
 }
 

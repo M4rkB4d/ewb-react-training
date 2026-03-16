@@ -11,7 +11,7 @@ export function AccountDetail({ accountId }: { accountId: string }) {
         <span
           aria-hidden="true"
           className={`h-2 w-2 rounded-full ${
-            connectionState === 'connected' ? 'bg-ewb-lime-500' : 'bg-gray-300'
+            connectionState === 'connected' ? 'bg-emerald-500' : 'bg-gray-300'
           }`}
         />
         {connectionState === 'connected' ? 'Live' : 'Connecting...'}

@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { z } from 'zod';
 import { clientEnv } from '@/lib/env';
+import { mockRates } from '@/lib/mock-data';
 
 const RateSchema = z.object({
   currency: z.string(),
@@ -15,14 +16,15 @@ async function getTopRates() {
   try {
     const res = await fetch(`${clientEnv.NEXT_PUBLIC_API_URL}/rates/forex`, {
       next: { revalidate: 60 },
+      signal: AbortSignal.timeout(5000),
     });
 
-    if (!res.ok) return [];
+    if (!res.ok) return mockRates.slice(0, 4);
 
     const data = await res.json();
     return z.array(RateSchema).parse(data).slice(0, 4);
   } catch {
-    return [];
+    return mockRates.slice(0, 4);
   }
 }
 

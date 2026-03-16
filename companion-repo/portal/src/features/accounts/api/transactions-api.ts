@@ -6,7 +6,7 @@ const transactionSchema = z.object({
   id: z.string(),
   date: z.string().datetime(),
   description: z.string(),
-  amount: z.number().int(), // centavos
+  amount: z.number().int().nonnegative(), // centavos (unsigned — type field carries direction)
   type: z.enum(['credit', 'debit']),
   balance: z.number().int().nonnegative(), // centavos
   reference: z.string(),

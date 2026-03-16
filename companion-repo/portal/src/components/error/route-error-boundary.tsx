@@ -14,7 +14,7 @@ export function RouteErrorBoundary() {
           <p className="mt-2 text-gray-600">
             The page you are looking for does not exist.
           </p>
-          <Button className="mt-4" onClick={() => navigate('/dashboard')}>
+          <Button className="mt-4" onClick={() => navigate('/')}>
             Go to Dashboard
           </Button>
         </div>
@@ -35,7 +35,7 @@ export function RouteErrorBoundary() {
       <p className="mt-2 text-gray-600">
         An unexpected error occurred. Please try refreshing the page.
       </p>
-      <Button className="mt-4" onClick={() => window.location.reload()}>
+      <Button className="mt-4" onClick={() => { window.location.reload(); }}>
         Refresh Page
       </Button>
     </div>

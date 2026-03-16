@@ -1,12 +1,11 @@
 // src/features/payments/components/payment-receipt.tsx
 import { usePaymentDraftStore } from '../stores/payment-draft-store';
-import { usePayment } from '../hooks/use-payment';
 import { formatPHP } from '@/lib/format';
 import { Button } from '@/components/ui/button';
 
 export function PaymentReceipt() {
   const reset = usePaymentDraftStore((s) => s.reset);
-  const { receipt } = usePayment();
+  const receipt = usePaymentDraftStore((s) => s.receipt);
 
   if (receipt == null) {
     return <p className="text-gray-500">No receipt available.</p>;

@@ -44,8 +44,8 @@ export function PinInput({ onChange }: PinInputProps) {
           inputMode="numeric"
           maxLength={1}
           value={digit}
-          onChange={(e) => handleChange(index, e.target.value)}
-          onKeyDown={(e) => handleKeyDown(index, e)}
+          onChange={(e) => { handleChange(index, e.target.value); }}
+          onKeyDown={(e) => { handleKeyDown(index, e); }}
           className="h-12 w-12 rounded-lg border border-gray-300 text-center text-xl"
           aria-label={`PIN digit ${index + 1}`}
         />

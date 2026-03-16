@@ -2,7 +2,7 @@
 import { Navigate } from 'react-router';
 import { useAuthStore } from '@/stores/auth-store';
 import { hasMinimumRole } from '@/lib/permissions';
-import type { Role } from '@/stores/auth-store';
+import type { Role } from '@/types/auth';
 
 interface RoleRouteProps {
   requiredRole: Role;

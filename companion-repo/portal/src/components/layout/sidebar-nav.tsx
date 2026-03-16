@@ -21,8 +21,8 @@ export function SidebarNav() {
               className={({ isActive }) =>
                 `flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                   isActive
-                    ? 'bg-ewb-purple-100 text-ewb-purple-700'
-                    : 'text-gray-700 hover:bg-gray-100'
+                    ? 'bg-ewb-purple-700 text-ewb-gold-300'
+                    : 'text-ewb-purple-100 hover:bg-ewb-purple-800 hover:text-white'
                 }`
               }
             >

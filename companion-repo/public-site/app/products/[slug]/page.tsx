@@ -1,8 +1,8 @@
 // app/products/[slug]/page.tsx
 import { notFound } from 'next/navigation';
-import Image from 'next/image';
 import { z } from 'zod';
 import { clientEnv } from '@/lib/env';
+import { mockProducts } from '@/lib/mock-data';
 
 const ProductDetailSchema = z.object({
   id: z.string(),
@@ -22,30 +22,39 @@ async function getProduct(slug: string): Promise<ProductDetail | null> {
   try {
     const res = await fetch(
       `${clientEnv.NEXT_PUBLIC_API_URL}/products/${slug}`,
-      { next: { revalidate: 3600 } },
+      { next: { revalidate: 3600 }, signal: AbortSignal.timeout(5000) },
     );
 
-    if (res.status === 404) return null;
-    if (!res.ok) return null;
+    if (res.status === 404 || !res.ok) {
+      // API returned error — try mock data for local development
+      const mock = mockProducts.find((p) => p.slug === slug);
+      return mock ? ProductDetailSchema.parse(mock) : null;
+    }
 
     return ProductDetailSchema.parse(await res.json());
   } catch {
-    return null;
+    // API unavailable — fall back to mock data for local development
+    const mock = mockProducts.find((p) => p.slug === slug);
+    return mock ? ProductDetailSchema.parse(mock) : null;
   }
 }
 
 export async function generateStaticParams() {
   try {
-    const res = await fetch(`${clientEnv.NEXT_PUBLIC_API_URL}/products`);
-    if (!res.ok) return [];
+    const res = await fetch(`${clientEnv.NEXT_PUBLIC_API_URL}/products`, {
+      signal: AbortSignal.timeout(5000),
+    });
+    if (!res.ok) {
+      return mockProducts.map((p) => ({ slug: p.slug }));
+    }
     const products = z.array(z.object({ slug: z.string() })).parse(await res.json());
 
     return products.map((product) => ({
       slug: product.slug,
     }));
   } catch {
-    // API unavailable at build time — fall back to dynamic rendering
-    return [];
+    // API unavailable at build time — use mock slugs for static generation
+    return mockProducts.map((p) => ({ slug: p.slug }));
   }
 }
 
@@ -67,7 +76,7 @@ export async function generateMetadata({
     openGraph: {
       title: product.name,
       description: product.description.slice(0, 160),
-      images: [`https://cdn.ewbanking.com/products/${product.slug}.jpg`],
+      images: [`/products/${product.slug}.jpg`],
     },
   };
 }
@@ -87,14 +96,9 @@ export default async function ProductPage({
   return (
     <main className="mx-auto max-w-7xl px-4 py-12">
       <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
-        <Image
-          src={`https://cdn.ewbanking.com/products/${product.slug}.jpg`}
-          alt={product.name}
-          width={600}
-          height={400}
-          className="rounded-xl"
-          priority
-        />
+        <div className="flex h-[400px] w-full items-center justify-center rounded-xl bg-gradient-to-br from-ewb-purple/10 to-ewb-navy/10">
+          <span className="text-3xl font-bold text-ewb-purple/30">{product.name}</span>
+        </div>
 
         <div>
           <h1 className="text-3xl font-bold text-gray-900">{product.name}</h1>
@@ -114,9 +118,9 @@ export default async function ProductPage({
 
           <h2 className="mt-8 text-xl font-semibold text-gray-900">Features</h2>
           <ul className="mt-4 space-y-2">
-            {product.features.map((feature, i) => (
-              <li key={i} className="flex items-start gap-2">
-                <span className="mt-1 text-ewb-lime-700">✓</span>
+            {product.features.map((feature) => (
+              <li key={feature} className="flex items-start gap-2">
+                <span className="mt-1 text-emerald-700">✓</span>
                 <span className="text-gray-600">{feature}</span>
               </li>
             ))}
@@ -124,8 +128,8 @@ export default async function ProductPage({
 
           <h2 className="mt-8 text-xl font-semibold text-gray-900">Requirements</h2>
           <ul className="mt-4 space-y-2">
-            {product.requirements.map((req, i) => (
-              <li key={i} className="flex items-start gap-2">
+            {product.requirements.map((req) => (
+              <li key={req} className="flex items-start gap-2">
                 <span className="mt-1 text-gray-400">•</span>
                 <span className="text-gray-600">{req}</span>
               </li>

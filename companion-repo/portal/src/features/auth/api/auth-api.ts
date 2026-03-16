@@ -33,7 +33,7 @@ export async function login(username: string, password: string): Promise<LoginRe
   return loginResponseSchema.parse(response.data);
 }
 
-const mfaResponseSchema = z.object({
+const authSuccessSchema = z.object({
   user: z.object({
     id: z.string(),
     name: z.string(),
@@ -43,22 +43,22 @@ const mfaResponseSchema = z.object({
   accessToken: z.string(),
 });
 
-export async function verifyMfa(mfaToken: string, code: string): Promise<z.infer<typeof mfaResponseSchema>> {
+export async function verifyMfa(mfaToken: string, code: string): Promise<z.infer<typeof authSuccessSchema>> {
   const response = await axios.post(
     `${env.VITE_API_BASE_URL}/auth/mfa`,
     { mfaToken, code },
     { withCredentials: true },
   );
-  return mfaResponseSchema.parse(response.data);
+  return authSuccessSchema.parse(response.data);
 }
 
-export async function refreshSession(): Promise<z.infer<typeof mfaResponseSchema>> {
+export async function refreshSession(): Promise<z.infer<typeof authSuccessSchema>> {
   const response = await axios.post(
     `${env.VITE_API_BASE_URL}/auth/refresh`,
     null,
     { withCredentials: true },
   );
-  return mfaResponseSchema.parse(response.data);
+  return authSuccessSchema.parse(response.data);
 }
 
 export async function logout(): Promise<void> {

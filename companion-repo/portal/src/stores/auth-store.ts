@@ -35,33 +35,33 @@ export const useAuthStore = create<AuthState>((set) => ({
   mfaMethods: [],
 
   setAuth: (user, accessToken) =>
-    set({
+    { set({
       user,
       accessToken,
       isAuthenticated: true,
       status: 'authenticated',
       mfaToken: null,
       mfaMethods: [],
-    }),
+    }); },
 
   clearAuth: () =>
-    set({
+    { set({
       user: null,
       accessToken: null,
       isAuthenticated: false,
       status: 'unauthenticated',
       mfaToken: null,
       mfaMethods: [],
-    }),
+    }); },
 
   setMfaRequired: (mfaToken, mfaMethods) =>
-    set({
+    { set({
       status: 'mfa-required',
       mfaToken,
       mfaMethods,
-    }),
+    }); },
 
-  setLoading: () => set({ status: 'loading' }),
+  setLoading: () => { set({ status: 'loading' }); },
 
-  setError: () => set({ status: 'unauthenticated' }),
+  setError: () => { set({ status: 'unauthenticated' }); },
 }));

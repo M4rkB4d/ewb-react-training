@@ -7,7 +7,7 @@ import { useAuthStore } from '@/stores/auth-store';
 export function useLogin() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { setAuth, setMfaRequired, setLoading, setError } = useAuthStore();
+  const { setAuth, setMfaRequired, setLoading, setError } = useAuthStore.getState();
 
   // Get the page the user was trying to visit before being redirected
   const from = (location.state as { from?: string })?.from ?? '/';

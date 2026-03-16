@@ -1,6 +1,6 @@
 // src/lib/rate-limit.ts
 import crypto from 'node:crypto';
-import { redis } from './redis';
+import { getRedis } from './redis';
 
 interface RateLimitResult {
   allowed: boolean;
@@ -18,21 +18,21 @@ export async function rateLimit(
   const windowStart = now - windowSeconds;
 
   // Remove old entries
-  await redis.zremrangebyscore(redisKey, 0, windowStart);
+  await getRedis().zremrangebyscore(redisKey, 0, windowStart);
 
   // Count current entries
-  const count = await redis.zcard(redisKey);
+  const count = await getRedis().zcard(redisKey);
 
   if (count >= limit) {
-    const oldestEntry = await redis.zrange(redisKey, 0, 0, 'WITHSCORES');
+    const oldestEntry = await getRedis().zrange(redisKey, 0, 0, 'WITHSCORES');
     const resetAt = new Date((Number(oldestEntry[1]) + windowSeconds) * 1000);
 
     return { allowed: false, remaining: 0, resetAt };
   }
 
   // Add current request
-  await redis.zadd(redisKey, now, `${now}:${crypto.randomUUID()}`);
-  await redis.expire(redisKey, windowSeconds);
+  await getRedis().zadd(redisKey, now, `${now}:${crypto.randomUUID()}`);
+  await getRedis().expire(redisKey, windowSeconds);
 
   return {
     allowed: true,

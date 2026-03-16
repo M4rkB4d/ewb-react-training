@@ -16,5 +16,5 @@ export function on<T>(event: string, handler: EventHandler<T>): () => void {
 }
 
 export function emit<T>(event: string, payload: T): void {
-  handlers.get(event)?.forEach((handler) => handler(payload));
+  handlers.get(event)?.forEach((handler) => { handler(payload); });
 }

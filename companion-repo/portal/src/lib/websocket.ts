@@ -1,9 +1,16 @@
 // src/lib/websocket.ts
+import { z } from 'zod';
+
 type MessageHandler = (data: unknown) => void;
+
+// Zod schema for WebSocket message envelope
+const wsMessageSchema = z.object({
+  type: z.string(),
+  payload: z.unknown(),
+});
 
 interface WebSocketOptions {
   url: string;
-  token: string;
   onOpen?: () => void;
   onClose?: () => void;
   onError?: (error: Event) => void;
@@ -14,7 +21,6 @@ interface WebSocketOptions {
 export function createWebSocket(options: WebSocketOptions) {
   const {
     url,
-    token,
     onOpen,
     onClose,
     onError,
@@ -31,8 +37,9 @@ export function createWebSocket(options: WebSocketOptions) {
   function connect(): void {
     if (isDestroyed) return;
 
-    // Pass token in WebSocket protocol (sub-protocol auth)
-    ws = new WebSocket(url, [`auth-${token}`]);
+    // Cookie-based auth: the browser sends HttpOnly cookies on the upgrade request.
+    // NEVER pass tokens in sub-protocols — they leak in server logs and proxy headers.
+    ws = new WebSocket(url);
 
     ws.onopen = () => {
       reconnectAttempts = 0;
@@ -40,13 +47,13 @@ export function createWebSocket(options: WebSocketOptions) {
     };
 
     ws.onmessage = (event) => {
-      try {
-        const message = JSON.parse(event.data) as { type: string; payload: unknown };
-        const channelHandlers = handlers.get(message.type);
-        channelHandlers?.forEach((handler) => handler(message.payload));
-      } catch {
-        // Ignore malformed messages
-      }
+      const parsed = wsMessageSchema.safeParse(
+        (() => { try { return JSON.parse(event.data); } catch { return null; } })()
+      );
+      if (!parsed.success) return; // Ignore malformed messages
+      const { type, payload } = parsed.data;
+      const channelHandlers = handlers.get(type);
+      channelHandlers?.forEach((handler) => { handler(payload); });
     };
 
     ws.onclose = () => {

@@ -17,7 +17,7 @@ export function MaskedValue({ value, maskedValue, label }: MaskedValueProps) {
       </span>
       <button
         type="button"
-        onClick={() => setIsRevealed((prev) => !prev)}
+        onClick={() => { setIsRevealed((prev) => !prev); }}
         className="text-xs text-ewb-purple underline"
         aria-label={isRevealed ? `Hide ${label}` : `Show ${label}`}
       >

@@ -13,7 +13,7 @@ export function LocaleSwitcher() {
   return (
     <select
       value={locale}
-      onChange={(e) => setLocale(e.target.value as typeof locale)}
+      onChange={(e) => { setLocale(e.target.value as typeof locale); }}
       aria-label="Select language"
       className="rounded border px-2 py-1 text-sm"
     >

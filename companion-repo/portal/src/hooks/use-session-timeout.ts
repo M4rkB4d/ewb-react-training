@@ -95,11 +95,11 @@ export function useSessionTimeout(options: SessionTimeoutOptions = {}) {
     };
 
     resetTimersRef.current = resetTimers;
-    events.forEach((event) => window.addEventListener(event, handleActivity));
+    events.forEach((event) => { window.addEventListener(event, handleActivity); });
     resetTimers();
 
     return () => {
-      events.forEach((event) => window.removeEventListener(event, handleActivity));
+      events.forEach((event) => { window.removeEventListener(event, handleActivity); });
       clearAllTimers();
     };
   }, [isAuthenticated]);

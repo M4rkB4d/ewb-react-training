@@ -3,7 +3,7 @@ import * as Sentry from '@sentry/react';
 import { env } from './env';
 
 export function initMonitoring(): void {
-  if (import.meta.env.PROD && env.VITE_SENTRY_DSN) {
+  if (import.meta.env.PROD) {
     Sentry.init({
       dsn: env.VITE_SENTRY_DSN,
       environment: import.meta.env.MODE,

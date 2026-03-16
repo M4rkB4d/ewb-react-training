@@ -6,7 +6,8 @@ import { useAuthStore } from '@/stores/auth-store';
 
 export function useVerifyMfa() {
   const navigate = useNavigate();
-  const { setAuth, mfaToken } = useAuthStore();
+  const mfaToken = useAuthStore((state) => state.mfaToken);
+  const { setAuth } = useAuthStore.getState();
 
   return useMutation({
     mutationFn: (code: string) => {
@@ -18,7 +19,7 @@ export function useVerifyMfa() {
 
     onSuccess: (data) => {
       setAuth(data.user, data.accessToken);
-      navigate('/dashboard');
+      navigate('/');
     },
   });
 }

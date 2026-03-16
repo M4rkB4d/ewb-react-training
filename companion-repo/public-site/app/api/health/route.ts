@@ -8,8 +8,8 @@ export async function GET() {
 
   // Check Redis connectivity
   try {
-    const { redis } = await import('@/lib/redis');
-    await redis.ping();
+    const { getRedis } = await import('@/lib/redis');
+    await getRedis().ping();
     checks.redis = 'ok';
   } catch {
     checks.redis = 'error';

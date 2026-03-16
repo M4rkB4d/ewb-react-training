@@ -15,11 +15,13 @@ function TransactionRow({ transaction }: TransactionRowProps) {
     <div className="flex items-center justify-between border-b px-4 py-3">
       <div>
         <p className="font-medium">{transaction.description}</p>
-        <p className="text-sm text-gray-500">{transaction.date} · {transaction.channel}</p>
+        <p className="text-sm text-gray-500">
+          {new Date(transaction.date).toLocaleDateString('en-PH', { year: 'numeric', month: 'short', day: 'numeric' })} · {transaction.channel}
+        </p>
       </div>
       <div className="text-right">
-        <p className={isDebit ? 'text-red-600' : 'text-ewb-lime-600'}>
-          {isDebit ? '-' : '+'}{formatPHP(transaction.amount)}
+        <p className={isDebit ? 'text-red-600' : 'text-emerald-600'}>
+          {isDebit ? '-' : '+'}{formatPHP(Math.abs(transaction.amount))}
         </p>
         <p className="text-xs text-gray-400">{transaction.reference}</p>
       </div>

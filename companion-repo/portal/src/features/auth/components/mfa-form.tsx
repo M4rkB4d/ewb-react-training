@@ -43,7 +43,7 @@ export function MfaForm() {
           pattern="[0-9]{6}"
           autoComplete="one-time-code"
           value={code}
-          onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))}
+          onChange={(e) => { setCode(e.target.value.replace(/\D/g, '')); }}
           className="w-full rounded border p-3 text-center text-2xl tracking-widest"
           aria-describedby="mfa-help"
         />
