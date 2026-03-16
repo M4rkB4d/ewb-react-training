@@ -32,7 +32,7 @@
 
       "types/index.ts": 1,
       "types/common.ts": 1,
-      "types/auth.ts": 5,
+      "types/auth.ts": 2,
       "types/account.ts": 5,
       "types/transaction.ts": 5,
       "types/transfer.ts": 8,
@@ -58,7 +58,7 @@
       "lib/masking.test.ts": 7,
       "lib/sanitize.ts": 7,
       "lib/sanitize.test.ts": 7,
-      "lib/permissions.ts": 7,
+      "lib/permissions.ts": 5,
       "lib/permissions.test.ts": 7,
       "lib/csp-report.ts": 7,
       "lib/audit.ts": 7,
