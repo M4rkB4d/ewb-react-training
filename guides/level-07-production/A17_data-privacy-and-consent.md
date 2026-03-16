@@ -427,6 +427,36 @@ export function DataAccessRequest() {
 }
 ```
 
+### Wiring privacy controls into pages
+
+The `ConsentManager` component from Phase 1 must be accessible from the user's
+settings page. Add it below the existing passkey settings:
+
+```tsx
+// src/pages/settings.tsx (add ConsentManager import and section)
+import { PasskeySettings } from '@/features/auth/components/passkey-settings';
+import { ConsentManager } from '@/features/consent/components/consent-manager';
+
+export function Component() {
+  return (
+    <div className="space-y-6">
+      <h1 className="text-2xl font-bold">Settings</h1>
+      <section>
+        <PasskeySettings />
+      </section>
+      <hr className="border-gray-200" />
+      <section>
+        <ConsentManager />
+      </section>
+    </div>
+  );
+}
+```
+
+Every privacy-related feature built in this guide — consent preferences, data
+masking toggles, data subject request forms — should be reachable from the
+settings page. Users should never have to search for privacy controls.
+
 ---
 
 ## Key Takeaways

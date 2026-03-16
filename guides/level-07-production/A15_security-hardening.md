@@ -676,6 +676,92 @@ Even with route guards, every API call must include authorization headers,
 and the backend must independently verify permissions. The frontend guard
 is UX — the backend guard is security.
 
+### Permissions utility
+
+The `RequireRole` component above checks a flat list of role strings. For
+more granular control, build a permissions module that models the role
+hierarchy and maps roles to specific capabilities:
+
+```tsx
+// src/lib/permissions.ts
+import type { Role } from '@/types/auth';
+
+const roleHierarchy: Record<Role, number> = {
+  customer: 0,
+  teller: 1,
+  manager: 2,
+  admin: 3,
+};
+
+export function hasMinimumRole(userRole: Role, requiredRole: Role): boolean {
+  return roleHierarchy[userRole] >= roleHierarchy[requiredRole];
+}
+
+export function canAccessRoute(userRole: Role, routeRoles: Role[]): boolean {
+  return routeRoles.some((role) => hasMinimumRole(userRole, role));
+}
+
+type Permission =
+  | 'accounts:read'
+  | 'accounts:write'
+  | 'transfers:create'
+  | 'transfers:approve'
+  | 'users:manage'
+  | 'reports:view'
+  | 'settings:manage';
+
+const rolePermissions: Record<Role, Set<Permission>> = {
+  customer: new Set(['accounts:read']),
+  teller: new Set(['accounts:read', 'accounts:write', 'transfers:create']),
+  manager: new Set([
+    'accounts:read', 'accounts:write', 'transfers:create',
+    'transfers:approve', 'reports:view',
+  ]),
+  admin: new Set([
+    'accounts:read', 'accounts:write', 'transfers:create',
+    'transfers:approve', 'users:manage', 'reports:view', 'settings:manage',
+  ]),
+};
+
+export function hasPermission(role: Role, permission: Permission): boolean {
+  const perms = rolePermissions[role];
+  if (!perms) return false;
+  return perms.has(permission);
+}
+```
+
+This module separates two concerns:
+
+- **Role hierarchy** (`hasMinimumRole`) — A manager can do anything a teller
+  can do. Useful for route-level guards where "manager or above" is the rule.
+- **Granular permissions** (`hasPermission`) — A teller can create transfers
+  but not approve them. Useful for hiding individual UI actions (buttons,
+  menu items) based on the user's specific capabilities.
+
+The `RequireRole` component from above handles route access. For component-level
+permission checks, use `hasPermission` directly:
+
+```tsx
+// In any component
+import { hasPermission } from '@/lib/permissions';
+import { useAuthStore } from '@/stores/auth-store';
+
+function TransferActions() {
+  const role = useAuthStore((s) => s.user?.role);
+
+  return (
+    <div>
+      {role && hasPermission(role, 'transfers:create') && (
+        <button>New Transfer</button>
+      )}
+      {role && hasPermission(role, 'transfers:approve') && (
+        <button>Approve Pending</button>
+      )}
+    </div>
+  );
+}
+```
+
 ### A02 — Cryptographic Failures
 
 ```tsx
