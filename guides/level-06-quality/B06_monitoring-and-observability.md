@@ -155,6 +155,8 @@ function createLog(level: LogLevel, message: string, context?: Record<string, un
 }
 
 export const logger = {
+  // Debug logs are console-only and never sent to the backend —
+  // they are stripped by Terser's drop_console in production builds.
   debug: (message: string, context?: Record<string, unknown>) => {
     if (import.meta.env.DEV) {
       console.debug('[DEBUG]', message, context);

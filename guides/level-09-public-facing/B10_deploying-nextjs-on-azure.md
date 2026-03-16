@@ -172,7 +172,7 @@ CMD ["node", "server.js"]
 
 ### Standalone output
 
-The `output: 'standalone'` option in `next.config.ts` (from A21) tells
+Add the `output: 'standalone'` option to the `next.config.ts` created in A21. This tells
 Next.js to produce a minimal Node.js server in `.next/standalone/`. This
 directory contains only the files needed to run the application — no
 `node_modules` folder with thousands of packages.
@@ -850,6 +850,7 @@ Usage in a Route Handler:
 
 ```tsx
 // app/api/rates/route.ts (addition from A22)
+import { NextResponse } from 'next/server';
 import { rateLimit } from '@/lib/rate-limit';
 import { headers } from 'next/headers';
 

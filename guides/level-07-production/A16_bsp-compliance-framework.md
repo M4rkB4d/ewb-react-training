@@ -744,7 +744,7 @@ function extractControlId(testName: string): string {
     'token storage': 'BSP-982-5.4',
     'no localStorage': 'BSP-982-5.4',
     'zod validation': 'BSP-1122-9.1',
-    'csp headers': 'BSP-1105-8.1',
+    'csp headers': 'BSP-1105',
   };
 
   const key = Object.keys(controlMap).find((k) =>

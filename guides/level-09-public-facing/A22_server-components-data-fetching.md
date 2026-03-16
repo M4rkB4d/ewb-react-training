@@ -155,8 +155,8 @@ Components by considering where the code executes.
 
 ### Fetching with `async/await`
 
-In the Vite SPA (B03), you fetch data with TanStack Query inside `useEffect`
-or custom hooks. The data is fetched in the browser after the page loads.
+In the Vite SPA (B03), you fetch data with TanStack Query's `useQuery` hook
+inside custom hooks. The data is fetched in the browser after the page loads.
 
 In a Server Component, you fetch data directly in the component body using
 `async/await`. The data is fetched on the server, and the rendered HTML is
@@ -257,7 +257,9 @@ async function getProducts(): Promise<Product[]> {
 > **Guide vs. Companion Repo:** The guide shows `throw new Error(...)` because that is the correct production pattern — errors bubble up to Next.js error boundaries where users see a proper error page. The companion repo wraps fetches in `try/catch` and falls back to mock data so you can run `npm run dev` and `next build` without a live API. Both patterns are valid; choose based on whether your environment has a running backend.
 
 ```tsx
-export const metadata = {
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
   title: 'Banking Products | EastWest Bank',
   description: 'Explore savings accounts, personal loans, credit cards, and investment products from EastWest Bank.',
 };
@@ -370,7 +372,9 @@ async function getRates() {
   return RateListSchema.parse(await res.json());
 }
 
-export const metadata = {
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
   title: 'Exchange Rates | EastWest Bank',
   description: 'Current foreign exchange rates for USD, EUR, JPY, and more.',
 };
@@ -475,12 +479,18 @@ async function getProduct(slug: string): Promise<ProductDetail | null> {
 }
 
 export async function generateStaticParams() {
-  const res = await fetch(`${clientEnv.NEXT_PUBLIC_API_URL}/products`);
-  const products = z.array(z.object({ slug: z.string() })).parse(await res.json());
+  try {
+    const res = await fetch(`${clientEnv.NEXT_PUBLIC_API_URL}/products`);
+    const products = z.array(z.object({ slug: z.string() })).parse(await res.json());
 
-  return products.map((product) => ({
-    slug: product.slug,
-  }));
+    return products.map((product) => ({
+      slug: product.slug,
+    }));
+  } catch {
+    // If the API is unavailable at build time, return empty —
+    // pages will be rendered on-demand via dynamic rendering.
+    return [];
+  }
 }
 
 export async function generateMetadata({

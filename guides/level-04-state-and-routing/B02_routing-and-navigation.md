@@ -365,6 +365,8 @@ export function useUnsavedChanges(hasUnsavedChanges: boolean) {
 Usage in a form:
 
 ```tsx
+// Imports omitted for brevity — useForm from react-hook-form,
+// ConfirmationDialog from @/components/ui/confirmation-dialog
 export function TransferPage() {
   const { formState: { isDirty } } = useForm();
   const blocker = useUnsavedChanges(isDirty);

@@ -335,7 +335,7 @@ Create a Zod schema for a "New Beneficiary" form with:
 - Full name (required, 2-100 characters)
 - Account number (10 digits)
 - Bank name (required)
-- Relationship (e.g., 'family', 'business', 'other')
+- Relationship (e.g., 'family', 'friend', 'business', 'other')
 - Philippine mobile number
 - Email (optional, but valid if provided)
 

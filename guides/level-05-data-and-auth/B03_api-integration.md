@@ -285,8 +285,8 @@ remaining requests fail because they are trying to use an already-consumed refre
 token. The mutex ensures exactly one refresh call runs; every other 401 handler
 awaits the same promise and retries with the new token.
 
-> **BSP 982 Critical:** The refresh endpoint uses `withCredentials: true` on a
-> fresh Axios instance (not `apiClient`) to avoid infinite loops. The refresh
+> **BSP 982 Critical:** The refresh endpoint uses `withCredentials: true` on the
+> default `axios` instance (not `apiClient`) to avoid infinite loops. The refresh
 > token in the HttpOnly cookie is the only credential sent — no access token
 > needed.
 

@@ -124,7 +124,7 @@ const router = createBrowserRouter([
     lazy: () => import('./layouts/app-layout'),
     children: [
       {
-        path: 'dashboard',
+        index: true,
         lazy: () => import('@/pages/dashboard'),
       },
       {

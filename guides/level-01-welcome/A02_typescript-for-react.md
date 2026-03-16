@@ -106,7 +106,7 @@ const status: 'active' | 'closed' = 'active';
 Type both parameters and return values:
 
 ```typescript
-// Simple function
+// Simple function (we'll build a production version called formatPHP in A07)
 function formatCurrency(amount: number, currency: string): string {
   return new Intl.NumberFormat('en-PH', {
     style: 'currency',
@@ -212,6 +212,7 @@ function Button({
 }: ButtonProps) {
   return (
     <button
+      // getVariantClasses and getSizeClasses are helpers — see A06 for the full implementation
       className={`rounded-md font-medium ${getVariantClasses(variant)} ${getSizeClasses(size)}`}
       disabled={disabled || loading}
       onClick={onClick}
@@ -699,7 +700,7 @@ The key insight: **define the Zod schema first, then extract the TypeScript type
 ### 5.3 Validating API Responses
 
 ```typescript
-// src/services/accountService.ts
+// src/services/accountService.ts (conceptual — axios is installed in B01)
 import axios from 'axios';
 import { z } from 'zod';
 import { accountSchema } from '../schemas/account';
@@ -784,7 +785,9 @@ If a required environment variable is missing, the application fails immediately
 
 ### 6.1 The tsconfig.json
 
-Every project in these guides uses TypeScript strict mode. Here is the configuration:
+Every project in these guides uses TypeScript strict mode. Here is a simplified
+configuration to understand the key flags — B01 provides the full production
+`tsconfig.app.json` with additional strictness options:
 
 ```json
 // tsconfig.json

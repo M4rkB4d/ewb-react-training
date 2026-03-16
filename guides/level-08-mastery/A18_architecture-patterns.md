@@ -168,6 +168,7 @@ export function addMoney(a: Money, b: Money): Money {
   return createMoney(a.amount + b.amount, a.currency);
 }
 
+// Formats a Money value object (vs formatPHP in src/lib/format.ts which takes raw centavos)
 export function formatMoney(money: Money): string {
   return new Intl.NumberFormat('en-PH', {
     style: 'currency',

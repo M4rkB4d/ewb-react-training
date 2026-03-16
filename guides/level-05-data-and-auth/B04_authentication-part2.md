@@ -163,7 +163,7 @@ export async function login(username: string, password: string): Promise<LoginRe
   return loginResponseSchema.parse(response.data);
 }
 
-const mfaResponseSchema = z.object({
+const authSuccessSchema = z.object({
   user: z.object({
     id: z.string(),
     name: z.string(),
@@ -173,22 +173,22 @@ const mfaResponseSchema = z.object({
   accessToken: z.string(),
 });
 
-export async function verifyMfa(mfaToken: string, code: string): Promise<z.infer<typeof mfaResponseSchema>> {
+export async function verifyMfa(mfaToken: string, code: string): Promise<z.infer<typeof authSuccessSchema>> {
   const response = await axios.post(
     `${env.VITE_API_BASE_URL}/auth/mfa`,
     { mfaToken, code },
     { withCredentials: true },
   );
-  return mfaResponseSchema.parse(response.data);
+  return authSuccessSchema.parse(response.data);
 }
 
-export async function refreshSession(): Promise<z.infer<typeof mfaResponseSchema>> {
+export async function refreshSession(): Promise<z.infer<typeof authSuccessSchema>> {
   const response = await axios.post(
     `${env.VITE_API_BASE_URL}/auth/refresh`,
     null,
     { withCredentials: true },
   );
-  return mfaResponseSchema.parse(response.data);
+  return authSuccessSchema.parse(response.data);
 }
 
 export async function logout(): Promise<void> {
@@ -519,7 +519,7 @@ To use `PinInput` in the MFA form, replace the single `<input>` with:
 <PinInput onChange={(pin) => {
   setCode(pin);
   // Auto-submit when all 6 digits are entered
-  if (pin.length === PIN_LENGTH) {
+  if (pin.length === 6) {
     verifyMfa.mutate(pin);
   }
 }} />
@@ -723,7 +723,7 @@ B02 introduced `RoleGuard` which wraps its children and renders a fallback when 
 import { Navigate } from 'react-router';
 import { useAuthStore } from '@/stores/auth-store';
 import { hasMinimumRole } from '@/lib/permissions';
-import type { Role } from '@/stores/auth-store';
+import type { Role } from '@/types/auth';
 
 interface RoleRouteProps {
   requiredRole: Role;
@@ -771,7 +771,7 @@ export function useLogin() {
 ### Route configuration with guards
 
 ```tsx
-// src/router.tsx (relevant section)
+// src/router.tsx (relevant section — layout imports omitted for brevity)
 import { ProtectedRoute } from '@/components/auth/protected-route';
 import { RoleRoute } from '@/components/auth/role-route';
 
@@ -832,12 +832,11 @@ import { refreshSession } from '../api/auth-api';
 
 export function useAuthInit() {
   const status = useAuthStore((s) => s.status);
-  // Use getState() for actions — avoids subscribing to unrelated store changes.
-  const { setAuth, clearAuth } = useAuthStore.getState();
-
   useEffect(() => {
     if (status !== 'idle') return;
 
+    // Access actions inside the effect — stable references from getState()
+    const { setAuth, clearAuth } = useAuthStore.getState();
     let cancelled = false;
 
     async function init() {
@@ -855,7 +854,7 @@ export function useAuthInit() {
 
     init();
     return () => { cancelled = true; };
-  }, [status, setAuth, clearAuth]);
+  }, [status]);
 }
 ```
 

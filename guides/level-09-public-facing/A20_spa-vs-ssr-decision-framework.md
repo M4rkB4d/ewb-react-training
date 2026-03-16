@@ -2,7 +2,7 @@
 
 > **EastWest Bank — Digital Platforms & Innovations**
 >
-> Part A (Core) · Level 9 — Public-Facing Applications
+> Part C (Next.js) · Level 9 — Public-Facing Applications
 
 ---
 
@@ -355,7 +355,7 @@ are only justified when the benefits (SEO, performance, security) are needed.
 
 ### The internal portal stays as a SPA
 
-The banking portal at `portal.ewbanking.com` has 50–200 authenticated users.
+The banking portal at `portal.ewbanking.com` has 50–200 concurrent authenticated users.
 Every user logs in before seeing any content. There is no SEO requirement. The
 rich interactivity (real-time balance updates, transfer wizards, account
 filtering) is better served by a client-side application with local state
@@ -375,8 +375,8 @@ The Vite SPA from Levels 1–8 remains the correct architecture.
 
 | Deployment | Azure Service | Approximate Monthly Cost |
 |------------|---------------|--------------------------|
-| Vite SPA (static files) | Blob Storage + CDN | ~₱250 |
-| Next.js (server rendering) | App Service (B2) + Redis | ~₱3,500 |
+| Vite SPA (static files) | Blob Storage + CDN | ~₱280 |
+| Next.js (server rendering) | App Service (B1) + CDN | ~₱3,900 |
 | Next.js (containerized) | Container Apps | ~₱2,800–5,600 |
 
 Server rendering requires a running Node.js process. This means compute costs,

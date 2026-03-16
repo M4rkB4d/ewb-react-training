@@ -243,7 +243,7 @@ test.describe('Login Flow', () => {
     await page.getByRole('button', { name: 'Sign In' }).click();
 
     // Should redirect to dashboard
-    await expect(page).toHaveURL('/dashboard');
+    await expect(page).toHaveURL('/');
     await expect(page.getByText('Welcome, Juan Santos')).toBeVisible();
   });
 
@@ -281,7 +281,7 @@ test.describe('Fund Transfer', () => {
     await page.getByLabel('Username').fill('juan.santos');
     await page.getByLabel('Password').fill('SecureP@ss123');
     await page.getByRole('button', { name: 'Sign In' }).click();
-    await page.waitForURL('/dashboard');
+    await page.waitForURL('/');
   });
 
   test('completes a fund transfer', async ({ page }) => {
@@ -325,7 +325,7 @@ export const test = base.extend<AuthFixtures>({
     await page.getByLabel('Username').fill('juan.santos');
     await page.getByLabel('Password').fill('SecureP@ss123');
     await page.getByRole('button', { name: 'Sign In' }).click();
-    await page.waitForURL('/dashboard');
+    await page.waitForURL('/');
     await use(page);
   },
 });
@@ -401,7 +401,7 @@ e2e/
 ```tsx
 // src/test/setup.ts
 import '@testing-library/jest-dom/vitest';
-import { afterAll, afterEach, beforeAll, beforeEach } from 'vitest';
+import { afterAll, afterEach, beforeAll } from 'vitest';
 import { cleanup } from '@testing-library/react';
 import { server } from './mocks/server';
 
@@ -420,7 +420,7 @@ real APIs.
 ### Testing pure utility functions
 
 Pure functions (no side effects, no dependencies) are the easiest to test.
-The `formatPHP` utility from A07/B03 is a good example:
+The `formatPHP` utility from B03 is a good example:
 
 ```tsx
 // src/lib/format.test.ts

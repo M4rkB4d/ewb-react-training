@@ -217,9 +217,8 @@ export function hasMinimumRole(userRole: Role, requiredRole: Role): boolean {
   return roleHierarchy[userRole] >= roleHierarchy[requiredRole];
 }
 
-// This uses role hierarchy (manager inherits teller access).
-// B02's RoleGuard also uses hasMinimumRole() for the same hierarchical check.
-// This function is a convenience wrapper for checking multiple allowed roles.
+// Convenience wrapper — checks if the user meets ANY of the listed minimum roles.
+// Useful when a route is accessible to multiple role levels.
 export function canAccessRoute(userRole: Role, routeRoles: Role[]): boolean {
   return routeRoles.some((role) => hasMinimumRole(userRole, role));
 }

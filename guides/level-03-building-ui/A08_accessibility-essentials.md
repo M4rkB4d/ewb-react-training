@@ -382,6 +382,7 @@ export function ConfirmationDialog({
   return (
     <dialog
       ref={dialogRef}
+      aria-labelledby="confirm-dialog-title"
       className="rounded-xl border border-gray-200 bg-white p-0 shadow-xl backdrop:bg-black/50"
       onClose={onCancel}
     >

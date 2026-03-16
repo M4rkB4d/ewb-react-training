@@ -752,7 +752,7 @@ React 19 introduces several features you will encounter throughout these guides:
 | React Compiler (separate tool) | Automatically memoizes components — no more manual `useMemo`/`useCallback` | B05 (Performance) |
 | `ref` as prop | Pass refs directly — no `forwardRef` wrapper | This guide (Phase 5) |
 | `useActionState` | Manage form submission state | A07 (Forms) |
-| `use` API | Read resources (promises, context) during render | A09 (State Management) |
+| `use` API | Read resources (promises, context) during render | [React docs](https://react.dev/reference/react/use) |
 | Server Components | Components that run on the server (Next.js only) | Part C (deferred) |
 
 ### 6.3 What You Will Not Need

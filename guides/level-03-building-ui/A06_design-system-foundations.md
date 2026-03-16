@@ -600,9 +600,10 @@ inline in every component is error-prone — a single `CurrencyDisplay` componen
 ensures consistency.
 
 The component uses the built-in `Intl.NumberFormat` API — no external dependencies
-needed. In B08 (Internationalization), you will learn `react-intl` for more advanced
-locale switching. For now, `Intl.NumberFormat` handles thousand separators and
-currency symbols correctly for Philippine peso formatting.
+needed. `Intl.NumberFormat` handles thousand separators and currency symbols correctly
+for Philippine peso formatting. B08 (Internationalization) introduces `react-intl`
+for multilingual message formatting, but currency display continues to use
+`Intl.NumberFormat` via the `formatPHP()` utility from A07.
 
 ```tsx
 // src/components/ui/currency-display.tsx
@@ -701,6 +702,8 @@ export function DataTable({ columns, data, caption }: DataTableProps) {
         </tr>
       </thead>
       <tbody>
+        {/* Index key is acceptable here — rows are read-only display data,
+            never reordered. Use a unique ID when rows support sorting/filtering. */}
         {data.map((row, idx) => (
           <tr key={idx} className="hover:bg-gray-50">
             {columns.map((col) => (
@@ -725,7 +728,7 @@ Key accessibility features:
 
 ```tsx
 <CurrencyDisplay amount={15000000} />   {/* ₱150,000.00 */}
-<CurrencyDisplay amount={-1500} />      {/* -₱15.00 in red */}
+<CurrencyDisplay amount={1500} />       {/* ₱15.00 */}
 <LocaleDate value="2026-03-15" />       {/* Mar 15, 2026 */}
 <LocaleDate value="2026-03-15" format="long" /> {/* Saturday, March 15, 2026 */}
 
@@ -747,7 +750,6 @@ Key accessibility features:
 
 Add all three components to your design system page and verify:
 1. `CurrencyDisplay` formats centavos correctly (10050 → ₱100.50)
-2. Negative amounts appear in red
 3. `LocaleDate` formats dates in short and long forms
 4. `DataTable` renders with proper headers and hover states
 
@@ -755,8 +757,6 @@ Add all three components to your design system page and verify:
 
 ## Phase 7 — Dark Mode
 
-> **Note:** Phase numbering shifted — Phase 6 (Banking Utility Components) was
-> inserted above. Previous Phases 6 and 7 are now Phases 7 and 8.
 
 ### Why dark mode for banking?
 

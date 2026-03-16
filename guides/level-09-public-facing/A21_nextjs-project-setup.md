@@ -244,7 +244,7 @@ export default nextConfig;
 
 | Concern | Vite (`vite.config.ts`) | Next.js (`next.config.ts`) |
 |---------|------------------------|---------------------------|
-| Bundler | Rollup (via Vite) | Turbopack |
+| Bundler | Rollup (via Vite) | Turbopack (dev) / Webpack (prod) |
 | Dev server | Vite dev server (port 5173) | Next.js dev server (port 3000) |
 | Security headers | Nginx config / Azure CDN rules | `headers()` function in config |
 | Image optimization | Manual (via plugins) | Built-in `next/image` |

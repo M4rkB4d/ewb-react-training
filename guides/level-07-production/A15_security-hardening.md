@@ -646,23 +646,25 @@ users from seeing UI they should not access, and to provide clear feedback
 when access is denied.
 
 ```tsx
-// src/components/auth/role-guard.tsx (companion repo uses this path)
+// src/components/auth/role-guard.tsx — same component from B02/B04
 import { Navigate } from 'react-router';
 import { useAuthStore } from '@/stores/auth-store';
+import { hasMinimumRole } from '@/lib/permissions';
+import type { Role } from '@/types/auth';
 
-interface RequireRoleProps {
-  roles: readonly string[];
+interface RoleGuardProps {
+  requiredRole: Role;
   children: React.ReactNode;
 }
 
-export function RequireRole({ roles, children }: RequireRoleProps) {
+export function RoleGuard({ requiredRole, children }: RoleGuardProps) {
   const user = useAuthStore((s) => s.user);
 
   if (!user) {
     return <Navigate to="/login" replace />;
   }
 
-  if (!roles.includes(user.role)) {
+  if (!hasMinimumRole(user.role, requiredRole)) {
     // Log the unauthorized access attempt (BSP 1019)
     console.warn(`Access denied: user ${user.id} attempted to access role-restricted route`);
     return <Navigate to="/unauthorized" replace />;
@@ -671,6 +673,10 @@ export function RequireRole({ roles, children }: RequireRoleProps) {
   return <>{children}</>;
 }
 ```
+
+This is the same `RoleGuard` from B02 and `RoleRoute` from B04, using
+`hasMinimumRole()` for hierarchical checks. The BSP audit logging is the
+new addition — always log denied access attempts for compliance.
 
 Even with route guards, every API call must include authorization headers,
 and the backend must independently verify permissions. The frontend guard
@@ -1044,14 +1050,14 @@ import { useEffect, useRef } from 'react';
 export function useIdleTimeout(timeoutMs: number, onTimeout: () => void): void {
   const timerRef = useRef<ReturnType<typeof setTimeout>>();
 
-  const resetTimer = () => {
-    if (timerRef.current) {
-      clearTimeout(timerRef.current);
-    }
-    timerRef.current = setTimeout(onTimeout, timeoutMs);
-  };
-
   useEffect(() => {
+    const resetTimer = () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+      timerRef.current = setTimeout(onTimeout, timeoutMs);
+    };
+
     const events: Array<keyof WindowEventMap> = [
       'mousedown', 'keydown', 'touchstart', 'scroll',
     ];

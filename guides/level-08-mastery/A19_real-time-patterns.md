@@ -74,9 +74,11 @@ import { useEffect, useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import type { QueryKey } from '@tanstack/react-query';
 
-interface UsePollingOptions {
+interface UsePollingOptions<TData = unknown, TSelected = TData> {
   queryKey: QueryKey;
-  queryFn: () => Promise<unknown>;
+  queryFn: () => Promise<TData>;
+  /** Transform the data before returning */
+  select?: (data: TData) => TSelected;
   /** Base interval in milliseconds */
   interval: number;
   /** Only poll when the tab is visible */
@@ -86,20 +88,22 @@ interface UsePollingOptions {
   enabled?: boolean;
 }
 
-export function usePolling({
+export function usePolling<TData = unknown, TSelected = TData>({
   queryKey,
   queryFn,
+  select,
   interval,
   pauseWhenHidden = true,
   adaptive = false,
   enabled = true,
-}: UsePollingOptions) {
+}: UsePollingOptions<TData, TSelected>) {
   const [currentInterval, setCurrentInterval] = useState(interval);
   const previousDataRef = useRef<number | undefined>(undefined);
 
   const query = useQuery({
     queryKey,
     queryFn,
+    select,
     // TanStack Query re-evaluates refetchInterval on every cycle,
     // so changing `currentInterval` via useState triggers a re-render
     // and the new value takes effect on the next tick.
@@ -177,7 +181,7 @@ export function useEventSource({
   const onMessageRef = useRef(onMessage);
   onMessageRef.current = onMessage;
   const onErrorRef = useRef(onError);
-  if (onError) onErrorRef.current = onError;
+  onErrorRef.current = onError;
 
   useEffect(() => {
     if (!enabled) return;

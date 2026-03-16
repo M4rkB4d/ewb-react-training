@@ -349,7 +349,7 @@ const accountSchema = z.object({
   id: z.string(),
   name: z.string(),
   number: z.string(),
-  type: z.enum(['savings', 'checking', 'time-deposit']),
+  type: z.enum(['savings', 'checking', 'time-deposit']), // B03 adds 'current' in shared types
   balance: z.number().int().nonnegative(), // Centavos
   currency: z.string().default('PHP'),
   isActive: z.boolean(),
@@ -437,7 +437,8 @@ Structured query keys enable targeted cache invalidation:
 // Invalidate all account data
 queryClient.invalidateQueries({ queryKey: accountKeys.all });
 
-// Invalidate only one account's transactions
+// Invalidate all transaction queries for one account (prefix match —
+// this catches every (id, filters) combination for ACC-001)
 queryClient.invalidateQueries({ queryKey: accountKeys.transactions('ACC-001') });
 ```
 
@@ -556,15 +557,16 @@ wrong (e.g., due to server-side fees)?
 Each feature gets its own store:
 
 ```
-src/features/
-├── accounts/
-│   └── stores/account-filter-store.ts
-├── auth/
-│   └── stores/auth-store.ts
-├── transfers/
-│   └── stores/transfer-wizard-store.ts
-└── payments/
-    └── stores/payment-store.ts
+src/
+├── stores/
+│   └── auth-store.ts          ← App-wide (used by every feature)
+└── features/
+    ├── accounts/
+    │   └── stores/account-filter-store.ts
+    ├── transfers/
+    │   └── stores/transfer-wizard-store.ts
+    └── payments/
+        └── stores/payment-store.ts
 ```
 
 ### Zustand with computed values

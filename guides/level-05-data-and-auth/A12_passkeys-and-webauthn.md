@@ -677,7 +677,7 @@ user behavior does this encourage?
 ### Phased rollout
 
 ```
-Phase 1 (Now)         Phase 2 (April)       Phase 3 (June)
+Phase 1 (Now)         Phase 2 (April 2026)  Phase 3 (June 2026)
 Optional enrollment   Prompted enrollment   Required for new users
   │                     │                     │
   │ Staff first         │ Customer prompts    │ Password + passkey OR

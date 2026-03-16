@@ -361,7 +361,7 @@ import { z } from 'zod';
 import { usePaymentDraftStore } from '../stores/payment-draft-store';
 import { useAccounts } from '@/features/accounts';
 import { maskAccountNumber } from '@/lib/masking';
-import { formatPHP } from '@/lib/format'; // locale-aware version from B08
+import { formatPHP } from '@/lib/format'; // locale-aware version from B03
 import { Button } from '@/components/ui/button';
 
 // User enters pesos; converted to centavos (* 100) before API call
@@ -829,7 +829,7 @@ test.describe('Bill Payment', () => {
     await page.getByLabel('Username').fill('juan.santos');
     await page.getByLabel('Password').fill('SecureP@ss123');
     await page.getByRole('button', { name: 'Sign In' }).click();
-    await page.waitForURL('/dashboard');
+    await page.waitForURL('/');
   });
 
   test('completes a bill payment', async ({ page }) => {
@@ -998,7 +998,7 @@ export function TransferWizard({ accounts, onSubmit }: TransferWizardProps) {
                 <option value="">Select an account</option>
                 {accounts.map((acc) => (
                   <option key={acc.number} value={acc.number}>
-                    {acc.name} (••••{acc.number.slice(-4)}) — ₱{(acc.balance / 100).toLocaleString('en-PH', { minimumFractionDigits: 2 })}
+                    {acc.name} (••••{acc.number.slice(-4)}) — {formatPHP(acc.balance)}
                   </option>
                 ))}
               </select>
@@ -1052,7 +1052,7 @@ export function TransferWizard({ accounts, onSubmit }: TransferWizardProps) {
             </div>
             <div className="flex justify-between border-t pt-3">
               <dt className="text-sm text-gray-500">Amount</dt>
-              <dd className="text-lg font-bold">₱{Number(formValues.amount).toLocaleString('en-PH', { minimumFractionDigits: 2 })}</dd>
+              <dd className="text-lg font-bold">{formatPHP(Math.round(Number(formValues.amount) * 100))}</dd>
             </div>
           </dl>
         </CardBody>
@@ -1086,6 +1086,8 @@ saving previous state and `onSettled` for guaranteed invalidation:
 
 ```tsx
 // src/features/transfers/hooks/use-create-transfer.ts
+// createTransfer and TransferRequest follow the same pattern as paymentApi
+// in src/features/payments/api/payment-api.ts — build this as an exercise.
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createTransfer } from '../api/transfers-api';
 import type { TransferRequest } from '../api/transfers-api';
