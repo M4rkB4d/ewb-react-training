@@ -594,18 +594,9 @@ sends telemetry to Application Insights via the JavaScript SDK. In Next.js,
 server-side rendering adds a new dimension — you can monitor server render
 times, API latencies, and errors before they reach the browser.
 
-```tsx
-// instrumentation.ts
-import { registerOTel } from '@vercel/otel';
-
-export function register() {
-  registerOTel({
-    serviceName: 'ewb-public-site',
-  });
-}
-```
-
-For Azure-native instrumentation using `@azure/monitor-opentelemetry`:
+Next.js supports an `instrumentation.ts` file at the project root. For Vercel
+deployments you would use `@vercel/otel`, but since we are deploying to
+**Azure App Service**, use the Azure-native SDK instead:
 
 ```tsx
 // instrumentation.ts

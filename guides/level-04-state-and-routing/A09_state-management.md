@@ -400,7 +400,15 @@ export function AccountList() {
   return (
     <div className="space-y-4">
       {accounts.map((account) => (
-        <AccountCard key={account.id} {...account} />
+        <AccountCard
+          key={account.id}
+          accountName={account.name}
+          accountNumber={account.number}
+          accountType={account.type}
+          balance={account.balance}
+          currency={account.currency}
+          isActive={account.isActive}
+        />
       ))}
     </div>
   );
@@ -417,7 +425,8 @@ export const accountKeys = {
   list: (filters: Record<string, unknown>) => [...accountKeys.lists(), filters] as const,
   details: () => [...accountKeys.all, 'detail'] as const,
   detail: (id: string) => [...accountKeys.details(), id] as const,
-  transactions: (id: string) => [...accountKeys.detail(id), 'transactions'] as const,
+  transactions: (id: string, filters?: Record<string, unknown>) =>
+    [...accountKeys.detail(id), 'transactions', ...(filters ? [filters] : [])] as const,
   balance: (id: string) => [...accountKeys.detail(id), 'balance'] as const,
 };
 ```

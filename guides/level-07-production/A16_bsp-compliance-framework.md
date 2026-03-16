@@ -30,6 +30,7 @@ By the end of this guide, you will:
 |------------|-------|
 | Completed A03 — Thinking in Compliance | Level 1 |
 | Completed A15 — Security Hardening | Level 7 |
+| Completed B07 — Deployment and CI/CD | Level 7 |
 | Completed B06 — Monitoring and Observability | Level 6 |
 
 ---

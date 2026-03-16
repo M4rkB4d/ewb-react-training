@@ -933,6 +933,11 @@ Every layer built in Phases 1 through 7 is testable in isolation thanks to MSW. 
 
 ### MSW handlers for the full API
 
+Handler paths must match the full URL that Axios resolves. Since `apiClient` has
+`baseURL: env.VITE_API_BASE_URL` and your test setup sets this to something like
+`http://localhost:3000/api`, a call to `apiClient.get('/accounts')` resolves to
+`http://localhost:3000/api/accounts` — so the MSW handler uses `/api/accounts`.
+
 ```tsx
 // src/test/mocks/handlers.ts
 import { http, HttpResponse } from 'msw';

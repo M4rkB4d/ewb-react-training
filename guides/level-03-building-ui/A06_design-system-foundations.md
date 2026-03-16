@@ -622,15 +622,17 @@ export function CurrencyDisplay({ amount, currency = 'PHP' }: CurrencyDisplayPro
   }).format(amount / 100);
 
   return (
-    <span className={amount < 0 ? 'text-red-600' : 'text-emerald-700'}>
+    <span className="text-gray-900 font-medium">
       {formatted}
     </span>
   );
 }
 ```
 
-Negative amounts render in red (overdraft, fees), positive in green (balances,
-credits). This convention is universal in banking UIs.
+The component uses neutral styling by default. In transaction lists, you will
+pair this with debit/credit indicators — the `Transaction` type's `type` field
+(`'debit' | 'credit'`) determines the color, not the amount sign. All amounts
+are unsigned centavos in this codebase.
 
 ### Locale-aware date display
 
