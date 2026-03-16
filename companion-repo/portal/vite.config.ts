@@ -12,6 +12,9 @@ export default defineConfig({
     tailwindcss(),
     sri(),
   ],
+  server: {
+    port: 3000,
+  },
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src'),
