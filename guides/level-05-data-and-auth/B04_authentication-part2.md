@@ -437,6 +437,94 @@ Key accessibility details:
 - `pattern` enables built-in validation
 - Non-digit characters are stripped on input
 
+### Individual-digit PIN input
+
+For a more polished MFA experience, replace the single text input with a
+component that renders one input per digit. Each digit gets its own box, and
+focus automatically advances as the user types:
+
+```tsx
+// src/features/auth/components/pin-input.tsx
+import { useRef, useState } from 'react';
+
+const PIN_LENGTH = 6;
+
+interface PinInputProps {
+  onChange: (pin: string) => void;
+}
+
+export function PinInput({ onChange }: PinInputProps) {
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+  const [digits, setDigits] = useState<string[]>(Array(PIN_LENGTH).fill(''));
+
+  const updateDigits = (index: number, value: string) => {
+    const next = [...digits];
+    next[index] = value;
+    setDigits(next);
+    onChange(next.join(''));
+  };
+
+  const handleChange = (index: number, value: string) => {
+    if (!/^\d?$/.test(value)) return; // Only allow single digit
+    updateDigits(index, value);
+
+    if (value.length === 1 && index < PIN_LENGTH - 1) {
+      inputRefs.current[index + 1]?.focus();
+    }
+  };
+
+  const handleKeyDown = (index: number, event: React.KeyboardEvent) => {
+    if (event.key === 'Backspace' && digits[index] === '' && index > 0) {
+      updateDigits(index - 1, '');
+      inputRefs.current[index - 1]?.focus();
+    }
+  };
+
+  return (
+    <div className="flex gap-2">
+      {digits.map((digit, index) => (
+        <input
+          key={index}
+          ref={(el) => { inputRefs.current[index] = el; }}
+          type="text"
+          inputMode="numeric"
+          maxLength={1}
+          value={digit}
+          onChange={(e) => handleChange(index, e.target.value)}
+          onKeyDown={(e) => handleKeyDown(index, e)}
+          className="h-12 w-12 rounded-lg border border-gray-300 text-center text-xl"
+          aria-label={`PIN digit ${index + 1}`}
+        />
+      ))}
+    </div>
+  );
+}
+```
+
+Key implementation details:
+
+- **Auto-advance focus:** When a digit is entered, focus moves to the next input.
+  When backspace is pressed on an empty input, focus moves back.
+- **Strict input filtering:** The regex `^\d?$` ensures only single digits are
+  accepted. Pasting multi-character strings is blocked at the input level.
+- **`inputMode="numeric"`** triggers the number pad on mobile — critical for a
+  good UX when entering codes on phones.
+- **`aria-label` per digit:** Each input has a descriptive label for screen readers
+  ("PIN digit 1", "PIN digit 2", etc.) so the user always knows which digit they
+  are editing.
+
+To use `PinInput` in the MFA form, replace the single `<input>` with:
+
+```tsx
+<PinInput onChange={(pin) => {
+  setCode(pin);
+  // Auto-submit when all 6 digits are entered
+  if (pin.length === PIN_LENGTH) {
+    verifyMfa.mutate(pin);
+  }
+}} />
+```
+
 ---
 
 ## Phase 4 — Session Timeout

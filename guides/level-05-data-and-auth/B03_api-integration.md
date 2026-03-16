@@ -18,6 +18,9 @@ By the end of this guide, you will:
 - Handle mutations with server-confirmed cache invalidation (no optimistic updates)
 - Build structured error handling with custom error classes and smart retry logic
 - Test the full API stack with MSW
+- Build account feature components with DPA-compliant data masking
+- Virtualize long transaction lists with `@tanstack/react-virtual`
+- Organize feature modules with barrel exports
 
 ---
 
@@ -318,6 +321,115 @@ infinite loop. Using plain `axios` bypasses the interceptors.
 
 You now have a fully configured HTTP client with auth and error handling built in. The next step is building the API functions that the rest of the application calls. Each function defines a Zod schema for its response, makes the request through `apiClient`, and validates the data before returning it. This is the contract between your frontend and the backend.
 
+### Shared type definitions
+
+Before building API functions, define the shared domain types that multiple features
+will reference. These plain TypeScript interfaces mirror the shapes validated by Zod
+but are available to components that don't need runtime validation:
+
+```tsx
+// src/types/account.ts
+export type AccountType = 'savings' | 'checking' | 'time-deposit' | 'current';
+export type AccountStatus = 'active' | 'dormant' | 'frozen' | 'closed';
+export type Currency = 'PHP' | 'USD' | 'EUR' | 'JPY' | 'CNY';
+
+export interface Account {
+  id: string;
+  accountNumber: string;
+  accountName: string;
+  type: AccountType;
+  /** Balance in centavos (integer). */
+  balance: number;
+  /** Available balance in centavos (integer). */
+  availableBalance: number;
+  currency: Currency;
+  status: AccountStatus;
+  openedDate: string;
+  lastActivityDate: string;
+}
+```
+
+```tsx
+// src/types/transaction.ts
+import type { Currency } from './account';
+
+export type TransactionType = 'credit' | 'debit' | 'transfer' | 'payment' | 'fee';
+
+export type TransactionStatus =
+  | 'pending'
+  | 'processing'
+  | 'completed'
+  | 'failed'
+  | 'reversed'
+  | 'cancelled';
+
+export interface TransactionMetadata {
+  channel: 'web' | 'mobile' | 'atm' | 'branch';
+  ipAddress?: string;
+  deviceId?: string;
+}
+
+export interface Transaction {
+  id: string;
+  accountId: string;
+  type: TransactionType;
+  amount: number;
+  currency: Currency;
+  description: string;
+  referenceNumber: string;
+  status: TransactionStatus;
+  createdAt: string;
+  processedAt: string | null;
+  metadata: TransactionMetadata;
+}
+```
+
+These are the "full" domain types used across the application. Each feature may also
+define its own narrower types — the API functions below infer types from Zod schemas,
+which is the preferred approach for data coming directly from API responses. The shared
+types above are useful for props interfaces, store state, and cross-feature contracts.
+
+### Feature-level types
+
+The accounts feature defines its own lean types for internal use — smaller than the
+shared types, focused on what the account UI actually renders:
+
+```tsx
+// src/features/accounts/types.ts
+export type AccountType = 'savings' | 'checking' | 'time-deposit';
+
+export interface Account {
+  id: string;
+  name: string;
+  number: string;
+  type: AccountType;
+  /** Balance in centavos (integer). ₱1,500.00 = 150000. */
+  balance: number;
+  currency: string;
+  isActive: boolean;
+}
+
+export type TransactionType = 'debit' | 'credit';
+
+export interface Transaction {
+  id: string;
+  date: string;
+  description: string;
+  /** Amount in centavos (integer). */
+  amount: number;
+  type: TransactionType;
+  /** Running balance in centavos (integer). */
+  balance: number;
+  reference: string;
+  channel: string;
+}
+```
+
+Notice the feature types are leaner than the shared types — they only include the fields
+the account feature's components actually use. The Zod schemas in the API functions
+(below) validate against this shape. If the backend adds new fields, Zod strips them
+by default (`z.object` ignores unknown keys), keeping the feature boundary clean.
+
 ### API function pattern
 
 ```tsx
@@ -458,6 +570,41 @@ export async function createTransfer(payload: TransferRequest): Promise<Transfer
 }
 ```
 
+### Transfer form schema
+
+The transfer form needs its own Zod schema separate from the API request schema.
+Form schemas validate user input (amounts in pesos, human-readable format), while
+API schemas validate wire format (amounts in centavos, machine format). The
+conversion happens at the boundary between form and API:
+
+```tsx
+// src/schemas/transferForm.ts
+import { z } from 'zod';
+
+export const transferFormSchema = z.object({
+  fromAccount: z.string().min(1, 'Select a source account'),
+  toAccount: z.string().min(1, 'Select a destination account'),
+  amount: z
+    .number({ invalid_type_error: 'Amount must be a number' })
+    .positive('Amount must be greater than zero')
+    .max(1_000_000, 'Maximum transfer amount is ₱1,000,000'),
+  note: z.string().max(200, 'Note must be 200 characters or less').optional(),
+}).refine(
+  (data) => data.fromAccount !== data.toAccount,
+  {
+    message: 'Source and destination accounts must be different',
+    path: ['toAccount'],
+  }
+);
+
+export type TransferFormData = z.infer<typeof transferFormSchema>;
+```
+
+The `.refine()` at the end is a cross-field validation — it checks a condition that
+depends on multiple fields (source ≠ destination). Zod runs `.refine()` validators
+after all individual field validations pass. The `path: ['toAccount']` tells Zod
+which field to attach the error to, so your form can highlight the right input.
+
 ### Checkpoint 4
 
 Why do we validate the outgoing payload in `createTransfer` even though the
@@ -481,6 +628,7 @@ export const accountKeys = {
   detail: (id: string) => [...accountKeys.details(), id] as const,
   transactions: (id: string, filters?: Record<string, unknown>) =>
     [...accountKeys.detail(id), 'transactions', ...(filters != null ? [filters] : [])] as const,
+  balance: (id: string) => [...accountKeys.detail(id), 'balance'] as const,
 };
 ```
 
@@ -540,6 +688,32 @@ export function useTransactions(options: UseTransactionsOptions) {
   });
 }
 ```
+
+### Derived query: account balance
+
+Sometimes you need a single derived value from a query. The `select` option transforms
+the cached data without a separate network request:
+
+```tsx
+// src/features/accounts/hooks/use-account-balance.ts
+import { useQuery } from '@tanstack/react-query';
+import { accountsApi } from '../api/accounts-api';
+import { accountKeys } from '../queries';
+
+export function useAccountBalance(accountId: string) {
+  return useQuery({
+    queryKey: accountKeys.balance(accountId),
+    queryFn: () => accountsApi.getById(accountId),
+    select: (account) => account.balance,
+    enabled: accountId !== '',
+  });
+}
+```
+
+The `select` function runs on the cached data — it does not make an additional network
+request. TanStack Query only re-renders the component when the _selected_ value changes,
+not when other fields in the account object change. This is a performance optimization
+for components that only care about the balance.
 
 ### Checkpoint 5
 
@@ -876,6 +1050,441 @@ describe('apiClient', () => {
 
 ---
 
+## Phase 9 — Account UI Components
+
+With the full data layer in place — API functions, TanStack Query hooks, error handling,
+and MSW mocks — you can now build the feature components that consume it. Each component
+below lives inside `src/features/accounts/components/` and uses the hooks from Phase 5.
+
+### Account card
+
+The account card is the primary display component for a single account. It demonstrates
+several banking UI patterns: DPA-compliant data masking, centavos formatting, and
+conditional action rendering based on account status.
+
+```tsx
+// src/features/accounts/components/account-card.tsx
+
+interface AccountCardProps {
+  accountName: string;
+  accountNumber: string;
+  accountType: 'savings' | 'checking' | 'time-deposit';
+  balance: number;
+  currency?: string;
+  isActive: boolean;
+  onTransfer?: (accountNumber: string) => void;
+  onViewDetails?: (accountNumber: string) => void;
+}
+
+export function AccountCard({
+  accountName,
+  accountNumber,
+  accountType,
+  balance,
+  currency = 'PHP',
+  isActive,
+  onTransfer,
+  onViewDetails,
+}: AccountCardProps) {
+  // DPA compliance: mask account number (show last 4 only)
+  const maskedNumber = `••••${accountNumber.slice(-4)}`;
+
+  // Format currency — balance is in centavos
+  const formattedBalance = new Intl.NumberFormat('en-PH', {
+    style: 'currency',
+    currency,
+    minimumFractionDigits: 2,
+  }).format(balance / 100);
+
+  const typeLabels: Record<AccountCardProps['accountType'], string> = {
+    savings: 'Savings',
+    checking: 'Checking',
+    'time-deposit': 'Time Deposit',
+  };
+
+  return (
+    <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+      {/* Header */}
+      <div className="flex items-start justify-between">
+        <div>
+          <h3 className="text-lg font-semibold text-gray-900">{accountName}</h3>
+          <p className="text-sm text-gray-500">{maskedNumber}</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="rounded-full bg-ewb-purple-100 px-3 py-1 text-xs font-medium text-ewb-purple-700">
+            {typeLabels[accountType]}
+          </span>
+          <span
+            aria-hidden="true"
+            className={`inline-block h-2 w-2 rounded-full ${
+              isActive ? 'bg-emerald-500' : 'bg-red-500'
+            }`}
+          />
+          <span className="sr-only">{isActive ? 'Active account' : 'Inactive account'}</span>
+        </div>
+      </div>
+
+      {/* Balance */}
+      <div className="mt-4">
+        <p className="text-sm text-gray-500">Available Balance</p>
+        <p className="text-2xl font-bold text-gray-900">{formattedBalance}</p>
+      </div>
+
+      {/* Actions — only for active accounts */}
+      {isActive && (onTransfer != null || onViewDetails != null) && (
+        <div className="mt-4 flex gap-2 border-t border-gray-100 pt-4">
+          {onTransfer != null && (
+            <button
+              type="button"
+              onClick={() => onTransfer(accountNumber)}
+              className="rounded-lg bg-ewb-purple px-4 py-2 text-sm text-white hover:bg-ewb-purple-700"
+            >
+              Transfer
+            </button>
+          )}
+          {onViewDetails != null && (
+            <button
+              type="button"
+              onClick={() => onViewDetails(accountNumber)}
+              className="rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+            >
+              View Details
+            </button>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+Key patterns in this component:
+
+- **DPA data masking:** Account numbers are masked by default (`••••1234`). The BSP
+  Data Privacy Act requires masking PII in displays. Never show full account numbers
+  without explicit user action.
+- **Centavos → display conversion:** `balance / 100` happens only at the presentation
+  layer. The component receives centavos, formats for display. No floating-point math.
+- **Accessibility:** The status dot uses `aria-hidden="true"` with a `sr-only` text
+  alternative. Screen readers announce "Active account" or "Inactive account" instead
+  of seeing a colored dot.
+- **Conditional rendering:** Actions are only rendered for active accounts. Inactive
+  accounts cannot initiate transfers — enforced in the UI, not just the backend.
+
+### Supporting components
+
+The account feature also includes several smaller components that compose together:
+
+```tsx
+// src/features/accounts/components/account-header.tsx
+interface AccountHeaderProps {
+  accountName: string;
+  accountType: 'savings' | 'checking' | 'time-deposit';
+}
+
+export function AccountHeader({ accountName, accountType }: AccountHeaderProps) {
+  return (
+    <div className="flex items-center justify-between">
+      <h2 className="text-lg font-semibold text-gray-900">{accountName}</h2>
+      <span className="rounded-full bg-ewb-purple-100 px-3 py-1 text-sm text-ewb-purple-700">
+        {accountType}
+      </span>
+    </div>
+  );
+}
+```
+
+```tsx
+// src/features/accounts/components/account-actions.tsx
+interface AccountActionsProps {
+  accountId: string;
+  onTransfer: (accountId: string) => void;
+  onViewHistory: (accountId: string) => void;
+}
+
+export function AccountActions({
+  accountId,
+  onTransfer,
+  onViewHistory,
+}: AccountActionsProps) {
+  return (
+    <div className="flex gap-2">
+      <button
+        type="button"
+        onClick={() => onTransfer(accountId)}
+        className="rounded-lg bg-ewb-purple px-4 py-2 text-sm text-white hover:bg-ewb-purple-700"
+      >
+        Transfer
+      </button>
+      <button
+        type="button"
+        onClick={() => onViewHistory(accountId)}
+        className="rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+      >
+        History
+      </button>
+    </div>
+  );
+}
+```
+
+### Account selector
+
+The account selector is a form component that lets users pick an account from a
+dropdown. It fetches the account list using the `useAccounts` hook and displays
+each account with its masked number and formatted balance:
+
+```tsx
+// src/features/accounts/components/account-selector.tsx
+import { useId } from 'react';
+import { useAccounts } from '../hooks/use-accounts';
+import { formatPHP } from '@/lib/format';
+import type { Account } from '../types';
+
+interface AccountSelectorProps {
+  value: string;
+  onChange: (accountId: string) => void;
+  label?: string;
+}
+
+export function AccountSelector({ value, onChange, label = 'Select Account' }: AccountSelectorProps) {
+  const { data: accounts, isLoading } = useAccounts();
+  const selectId = useId();
+
+  return (
+    <div>
+      <label htmlFor={selectId} className="mb-1 block text-sm font-medium">
+        {label}
+      </label>
+      <select
+        id={selectId}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        disabled={isLoading}
+        className="w-full rounded border px-3 py-2"
+      >
+        <option value="">— Choose an account —</option>
+        {accounts?.map((account: Account) => (
+          <option key={account.id} value={account.id}>
+            {account.name} ({account.number}) — {formatPHP(account.balance)}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+}
+```
+
+`useId()` generates a stable, unique ID for the label/input association without
+relying on manually chosen IDs that could collide.
+
+### Virtualized transaction list
+
+For accounts with hundreds or thousands of transactions, rendering all rows
+simultaneously would degrade performance. The `TransactionList` uses
+`@tanstack/react-virtual` to render only the rows visible in the viewport, plus
+a small overscan buffer:
+
+```tsx
+// src/features/accounts/components/transaction-list.tsx
+import { useVirtualizer } from '@tanstack/react-virtual';
+import { useRef } from 'react';
+import { formatPHP } from '@/lib/format';
+import type { Transaction } from '../types';
+
+function TransactionRow({ transaction }: { transaction: Transaction }) {
+  const isDebit = transaction.type === 'debit';
+
+  return (
+    <div className="flex items-center justify-between border-b px-4 py-3">
+      <div>
+        <p className="font-medium">{transaction.description}</p>
+        <p className="text-sm text-gray-500">
+          {new Date(transaction.date).toLocaleDateString('en-PH', {
+            year: 'numeric', month: 'short', day: 'numeric',
+          })} · {transaction.channel}
+        </p>
+      </div>
+      <div className="text-right">
+        <p className={isDebit ? 'text-red-600' : 'text-emerald-600'}>
+          {isDebit ? '-' : '+'}{formatPHP(Math.abs(transaction.amount))}
+        </p>
+        <p className="text-xs text-gray-400">{transaction.reference}</p>
+      </div>
+    </div>
+  );
+}
+
+export function TransactionList({ transactions }: { transactions: Transaction[] }) {
+  const parentRef = useRef<HTMLDivElement>(null);
+
+  const virtualizer = useVirtualizer({
+    count: transactions.length,
+    getScrollElement: () => parentRef.current,
+    estimateSize: () => 72,
+    overscan: 10,
+  });
+
+  return (
+    <div
+      ref={parentRef}
+      className="h-[600px] overflow-auto"
+      role="list"
+      aria-label="Transaction history"
+    >
+      <div style={{ height: `${virtualizer.getTotalSize()}px`, position: 'relative' }}>
+        {virtualizer.getVirtualItems().map((virtualRow) => {
+          const transaction = transactions[virtualRow.index];
+          if (transaction == null) return null;
+
+          return (
+            <div
+              key={transaction.id}
+              role="listitem"
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: `${virtualRow.size}px`,
+                transform: `translateY(${virtualRow.start}px)`,
+              }}
+            >
+              <TransactionRow transaction={transaction} />
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+```
+
+Key virtualization concepts:
+
+- **`estimateSize: () => 72`** — Each row is estimated at 72px tall. If rows vary in
+  height, use `measureElement` for dynamic measurement.
+- **`overscan: 10`** — Render 10 extra rows above and below the visible viewport.
+  This prevents white flashes during fast scrolling.
+- **Absolute positioning with `transform`** — Each row is absolutely positioned and
+  translated to its correct offset. This is more performant than using `top` directly
+  because `transform` triggers GPU compositing instead of layout recalculation.
+
+### Lazy-loaded chart
+
+Charts are heavy dependencies. The `TransactionChart` wrapper uses React's `lazy()` and
+`Suspense` to split the chart into a separate bundle that only loads when rendered:
+
+```tsx
+// src/features/accounts/components/chart-component.tsx
+interface ChartComponentProps {
+  data: { date: string; amount: number }[];
+}
+
+export default function ChartComponent({ data }: ChartComponentProps) {
+  return (
+    <div className="h-64">
+      {/* Integrate with recharts or similar charting library */}
+      <p className="text-sm text-gray-500">Chart: {data.length} data points</p>
+    </div>
+  );
+}
+```
+
+```tsx
+// src/features/accounts/components/transaction-chart.tsx
+import { lazy, Suspense } from 'react';
+
+const Chart = lazy(() => import('./chart-component'));
+
+interface ChartData {
+  date: string;
+  amount: number;
+}
+
+export function TransactionChart({ data }: { data: ChartData[] }) {
+  return (
+    <Suspense fallback={<div className="h-64 animate-pulse bg-gray-100" />}>
+      <Chart data={data} />
+    </Suspense>
+  );
+}
+```
+
+The `chart-component` uses a `default` export because `React.lazy()` requires it.
+This is the one case where default exports are preferred — `lazy()` cannot import
+named exports. The wrapper component `TransactionChart` uses a named export so the
+rest of the application follows the standard pattern.
+
+### Account detail (placeholder)
+
+The account detail component displays live connection status and will be expanded
+in later guides with transaction alerts (A19) and error handling (A13):
+
+```tsx
+// src/features/accounts/components/account-detail.tsx
+
+export function AccountDetail({ accountId }: { accountId: string }) {
+  // TODO: In A19 (Real-Time & Streaming), add useTransactionAlerts(accountId)
+  // for SSE-based live transaction notifications.
+
+  return (
+    <div>
+      <p className="text-sm text-gray-500">Account: {accountId}</p>
+      {/* Exercise — Wire useAccount(accountId) and useTransactions() here
+          to display account info and recent transactions. */}
+    </div>
+  );
+}
+```
+
+### Checkpoint 9
+
+The `TransactionList` uses `@tanstack/react-virtual` for virtualization.
+What problem does virtualization solve, and why is it particularly important
+for banking transaction histories that can contain thousands of entries?
+
+---
+
+## Phase 10 — Feature Barrel Export
+
+Each feature exposes a public API through its `index.ts` barrel file. Only the
+exports listed here can be imported by other features — everything else is internal:
+
+```tsx
+// src/features/accounts/index.ts
+
+// Components
+export { AccountCard } from './components/account-card';
+export { AccountList } from './components/account-list';
+export { AccountSelector } from './components/account-selector';
+
+// Hooks
+export { useAccounts } from './hooks/use-accounts';
+export { useAccountBalance } from './hooks/use-account-balance';
+
+// Types
+export type { Account, AccountType, Transaction } from './types';
+```
+
+This barrel enforces feature encapsulation. Other features import from
+`@/features/accounts` — never from internal paths like
+`@/features/accounts/components/account-card`. This means you can refactor the
+internal structure (rename files, split components, reorganize folders) without
+breaking any imports outside the feature boundary.
+
+The `query-keys.ts` file in `api/` re-exports from the root `queries.ts` for
+backwards compatibility:
+
+```tsx
+// src/features/accounts/api/query-keys.ts
+// Re-export from the canonical query key factory.
+// All new code should import from '../queries' directly.
+export { accountKeys } from '../queries';
+```
+
+---
+
 ## Key Takeaways
 
 1. **Start with the fundamentals.** Raw `fetch()` + Zod proves the concept before
@@ -900,6 +1509,15 @@ describe('apiClient', () => {
 
 8. **Smart retry logic** in TanStack Query — never retry auth or validation
    errors, retry server errors up to 2 times.
+
+9. **DPA-compliant masking** — always mask account numbers by default. Show
+   full numbers only on explicit user action, never in logs.
+
+10. **Virtualize long lists** — banking transaction histories can contain
+    thousands of entries. `@tanstack/react-virtual` renders only visible rows.
+
+11. **Feature barrel exports** enforce encapsulation. Import from
+    `@/features/accounts`, never from internal component paths.
 
 ---
 
