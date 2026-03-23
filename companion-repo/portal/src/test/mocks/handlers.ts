@@ -1,2 +1,2 @@
-// [scaffold] Placeholder — implementation added in a later level
-export const handlers = (() => {}) as any;
+// [scaffold] Empty handlers — real handlers added in Level 06
+export const handlers = [];
