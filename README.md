@@ -65,13 +65,13 @@ git diff level-XX-start level-XX-complete -- src/stores/auth-store.ts
 
 # Level 02: First App
 
-**Branch:** `level-02-complete`
+**Branch:** `level-02-start`
 
 ---
 
 ## About This Level
 
-Reference implementation with components, utilities, and test infrastructure added.
+Your first codebase. The portal code is pre-built — explore it while reading the guides, and run the exercise tests to verify your understanding.
 
 **Guides for this level:** B01, B01b, A04, A05
 Access your guides on Notion (link provided by your instructor).
@@ -80,15 +80,13 @@ Access your guides on Notion (link provided by your instructor).
 
 ## Getting Started
 
-This is the reference implementation. Run it to see the completed code:
-
 ```bash
 cd companion-repo/portal
 npm install
-npm run dev
+npm run test:exercises:02
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Explore the source code in `src/` while reading the guides. The exercise tests verify the pre-built code works as described.
 
 ---
 
@@ -104,7 +102,7 @@ npm run test:exercises:02
 npm run test:exercises
 ```
 
-All tests should pass on this branch.
+All tests should pass. The code for this level is pre-built — study it while reading the guides.
 
 ---
 
