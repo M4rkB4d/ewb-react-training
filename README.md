@@ -1,15 +1,15 @@
-# EWB React Training - Level 03: Building UI
+# EWB React Training - Level 04: State and Routing
 
 **EastWest Bank - Digital Platforms & Innovations**
-**Branch:** `level-03-complete`
+**Branch:** `level-04-complete`
 
 ---
 
 ## About This Level
 
-Reference implementation with design system components, form validation, and accessibility patterns.
+Reference implementation with Zustand stores, route configuration, and layout components.
 
-**Guides for this level:** A06, A07, A08
+**Guides for this level:** A09, B02, A10
 Access your guides on Notion (link provided by your instructor).
 
 ---
@@ -34,7 +34,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 cd companion-repo/portal
 
 # Run this level's exercise tests
-npm run test:exercises:03
+npm run test:exercises:04
 
 # Run all exercise tests (current + previous levels)
 npm run test:exercises
@@ -46,7 +46,7 @@ All tests should pass on this branch.
 
 ## Exercises
 
-Study the BeneficiaryForm (Zod validation + React Hook Form) and the accessible DataTable component.
+Study the transaction filter store (Zustand patterns) and the routing configuration.
 
 ---
 
@@ -55,7 +55,7 @@ Study the BeneficiaryForm (Zod validation + React Hook Form) and the accessible 
 See what changed between start and complete:
 
 ```bash
-git diff level-03-start level-03-complete
+git diff level-04-start level-04-complete
 ```
 
 ---
@@ -63,7 +63,7 @@ git diff level-03-start level-03-complete
 ## Next Level
 
 ```bash
-git checkout level-04-start
+git checkout level-05-start
 cd companion-repo/portal
 npm install
 npm run dev
