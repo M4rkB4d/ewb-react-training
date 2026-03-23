@@ -1,15 +1,15 @@
-# EWB React Training - Level 05: Data and Auth
+# EWB React Training - Level 06: Quality
 
 **EastWest Bank - Digital Platforms & Innovations**
-**Branch:** `level-05-complete`
+**Branch:** `level-06-complete`
 
 ---
 
 ## About This Level
 
-Reference implementation with API client, auth store, and account query hook.
+Reference implementation with error hierarchy, MSW mocks, and test factories.
 
-**Guides for this level:** B03, A11, B04, A12
+**Guides for this level:** A13, B05, A14, B06
 Access your guides on Notion (link provided by your instructor).
 
 ---
@@ -34,7 +34,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 cd companion-repo/portal
 
 # Run this level's exercise tests
-npm run test:exercises:05
+npm run test:exercises:06
 
 # Run all exercise tests (current + previous levels)
 npm run test:exercises
@@ -46,9 +46,9 @@ All tests should pass on this branch.
 
 ## Exercises
 
-1. **Secure API Client** ('src/lib/api-client.ts') — Axios with interceptors, token refresh
-2. **Auth Store** ('src/stores/auth-store.ts') — Zustand store with auth state machine
-3. **Account Query Hook** ('src/features/accounts/hooks/use-accounts.ts') — TanStack Query integration
+1. **Error Hierarchy** ('src/lib/errors.ts') — AppError base class with subclasses
+2. **MSW Handlers** ('src/test/mocks/handlers.ts', 'server.ts') — Mock API setup
+3. **Test Factories** ('src/test/factories/') — User and account factories
 
 ---
 
@@ -57,7 +57,7 @@ All tests should pass on this branch.
 See what changed between start and complete:
 
 ```bash
-git diff level-05-start level-05-complete
+git diff level-06-start level-06-complete
 ```
 
 ---
@@ -65,7 +65,7 @@ git diff level-05-start level-05-complete
 ## Next Level
 
 ```bash
-git checkout level-06-start
+git checkout level-07-start
 cd companion-repo/portal
 npm install
 npm run dev
