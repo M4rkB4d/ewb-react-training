@@ -20,18 +20,18 @@ describe('Exercise 1: Currency Formatter', () => {
     }
   });
 
-  describe('formatPHP', () => {
+  describe('formatPeso', () => {
     it('formats 150000 as ₱150,000.00', () => {
-      expect(currency?.formatPHP).toBeDefined();
-      expect(currency.formatPHP(150000)).toBe('₱150,000.00');
+      expect(currency?.formatPeso).toBeDefined();
+      expect(currency.formatPeso(150000)).toBe('₱150,000.00');
     });
 
     it('formats 0 as ₱0.00', () => {
-      expect(currency.formatPHP(0)).toBe('₱0.00');
+      expect(currency.formatPeso(0)).toBe('₱0.00');
     });
 
     it('formats 42500.5 as ₱42,500.50', () => {
-      expect(currency.formatPHP(42500.5)).toBe('₱42,500.50');
+      expect(currency.formatPeso(42500.5)).toBe('₱42,500.50');
     });
   });
 
