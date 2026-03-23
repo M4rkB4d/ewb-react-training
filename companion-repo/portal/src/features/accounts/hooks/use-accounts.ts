@@ -1,11 +1,6 @@
-// src/features/accounts/hooks/use-accounts.ts
-import { useQuery } from '@tanstack/react-query';
-import { getAccounts } from '../api/accounts-api';
-import { accountKeys } from '../queries';
-
+// TODO: Implement Exercise 3a — Account Query Hook
+// See guide A05 for requirements | Run: npm run test:exercises:05
+// TODO: Implement useAccounts hook using useQuery from @tanstack/react-query
 export function useAccounts() {
-  return useQuery({
-    queryKey: accountKeys.lists(),
-    queryFn: getAccounts,
-  });
+  return { data: undefined, isLoading: true, error: null };
 }

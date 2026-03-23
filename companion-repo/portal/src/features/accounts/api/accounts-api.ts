@@ -1,40 +1,14 @@
-// src/features/accounts/api/accounts-api.ts
+// TODO: Implement Exercise 3b — Account API Functions
+// See guide B03 for requirements | Run: npm run test:exercises:05
 import { z } from 'zod';
-import { apiClient } from '@/lib/api-client';
-
-// 1. Define the schema
 const accountSchema = z.object({
-  id: z.string(),
-  name: z.string(),
-  number: z.string(),
+  id: z.string(), accountName: z.string(), accountNumber: z.string(),
+  balance: z.number(), availableBalance: z.number(),
   type: z.enum(['savings', 'checking', 'time-deposit']),
-  balance: z.number().int().nonnegative(), // centavos
-  currency: z.string().default('PHP'),
-  isActive: z.boolean(),
+  status: z.enum(['active', 'inactive', 'frozen']),
 });
-
 export type Account = z.infer<typeof accountSchema>;
-
-// 2. Define the API function with Zod validation
-export async function getAccounts(): Promise<Account[]> {
-  const response = await apiClient.get('/accounts');
-  // BSP 1122 — Validate all external data
-  return z.array(accountSchema).parse(response.data);
-}
-
-export async function getAccount(id: string): Promise<Account> {
-  const response = await apiClient.get(`/accounts/${id}`);
-  return accountSchema.parse(response.data);
-}
-
-async function getBalance(id: string): Promise<number> {
-  const account = await getAccount(id);
-  return account.balance;
-}
-
-// Object-style API for hooks that prefer method syntax
-export const accountsApi = {
-  getAll: getAccounts,
-  getById: getAccount,
-  getBalance,
-};
+// TODO: Implement API calls with Zod validation
+export async function getAccounts(): Promise<Account[]> { return []; }
+export async function getAccount(id: string): Promise<Account> { return {} as Account; }
+export const accountsApi = { getAccounts, getAccount };
