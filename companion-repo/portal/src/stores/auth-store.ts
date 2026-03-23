@@ -1,8 +1,8 @@
 // TODO: Implement Exercise 2 — Authentication Store
 // See guide B04 for requirements | Run: npm run test:exercises:05
 import { create } from 'zustand';
-type Role = 'admin' | 'teller' | 'customer';
-interface User { id: string; username: string; role: Role; }
+type Role = 'customer' | 'teller' | 'manager' | 'admin';
+interface User { id: string; name: string; email: string; role: Role; branch?: string; }
 export type { Role, User };
 export type AuthStatus = 'idle' | 'loading' | 'mfa-required' | 'authenticated' | 'unauthenticated';
 interface AuthState {
