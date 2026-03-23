@@ -72,6 +72,13 @@ describe('Exercise 2: Sanitization', () => {
     expect(result).not.toContain('onmouseover');
     expect(result).toContain('Content');
   });
+
+  it('strips javascript: URLs', async () => {
+    const mod = await import('@/lib/sanitize');
+    const fn = mod.sanitizeHtml || mod.sanitize;
+    const result = fn('<a href="javascript:alert(1)">Click</a>');
+    expect(result).not.toContain('javascript:');
+  });
 });
 
 // ─── Exercise 3: Role-Based Permissions ──────────────────────────────────────

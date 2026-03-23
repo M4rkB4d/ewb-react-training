@@ -86,16 +86,30 @@ describe('Exercise 3: Middleware', () => {
 describe('Exercise 4: Deployment', () => {
   const publicSiteRoot = resolve(__dirname, '../../../..', 'public-site');
 
-  it('Dockerfile exists', () => {
-    expect(existsSync(resolve(publicSiteRoot, 'Dockerfile'))).toBe(true);
+  it('Dockerfile exists with multi-stage build', () => {
+    const dockerfile = resolve(publicSiteRoot, 'Dockerfile');
+    expect(existsSync(dockerfile)).toBe(true);
+    const content = readFileSync(dockerfile, 'utf-8');
+    // Real Dockerfiles have FROM + COPY instructions, not just a base image
+    expect(content).toContain('COPY');
+    expect(content.match(/FROM/g)!.length).toBeGreaterThanOrEqual(2); // multi-stage
   });
 
-  it('azure-pipelines.yml exists', () => {
-    expect(existsSync(resolve(publicSiteRoot, 'azure-pipelines.yml'))).toBe(true);
+  it('azure-pipelines.yml exists with pipeline stages', () => {
+    const pipeline = resolve(publicSiteRoot, 'azure-pipelines.yml');
+    expect(existsSync(pipeline)).toBe(true);
+    const content = readFileSync(pipeline, 'utf-8');
+    // Real pipeline has stages or steps, not just a trigger
+    expect(content).toContain('steps');
   });
 
-  it('instrumentation.ts exists', () => {
-    expect(existsSync(resolve(publicSiteRoot, 'instrumentation.ts'))).toBe(true);
+  it('instrumentation.ts exists with register function', () => {
+    const file = resolve(publicSiteRoot, 'instrumentation.ts');
+    expect(existsSync(file)).toBe(true);
+    const content = readFileSync(file, 'utf-8');
+    // Must export a register function with actual OpenTelemetry setup
+    expect(content).toContain('register');
+    expect(content.length).toBeGreaterThan(200); // Not just an empty stub
   });
 
   it('next.config.ts exists and has output config', () => {
