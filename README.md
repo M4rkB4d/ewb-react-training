@@ -65,13 +65,13 @@ git diff level-XX-start level-XX-complete -- src/stores/auth-store.ts
 
 # Level 09: Public-Facing Applications
 
-**Branch:** `level-09-complete`
+**Branch:** `level-09-start`
 
 ---
 
 ## About This Level
 
-Reference implementation with Next.js pages, API routes, middleware, and deployment config.
+Next.js and server-side rendering. This level uses the public-site app in addition to the portal.
 
 **Guides for this level:** A20, A21, A22, A23, B10
 Access your guides on Notion (link provided by your instructor).
@@ -79,8 +79,6 @@ Access your guides on Notion (link provided by your instructor).
 ---
 
 ## Getting Started
-
-This is the reference implementation. Run it to see the completed code:
 
 ```bash
 cd companion-repo/portal
@@ -118,7 +116,7 @@ npm run test:exercises:09
 npm run test:exercises
 ```
 
-All tests should pass on this branch.
+**Tests will fail — that's expected.** Complete the exercises below to make them pass. Previous level tests should all pass.
 
 ---
 
