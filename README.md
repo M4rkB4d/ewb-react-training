@@ -1,15 +1,15 @@
-# EWB React Training - Level 02: First App
+# EWB React Training - Level 03: Building UI
 
 **EastWest Bank - Digital Platforms & Innovations**
-**Branch:** `level-02-complete`
+**Branch:** `level-03-complete`
 
 ---
 
 ## About This Level
 
-Reference implementation with components, utilities, and test infrastructure added.
+Reference implementation with design system components, form validation, and accessibility patterns.
 
-**Guides for this level:** B01, B01b, A04, A05
+**Guides for this level:** A06, A07, A08
 Access your guides on Notion (link provided by your instructor).
 
 ---
@@ -34,7 +34,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 cd companion-repo/portal
 
 # Run this level's exercise tests
-npm run test:exercises:02
+npm run test:exercises:03
 
 # Run all exercise tests (current + previous levels)
 npm run test:exercises
@@ -46,7 +46,7 @@ All tests should pass on this branch.
 
 ## Exercises
 
-Study the TransactionHistory and AccountDashboard components. Run the exercise tests to verify the code works as described in the guides.
+Study the BeneficiaryForm (Zod validation + React Hook Form) and the accessible DataTable component.
 
 ---
 
@@ -55,7 +55,7 @@ Study the TransactionHistory and AccountDashboard components. Run the exercise t
 See what changed between start and complete:
 
 ```bash
-git diff level-02-start level-02-complete
+git diff level-03-start level-03-complete
 ```
 
 ---
@@ -63,7 +63,7 @@ git diff level-02-start level-02-complete
 ## Next Level
 
 ```bash
-git checkout level-03-start
+git checkout level-04-start
 cd companion-repo/portal
 npm install
 npm run dev
