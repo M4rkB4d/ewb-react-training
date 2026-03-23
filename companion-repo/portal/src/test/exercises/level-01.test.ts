@@ -20,18 +20,28 @@ describe('Exercise 1: Currency Formatter', () => {
     }
   });
 
-  describe('formatPeso', () => {
+  describe('formatPeso / formatPHP', () => {
+    // Accept both names: formatPeso (canonical) or formatPHP (legacy on some branches)
+    let fmt: (amount: number) => string;
+
+    beforeAll(() => {
+      fmt = (currency as any).formatPeso || (currency as any).formatPHP;
+    });
+
+    it('formatter exists', () => {
+      expect(fmt).toBeDefined();
+    });
+
     it('formats 150000 as ₱150,000.00', () => {
-      expect(currency?.formatPeso).toBeDefined();
-      expect(currency.formatPeso(150000)).toBe('₱150,000.00');
+      expect(fmt(150000)).toBe('₱150,000.00');
     });
 
     it('formats 0 as ₱0.00', () => {
-      expect(currency.formatPeso(0)).toBe('₱0.00');
+      expect(fmt(0)).toBe('₱0.00');
     });
 
     it('formats 42500.5 as ₱42,500.50', () => {
-      expect(currency.formatPeso(42500.5)).toBe('₱42,500.50');
+      expect(fmt(42500.5)).toBe('₱42,500.50');
     });
   });
 
