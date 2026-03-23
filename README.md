@@ -68,8 +68,9 @@ git diff level-07-start level-07-complete
 git checkout level-08-start
 cd companion-repo/portal
 npm install
-npm run dev
 ```
+
+Then follow the instructions in that branch's README.
 
 ---
 
