@@ -1,2 +1,2 @@
 // src/features/kyc/index.ts
-// [scaffold] export { DocumentUpload } from './components/document-upload';
+// [scaffold] // [scaffold] export { DocumentUpload } from './components/document-upload';
