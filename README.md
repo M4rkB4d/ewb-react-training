@@ -65,13 +65,13 @@ git diff level-XX-start level-XX-complete -- src/stores/auth-store.ts
 
 # Level 04: State and Routing
 
-**Branch:** `level-04-complete`
+**Branch:** `level-04-start`
 
 ---
 
 ## About This Level
 
-Reference implementation with Zustand stores, route configuration, and layout components.
+State management with Zustand and routing with React Router. Code is pre-built for study.
 
 **Guides for this level:** A09, B02, A10
 Access your guides on Notion (link provided by your instructor).
@@ -80,15 +80,13 @@ Access your guides on Notion (link provided by your instructor).
 
 ## Getting Started
 
-This is the reference implementation. Run it to see the completed code:
-
 ```bash
 cd companion-repo/portal
 npm install
-npm run dev
+npm run test:exercises:04
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Explore the source code in `src/` while reading the guides. The exercise tests verify the pre-built code works as described.
 
 ---
 
@@ -104,7 +102,7 @@ npm run test:exercises:04
 npm run test:exercises
 ```
 
-All tests should pass on this branch.
+All tests should pass. The code for this level is pre-built — study it while reading the guides.
 
 ---
 
