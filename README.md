@@ -65,13 +65,13 @@ git diff level-XX-start level-XX-complete -- src/stores/auth-store.ts
 
 # Level 06: Quality
 
-**Branch:** `level-06-complete`
+**Branch:** `level-06-start`
 
 ---
 
 ## About This Level
 
-Reference implementation with error hierarchy, MSW mocks, and test factories.
+Error handling, testing infrastructure, and monitoring. Implement from the TODO stubs.
 
 **Guides for this level:** A13, B05, A14, B06
 Access your guides on Notion (link provided by your instructor).
@@ -79,8 +79,6 @@ Access your guides on Notion (link provided by your instructor).
 ---
 
 ## Getting Started
-
-This is the reference implementation. Run it to see the completed code:
 
 ```bash
 cd companion-repo/portal
@@ -104,7 +102,7 @@ npm run test:exercises:06
 npm run test:exercises
 ```
 
-All tests should pass on this branch.
+**Tests will fail — that's expected.** Complete the exercises below to make them pass. Previous level tests should all pass.
 
 ---
 
