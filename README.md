@@ -65,13 +65,13 @@ git diff level-XX-start level-XX-complete -- src/stores/auth-store.ts
 
 # Level 01: Welcome
 
-**Branch:** `level-01-complete`
+**Branch:** `level-01-start`
 
 ---
 
 ## About This Level
 
-This branch is the same as the start branch. Level 1 has no code exercises.
+This level is reading-only. Open your guides on Notion and work through A01 (What Is React), A02 (TypeScript for React), and A03 (Thinking in Compliance). No code to run yet.
 
 **Guides for this level:** A01, A02, A03
 Access your guides on Notion (link provided by your instructor).
