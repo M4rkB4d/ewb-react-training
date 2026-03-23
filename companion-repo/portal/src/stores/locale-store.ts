@@ -1,23 +1,8 @@
-// src/stores/locale-store.ts
+// TODO: Implement Exercise 2 — Locale Store
+// See guide B06 for requirements | Run: npm run test:exercises:08
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-
-type Locale = 'en-US' | 'fil-PH' | 'zh-Hans';
-
-interface LocaleState {
-  locale: Locale;
-  setLocale: (locale: Locale) => void;
-}
-
+interface LocaleState { locale: string; setLocale: (locale: string) => void; }
 export const useLocaleStore = create<LocaleState>()(
-  persist(
-    (set) => ({
-      locale: 'en-US',
-      setLocale: (locale) => {
-        document.documentElement.lang = locale;
-        set({ locale });
-      },
-    }),
-    { name: 'ewb-locale' },
-  ),
+  persist((set) => ({ locale: 'en-US', setLocale: (locale: string) => set({ locale }) }), { name: 'locale-storage' })
 );

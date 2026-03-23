@@ -65,13 +65,13 @@ git diff level-XX-start level-XX-complete -- src/stores/auth-store.ts
 
 # Level 08: Mastery
 
-**Branch:** `level-08-complete`
+**Branch:** `level-08-start`
 
 ---
 
 ## About This Level
 
-Reference implementation with message catalogs, locale store, real-time hooks, and payment API.
+i18n, real-time data, and the integration capstone. Implement from TODO stubs.
 
 **Guides for this level:** A18, B08, B09, A19
 Access your guides on Notion (link provided by your instructor).
@@ -79,8 +79,6 @@ Access your guides on Notion (link provided by your instructor).
 ---
 
 ## Getting Started
-
-This is the reference implementation. Run it to see the completed code:
 
 ```bash
 cd companion-repo/portal
@@ -104,7 +102,7 @@ npm run test:exercises:08
 npm run test:exercises
 ```
 
-All tests should pass on this branch.
+**Tests will fail — that's expected.** Complete the exercises below to make them pass. Previous level tests should all pass.
 
 ---
 

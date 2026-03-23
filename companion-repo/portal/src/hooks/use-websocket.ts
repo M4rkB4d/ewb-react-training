@@ -1,42 +1,5 @@
-// src/hooks/use-websocket.ts
-import { useEffect, useRef, useState } from 'react';
-import { createWebSocket } from '@/lib/websocket';
-import { useAuthStore } from '@/stores/auth-store';
-
-type ConnectionState = 'connecting' | 'connected' | 'disconnected';
-
+// TODO: Implement Exercise 3a — WebSocket Hook
+// See guide A19 for requirements | Run: npm run test:exercises:08
 export function useWebSocket(url: string) {
-  const [state, setState] = useState<ConnectionState>('disconnected');
-  const wsRef = useRef<ReturnType<typeof createWebSocket> | null>(null);
-  const isAuthenticated = useAuthStore((s) => s.status === 'authenticated');
-
-  useEffect(() => {
-    if (!isAuthenticated) return;
-
-    // Cookie-based auth — no token passed; HttpOnly cookies sent on upgrade request
-    const ws = createWebSocket({
-      url,
-      onOpen: () => { setState('connected'); },
-      onClose: () => { setState('disconnected'); },
-    });
-
-    wsRef.current = ws;
-    setState('connecting');
-
-    return () => {
-      ws.destroy();
-      wsRef.current = null;
-      setState('disconnected');
-    };
-  }, [url, isAuthenticated]);
-
-  const subscribe = (channel: string, handler: (data: unknown) => void) => {
-    return wsRef.current?.subscribe(channel, handler) ?? (() => {});
-  };
-
-  const send = (type: string, payload: unknown) => {
-    wsRef.current?.send(type, payload);
-  };
-
-  return { state, subscribe, send };
+  return { data: null, isConnected: false, send: (_m: string) => {}, disconnect: () => {} };
 }
