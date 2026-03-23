@@ -1,15 +1,15 @@
-# EWB React Training - Level 06: Quality
+# EWB React Training - Level 07: Production
 
 **EastWest Bank - Digital Platforms & Innovations**
-**Branch:** `level-06-complete`
+**Branch:** `level-07-complete`
 
 ---
 
 ## About This Level
 
-Reference implementation with error hierarchy, MSW mocks, and test factories.
+Reference implementation with PII masking, input sanitization, RBAC permissions, and deployment config.
 
-**Guides for this level:** A13, B05, A14, B06
+**Guides for this level:** A15, B07, A16, A17
 Access your guides on Notion (link provided by your instructor).
 
 ---
@@ -34,7 +34,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 cd companion-repo/portal
 
 # Run this level's exercise tests
-npm run test:exercises:06
+npm run test:exercises:07
 
 # Run all exercise tests (current + previous levels)
 npm run test:exercises
@@ -46,9 +46,9 @@ All tests should pass on this branch.
 
 ## Exercises
 
-1. **Error Hierarchy** ('src/lib/errors.ts') — AppError base class with subclasses
-2. **MSW Handlers** ('src/test/mocks/handlers.ts', 'server.ts') — Mock API setup
-3. **Test Factories** ('src/test/factories/') — User and account factories
+1. **PII Masking** ('src/lib/masking.ts') — Account number, email, phone masking
+2. **Input Sanitization** ('src/lib/sanitize.ts') — XSS protection
+3. **Permissions** ('src/lib/permissions.ts') — Role-based access control
 
 ---
 
@@ -57,7 +57,7 @@ All tests should pass on this branch.
 See what changed between start and complete:
 
 ```bash
-git diff level-06-start level-06-complete
+git diff level-07-start level-07-complete
 ```
 
 ---
@@ -65,7 +65,7 @@ git diff level-06-start level-06-complete
 ## Next Level
 
 ```bash
-git checkout level-07-start
+git checkout level-08-start
 cd companion-repo/portal
 npm install
 npm run dev
