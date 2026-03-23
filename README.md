@@ -65,13 +65,13 @@ git diff level-XX-start level-XX-complete -- src/stores/auth-store.ts
 
 # Level 07: Production
 
-**Branch:** `level-07-complete`
+**Branch:** `level-07-start`
 
 ---
 
 ## About This Level
 
-Reference implementation with PII masking, input sanitization, RBAC permissions, and deployment config.
+Security, compliance, and deployment. The most critical level for banking. Implement from TODO stubs.
 
 **Guides for this level:** A15, B07, A16, A17
 Access your guides on Notion (link provided by your instructor).
@@ -79,8 +79,6 @@ Access your guides on Notion (link provided by your instructor).
 ---
 
 ## Getting Started
-
-This is the reference implementation. Run it to see the completed code:
 
 ```bash
 cd companion-repo/portal
@@ -104,7 +102,7 @@ npm run test:exercises:07
 npm run test:exercises
 ```
 
-All tests should pass on this branch.
+**Tests will fail — that's expected.** Complete the exercises below to make them pass. Previous level tests should all pass.
 
 ---
 
