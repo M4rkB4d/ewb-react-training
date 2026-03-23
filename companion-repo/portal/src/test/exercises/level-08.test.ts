@@ -4,6 +4,8 @@
 // Run: npm run test:exercises -- level-08
 
 import { describe, it, expect } from 'vitest';
+import { readFileSync } from 'fs';
+import { resolve } from 'path';
 
 // ─── Exercise 1: i18n Message Catalogs ───────────────────────────────────────
 
@@ -41,6 +43,20 @@ describe('Exercise 1: i18n Messages', () => {
     expect(filKeys).toEqual(enKeys);
     expect(zhKeys).toEqual(enKeys);
   });
+
+  it('message catalogs have meaningful content (not empty stubs)', async () => {
+    const en = await import('@/i18n/messages/en-US.json');
+    const msgs = en.default || en;
+    const keys = Object.keys(msgs);
+
+    // Real catalogs have at least 10 keys — stubs have 2
+    expect(keys.length).toBeGreaterThanOrEqual(10);
+
+    // At least one value should be a non-empty translated string
+    const values = Object.values(msgs) as string[];
+    const nonEmpty = values.filter((v) => typeof v === 'string' && v.length > 0);
+    expect(nonEmpty.length).toBeGreaterThanOrEqual(5);
+  });
 });
 
 // ─── Exercise 2: Locale Store ────────────────────────────────────────────────
@@ -69,6 +85,14 @@ describe('Exercise 2: Locale Store', () => {
     // Reset
     store.getState().setLocale('en-US');
   });
+
+  it('uses persist middleware', async () => {
+    const mod = await import('@/stores/locale-store');
+    const store = mod.useLocaleStore;
+    // Zustand persist stores expose persist API
+    expect(store.persist).toBeDefined();
+    expect(typeof store.persist.getOptions).toBe('function');
+  });
 });
 
 // ─── Exercise 3: Real-time Hooks ─────────────────────────────────────────────
@@ -79,6 +103,14 @@ describe('Exercise 3: Real-time Hooks', () => {
   it('exports useWebSocket hook', async () => {
     const mod = await import('@/hooks/use-websocket');
     expect(mod.useWebSocket || mod.default).toBeDefined();
+  });
+
+  it('useWebSocket has real implementation (not a stub)', () => {
+    const src = readFileSync(resolve(__dirname, '../../hooks/use-websocket.ts'), 'utf-8');
+    // Real implementation uses React hooks (useRef, useState, useEffect, useCallback)
+    expect(src).toMatch(/use(Ref|State|Effect|Callback)/);
+    // Real implementation references WebSocket
+    expect(src).toMatch(/WebSocket|new\s+WebSocket/i);
   });
 
   it('exports useEventSource hook', async () => {

@@ -109,5 +109,6 @@ describe('Exercise 3: Test Factories', () => {
     const account = mod.createAccount();
     expect(account.id).toBeDefined();
     expect(account.balance).toBeGreaterThanOrEqual(0);
+    expect(Number.isInteger(account.balance)).toBe(true); // Centavos are integers
   });
 });
